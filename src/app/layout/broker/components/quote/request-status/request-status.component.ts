@@ -322,11 +322,11 @@ export class RequestStatusComponent implements OnInit {
             res => {
                 this.documentTypeList = res;
 
-                if (this.isExternalUser) {
-                    this.mainFormGroup.controls.brokerSearchMode.patchValue("1");
-                    this.mainFormGroup.controls.brokerDocumentType.patchValue(JSON.parse(localStorage.getItem("currentUser"))["tdocument"].toString());
-                    this.mainFormGroup.controls.brokerDocumentNumber.patchValue(JSON.parse(localStorage.getItem("currentUser"))["dni"].toString());
-                }
+                // if (this.isExternalUser) {
+                //     this.mainFormGroup.controls.brokerSearchMode.patchValue("1");
+                //     this.mainFormGroup.controls.brokerDocumentType.patchValue(JSON.parse(localStorage.getItem("currentUser"))["tdocument"].toString());
+                //     this.mainFormGroup.controls.brokerDocumentNumber.patchValue(JSON.parse(localStorage.getItem("currentUser"))["dni"].toString());
+                // }
             },
             err => {
                 console.log(err);
