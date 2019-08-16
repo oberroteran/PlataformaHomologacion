@@ -126,7 +126,7 @@ export class GlobalValidators {
 				if (/[qwrtypsdfghjklñzxcvbnm]/.test(control.value.toString().trim().toLowerCase().charAt(i))) consonantCount++;
 				else consonantCount = 0;
 
-				if (consonantCount > 5) return { 'moreThanFiveConsonants': true };
+				if (consonantCount > 6) return { 'moreThanFiveConsonants': true };
 			}
 			return null;
 		} else {
