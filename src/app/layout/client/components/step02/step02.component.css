@@ -1,0 +1,442 @@
+/* .container-main {
+  display: none !important;
+} */
+
+.lcv {
+  min-width: 248px !important;
+  padding-right: 0px !important;
+}
+
+.lmv {
+  min-width: 261px;
+  padding-right: 0px !important;
+}
+
+.anio {
+  width: 55px !important;
+}
+
+.d-row {
+  display: inline-block;
+  position: relative;
+  line-height: 2;
+  margin-right: 6px;
+}
+
+.si-mobile {
+  display: none;
+}
+
+.contenido {
+  width: 100%;
+}
+
+.contenido .imagenes {
+  width: 100%;
+  height: 300px;
+}
+
+.contenido .imagenes .tarjeta {
+  height: 100%;
+  float: left;
+  display: inline-block;
+}
+
+.contenido .imagenes .vehiculo-especial {
+  width: 40%;
+  height: 100%;
+  float: left;
+  text-align: right;
+}
+
+.contenido .imagenes .vehiculo-especial .cuadro {
+  width: 45%;
+  height: 70%;
+  margin: 50px 70px;
+  float: right;
+  border: 1px dashed #000;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.contenido .imagenes .vehiculo-especial .cuadro .img-vehiculo {
+  width: 100%;
+  text-align: center;
+}
+
+.contenido .imagenes .vehiculo-especial .cuadro a {
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #806ea0;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.contenido .imagenes .vehiculo-especial .cuadro a span {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.contenido .imagenes .vehiculo-especial .cuadro p {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.contenido .texto {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 19px;
+  font-weight: bold;
+  line-height: 45px;
+  width: 95%;
+}
+
+.contenido .texto select {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 15px;
+  font-weight: 500;
+  text-align-last: center;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #806ea0;
+  box-shadow: none;
+  appearance: none;
+  /*overflow: hidden;*/
+  background: url("assets/icons/placeholder_icon.svg") no-repeat 99%;
+  cursor: pointer;
+}
+
+.contenido .texto select::-ms-expand {
+  display: none;
+}
+
+.contenido .texto select > option {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  box-shadow: none;
+  /*padding: 10px;
+  outline: none;
+  appearance: none;*/
+}
+
+/*.texto input {
+  border-bottom: 1px solid #806EA0;
+  outline: none;
+}*/
+
+.contenido .texto input[type="text"] {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 15px;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid #806ea0;
+  outline: none;
+  height: 21px;
+  line-height: 1;
+}
+
+.contenido .texto input[type="date"] {
+  text-align: right;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-bottom: 1px solid #806ea0;
+  outline: none;
+  line-height: 21px;
+}
+
+.contenido .texto input[type="number"] {
+  text-align: center;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  border: none;
+  border-bottom: 1px solid #806ea0;
+  outline: none;
+}
+
+.contenido .texto .xs {
+  width: 5rem;
+}
+
+.contenido .texto .ss {
+  width: 10rem;
+}
+
+.contenido .texto .mm {
+  width: 15rem;
+}
+
+.contenido .texto .yy {
+  height: 40px !important;
+}
+
+div.mm {
+  display: inline-block;
+  width: 175px !important;
+}
+
+.contenido .texto .ll {
+  /* width: 18rem;*/
+  /* height: 31px;
+  width: 273px; */
+  padding-right: 20px;
+  line-height: 1;
+}
+
+.contenido .texto .ll_uso {
+  height: 31px;
+  width: 208px;
+}
+
+.contenido .texto .xl {
+  /*width: 23rem;*/
+  /* height: 31px; */
+  /* width: 376px; */
+  padding-right: 25px;
+  line-height: 1;
+}
+
+.botones {
+  width: 100%;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.botones .btn-siguiente {
+  border-radius: 6px;
+  background-color: #ed6e00;
+  border: 1px solid #f4a866;
+  color: #ffffff;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 296px;
+  height: 46px;
+}
+
+.m-body hr {
+  width: 100%;
+}
+
+.filters {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+}
+
+.filters input[type="text"] {
+  width: 90%;
+  height: 90%;
+  padding: 4px;
+  outline: none;
+  border: none;
+  background: url("assets/icons/search_form.png") no-repeat right;
+}
+
+.lista-grid {
+  width: 100%;
+  height: 300px;
+  overflow-y: scroll;
+  /*border: 1px solid #000;*/
+}
+
+.lista-grid .item-grid {
+  width: 45%;
+  border-bottom: 1px solid #d5cfdf;
+  margin-left: 10px;
+  float: left;
+}
+
+.lista-grid .item-grid a {
+  text-decoration: none;
+  text-transform: none;
+  text-decoration-style: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.lista-grid .item-grid a .cuadro-item {
+  text-align: center;
+}
+
+.lista-grid .item-grid .clase-img {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  border-radius: 6px;
+  /*background-color: #D5CFDF;*/
+}
+
+.lista-grid .item-grid .clase-img:hover {
+  background-color: #d5cfdf;
+}
+
+.lista-grid .clase-img .clase-descripcion {
+  width: 100%;
+  text-align: center;
+}
+
+.especiales {
+  width: 100%;
+}
+
+.especiales h4 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 28px;
+  font-weight: 900;
+  padding: 5px;
+}
+
+.especiales .especiales-list {
+  width: 100%;
+  height: 300px;
+  overflow-y: scroll;
+  padding: 5px;
+  border: none;
+}
+
+.controller {
+  height: 45px;
+  display: inline-block;
+  /*border: 1px solid #000;*/
+}
+
+.controller select {
+  width: 100%;
+}
+
+/*.controller span {
+  text-align: left;
+}*/
+
+.mensajes-validacion {
+  margin-top: 5px;
+  width: 100%;
+}
+
+input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+::placeholder {
+  color: #806ea0;
+}
+
+.tooltip_icon {
+  cursor: pointer;
+}
+
+.xsasiento {
+  width: 38px !important;
+}
+
+.linea {
+  margin-top: 15px;
+}
+
+.error-validate {
+  border-bottom: 1px solid red !important;
+  color: red !important;
+}
+
+.error-validate::placeholder {
+  border-bottom: 1px solid red !important;
+  color: red !important;
+}
+
+/* .btn-siguiente[disabled]{
+  background-color: #ADADAD !important;
+} */
+
+.mini-card {
+  /* display: inline-block; */
+  /* min-height: 206px; */
+  /* float: left; */
+  padding-top: 90px;
+  /* 54 */
+}
+
+.mini-card-hrule {
+  border-left: 1px solid #e9e6ef;
+  /* border-left: 1px solid red; */
+  float: left;
+  /* display: inline-block; */
+  height: 206px;
+  margin-left: 30px;
+  margin-right: 23px;
+  margin-top: 40px;
+}
+
+/* .mini-card-row {
+  display: table-row;
+}
+
+.mini-card-cell {
+  display: table-cell;
+} */
+
+.mini-card-title {
+  height: 20px;
+  /*width: 182px;*/
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0.34px;
+  line-height: 20px;
+  margin-top: 8px;
+}
+
+.mini-card-subtitle {
+  height: 40px;
+  /* width: 399px; */
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 20px;
+}
+
+.new-error {
+  position: absolute;
+  bottom: -8px;
+  white-space: nowrap;
+  display: run-in !important;
+}
+
+.new-error,
+.ico-error {
+  background-image: url("../../../../../assets/icons/error.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+
+.ico-error {
+  display: block !important;
+  text-align: left !important;
+}
+
+.nn {
+  display: none !important;
+}

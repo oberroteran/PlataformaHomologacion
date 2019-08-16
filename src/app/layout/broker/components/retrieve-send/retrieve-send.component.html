@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="form-group row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="title-principal">
+        <a>Generaci&oacute;n de Contrase&ntilde;a</a>
+      </div>
+      <div class="sub-title">
+        Este servicio te permite generar de forma segura tu contraseña necesaria para ingresar al portal de Protecta.
+      </div>
+      <hr class="hdivider" />
+      <app-retrieve-miga-pan [step]="2"></app-retrieve-miga-pan>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="sub-title">
+        Estaremos enviando a tu correo electr&oacute;nico un link para la generaci&oacute;n de tu nueva contraseña.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="email-text">
+        Correo electr&oacute;nico: {{email}}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="email-warning">
+        <i class="fa fa-lock-alt"></i>
+        Por tu seguridad hemos ocultado con asteriscos parte de la direcci&oacute;n de correo electr&oacute;nico.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="sub-title">
+        Si no recibes el correo electr&oacute;nico o tus datos no est&aacute;n actualizados, por favor ponte en contacto con nosotros
+        llamando a Nuestro Canal Corporativo 01-391-3005 o escribi&eacute;ndonos a:
+        <a href="mailto:canalcorporativo@protectasecurity.pe">canalcorporativo@protectasecurity.pe</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12 col-lg-4"></div>
+    <div class="col-sm-12 col-lg-4">
+      <button type="button" class="btn btn-warning btn-block" (click)="sendEmail()" [disabled]="loading">Enviar</button>
+    </div>
+    <div class="col-sm-12 col-lg-4"></div>
+  </div>
+</div>
+
+<app-modal #modalWindow [close]="false" [extraCss]="true">
+  <div class="m-body">
+    <div class="row">
+      <div class="col-lg-12">
+        <h6>{{message}}</h6>
+      </div>
+    </div>
+    <hr>
+    <div class="botones">
+      <button type="button" class="btn btn-orange" (click)="closeMessage()">Cerrar</button>
+    </div>
+  </div>
+</app-modal>
+<app-overlay [visible]="loading"></app-overlay>

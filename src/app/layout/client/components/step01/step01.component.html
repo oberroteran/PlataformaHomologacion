@@ -1,0 +1,164 @@
+<app-pixel-facebook></app-pixel-facebook>
+<app-pixel-google-analytics></app-pixel-google-analytics>
+<app-pixel-google-tag-manager></app-pixel-google-tag-manager>
+<app-miga-pan
+  [paso01]="false"
+  [paso02]="false"
+  [paso03]="false"
+  [paso04]="false"
+></app-miga-pan>
+<app-sidebar [visibleMobile]="false"></app-sidebar>
+<div class="container-main">
+  <div class="form-group row">
+    <div class="col-lg-7">
+      <app-title-step
+        actual="1"
+        titulo="Ingresa tu placa"
+        [anterior]="false"
+      ></app-title-step>
+
+      <div class="col-md-12">
+        <div class="placa">
+          <input
+            type="text"
+            class="form-control input-placa"
+            maxlength="{{ longitudPlaca }}"
+            placeholder="XXX XXX"
+            (keyup.enter)="validarPlaca()"
+            [(ngModel)]="placa"
+            [disabled]="bValidar || !bAceptarTerminos"
+            [ngClass]="{
+              'message-success': bValidado && bValido,
+              'message-error': bValidado && !bValido
+            }"
+          />
+        </div>
+        <div *ngIf="bValidado && !bValido" class="mensaje-placa">
+          <!--<p>Ups! No encontramos este n&uacute;mero de placa en nuestro sistema de datos. Por favor, verifica que hayas ingresado el n&uacute;mero correcto de caracteres: 5 &oacute; 6.</p>-->
+          <p>{{ mensaje }}</p>
+        </div>
+
+        <div class="acciones">
+          <div class="chkleft">
+            <label class="container">
+              <input
+                type="checkbox"
+                [checked]="bAceptarTerminos"
+                (change)="acceptTerms($event)"
+              />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div class="chkright">
+            <span class="acceptar"
+              >Acepto los
+              <a (click)="openModalTerminos()">
+                t&eacute;rminos y condiciones</a
+              >
+            </span>
+          </div>
+        </div>
+        <button
+          [disabled]="bValidar || !bAceptarTerminos"
+          type="button"
+          class="btn btn-validar-placa"
+          (click)="validarPlaca()"
+        >
+          Validar
+        </button>
+
+        <div class="img-valida-placa">
+          <img alt="" *ngIf="bLoading" src="assets/icons/loading.gif" />
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="tipo-vehiculo">
+        <div class="imagenes">
+          <img
+            *ngIf="bTipoVehiculo && bPlacaOk"
+            src="assets/icons/soat_big_car.svg"
+            class="img-fluid"
+            alt="auto"
+          />
+          <img
+            *ngIf="bTipoVehiculo && !bPlacaOk"
+            src="assets/icons/soat_bigcar_tooltip.svg"
+            class="img-fluid"
+            alt="auto"
+          />
+          <img
+            *ngIf="!bTipoVehiculo"
+            src="assets/icons/soat_bigmoto.svg"
+            class="img-fluid"
+            alt="moto"
+          />
+        </div>
+        <div class="botones">
+          <button
+            type="button"
+            [disabled]="bValidar"
+            class="btn-white"
+            [ngClass]="{ 'btn-selected': bTipoVehiculo == true }"
+            (click)="onSetTipoVehiculo(true)"
+          >
+            TENGO AUTO
+          </button>
+          <!-- <button type="button" [disabled]="bValidar" class="btn-white" [ngClass]="{'btn-selected': bTipoVehiculo == false }" (click)="onSetTipoVehiculo(false)">TENGO MOTO</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <app-sidebar [visibleMobile]="true"></app-sidebar>
+    </div>
+    <div class="col-lg-12">
+      <div class="mensaje">
+        <div class="imagen">
+          <img src="assets/icons/que_es_soat.svg" alt="SOAT" />
+        </div>
+        <div class="texto">
+          <div class="pregunta">
+            <p>P: ¿Que es el SOAT electr&oacute;nico?</p>
+          </div>
+          <div class="respuesta">
+            <p>
+              <span>R:</span> Es tener disponible tu SOAT Protecta Security
+              todos los d&iacute;as a todas horas sin tener que manejar dinero
+              en efectivo a un solo click de distancia desde tu celular, tu
+              lugar de trabajo o la comodidad de tu hogar. Todo de manera
+              r&aacute;pida y segura.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #modalTerminosCondiciones [efectivoCss]="true" [close]="false">
+  <div class="m-body">
+    <div class="terminos-titulo">
+      <h1>Nuestros T&eacute;rminos y Condiciones</h1>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="closeModalTerminos()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="terminos-texto">
+      <h5>T&Eacute;RMINOS Y CONDICIONES</h5>
+      <p>{{ texto1 }}</p>
+      <h5>{{ texto2 }}</h5>
+      <p>{{ texto3 }}</p>
+      <h3>{{ texto4 }}</h3>
+      <p>{{ texto5 }}</p>
+    </div>
+    <div class="botones">
+      <button class="btn-orange" (click)="aceptarTerminos()">Cerrar</button>
+    </div>
+  </div>
+</app-modal>

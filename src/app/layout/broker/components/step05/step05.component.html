@@ -1,0 +1,323 @@
+<div class="form-group row">
+  <div class="col-lg-3">
+    <nav-menu></nav-menu>
+  </div>
+  <div class="col-lg-9">
+    <div class="container-fluid">
+      <div class="form-group row hidden-xs-down">
+        <div class="col-lg-12 ">
+          <div class="creaunsoatmanual">
+            <a>{{ mainTitle }}</a>
+          </div>
+        </div>
+      </div>
+      <hr class="linea" />
+
+      <app-title-step
+        actual="99"
+        titulo=""
+        url="broker/stepAll"
+        [redirigir]="true"
+      ></app-title-step>
+      <!--<app-title-step actual="5" titulo="Resumen de tu compra" url="../step04"></app-title-step>-->
+      <div class="contenido">
+        <div class="resumen-top">
+          <span class="texto">La Compra del SOAT sale:</span>
+          <span class="monto">S/ {{ certificado.P_NPREMIUM }}</span>
+        </div>
+        <div class="resumen-bottom">
+          <div class="compra">
+            <div class="titulo">
+              <h4>Resumen de tu compra: {{ cliente.p_NIDPROCESS }}</h4>
+            </div>
+            <div class="encabezado-vehiculos">
+              <img
+                alt=""
+                src="assets/icons/car_resumen.png"
+                alt="Datos de vehiculo"
+              />
+              <div class="subtitulos">
+                <h5>Datos del veh&iacute;culo</h5>
+                <h6>Nro. de placa: {{ auto.p_SREGIST }}</h6>
+              </div>
+            </div>
+            <div class="datos-personales">
+              <app-item-personal
+                [label]="'Clase'"
+                [value]="auto.p_SNAMECLASE"
+              ></app-item-personal>
+              <app-item-personal
+                [label]="'Año'"
+                [value]="auto.p_NYEAR"
+              ></app-item-personal>
+
+              <app-item-personal
+                [label]="'Marca'"
+                [value]="auto.p_SNAME_VEHBRAND"
+              ></app-item-personal>
+              <app-item-personal
+                [label]="'Uso'"
+                [value]="auto.p_SNAME_USO"
+              ></app-item-personal>
+
+              <app-item-personal
+                [label]="'Modelo'"
+                [value]="auto.p_SNAME_VEHMODEL"
+              ></app-item-personal>
+              <app-item-personal
+                [label]="'Nro. Asientos'"
+                [value]="auto.p_SEATNUMBER"
+              ></app-item-personal>
+
+              <app-item-personal
+                [label]="'Nro. de Serie'"
+                [value]="auto.p_SNUMSERIE"
+              ></app-item-personal>
+            </div>
+            <div class="hr"></div>
+            <div class="encabezado-personas">
+              <img
+                src="assets/icons/datos_personales_icon.png"
+                alt="Datos de vehiculo"
+              />
+              <div class="subtitulos">
+                <h5>Datos Personales</h5>
+                <h6>Nro. {{ this.tpDocumento }}: {{ cliente.p_SDOCUMENT }}</h6>
+              </div>
+            </div>
+            <div class="datos-personales">
+              <app-item-personal
+                [label]="'Nombre'"
+                [value]="cliente.p_SCLIENT_NAME"
+              ></app-item-personal>
+              <app-item-personal
+                [label]="'Nro. Celular'"
+                [value]="cliente.p_SPHONE"
+              ></app-item-personal>
+
+              <app-item-personal
+                [label]="'Apellido Paterno'"
+                [value]="cliente.p_SCLIENT_APPPAT"
+              ></app-item-personal>
+              <app-item-personal
+                [label]="'Correo'"
+                [value]="cliente.p_SMAIL"
+              ></app-item-personal>
+
+              <app-item-personal
+                [label]="'Apellido Materno'"
+                [value]="cliente.p_SCLIENT_APPMAT"
+              ></app-item-personal>
+              <app-item-personal
+                [label]="'Raz&oacute;n Social'"
+                [value]="cliente.p_SLEGALNAME"
+              ></app-item-personal>
+            </div>
+            <div class="hr"></div>
+            <div class="encabezado-personas">
+              <img
+                src="assets/icons/certificado_icon.png"
+                alt="Datos de certificado"
+              />
+              <div class="subtitulos">
+                <h5>Datos del certificado</h5>
+                <h6>Nro. de p&oacute;liza: {{ certificado.P_NPOLICY }}</h6>
+              </div>
+            </div>
+            <div class="datos-personales">
+              <app-item-personal
+                [label]="'F. Inicio de Vigencia'"
+                [value]="certificado.P_DSTARTDATE | date: 'dd/MM/yyyy'"
+              ></app-item-personal>
+              <app-item-personal
+                [label]="'Total'"
+                [value]="'S/ ' + certificado.P_NPREMIUM.toString()"
+              ></app-item-personal>
+            </div>
+            <div *ngIf="showSeccionEntrega">
+              <div class="hr"></div>
+              <div class="encabezado-personas">
+                <img src="assets/icons/delivery.png" alt="Datos de entrega" />
+                <div class="subtitulos">
+                  <h5>Datos de Entrega</h5>
+                  <h6>
+                    Fecha:
+                    {{
+                      certificado.P_DFECHAENTREGADELIVERY | date: "dd/MM/yyyy"
+                    }}
+                  </h6>
+                </div>
+              </div>
+              <div class="datos-personales">
+                <app-item-personal
+                  [label]="'Turno de entrega'"
+                  [value]="certificado.P_STURNOENTREGADESCRIPTDELIVERY"
+                ></app-item-personal>
+                <app-item-personal
+                  [label]="'Forma de Pago'"
+                  [value]="certificado.P_SFORMAPAGODESCRIPTDELIVERY"
+                ></app-item-personal>
+                <app-item-personal-full
+                  [label]="'Dirección de Entrega'"
+                  [value]="0"
+                ></app-item-personal-full>
+                <app-item-personal-full
+                  [label]="certificado.P_SDIRECCIONENTREGADELIVERY"
+                  [value]="1"
+                ></app-item-personal-full>
+                <app-item-personal-full
+                  [label]="'Comentario'"
+                  [value]="0"
+                ></app-item-personal-full>
+                <app-item-personal-full
+                  [label]="certificado.P_SCOMENTARIODELIVERY"
+                  [value]="1"
+                ></app-item-personal-full>
+                <app-item-personal
+                  [label]="'Departamento'"
+                  [value]="certificado.P_NPROVINCEDESCRIPTDELIVERY"
+                ></app-item-personal>
+                <app-item-personal
+                  [label]="'Provincia'"
+                  [value]="certificado.P_NLOCATDELIVERYDESCRIPTDELIVERY"
+                ></app-item-personal>
+                <app-item-personal
+                  [label]="'Distrito'"
+                  [value]="certificado.P_SMUNICIPALITYDESCRIPTDELIVERY"
+                ></app-item-personal>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="acciones">
+          <div class="accion" [hidden]="true">
+            <span>Mira un ejemplo de un SOAT electr&oacute;nico </span>
+            <a (click)="verEjemploSOAT()">Ver SOAT electr&oacute;nico</a>
+          </div>
+          <div class="accion">
+            <input
+              type="checkbox"
+              [checked]="bAceptarTerminos"
+              (change)="acceptTerms($event)"
+              disabled
+            />
+            <span class="acceptar"
+              >Acepto los
+              <a (click)="openModalTerminos()">
+                t&eacute;rminos y condiciones</a
+              >
+            </span>
+          </div>
+        </div>
+        <div class="pago">
+          <!-- <div class="texto">
+            <h6>Para finalizar tu compra</h6>
+            <h5>Escoge tu metodo de pago</h5>
+          </div> -->
+          <div class="formas-pago">
+            <div *ngIf="bAceptarTerminos" class="form-group row">
+              <div class="col-lg-4 col-sm-12">
+                <!-- <div class="forma-pago">
+                  <a class="btn-selected" (click)="setMetodoPago(2)">
+                    <span>Pagar con Cup&oacute;n</span>
+                  </a>
+                </div> -->
+                <div *ngIf="bPagoEfectivo" class="btn-pago-efectivo">
+                  <a (click)="onPagar(2)">
+                    <img
+                      src="assets/images/logo_pagoefectivo_112x52.png"
+                      class="img-pago-efectivo"
+                      alt="PagoEfectivo"
+                    />
+                  </a>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-12">
+                <!--  <div class="forma-pago">
+                  <a class="btn-selected" (click)="setMetodoPago(1)">
+                    <span>Pagar con Visa</span>
+                  </a>
+                </div> -->
+                <div *ngIf="bVisa">
+                  <div class="btn-visa"></div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-sm-12">
+                <div *ngIf="bVoucher" class="forma-pago">
+                  <a class="btn-selected" (click)="setMetodoPago(3)">
+                    <span>Finalizar Venta</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="bMostrarLoading" class="loading">
+              <p>Espere unos segundos mientras procesamos su pago...</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!bValido" class="mensaje-validation">
+          <p *ngFor="let mensaje of mensajes">{{ mensaje }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #modalResultadoPE [close]="false" [efectivoCss]="true">
+  <div class="m-body">
+    <div class="frame-result"></div>
+    <div class="botones">
+      <button class="btn-orange" (click)="finalizar()">Finalizar</button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal #modalEjemploSoat>
+  <div class="m-body">
+    <div class="ejemplo_soat">
+      <img alt="" src="assets/images/soat_large_view.jpg" />
+    </div>
+  </div>
+</app-modal>
+
+<app-modal
+  #modalTerminosCondiciones
+  [close]="false"
+  [whiteOverlay]="true"
+  [extraCss]="true"
+>
+  <div class="m-body">
+    <div class="terminos-titulo">
+      <h1>Nuestros Términos y Condiciones</h1>
+      <button
+        type="button"
+        class="close close-button"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="cerrarTerminos()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="terminos-texto">
+      <h5>Términos y condiciones</h5>
+      <p>
+        Declaro en mi calidad de Corredor de Seguros o Comercializador, que he
+        cumplido con brindar la información relevante ​ ​del Certificado Soat
+        Electrónico al contratante y/o asegurado, quien ha manifestado su
+        consentimiento para contratar ​ el Certificado Soat Electrónico y para
+        que se le remita al correo electrónico que indique en la presente página
+        web, el ​Certificado S​oat ​Electrónico ​y los términos y condiciones de
+        los cuales acepta haber tomado conocimiento​.
+      </p>
+    </div>
+    <div class="terminos-boton">
+      <button type="button" class="btn btn-orange" (click)="cerrarTerminos()">
+        Aceptar
+      </button>
+    </div>
+  </div>
+</app-modal>

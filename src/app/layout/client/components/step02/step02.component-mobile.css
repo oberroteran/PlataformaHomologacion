@@ -1,0 +1,159 @@
+@media screen and (max-width: 768px) {
+  .link-seats {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .d-row {
+    display: table;
+    width: 100%;
+    line-height: 40px;
+  }
+  .d-row>* {
+    display: table-row;
+  }
+  .d-row>*>* {
+    display: table-cell;
+  }
+  .d-row>*>a {
+    width: 15px;
+  }
+  .si-mobile {
+    display: block;
+  }
+  .no-mobile {
+    display: none;
+  }
+  .container-main {
+    width: 96%;
+    padding: 20px;
+    padding-top: 0px;
+  }
+  .contenido .texto {
+    width: 100%;
+    text-align: unset;
+    font-size: 16px;
+    display: table;
+    line-height: 42px;
+  }
+  .contenido .texto span {
+    clear: both;
+    line-height: 40px;
+  }
+  .contenido .texto .d-row select, .contenido .texto .d-row input[type=text] {
+    width: 100% !important;
+    font-size: 15px;
+    text-align: center !important;
+    /*text-align: -webkit-center !important;*/
+    height: 40px !important;
+    border-radius: 0px;
+  }
+  .contenido .texto .d-row select, .d-row select {
+    text-align: center !important;
+    /*text-align: -webkit-center !important;*/
+    text-align-last: center !important;
+  }
+  .contenido .imagenes {
+    width: 100%;
+    height: 100%;
+  }
+  .contenido .imagenes .tarjeta {
+    width: 100%;
+    height: 100%;
+    float: left;
+    margin-bottom: 10px;
+    padding: 0px 20px;
+    text-align: center;
+  }
+  .botones {
+    margin: 0px;
+  }
+  .botones .btn-siguiente {
+    width: 100%;
+    height: unset;
+    min-height: 46px;
+    white-space: normal;
+    padding: 0px;
+  }
+  /* .ll {
+    height: 31px !important;
+  } */
+  input[type=text] {
+    height: 31px !important;
+  }
+  .circulacion {
+    line-height: 1;
+  }
+  .new-error {
+    display: none !important;
+  }
+  .error-validate::placeholder {
+    border-bottom: 1px none red !important;
+    color: red !important;
+  }
+  .d-row select {
+    height: 36px !important;
+    text-align: center !important;
+    /*text-align: -webkit-center*/
+  }
+  /*.modal-dialog{
+    width:94.5% !important;
+  }*/
+  /*
+
+  input.xsasiento {
+    height: 40px !important;
+    border-radius: 0px;
+  }
+  select.xstipo-uso {
+    text-align: center !important;
+    text-align-last: center !important;
+    border-radius: 0px !important;
+    height: 40px !important;
+  }
+  input.xsserie {
+    height: 40px !important;
+  }
+  input.anio {
+    height: 40px !important;
+  }
+  */
+  .simple-line {
+    line-height: 1;
+  }
+  /*
+  select {
+    text-align: -moz-center !important;
+    text-align: -webkit-center !important;
+  }*/
+}
+
+/* @media screen and (max-width: 1124px) { */
+
+@media screen and (max-width: 970px) {
+  .mini-card-hrule {
+    display: none;
+  }
+  .mini-card {
+    /* height: fit-content; */
+    clear: both;
+    padding-top: 0px;
+    padding-left: 15px;
+  }
+  .mini-card-row {
+    display: table-cell;
+  }
+  .mini-card-title {
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .mini-card-subtitle {
+    font-size: 10px;
+    line-height: 15px;
+  }
+}
+  select {
+    text-align: -moz-center !important;
+    text-align: -webkit-center !important;
+  }
+
+

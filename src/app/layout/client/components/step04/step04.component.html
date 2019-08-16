@@ -1,0 +1,278 @@
+<app-pixel-facebook></app-pixel-facebook>
+<app-pixel-google-analytics></app-pixel-google-analytics>
+<app-pixel-google-tag-manager></app-pixel-google-tag-manager>
+<app-miga-pan
+  [paso01]="true"
+  [paso02]="true"
+  [paso03]="true"
+  [paso04]="false"
+></app-miga-pan>
+<!-- <app-sidebar-resumen></app-sidebar-resumen> -->
+
+<div class="container-resumen">
+  <app-title-step
+    actual="4"
+    titulo="Resumen de tu compra"
+    url="client/contratante"
+    [redirigir]="true"
+  ></app-title-step>
+  <!-- <app-title-step actual="4" titulo="Resumen de tu compra" url="../contratante"></app-title-step> -->
+  <div class="contenido">
+    <div class="resumen-top">
+      <span class="texto"
+        >La Compra de <br class="si-mobile" />tu SOAT sale:</span
+      >
+      <div class="jumper"></div>
+      <span class="monto">S/ {{ total }}</span>
+    </div>
+    <div class="resumen-bottom">
+      <div class="compra">
+        <div class="titulo">
+          <h4>Resumen de tu compra: {{ auto.V_NIDPROCESS }}</h4>
+        </div>
+        <div class="encabezado-vehiculos">
+          <img  alt="" src="assets/icons/datos_vehiculo.svg" alt="Datos de vehiculo" />
+          <div class="subtitulos">
+            <h5>Datos del veh&iacute;culo</h5>
+            <h6>Nro. de placa: {{ auto.p_SREGIST }}</h6>
+          </div>
+        </div>
+        <div class="datos-personales">
+          <app-item-personal
+            [label]="'Clase'"
+            [value]="auto.p_SNAMECLASE"
+          ></app-item-personal>
+          <app-item-personal
+            [label]="'Marca'"
+            [value]="auto.p_SNAME_VEHBRAND"
+          ></app-item-personal>
+
+          <app-item-personal
+            [label]="'Modelo'"
+            [value]="auto.p_SNAME_VEHMODEL"
+          ></app-item-personal>
+          <app-item-personal
+            [label]="'Año'"
+            [value]="auto.p_NYEAR"
+          ></app-item-personal>
+
+          <app-item-personal
+            [label]="'Uso'"
+            [value]="auto.p_SNAME_USO"
+          ></app-item-personal>
+          <app-item-personal
+            [label]="'Nro. Asientos'"
+            [value]="auto.p_SEATNUMBER"
+          ></app-item-personal>
+        </div>
+
+        <div class="hr"></div>
+        <div class="encabezado-personas">
+          <img
+            src="assets/icons/datos_personales.svg"
+            alt="Datos de vehiculo"
+          />
+          <div class="subtitulos">
+            <h5>Datos Personales</h5>
+            <h6>Nro. {{ this.tpDocumento }}: {{ cliente.p_SDOCUMENT }}</h6>
+          </div>
+        </div>
+        <div class="datos-personales">
+          <app-item-personal
+            *ngIf="!besEmpresa"
+            class="form-group"
+            [label]="'Nombre'"
+            [value]="cliente.p_SCLIENT_NAME"
+          ></app-item-personal>
+          <app-item-personal
+            *ngIf="besEmpresa"
+            class="form-group"
+            [label]="'Raz&oacute;n Social'"
+            [value]="cliente.p_SLEGALNAME"
+          ></app-item-personal>
+          <app-item-personal
+            [label]="'Nro. Celular'"
+            [value]="cliente.p_SPHONE"
+          ></app-item-personal>
+
+          <app-item-personal
+            *ngIf="!besEmpresa"
+            class="form-group"
+            [label]="'Apellido Paterno'"
+            [value]="cliente.p_SCLIENT_APPPAT"
+          ></app-item-personal>
+          <app-item-personal
+            [label]="'Correo'"
+            [value]="cliente.p_SMAIL"
+          ></app-item-personal>
+
+          <app-item-personal
+            *ngIf="!besEmpresa"
+            class="form-group"
+            [label]="'Apellido Materno'"
+            [value]="cliente.p_SCLIENT_APPMAT"
+          ></app-item-personal>
+        </div>
+      </div>
+    </div>
+    <div class="acciones">
+      <!--<div class="accion"><input type="checkbox">Deseo recibir facturacion electr&oacute;nica</div>
+        <div class="accion"><input type="checkbox">Deseo renovar mi SOAT automaticamente</div>-->
+      <div class="accion">
+        <span>Mira un ejemplo de un SOAT electr&oacute;nico </span>
+        <a (click)="verEjemploSOAT()">Ver SOAT electr&oacute;nico</a>
+      </div>
+      <div class="accion accion-right">
+        <!-- <label class="container" (click)="openModalTerminos($event)">
+          <input type="checkbox" [checked]="bAceptarTerminos" disabled />
+          <span class="checkmark"></span>
+        </label>
+        <span class="acceptar">Acepto los t&eacute;rminos y condiciones</span> -->
+      </div>
+    </div>
+    <!-- <div>
+      <label class="container">
+          <input type="checkbox" checked>
+          <span class="checkmark"></span>
+      </label>
+    </div>-->
+
+    <div
+      *ngIf="bMostrarCupon"
+      class="cupon container-fluid"
+      [ngClass]="{
+        'cupon-locked': !btarifaExterno || btarifa || !bstockExterno
+      }"
+    >
+      <div class="cupon-title">CODIGO DE DESCUENTO</div>
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control cupon-input"
+          placeholder="{{ cuponPlaceholder }}"
+          aria-describedby="basic-addon2"
+          [(ngModel)]="cuponCode"
+          [disabled]="bLoadingCupon"
+        />
+        <span
+          class="input-group-addon cupon-addon"
+          id="basic-addon2"
+          (click)="aplicarCupon()"
+          >Aplicar</span
+        >
+      </div>
+      <span
+        *ngIf="bLoadingCupon == false && bErrorCupon == true"
+        class="mensaje-error-control"
+      >
+        {{ mensajeErrorCupon }}
+      </span>
+    </div>
+
+    <div class="pago">
+      <div class="texto line-texto">
+        <h6>Para finalizar tu compra</h6>
+        <h5>Escoge tu m&eacute;todo de pago</h5>
+      </div>
+      <div
+        class="formas-pago"
+        [ngClass]="{ 'formas-pago-locked': !bMostrarButtons }"
+      >
+        <div class="btn-paymentgeneral">
+           <div>
+            <div class="btn-visa">
+              <form action="paginaRespuesta" method="post">
+                <script
+                  src="https://static-content.vnforapps.com/v2/js/checkout.js"
+                  data-sessiontoken="123456ABCD789"
+                  data-channel="web"
+                  data-merchantid="123456789"
+                  data-merchantlogo="img/comercio.png"
+                  data-formbuttoncolor="#D80000"
+                  data-purchasenumber="123"
+                  data-amount="20.98"
+                  data-expirationminutes="5"
+                  data-timeouturl="timeout.html"
+                ></script>
+              </form>
+            </div>
+          </div>
+          <div *ngIf="mostrarPE" class="btn-pago-efectivo">
+            <a (click)="onPagar(2)">
+              <img
+                src="assets/images/logo_pagoefectivo_112x52.png"
+                alt="PagoEfectivo"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div *ngIf="btarifa" class="mensajes-validacion">
+        <span class="mensaje-error-control"
+          >Lamentablemente, no contamos con una tarifa configurada para los
+          valores ingresados de su veh&iacute;culo. Por favor, modifique sus
+          datos e intente nuevamente.
+          <br />
+        </span>
+      </div>
+
+      <div
+        *ngIf="!btarifaExterno || btarifa || !bstockExterno"
+        class="mensajes-validacion"
+        style="clear: both;"
+      >
+        <br />
+        <span *ngIf="!btarifaExterno || btarifa" class="mensaje-error-control">
+          Lamentablemente, el Canal de Venta no cuenta con con una tarifa
+          configurada para los valores ingresados.
+        </span>
+        <br />
+        <span *ngIf="!bstockExterno" class="mensaje-error-control"
+          >Lamentablemente, el Canal de Venta no cuenta con p&oacute;lizas
+          distribuidas.
+        </span>
+      </div>
+
+      <div *ngIf="bMostrarLoading" class="loading">
+        <p>Espere unos segundos mientras procesamos su pago...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #modalEjemploSoat [mobileDisplay]="true">
+  <div class="m-body">
+    <div class="ejemplo_soat">
+      <img src="assets/images/soat_large_view.jpg" />
+    </div>
+  </div>
+</app-modal>
+
+<app-modal #modalTerminosCondiciones [efectivoCss]="true" [close]="false">
+  <div class="m-body">
+    <div class="terminos-titulo">
+      <h1>Nuestros T&eacute;rminos y Condiciones</h1>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="closeModalTerminos()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="terminos-texto">
+      <h5>T&Eacute;RMINOS Y CONDICIONES</h5>
+      <p>{{ texto1 }}</p>
+      <h5>{{ texto2 }}</h5>
+      <p>{{ texto3 }}</p>
+      <h3>{{ texto4 }}</h3>
+      <p>{{ texto5 }}</p>
+    </div>
+    <div class="botones">
+      <button class="btn-orange" (click)="closeModalTerminos()">Cerrar</button>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,358 @@
+<div class="form-group row">
+  <div class="col-lg-3">
+    <navmenusctr></navmenusctr>
+  </div>
+  <div class="col-lg-9">
+    <div class="container-fluid">
+      <div class="header-content">
+        <div class="containt-item">
+          <div class="header-item">
+            <span class="title">Solicitudes</span>
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-9">
+                <h5>Datos del Contratante</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <span>TIPO DOCUMENTO</span>
+                <select disabled>
+                  <option selected>Seleccionar</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>NRO. DOCUMENTO</span>
+                <input type="text" placeholder="Documento" disabled />
+              </div>
+              <div class="col-sm-3">
+                <span>Contratante</span>
+                <input type="text" placeholder="Contratante" disabled />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <span>SEDE</span>
+                <select disabled>
+                  <option selected>Seleccionar</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>DIRECCIÓN</span>
+                <select disabled>
+                  <option selected>Seleccionar</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>CIIU</span>
+                <select disabled>
+                  <option selected>Seleccionar</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>CORREO ELECTRÓNICO</span>
+                <input type="text" placeholder="Correo Electrónico" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm">
+                <h5>Datos del Broker</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <span>TIPO DOCUMENTO</span>
+                <select disabled>
+                  <option selected>Seleccionar</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>NRO. DOCUMENTO</span>
+                <input type="text" placeholder="Documento" disabled />
+              </div>
+              <div class="col-sm-3">
+                <span>NOMBRES Y APELLIDOS</span>
+                <input type="text" placeholder="Nombres y Apellidos" disabled />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <span>COMISIÓN BROKER</span>
+                <input type="text" placeholder="Comisión del Broker" disabled />
+              </div>
+              <div class="col-sm-3">
+                <span>COMISIÓN PROPUESTA</span>
+                <input type="text" placeholder="Comisión Propuesta" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm">
+                <h5>Datos de la Póliza</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <span>MONEDA</span>
+                <select disabled>
+                  <option selected>Seleccionar</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>PERÍODO VIGENCIA</span>
+                <input type="text" placeholder="dd/MM/yyyy" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker
+                  [(bsValue)]="bsValueIni" value="{{ bsValueIni | date:'dd/MM/yyyy' }}" disabled />
+              </div>
+              <div class="col-sm-3">
+                <span>ACTIVIDAD</span>
+                <select disabled>
+                  <option selected>Seleccionar</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <span>PRIMA MÍNIMA</span>
+                <input type="text" placeholder="Prima Mínima" disabled />
+              </div>
+              <div class="col-sm-3">
+                <span>PRIMA MÍNIMA PROPUESTA</span>
+                <input type="text" placeholder="Prima Mínima Propuesta" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm">
+                <h5>Cotizador</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <label><input type="checkbox" class="checkbox" disabled><span class="schk">SCTR SALUD</span></label>
+              </div>
+              <div class="col-sm-3">
+                <label><input type="checkbox" class="checkbox" disabled><span class="schk">SCTR PENSIÓN</span></label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <table class="table table-borderless riesgo">
+                  <thead>
+                    <tr class="d-flex">
+                      <th class="col-sm-2">Riesgo</th>
+                      <th class="col-sm-2 text-center">Total Trabajadores</th>
+                      <th class="col-sm-2 text-center">Monto Planilla</th>
+                      <th class="col-sm-6">Delimitación</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="d-flex">
+                      <td class="col-sm-2"><span>Alto Riesgo</span></td>
+                      <td class="col-sm-2 text-center"><span>0</span></td>
+                      <td class="col-sm-2 text-center"><span>0</span></td>
+                      <td class="col-sm-6"><input type="button" class="btn btn-default" value="Descargar" /></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-sm-2"><span>Mediano Riesgo</span></td>
+                      <td class="col-sm-2 text-center"><span>0</span></td>
+                      <td class="col-sm-2 text-center"><span>0</span></td>
+                      <td class="col-sm-6"><input type="button" class="btn btn-default" value="Descargar" /></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-sm-2"><span>Bajo Riesgo</span></td>
+                      <td class="col-sm-2 text-center"><span>0</span></td>
+                      <td class="col-sm-2 text-center"><span>0</span></td>
+                      <td class="col-sm-6"><input type="button" class="btn btn-default" value="Descargar" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm">
+                        <h5>SCTR SALUD</h5>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <table class="table table-borderless riesgo">
+                        <thead>
+                          <tr class="d-flex">
+                            <th class="col-sm-3 text-center">Tasa Calculada</th>
+                            <th class="col-sm-3 text-center">Hab. Tasa</th>
+                            <th class="col-sm-3 text-center">Tasa Autorizada</th>
+                            <th class="col-sm-3 text-center">Prima Mensual</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="d-flex">
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                          </tr>
+                          <tr class="d-flex">
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                          </tr>
+                          <tr class="d-flex">
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm">
+                        <h5>SCTR PENSIÓN</h5>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <table class="table table-borderless riesgo">
+                        <thead>
+                          <tr class="d-flex">
+                            <th class="col-sm-3 text-center">Tasa Calculada</th>
+                            <th class="col-sm-3 text-center">Hab. Tasa</th>
+                            <th class="col-sm-3 text-center">Tasa Autorizada</th>
+                            <th class="col-sm-3 text-center">Prima Mensual</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="d-flex">
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                          </tr>
+                          <tr class="d-flex">
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                          </tr>
+                          <tr class="d-flex">
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                            <td class="col-sm-3 text-center"><span>0</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm">
+                    <h5>Retroactividad</h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <span>Fecha Regristro Solicitud:</span>
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="text" placeholder="11/11/2019" disabled />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-7">
+                    <span>La solicitud se esta intentando emitir con retroactividad mayor a 30 días</span>
+                  </div>
+                  <div class="col-sm-2">
+                    <label><input type="checkbox" class="checkbox"><span class="schk">Facultativa</span></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <span>Actividad Restringida:</span>
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="text" placeholder="Minería" disabled />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <span>COMENTARIO</span>
+                <textarea class="form-control" id="" rows="4" placeholder="Comentario"></textarea>
+              </div>
+              <div class="col-sm-5">
+                <input type="file" class="file" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">
+                <label><input type="radio" name="state" value="1"> Revisión</label>
+              </div>
+              <div class="col-sm-2">
+                <label><input type="radio" name="state" value="2"> Aprobar</label>
+              </div>
+              <div class="col-sm-2">
+                <label><input type="radio" name="state" value="3"> Rechazar</label>
+              </div>
+              <div class="col-sm-6">
+                <button class="full-color pull-right">
+                  <span>Aceptar</span>
+                </button>
+                <button class="pull-right">
+                  <span>Cancelar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

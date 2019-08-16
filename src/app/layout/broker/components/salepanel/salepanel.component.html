@@ -1,0 +1,238 @@
+<div class="form-group row">
+  <div class="col-lg-3">
+    <nav-menu></nav-menu>
+  </div>
+  <div class="col-lg-9">
+    <div class="container-fluid">
+      <div class="form-group row row-title-principal">
+        <div class="col-sm-12 col-lg-12">
+          <div class="title-princial">
+            <a>Bienvenido a Protecta Security, {{ nombre }}.</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-12 col-lg-12">
+          <div class="text-descripcion">
+            <p>
+              Ahora podrás crear e ingresar el seguro vehícular de tus clientes
+              de manera inmediata. Conoce el Historial de tus Ventas de SOAT con
+              Protecta Security.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="bMostrarPuntoVentas" class="form-group row">
+        <div class="col-lg-4">
+          <div class="title-rectangle">
+            <label for="disabledTextInput" class="label-formulario"
+              >Escoger punto de venta:
+            </label>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="rectangle-copy-parrafo-ini">
+            <select
+              class="form-control select-formulario"
+              (change)="setPuntoVenta($event)"
+            >
+              <option value="undefined" disabled selected
+                >Seleccione punto de venta</option
+              >
+              <option
+                *ngFor="let channelPoint of ListChannelPoint"
+                value="{{ channelPoint.nnumpoint }}"
+                >{{ channelPoint.sdescript }}</option
+              >
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-12 col-lg-6">
+          <div class="rectangle">
+            <div class="cabera">
+              <img
+                src="assets/icons/certificado_digital.svg"
+                class="fill-18 "
+                alt=""
+              />
+            </div>
+            <div class="title-rectangle">
+              <a>Compra un Certificado para <br />un tercero DIGITAL</a>
+              <img src="assets/icons/help-orange.png" class=".img-help" />
+            </div>
+            <div class="content-rectagle">
+              <div class="rectangle-copy-left">
+                <div class="rectangle-copy-numero">
+                  {{ Papel.v_NTOTAL_DIGITAL_V }}
+                </div>
+                <p class="rectangle-copy-parrafo">Certificados Vendidos</p>
+              </div>
+              <div class="rectangle-copy-rigth">
+                <div class="rectangle-copy-numero">
+                  {{ Papel.v_NTOTAL_DIGITAL_NV }}
+                </div>
+                <p class="rectangle-copy-parrafo">Certificados por vender</p>
+              </div>
+            </div>
+            <div class="rectangle-footer">
+              <!--<button type="button" [disabled]="!desDigital" class="btn-compra active" (click)="onComprar(3)">Comprar ahora</button>-->
+              <button
+                type="button"
+                [disabled]="!desDigital"
+                class="btn-compra active"
+                (click)="onComprarAll(3)"
+              >
+                Comprar ahora
+              </button>
+              <!-- <p class="rectangle-footer-parrafo">Solicitar acceso a la plataforma de ecommerce de Protecta Security</p> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12 col-lg-6">
+          <div class="rectangle">
+            <div class="cabera">
+              <img
+                src="assets/icons/certificado_laser.svg"
+                class="fill-18 "
+                alt=""
+              />
+              <img src="" class="switch" alt="" />
+            </div>
+            <div class="title-rectangle">
+              <a>Compra un Certificado para <br />un tercero LÁSER</a>
+              <img src="assets/icons/help-orange.png" class=".img-help" />
+            </div>
+            <div class="content-rectagle">
+              <div class="rectangle-copy-left">
+                <div class="rectangle-copy-numero">
+                  {{ Papel.v_NTOTAL_LASER_V_PU }}
+                </div>
+                <p class="rectangle-copy-parrafo">Certificados Vendidos</p>
+              </div>
+              <div class="rectangle-copy-rigth">
+                <div class="rectangle-copy-numero">
+                  {{ Papel.v_NTOTAL_LASER_NV_PU }}
+                </div>
+                <p class="rectangle-copy-parrafo">Certificados por vender</p>
+              </div>
+            </div>
+            <div class="content-rectagle">
+              <div class="rectangle-copy-left">
+                <div class="rectangle-copy-numero-pa">
+                  {{ Papel.v_NTOTAL_LASER_V_PA }}
+                </div>
+                <p class="rectangle-copy-parrafo-pa">Certificados Vendidos</p>
+              </div>
+              <div class="rectangle-copy-rigth">
+                <div class="rectangle-copy-numero-pa">
+                  {{ Papel.v_NTOTAL_LASER_NV_PA }}
+                </div>
+                <p class="rectangle-copy-parrafo-pa">Certificados por vender</p>
+              </div>
+            </div>
+            <div class="rectangle-footer">
+              <!--<button type="button" [disabled]="!desLaser" class="btn-compra active" (click)="onComprar(2)">Comprar ahora</button>-->
+              <button
+                type="button"
+                [disabled]="!desLaser"
+                class="btn-compra active"
+                (click)="onComprarAll(2)"
+              >
+                Comprar ahora
+              </button>
+              <!-- <p class="rectangle-footer-parrafo">Solicitar acceso a la plataforma de ecommerce de Protecta Security</p> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="col-sm-12 col-lg-4">
+          <div class="rectangle">
+            <div class="cabera">
+              <img
+                src="assets/icons/certificado_manual.svg"
+                class="fill-18 "
+                alt=""
+              />
+              <img src="" class="switch" alt="" />
+            </div>
+            <div class="title-rectangle">
+              <a>Ingresa la venta del <br />Certificado MANUAL</a>
+              <img src="assets/icons/help-orange.png" class=".img-help" />
+            </div>
+            <div class="content-rectagle">
+              <div class="rectangle-copy-left">
+                <div class="rectangle-copy-numero">
+                  {{ Papel.v_NTOTAL_MANUAL_V_PU }}
+                </div>
+                <p class="rectangle-copy-parrafo">Certificados Vendidos</p>
+              </div>
+              <div class="rectangle-copy-rigth">
+                <div class="rectangle-copy-numero">
+                  {{ Papel.v_NTOTAL_MANUAL_NV_PU }}
+                </div>
+                <p class="rectangle-copy-parrafo">Certificados por vender</p>
+              </div>
+            </div>
+            <div class="content-rectagle">
+              <div class="rectangle-copy-left">
+                <div class="rectangle-copy-numero-pa">
+                  {{ Papel.v_NTOTAL_MANUAL_V_PA }}
+                </div>
+                <p class="rectangle-copy-parrafo-pa">Certificados Vendidos</p>
+              </div>
+              <div class="rectangle-copy-rigth">
+                <div class="rectangle-copy-numero-pa">
+                  {{ Papel.v_NTOTAL_MANUAL_NV_PA }}
+                </div>
+                <p class="rectangle-copy-parrafo-pa">Certificados por vender</p>
+              </div>
+            </div>
+            <div class="rectangle-footer">
+              <button
+                type="button"
+                [disabled]="!desManual"
+                class="btn-compra active"
+                (click)="onComprarAll(1)"
+              >
+                Comprar ahora
+              </button>
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <div *ngIf="bBloqueo" class="alert alert-danger text-center">
+        <p>{{ mensajeBloqueoVenta }}</p>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-12 col-lg-12">
+          <div class="container-historial-venta">
+            <div class="header-historial-venta">
+              <img
+                src="assets/icons/historial_ventas.svg"
+                class="fill-18 "
+                alt=""
+              />
+            </div>
+            <div class="contenido-historial-venta">
+              <a>Mi Historial de <br />Ventas</a>
+              <img src="assets/icons/help-orange.png" class=".img-help" />
+            </div>
+            <div class="footer-historial-venta">
+              <button
+                type="button"
+                class="btn-historial"
+                (click)="Irhistorial()"
+              >
+                Ir a mi Historial de Ventas
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,358 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~ngx-bootstrap/datepicker/bs-datepicker.css";
+@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+
+@font-face {
+  font-family: "Bliss Pro";
+  src: url("assets/fonts/BlissPro-Light.eot");
+  src: url("assets/fonts/BlissPro-Light.eot?#iefix") format("embedded-opentype"),
+    url("assets/fonts/BlissPro-Light.svg#BlissPro-Light") format("svg"),
+    url("assets/fonts/BlissPro-Light.ttf") format("truetype"),
+    url("assets/fonts/BlissPro-Light.woff") format("woff"),
+    url("assets/fonts/BlissPro-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bliss Pro Bold";
+  src: url("assets/fonts/BlissPro-Bold.eot");
+  src: url("assets/fonts/BlissPro-Bold.eot?#iefix") format("embedded-opentype"),
+    url("assets/fonts/BlissPro-Bold.svg#BlissPro-Bold") format("svg"),
+    url("assets/fonts/BlissPro-Bold.ttf") format("truetype"),
+    url("assets/fonts/BlissPro-Bold.woff") format("woff"),
+    url("assets/fonts/BlissPro-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body,
+input,
+select,
+button,
+* {
+  font-family: "Bliss Pro";
+}
+@media (min-width: 992px){
+	.modalCustom .modal-lg, .modalCustom .modal-xl {
+		max-width: 960px;
+	}
+}
+
+.container-main {
+  width: 70%;
+  min-height: 750px;
+  float: left;
+  margin-left: 2%;
+}
+
+.mensaje-error {
+  color: red;
+  font-size: 13px;
+}
+
+.mensaje-error-control {
+  color: #fd2f21;
+  font-family: "Bliss Pro";
+  font-size: 13px;
+  line-height: 12px;
+}
+
+.deshabilitado {
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.white-overlay {
+  background: rgba(255, 255, 255, 0.8) !important;
+  opacity: 1 !important;
+}
+
+.extra-modal {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.extra-modal .modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mi-paginado ul.pagination {
+  width: fit-content !important;
+  margin: auto !important;
+}
+
+.input-text-help {
+  background: url(assets/icons/help-orange.png) 97% no-repeat;
+}
+
+.select-chevron {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(assets/icons/chevron-small-down.png) 97% no-repeat;
+}
+
+.volver {
+  width: 100%;
+  height: 16px;
+  margin-bottom: 30px;
+}
+
+.volver a {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.volver a img {
+  /* float: left;
+  margin-left: 5px;
+  margin-top: 5px; */
+  margin-bottom: 2px;
+  vertical-align: middle;
+}
+
+.no-left {
+  padding-left: 0px !important;
+  margin-left: 0px !important;
+}
+
+.bs-datepicker-container {
+  padding: 0px;
+}
+
+.bs-datepicker-head {
+  background-color: #fff !important;
+  color: #2b0d61;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.bs-datepicker-head button.current {
+  border-radius: 15px;
+  max-width: 155px;
+  padding: 0 13px;
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.bs-datepicker-head button.next,
+.bs-datepicker-head button.previous {
+  color: #2b0d61 !important;
+}
+
+.bs-datepicker-body table td span.selected,
+bs-datepicker-body table td.selected span,
+.bs-datepicker-body table td span[class*="select-"]:after,
+.bs-datepicker-body table td[class*="select-"] span:after {
+  background-color: #c0bcc4 !important;
+  color: #fff !important;
+}
+
+.bs-datepicker-body table th {
+  font-size: 10px;
+  color: #2b0d61;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-family: "Bliss Pro";
+}
+
+.error-validate {
+  border: 1px solid red !important;
+  color: red !important;
+}
+
+.error-validate::placeholder {
+  color: red !important;
+}
+
+/* * {
+  border: 1px solid gray;
+} */
+
+@media screen and (max-width: 768px) {
+  .mobile-display .modal-dialog {
+    max-width: 95%;
+  }
+}
+
+///////
+/* Swal alert */
+.swal2-styled.swal2-confirm{
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    line-height: 20px !important;
+	text-align: center !important;
+	background: #ed6e00 !important;
+    border-color: #ed6e00 !important;
+}
+.swal2-styled.swal2-cancel{
+	font-size: 16px !important;
+    font-weight: 900 !important;
+    line-height: 20px !important;
+    text-align: center !important;
+}
+.swal2-content{
+	font-size: 16px !important;
+    color: #aa9ec0 !important;
+    font-weight: 300 !important;
+}
+.swal2-title{
+	font-size: 24px !important;
+    color: #2b0d61 !important;
+}
+
+/* Acordion */
+.accordion .card-header {
+	padding: 0px !important;
+}
+.accordion .card-header h5 {
+	padding: .75rem 1.25rem;
+	background-color: #806ea0;
+	color: #fff;
+	font-size: 18px;
+}
+.accordion .card-header h5:hover {
+	cursor: pointer;
+}
+.card {
+    border: 1px solid rgba(0,0,0,.125) !important;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #ebebe4;
+	opacity: 1;
+	 }
+//Select search
+.ng-select .ng-select-container .ng-value-container .ng-placeholder {
+	color: #aa9ec0;
+	font-size: 14px;
+	text-transform: uppercase;
+}
+.ng-select .ng-select-container .ng-value-container .ng-input>input{
+	color: #aa9ec0;
+}
+.ng-select.ng-select-single .ng-select-container {
+	width: 100%;
+	border: none;
+	padding: 8px 5px;	
+	border-radius: 2px;
+	// margin-top: 5px;
+	font-size: 14px;
+	height: 45px;
+	font-weight: 300;
+	color: #aa9ec0;
+	// border: 1px solid #aa9ec0;
+}
+.border-ng{
+	border: 1px solid #aa9ec0;
+    border-radius: 2px;
+    width: 100%;
+    padding: 1px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #aa9ec0;
+}
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    top: 5px;
+    left: 0;
+    padding-left: 16px;
+	padding-right: 50px;
+	padding-top: 7px;
+}
+.ng-select.ng-select-single .ng-select-container .ng-value-container, .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value{
+	padding-top: 2px;
+}
+
+[dir="rtl"] .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    padding-right: 10px;
+    padding-left: 50px
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-selected, .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-selected.ng-option-marked {
+    background-color: #ebf5ff;
+    font-weight: 600
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    background-color: #fff;
+	font-size: 14px;
+    text-transform: capitalize;
+	color: #aa9ec0;
+	padding: 0 16px;
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked{
+    color: #ffffff !important;
+    background-color: #007bff !important;
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected, .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
+    color: #ffffff !important;
+    background-color: #007bff !important;
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected .ng-option-label, .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked .ng-option-label {
+    font-weight: normal
+}
+.ng-select.ng-select-disabled>.ng-select-container {
+    background-color: #ebebe4;
+}
+
+//
+
+button.start-js-btn {
+  /*background-color: #45b1e8; background-image: linear-gradient(#45b1e8, #055a85);*/
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  border: 0 none;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+  padding: 1px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1); /*padding: 10px;*/
+  text-decoration: none;
+  font-family: Helvetica, Arial, Sans-serif; /*min-width: 100px;*/
+  display: inline-block;
+  text-align: center;
+  user-select: none;
+}
+button.start-js-btn:hover {
+  /*background-color: #3d9ccc; background-image: linear-gradient(#3d9ccc, #055a85);*/
+}
+button.start-js-btn:active {
+  /*background-color: #055a85; background-image: linear-gradient(#055a85, #3d9ccc);*/
+}
+.visanet-opened {
+  overflow: hidden;
+  position: fixed;
+}
+button.small {
+  width: 86px;
+  height: 73px;
+}
+button.medium {
+  width: 130px;
+  height: 45px;
+}
+button.large {
+  width: 223px;
+  height: 49px;
+}
+button.default {
+  width: 187px;
+  height: 40px;
+}
+/*# sourceMappingURL=button.css.map */

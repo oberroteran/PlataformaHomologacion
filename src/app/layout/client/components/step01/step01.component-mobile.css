@@ -1,0 +1,39 @@
+@media screen and (max-width: 768px) {
+  .mensaje {
+    display: none;
+  }
+  .row {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .container-main {
+    width: 100%;
+    margin-left: 0;
+  }
+  .placa {
+    width: 100%;
+    margin-top: 6px;
+  }
+  .acceptar {
+    margin-left: 9px;
+  }
+  .row-header h4 {
+    font-size: 20px;
+  }
+  .placa .input-placa {
+    clear: both;
+    margin-bottom: 0px;
+  }
+  .btn-validar-placa {
+    margin-top: 5px;
+  }
+  .placa .mensaje-placa {
+    clear: both;
+    padding: 10px 5px 0px 5px;
+    margin-bottom: 0px;
+  }
+
+  .mensaje-placa p {
+    margin-bottom: 0rem;
+  }
+}

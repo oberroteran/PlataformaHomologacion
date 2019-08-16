@@ -1,0 +1,391 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 no-left">
+      <nav-menu></nav-menu>
+    </div>
+    <div class="col-md-9">
+      <div class="container-fluid">
+        <div class="header-content">
+          <div class="containt-item">
+            <div class="header-item">
+              <span class="title">Lote de Comisiones</span>
+            </div>
+          </div>
+          <div class="containt-item">
+            <div class="header-item  rigth-item">
+              <button class="full-color" (click)="setAgregarLote()">
+                 <img alt="" src= "assets/icons/add.png" />
+                <span>Agregar Lote</span>
+              </button>
+            </div>
+            <div class="header-item  rigth-item">
+              <button *ngIf="(this.tipoCanal!=14)" class="min-color" (click)="openModalConfirmacionMasivo()">
+                 <img alt="" src= "assets/icons/delete.png" />
+                <span>Eliminar lote</span>
+              </button>
+            </div>
+            <div class="header-item right-item">
+              <button class="min-color" (click)="EventDownload($event)">
+                 <img alt="" src= "assets/icons/download2.png" />
+                <span>Descargar Excel</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter">
+          <div class="form-group row filter-row">
+            <div class="col-lg-1 filter-row-cell">
+              <span>POR FECHA :</span>
+              <input type="text" class="form-control date-search" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker [(bsValue)]="bsValueIni"
+                value="{{ bsValueIni | date:'dd/MM/yyyy' }}">
+            </div>
+            <div class="col-lg-1 filter-row-cell">
+              <span>&nbsp;</span>
+              <input type="text" class="form-control date-search" [bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker [(bsValue)]="bsValueFin"
+                value="{{ bsValueFin | date:'dd/MM/yyyy' }}">
+            </div>
+            <div class="col-lg-2 filter-row-cell">
+              <span>POR RAMO:</span>
+              <select (change)="onSelectBranch($event.target.value)">
+                <option value="0" selected>Todos</option>
+                <option *ngFor="let Item of lstBranch" value="{{Item.nid}}">{{Item.sdescript}}</option>
+              </select>
+            </div>
+            <div class="col-lg-2 filter-row-cell">
+              <span>POR NRO. LOTE:</span>
+              <input type="text" (keypress)="this.utilityService._kpPolicy($event, InputsFilter.P_NIDCOMMLOT)" placeholder="Busca con tu N° Lote"
+                class="form-control" [(ngModel)]="InputsFilter.P_NIDCOMMLOT" />
+            </div>
+            <div class="col-lg-2 filter-row-cell">
+              <span>POR NRO. PLANILLA:</span>
+              <input type="text" (keypress)="this.utilityService._kpPolicy($event, InputsFilter.P_NIDPAYROLL)" placeholder="Busca con tu N° Planilla"
+                class="form-control" [(ngModel)]="InputsFilter.P_NIDPAYROLL" />
+            </div>
+            <div class="col-lg-2 filter-row-cell">
+              <span>POR NRO. POLIZA:</span>
+              <input type="text" (keypress)="this.utilityService._kpPolicy($event, InputsFilter.P_NPOLICY)" placeholder="Busca con tu N° Póliza"
+                class="form-control" [(ngModel)]="InputsFilter.P_NPOLICY" />
+            </div>
+            <div class="col-lg-2 filter-row-cell">
+              <span>POR ESTADO:</span>
+              <select (change)="onSelectState($event.target.value)">
+                <option value="0" selected>Todos</option>
+                <option *ngFor="let Item of lstStateCommission" value="{{Item.nidstate}}">{{Item.sdescription}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-lg-12">
+              <div class="float-right">
+                <button (click)="onEventSearch()">
+                  <span>Buscar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid form-group row ">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr class="grid-title">
+                  <td class="grid-title-item">
+                    <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();">
+                  </td>
+                  <td class="grid-title-item">Ramo</td>
+                  <td class="grid-title-item">Nro. de Lote</td>
+                  <td class="grid-title-item">Nro. de Comisiones</td>
+                  <td class="grid-title-item">Fecha</td>
+                  <td class="grid-title-item">Monto de Comisión</td>
+                  <td class="grid-title-item">Estado</td>
+                  <td class="grid-title-item">Acciones</td>
+                </tr>
+              </thead>
+              <div *ngIf="fExistRegistro; then ocultarGrilla else mostrarGrilla"></div>
+            </table>
+            <ng-template #mostrarGrilla>
+              <tbody>
+                <tr>
+                  <td colspan="8">{{msgErrorLista}}</td>
+                </tr>
+              </tbody>
+            </ng-template>
+            <ng-template #ocultarGrilla>
+              <tbody *ngFor="let result of ListCommissionLot">
+                <tr>
+                  <td>
+                    <input type="checkbox" [(ngModel)]="result.selected" (change)="checkIfAllSelected();">
+                  </td>
+                  <td class="data-table-tr-td">{{result.sbranch}}</td>
+                  <td class="data-table-tr-td">{{result.sidcomlot}}</td>
+                  <td class="data-table-tr-td">{{result.nquantity}}</td>
+                  <td class="data-table-tr-td">{{result.sregister}}</td>
+                  <td class="data-table-tr-td">S/ {{result.namounttotal}}</td>
+                  <td class="data-table-tr-td">{{result.sdescription}}</td>
+                  <td class="data-table-tr-td">
+                    <a (click)="VerHistorial(result.niD_COMMLOT)">
+                       <img alt="" src= "assets/icons/historial.png" title="Historial" alt="Historial" />
+                    </a>
+                    <a *ngIf="(this.tipoCanal!=14 && result.nidstate ==1 || result.nidstate ==3) 
+                      || (this.tipoCanal==14 && result.nidstate ==2)" (click)="ActualizarLote(result.niD_COMMLOT)">
+                       <img alt="" src= "assets/icons/editar.png" title="Editar" alt="Editar" />
+                    </a>
+                    <a *ngIf="(this.tipoCanal!=14 && result.nidstate ==1 || result.nidstate ==3) 
+                      || (result.nidstate  == 2 && tipoCanal==14)" (click)="EnviarCommLot(result.niD_COMMLOT,result.nidstate)">
+                       <img alt="" src= "assets/icons/enviar.png" title="Enviar" alt="Enviar" />
+                    </a>
+                    <a *ngIf="this.tipoCanal==14 && result.nidstate==4" (click)="openModalConfirExactus(result.sidcomlot)">
+                       <img alt="" src= "assets/icons/check_mas_beneficios.png" title="Exactus" alt="Exactus" />
+                    </a>
+                    <a class="min-color" (click)="onImprimir(result.niD_COMMLOT)">
+                       <img alt="" src= "assets/icons/download2.png" title="Descargar" alt="Descargar" />
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </ng-template>
+          </div>
+        </div>
+        <div *ngIf="fExistRegistro; then ocultarPaginado else mostrarPaginado"></div>
+        <ng-template #mostrarPaginado>
+          <div></div>
+        </ng-template>
+        <!-- <ng-template #ocultarPaginado>
+            <div class="row">
+              <div class="col-xs-12 col-12 text-center mi-paginado">
+                <pagination [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [(ngModel)]="npage" (pageChanged)="pageChanged($event)"
+                  [previousText]="'«'"
+                  [nextText]="'»'"
+                class="pagination-sm"></pagination>
+              </div>
+            </div>
+          </ng-template> -->
+        <ng-template #ocultarPaginado>
+          <div class="row">
+            <div class="col-xs-12 col-12">
+              <pagination [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [rotate]="rotate" [maxSize]="maxSize" [(ngModel)]="currentPage"
+                (pageChanged)="pageChanged($event)">
+              </pagination>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div bsModal #childModalConfirmasivo="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-child-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header" [ngClass]="{'bHideHeader':bHideBody}">
+        <h4 id="dialog-child-name" class="modal-title pull-left titlemensajeinfo">{{msjHeader}}</h4>
+        <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close" (click)="closeconfirm()">
+          <span aria-hidden="true">
+             <img alt="" src= "assets/icons/close_modal.png" />
+          </span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row message" [ngClass]="{'bHideBody':bHideBody}">
+          <div class="col-lg-12 contenido-modal" id="msjModal">
+            <p class="messageinfo">{{message}}</p>
+          </div>
+        </div>
+        <div class="form-group row button-modal">
+          <div class="col-lg-6">
+            <button style="min-width: 100%;" class="full-color-modal" (click)="confirm()">
+              <span>Si</span>
+            </button>
+          </div>
+          <div class="col-lg-6">
+            <button style="min-width: 100%;" class="button-close" (click)="closeconfirm()">
+              <span>No</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-child-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left titlemensajeinfo">Mensaje</h4>
+        <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close" (click)="aceptarmsginfo()">
+          <span aria-hidden="true">
+             <img alt="" src= "assets/icons/close_modal.png" />
+          </span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row message">
+          <div class="col-lg-12">
+            <p class="messageinfo">{{messageinfo}}</p>
+          </div>
+        </div>
+        <div class="form-group row button-modal">
+          <div class="col-lg-12">
+            <button style="min-width: 100%;" class="full-color-modal" (click)="aceptarmsginfo()">
+              <span>Aceptar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #childModalHistorial="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-child-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content modalcontent-hist">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left titlemensajeinfo titleHist">Historial de Lote de Comisiones</h4>
+        <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close" (click)="closeHistorial()">
+          <span aria-hidden="true">
+             <img alt="" src= "assets/icons/close_modal.png" />
+          </span>
+        </button>
+      </div>
+      <div class="modal-body modal-hist">
+        <div class="form-group row ">
+          <div class="col-lg-3 label-historial">
+            Número de Lote
+          </div>
+          <div class="col-lg-6 nlote">
+            {{nLote}}
+          </div>
+        </div>
+        <div class="form-group row ">
+          <div class="col-lg-3 label-historial">
+            Canal de Venta
+          </div>
+          <div class="col-lg-6 scanal">
+            {{canalHist}}
+          </div>
+        </div>
+        <div class="form-group row message">
+          <div class="col-lg-12 contenido-modal">
+            <!--Cuerpo del popup-->
+            <div class="table-responsive">
+              <div class="payroll-content">
+                <div class="result-content">
+                  <table class="table">
+                    <thead>
+                      <tr class="tr-title">
+                        <td class="td-tittle">Secuencia</td>
+                        <td class="td-tittle">Estado</td>
+                        <td class="td-tittle">Fecha Registro</td>
+                        <td class="td-tittle">Comentarios</td>
+                        <td class="td-tittle">Usuario</td>
+                      </tr>
+                    </thead>
+
+                    <tbody *ngFor="let result of ListCommissionLotHist; let index=index">
+                      <tr class="data-hist">
+                        <td class="data-table-tr-td">{{index+1}}</td>
+                        <td class="data-table-tr-td">{{result.sstate}}</td>
+                        <td class="data-table-tr-td">{{result.dfecreg}}</td>
+                        <td class="data-table-tr-td">{{result.comments}}</td>
+                        <td class="data-table-tr-td">{{result.suser}}</td>
+                      </tr>
+                    </tbody>
+
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!--Fin table responsive -->
+          </div>
+        </div>
+
+        <div class="form-group row  float-right">
+          <div class="col-lg-12 button-cancel">
+            <button class="min-color" (click)="closeHistorial()">
+              <span>Cancelar</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #childModalConfirmarEnvio="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-child-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left titlemensajeinfo">Envío aprobación del Lote de Comisiones
+        </h4>
+        <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close" (click)="closeEnviar()">
+          <span aria-hidden="true">
+             <img alt="" src= "assets/icons/close_modal.png" />
+          </span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group row message-approb">
+          <div class="col-lg-12 contenido-modal">
+            <div class="form-group row ">
+              <label for="" class="col-lg-3 label-datos-liquidacion dato-estado">POR ESTADO:</label>
+              <div class="col-lg-8">
+                <select (change)="onSelectState($event.target.value)" [(ngModel)]="nidStateApprob">
+                  <option value="0" selected>--SELECCIONE--</option>
+                  <option *ngFor="let Item of lstStateApprobCommission" value="{{Item.nidstate}}">{{Item.sdescription}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row ">
+              <label for="" class="col-lg-3 label-datos-liquidacion dato-obs">OBSERVACION:</label>
+              <div class="col-lg-8">
+                <textarea name="" id="" [(ngModel)]="strObservacion" class="form-control text-obs" maxlength="250" rows="6"></textarea>
+              </div>
+            </div>
+            <div class="form-group row ">
+
+            </div>
+
+          </div>
+        </div>
+        <div class="form-group row button-modal" [ngClass]="{'bopacitysave':bopacitysave}">
+          <div class="col-lg-6">
+            <button [disabled]="bopacitysave" style="min-width: 100%;" class="full-color btn-planilla  " (click)="saveEnviar()">
+              <span>Guardar</span>
+            </button>
+          </div>
+          <div class="col-lg-6">
+            <button style="min-width: 100%;" class="btn-planilla" (click)="closeEnviar()">
+              <span>Cancelar</span>
+            </button>
+          </div>
+        </div>
+        <div class="form-group row ">
+          <div class="col-lg-12">
+            <div class="alert alert-danger" role="alert" *ngIf="this.flagAlerta">
+              <p *ngFor="let mensaje of mensajes_validacion">{{ mensaje }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <ngx-spinner bdOpacity=0.9 bdColor="#333" size="medium" color="#fff" type="ball-scale-multiple" [fullScreen]="true">
+  <p style="color: white"> Cargando... </p>
+</ngx-spinner> -->
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" loadingText="Procesando..." type="ball-pulse-sync">
+</ngx-spinner>
+
+<iframe id="ifrmPdf" name="ifrmPdf" style="display: none;"></iframe>

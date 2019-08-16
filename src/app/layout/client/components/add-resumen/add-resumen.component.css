@@ -1,0 +1,85 @@
+.container-left {
+    width: 20%;
+    box-shadow: 1px 0 0 0 #D5CFDF;
+    float: right;
+    padding: 0px 15px;
+  }
+  
+  .container-left .row-01 {
+    width: 100%;
+    /*padding-left: 8px;
+    padding-right: 6px;*/
+  }
+  
+  .container-left .row-01 h4 {
+    padding-left: 10px;
+    text-align: left;
+    font-family: "Bliss Pro";
+    font-weight: bold;
+    font-size: 24px;
+    color: #2B0D61;
+    margin-top: 5px;
+    margin-left: 1px;
+  }
+  
+  .container-left .row-02 {
+    width: 100%;
+    text-align: left;
+    /*padding-left: 6px;
+    padding-right: 6px;*/
+  }
+  
+  .container-left .row-02 img {
+    width: 95%;
+    margin-left: 8px;
+  }
+  
+  .container-left hr{
+    width: 95%;
+    border: 1px solid #D5CFDF;
+  }
+  
+  .container-left .row-03 {
+    width: 100%;
+    text-align: center;
+    /*padding-left: 6px;
+    padding-right: 6px;*/
+  }
+  
+  .container-left .row-03 h4{
+    color: #2B0D61;
+    font-family: "Bliss Pro";
+    font-size: 20px;
+    font-weight: 700;
+    padding-right: 10px;
+    margin: 18px;
+  }
+  
+  .container-left .row-03 h3 {
+    padding-left: 10px;
+    color: #2B0D61;
+    font-family: "Bliss Pro";
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 18px;
+  }
+  
+  .container-left .row-03 .btn-white {
+    border: 1px solid #ED6E00;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #ED6E00;
+    font-family: "Bliss Pro";
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: auto;
+    /*-webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;*/
+    cursor: pointer;
+  }
+  

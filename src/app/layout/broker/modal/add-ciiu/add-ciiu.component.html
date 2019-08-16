@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{txtAccion}}</h4>
+    <input type="button" class="close" aria-label="Close" (click)="reference.dismiss('Cross click')" value="&times;" />
+  
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <span>Actividad Económica CIIU (*)</span>
+          <ng-select [items]="ciiuList" class="border-ng" (change)="onSelectCiiu($event)" bindLabel="SDESCRIPT"
+                bindValue="P_SCIIU" [(ngModel)]="InputsCiiu.P_SCIIU" [clearable]="true"  [ngClass]="{'error-validate': VAL_CIIU[0] != ''}" (click)="Clear(0)"
+                placeholder="Seleccionar" dropdownPosition="bottom" notFoundText="No hay resultados">
+              </ng-select>
+
+          <!-- <select (change)="onSelectCiiu($event)" [(ngModel)]="InputsCiiu.P_SCIIU">
+            <option value="0" selected>Seleccionar</option>
+            <option *ngFor="let ciiu of ciiuList" value="{{ciiu.P_SCIIU}}">{{ciiu.SDESCRIPT}}</option>
+          </select> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="full-color" (click)="EventSave()"><span>{{txtAccion}}</span></button>
+  </div>

@@ -1,0 +1,183 @@
+<div class="form-group row">
+  <div class="col-lg-3">
+    <navmenusctr></navmenusctr>
+  </div>
+  <div class="col-lg-9">
+    <div class="container-fluid">
+      <div class="header-content">
+        <div class="containt-item">
+          <div class="header-item">
+            <!-- <span class="title">Consulta Solicitudes de Cotización</span> -->
+            <span class="title">Consulta Estado Solicitud</span>
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <span>TIPO PRODUCTO</span>
+                <select>
+                    <option value="0" selected>Todos</option>
+                    <option value="1">SCTR Salud</option>
+                    <option value="2">SCTR Pensión</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>NRO. DE COTIZACIÓN</span>
+                <input [(ngModel)]="filter.Quotation" type="text" placeholder="Nro. de Cotización" />
+              </div>
+              <div class="col-sm-3">
+                <span>FECHA DESDE</span>
+                <input type="text" placeholder="dd/mm/yyyy" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker
+                  [(bsValue)]="bsValueIni" value="{{ bsValueIni | date:'dd/MM/yyyy' }}" />
+              </div>
+              <div class="col-sm-3">
+                <span>FECHA HASTA</span>
+                <input type="text" placeholder="dd/mm/yyyy" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker
+                  [(bsValue)]="bsValueFin" value="{{ bsValueFin | date:'dd/MM/yyyy' }}" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <span>ESTADO</span>
+                <select id="">
+                    <option value="1" selected>Aprobado</option>
+                    <option value="2">Rechazado</option>
+                    <option value="3" selected>Revisión pendiente</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>TIPO DOC. CONTRATANTE</span>
+                <select>
+                  <option value="0" selected>Seleccione</option>
+                  <option value="1">DNI</option>
+                  <option value="2">RUC</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <span>NRO. DOC. CONTRATANTE</span>
+                <input type="text" [(ngModel)]="filter.NumberDocument" placeholder="Nro. Doc. Contratante" />
+              </div>
+              <div class="col-sm-3">
+                <span>CONTRATANTE</span>
+                <input type="text" [(ngModel)]="filter.Contractor" placeholder="Contratante" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <span>BROKER</span>
+                <input type="text" [(ngModel)]="filter.Broker" disabled />
+              </div>
+              <div class="col-sm-6">
+                <span>&nbsp;</span>
+                <button class="full-color pull-right" style="margin-top: 5px;" (click)="EventSearch($event)">
+                  <span>Buscar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid form-group">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr class="grid-title">
+                  <td class="grid-title-item">Producto</td>
+                  <td class="grid-title-item">Cotización</td>
+                  <td class="grid-title-item">Contratante</td>
+                  <td class="grid-title-item">Prima Mínima</td>
+                  <td class="grid-title-item">Nro. Trabajadrores</td>
+                  <td class="grid-title-item">Planilla</td>
+                  <td class="grid-title-item">Tasa</td>
+                  <td class="grid-title-item">Broker</td>
+                  <td class="grid-title-item">Comisión</td>
+                  <td class="grid-title-item">Estado</td>
+                  <td class="grid-title-item">Usuario</td>
+                  <td class="grid-title-item">Fecha Modificación</td>
+                  <td class="grid-title-item">Movimiento</td>
+                  <td class="grid-title-item">Opciones</td>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td>SCTR Salud</td>
+                    <td>231325</td>
+                    <td>Walter White</td>
+                    <td>100</td>
+                    <td>10</td>
+                    <td>1000</td>
+                    <td>0.10</td>
+                    <td>Caja Huancayo</td>
+                    <td>0.03</td>
+                    <td>Activo</td>
+                    <td>admin</td>
+                    <td>13/05/2019</td>
+                    <td><a href="/broker/request-status"><img alt="Ver Movimiento" src="assets/icons/editar.png" title="Ver Movimiento"></a></td>
+                    <td><a href="/broker/request-status"><img alt="Ver detalle" src="assets/icons/editar.png" title="Ver detalle"></a></td>
+                  </tr>
+                </tbody>
+              <!-- <div *ngIf="fExistRegistro; then ocultarGrilla else mostrarGrilla"></div> -->
+            </table>
+            <!-- <ng-template #mostrarGrilla>
+              <tbody>
+                <tr>
+                  <td>SCTR Salud</td>
+                  <td>231325</td>
+                  <td>Walter White</td>
+                  <td>100</td>
+                  <td>10</td>
+                  <td>1000</td>
+                  <td>0.10</td>
+                  <td>Caja Huancayo</td>
+                  <td>0.03</td>
+                  <td>Activo</td>
+                  <td>admin</td>
+                  <td>13/05/2019</td>
+                  <td><a href="/broker/request-status"><img alt="Ver Movimiento" src="assets/icons/editar.png" title="Ver Movimiento"></a></td>
+                  <td><a href="/broker/request-status"><img alt="Ver detalle" src="assets/icons/editar.png" title="Ver detalle"></a></td>
+                </tr>
+              </tbody>
+            </ng-template> -->
+            <!-- <ng-template #ocultarGrilla>
+              <tbody *ngFor="let historia of historialGrilla">
+                <tr>
+                  <td>{{ historia.npolicy }}</td>
+                  <td>{{ historia.npremium }}</td>
+                  <td>{{ historia.ndocuments }}</td>
+                  <td>{{ this.datePipe.transform(historia.dstartdate, 'dd/MM/yyyy') }}</td>
+                  <td>{{ this.datePipe.transform(historia.dexpirdat, 'dd/MM/yyyy') }}</td>
+                  <td>{{ historia.snamecomplete }}</td>
+                  <td>{{ historia.sregist }}</td>
+                  <td>{{ historia.ssalemode }}</td>
+                  <td>{{ historia.sstatuS_POL_DES }}</td>
+                  <td><button (click)="editOperation(operation)">Editar</button> </td>
+                  <td class="data-table-tr-td">
+                    <a *ngIf="historia.ssalemode !== 'DIGITAL' && historia.ssalemode !== 'MANUAL'"
+                      (click)="onImprimir(historia.npolicy)">
+                      <img src="assets/icons/imprimir.png" title="Editar" alt="Editar" style="cursor: pointer;" />
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </ng-template> -->
+          </div>
+        </div>
+        <div *ngIf="fExistRegistro; then ocultarPaginado else mostrarPaginado"></div>
+        <ng-template #mostrarPaginado>
+          <div></div>
+        </ng-template>
+        <ng-template #ocultarPaginado>
+          <div class="row">
+            <div class="col-xs-12 col-12">
+              <pagination [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [rotate]="rotate" [maxSize]="maxSize"
+                [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)">
+              </pagination>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

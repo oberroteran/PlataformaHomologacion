@@ -1,0 +1,137 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <navmenusctr></navmenusctr>
+      </div>
+      <div class="col-md-9">
+        <div class="container-fluid">
+  
+          <div class="header-content">
+            <div class="containt-item">
+              <div class="header-item">
+                <span class="title">Mantenimiento de Actividades</span>
+              </div>
+            </div>
+            <div class="containt-item">
+              <button class="full-color pull-right">
+                <img src="assets/icons/add.png" />
+                <span>Agregar Actividad</span>
+              </button>
+            </div>
+          </div>
+          <div class="filter">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <span>CÓDIGO TABLA</span>
+                    <input type="text" placeholder="Código Tabla">
+                    
+                  </div>
+                  <div class="col-sm-4">
+                    <span>NOMBRE TABLA</span>
+                    <select>
+                      <option selected>Nombre Tabla</option>
+                    </select>
+                  </div>
+                </div>
+                <br>
+                <div class="row pull-right">
+                  <div class="col-sm-3">
+                    <button>
+                      <span>Buscar</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid form-group">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr class="grid-title">
+                    <td class="grid-title-item">Código</td>
+                    <td class="grid-title-item">Descripción</td>
+                    <td class="grid-title-item">Editar</td>
+                    <td class="grid-title-item">Eliminar</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>001</td>
+                    <td>Tabla 1</td>
+                    <td>
+                      <a><img alt="Editar" src="assets/icons/editar.png" title="Editar"
+                          style="cursor: pointer;"></a>
+                    </td>
+                    <td>
+                      <a><img alt="Editar" src="assets/icons/anular.png" title="Editar"
+                          style="cursor: pointer;"></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>001</td>
+                    <td>Tabla 1</td>
+                    <td>
+                      <a><img alt="Editar" src="assets/icons/editar.png" title="Editar"
+                          style="cursor: pointer;"></a>
+                    </td>
+                    <td>
+                      <a><img alt="Editar" src="assets/icons/anular.png" title="Editar"
+                          style="cursor: pointer;"></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>001</td>
+                    <td>Tabla 1</td>
+                    <td>
+                      <a><img alt="Editar" src="assets/icons/editar.png" title="Editar"
+                          style="cursor: pointer;"></a>
+                    </td>
+                    <td>
+                      <a><img alt="Editar" src="assets/icons/anular.png" title="Editar"
+                          style="cursor: pointer;"></a>
+                    </td>
+                  </tr>
+                </tbody>
+                <!-- <div *ngIf="fExistRegistro; then ocultarGrilla else mostrarGrilla"></div> -->
+              </table>
+              <!-- <ng-template #mostrarGrilla>
+                <tbody>
+                  <tr>
+                    <td colspan="10">{{msgErrorLista}}</td>
+                  </tr>
+                </tbody>
+              </ng-template> -->
+              <!-- <ng-template #ocultarGrilla>
+                
+              </ng-template> -->
+              <!-- <ng-template #ocultarGrilla>
+                  <tbody *ngFor="let historia of historialGrilla">
+                    <tr>
+                      <td>{{ historia.npolicy }}</td>
+                      <td>{{ historia.npremium }}</td>
+                      <td>{{ historia.ndocuments }}</td>
+                      <td>{{ this.datePipe.transform(historia.dstartdate, 'dd/MM/yyyy') }}</td>
+                      <td>{{ this.datePipe.transform(historia.dexpirdat, 'dd/MM/yyyy') }}</td>
+                      <td>{{ historia.snamecomplete }}</td>
+                      <td>{{ historia.sregist }}</td>
+                      <td>{{ historia.ssalemode }}</td>
+                      <td>{{ historia.sstatuS_POL_DES }}</td>
+                       <td class="data-table-tr-td">
+                        <a *ngIf="historia.ssalemode !== 'DIGITAL' && historia.ssalemode !== 'MANUAL'"
+                          (click)="onImprimir(historia.npolicy)">
+                          <img src="assets/icons/imprimir.png" title="Editar" alt="Editar" style="cursor: pointer;" />
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </ng-template> -->
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  

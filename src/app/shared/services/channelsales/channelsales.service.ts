@@ -1,0 +1,36 @@
+import { Injectable } from '@angular/core';
+import { ConfigService } from '../general/config.service';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import { ChannelSales } from '../../models/channelsales/channelsales';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+@Injectable()
+export class ChannelSalesService {
+  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  list: any = [];
+  _baseUrl = '';
+
+  constructor(private http: HttpClient,
+    private configService: ConfigService) {
+    this._baseUrl = configService.getWebApiURL();
+  }
+
+  getPostChannelSales(channelSales: ChannelSales) {
+    const body = JSON.stringify(channelSales);
+    return this.http.post(this._baseUrl + '/ChannelSales/', body, { headers: this.headers })
+      .map(
+        response => response,
+        error => {
+          console.log(error);
+        },
+      );
+  }
+
+  getCanalTipoPago(channel: string) {
+    const endpoint = 'codechannel';
+    const action = 'obtenertipopagocanal';
+    const url = `${endpoint}/${action}/${channel}`;
+    return this.http.get(url);
+  }
+}

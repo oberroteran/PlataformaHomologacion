@@ -1,0 +1,114 @@
+.container {
+  width: 100%;
+  padding: 30px 30px;
+}
+
+.btn-warning {
+  background-color: #ed6e00;
+  border-color: #f0ad4e;
+  color: white;
+}
+
+.title-principal {
+  height: auto;
+  width: 100%;
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 0px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.text-descripcion {
+  height: auto;
+  width: 100%;
+  color: #553d81;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.title-principal-client {
+  height: auto;
+  width: 100%;
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 24px;
+  text-align: center;
+}
+
+.text-forget-align {
+  text-align: right;
+}
+
+.text-forget {
+  height: auto;
+  width: 100%;
+  color: #2b0d61;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+input {
+  padding: 15px;
+  font-size: 16px;
+}
+
+.form-group {
+  margin-bottom: 0px;
+}
+
+.captcha {
+  width: 305px;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .title-principal {
+    height: auto;
+    width: 100%;
+    color: #2b0d61;
+    font-family: "Bliss Pro";
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .text-descripcion {
+    height: auto;
+    width: 100%;
+    color: #553d81;
+    font-family: "Bliss Pro";
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 12px;
+    text-align: center;
+    margin-bottom: 0px;
+    line-height: 22px;
+  }
+  .title-principal-client {
+    height: auto;
+    width: 100%;
+    color: #2b0d61;
+    font-family: "Bliss Pro";
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 24px;
+    text-align: center;
+  }
+}

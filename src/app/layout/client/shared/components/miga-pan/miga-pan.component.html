@@ -1,0 +1,82 @@
+<!-- <div class="container-circle">
+  <div class="body-circles">
+
+    <div class="item-circle">
+      <div class="outer-circle">
+        <div class="inner-circle">
+          <span class="number-circle">1</span>
+        </div>
+      </div>
+      <h5>Ingresa <br>tu placa</h5>
+    </div>
+    <div class="separator"></div>
+    <div class="item-circle">
+      <div class="outer-circle">
+        <div class="inner-circle">
+          <span class="number-circle">2</span>
+        </div>
+      </div>
+      <h5>Datos de<br>tu Veh&iacute;culo</h5>
+    </div>
+    <div class="separator"></div>
+    <div class="item-circle">
+      <div class="outer-circle">
+        <div class="inner-circle">
+          <span class="number-circle">3</span>
+        </div>
+      </div>
+      <h5>Ingresa<br>tus Datos</h5>
+    </div>
+    <div class="separator"></div>
+    <div class="item-circle">
+      <div class="outer-circle">
+        <div class="inner-circle">
+          <span class="number-circle">4</span>
+        </div>
+      </div>
+      <h5>Resumen de<br>tu Compra</h5>
+    </div>
+
+
+  </div>
+</div> -->
+
+<div class="container-miga">
+  <div class="steps">
+    <div class="step" [ngClass]="{'step-done': paso01, 'step01': !paso01}">
+      <div [ngClass]="{ 'title-done': paso01, 'title-pending': !paso01 }">
+        <h5>Ingresa <br>tu placa</h5>
+      </div>
+    </div>
+
+    <div class="rule-wrapper">
+      <div [ngClass]="{'separador-done': paso01, 'separador': !paso01}"></div>
+    </div>
+
+    <div class="step" [ngClass]="{'step-done': paso02, 'step02': !paso02}">
+      <div [ngClass]="{ 'title-done': paso02, 'title-pending': !paso02 }">
+        <h5>Datos de<br>tu Veh&iacute;culo</h5>
+      </div>
+    </div>
+
+    <div class="rule-wrapper">
+      <div [ngClass]="{'separador-done': paso02, 'separador': !paso02}"></div>
+    </div>
+
+    <div class="step" [ngClass]="{'step-done': paso03, 'step03': !paso03}">
+      <div [ngClass]="{ 'title-done': paso03, 'title-pending': !paso03 }">
+        <h5>Ingresa<br>tus Datos</h5>
+      </div>
+    </div>
+
+    <div class="rule-wrapper">
+      <div [ngClass]="{'separador-done': paso03, 'separador': !paso03}"></div>
+    </div>
+
+    <div class="step" [ngClass]="{'step-done': paso04, 'step04': !paso04}">
+      <div [ngClass]="{ 'title-done': paso04, 'title-pending': !paso04 }">
+        <h5>Resumen de<br>tu Compra</h5>
+      </div>
+    </div>
+  </div>
+</div>

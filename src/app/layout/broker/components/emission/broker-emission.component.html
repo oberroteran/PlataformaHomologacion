@@ -1,0 +1,1430 @@
+<div class="form-group row">
+  <div class="col-lg-3">
+    <nav-menu></nav-menu>
+  </div>
+  <div class="col-lg-9">
+    <div class="container-fluid">
+      <div class="form-group row hidden-xs-down">
+        <div class="col-lg-12 ">
+          <div class="creaunsoatmanual">
+            <a>{{ mainTitle }}</a>
+          </div>
+        </div>
+      </div>
+      <hr class="linea" />
+
+      <div class="form-group row form-group-sm">
+        <div class="col-lg-12">
+          <div class="form-group row">
+            <div class="col-lg-8">
+              <app-title-step
+                actual="1"
+                titulo="Ingresa la placa del contratante"
+                [anterior]="false"
+              ></app-title-step>
+            </div>
+            <div class="col-lg-4">
+              <div class="bottom-new-mobile tophidden-new-mobile"></div>
+              <button
+                type="button"
+                [disabled]="!deshabilitarNuevoSoat"
+                [ngClass]="{ 'deshabilitado-boton': !deshabilitarNuevoSoat }"
+                class="btn btn-siguiente bottom-new-mobile nuevosoat"
+                (click)="nuevoSOAT()"
+              >
+                NUEVO SOAT
+              </button>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-lg-12">
+              <div class="form-group row">
+                <div class="col-lg-4">
+                  <div class="d-row">
+                    <div class="app-input-date">
+                      <div class="form-group input-group">
+                        <input
+                          [(ngModel)]="placa"
+                          [ngClass]="{ deshabilitado: bLock01 }"
+                          class="form-control input-text-formulario input-placa"
+                          maxlength="{{ longitudPlaca }}"
+                          placeholder="XXX XXX"
+                          type="text"
+                          [disabled]="bValidar"
+                          (keyup.enter)="validarPlaca()"
+                          (blur)="validarPlaca()"
+                        />
+                        <div class="input-group-addon">
+                          <img
+                            alt=""
+                            (click)="validarPlaca()"
+                            src="assets/icons/buscar_certificado.png"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="show-mensaje-error">
+                      <span
+                        *ngIf="bValidado && !bValido"
+                        class="mensaje-error-control new-error"
+                        >{{ mensaje }}
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                  <div class="tipo-vehiculo">
+                    <div class="botones">
+                      <button
+                        type="button"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        [ngClass]="{
+                          'deshabilitado-boton': !deshabilitarNuevoSoat
+                        }"
+                        class="btn btn-siguiente top-new-mobile nuevosoat"
+                        (click)="nuevoSOAT()"
+                      >
+                        NUEVO SOAT
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-12">
+          <div class="form-group row">
+            <div class="col-lg-8">
+              <app-title-step
+                actual="2"
+                titulo="Datos del Veh&iacute;culo."
+                [anterior]="false"
+              ></app-title-step>
+            </div>
+            <div class="col-lg-4"></div>
+          </div>
+          <div class="form-group row">
+            <div class="col-lg-12">
+              <form [formGroup]="vehiculoForm">
+                <div class="form-group row">
+                  <!-- /// MARCA /// -->
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >MARCA DE VEHICULO*</label
+                      >
+                      <select
+                        formControlName="marcacodigo"
+                        [ngClass]="{ deshabilitado: bLock02 }"
+                        class="form-control select-formulario"
+                        [(ngModel)]="auto.p_NVEHBRAND"
+                        (change)="setMarca($event.target.value)"
+                        [ngClass]="{
+                          'error-validate':
+                            !vehiculoForm.get('marcacodigo').valid &&
+                            vehiculoForm.get('marcacodigo').touched
+                        }"
+                      >
+                        <option value="" disabled selected
+                          >Seleccione la marca</option
+                        >
+                        <option
+                          *ngFor="let marca of marcas"
+                          value="{{ marca.nvehbrand }}"
+                          >{{ marca.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !vehiculoForm.get('marcacodigo').valid &&
+                          vehiculoForm.get('marcacodigo').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer la marca de tu veh&iacute;culo.
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- /// MODELO  /// -->
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >MODELO DEL VEHICULO*</label
+                      >
+                      <select
+                        formControlName="modelo"
+                        [ngClass]="{ deshabilitado: bLock02 }"
+                        class="form-control select-formulario"
+                        [(ngModel)]="auto.p_SNAME_VEHMODEL"
+                        (change)="setModelo($event.target.value)"
+                        [ngClass]="{
+                          'error-validate':
+                            !vehiculoForm.get('modelo').valid &&
+                            vehiculoForm.get('modelo').touched
+                        }"
+                      >
+                        <option value="" disabled selected
+                          >Seleccione el modelo</option
+                        >
+
+                        <option
+                          *ngFor="let modelo of modelos"
+                          value="{{ modelo.sdescript }}"
+                          >{{ modelo.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !vehiculoForm.get('modeloprincipal').valid &&
+                          vehiculoForm.get('modeloprincipal').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer el modelo de tu veh&iacute;culo.
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- /// CLASE /// -->
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >CLASE DE VEHICULO*</label
+                      >
+                      <select
+                        formControlName="clasecodigo"
+                        [ngClass]="{ deshabilitado: bLock02 }"
+                        class="form-control select-formulario"
+                        [(ngModel)]="auto.p_NIDCLASE"
+                        (change)="setClase($event.target.value)"
+                        [ngClass]="{
+                          'error-validate':
+                            !vehiculoForm.get('clasecodigo').valid &&
+                            vehiculoForm.get('clasecodigo').touched
+                        }"
+                      >
+                        <option value="0" disabled selected
+                          >Seleccione la Clase</option
+                        >
+                        <option
+                          *ngFor="let clase of clases"
+                          value="{{ clase.nvehclass }}"
+                          >{{ clase.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !vehiculoForm.get('clasecodigo').valid &&
+                          vehiculoForm.get('clasecodigo').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer la clase de tu veh&iacute;culo.
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <!-- /// USO /// -->
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >USO*</label
+                      >
+                      <select
+                        formControlName="uso"
+                        [ngClass]="{ deshabilitado: bLock02 }"
+                        class="form-control select-formulario"
+                        [(ngModel)]="auto.p_NIDUSO"
+                        (change)="setUso($event.target.value)"
+                        [ngClass]="{
+                          'error-validate':
+                            !vehiculoForm.get('uso').valid &&
+                            vehiculoForm.get('uso').touched
+                        }"
+                      >
+                        <option value="" disabled selected
+                          >Seleccione el tipo de uso</option
+                        >
+                        <option
+                          *ngFor="let uso of usos"
+                          value="{{ uso.niduso }}"
+                          >{{ uso.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !vehiculoForm.get('uso').valid &&
+                          vehiculoForm.get('uso').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer el uso de tu veh&iacute;culo.
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <!-- /// SERIE  /// -->
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >NRO. DE SERIE*</label
+                      >
+                      <input
+                        [(ngModel)]="auto.p_SNUMSERIE"
+                        [ngClass]="{ deshabilitado: bLock02 }"
+                        type="text"
+                        formControlName="serie"
+                        maxlength="17"
+                        (blur)="onBlurSerie()"
+                        class="form-control input-text-formulario input-text-help"
+                        placeholder="Ingresar el nro. de serie"
+                        [ngClass]="{
+                          'error-validate':
+                            !vehiculoForm.get('serie').valid &&
+                            vehiculoForm.get('serie').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !vehiculoForm.get('serie').valid &&
+                          vehiculoForm.get('serie').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer la serie de tu veh&iacute;culo.
+                        <br />
+                      </span>
+                      <span
+                        *ngIf="vehiculoForm.get('serie').valid && bserie"
+                        class="mensaje-error-control new-error"
+                        >El chassis o serie de tu veh&iacute;culo, debe tener 17
+                        d&iacute;gitos.
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- /// ASIENTOS  /// -->
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >NRO. DE ASIENTOS*</label
+                      >
+                      <input
+                        [(ngModel)]="auto.p_SEATNUMBER"
+                        [ngClass]="{ deshabilitado: bLock02 }"
+                        type="text"
+                        (keypress)="soloNumeros($event)"
+                        maxlength="2"
+                        (blur)="onBlurAsiento()"
+                        formControlName="asientos"
+                        class="form-control input-text-formulario input-text-help"
+                        [ngClass]="{
+                          'error-validate':
+                            !vehiculoForm.get('asientos').valid &&
+                            vehiculoForm.get('asientos').touched
+                        }"
+                        placeholder="Ingrese el nro. de asientos"
+                        value=""
+                        (change)="recalculateTarifa()"
+                      />
+                      <span
+                        *ngIf="
+                          !vehiculoForm.get('asientos').valid &&
+                          vehiculoForm.get('asientos').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer la cantidad de asientos que tiene
+                        tu veh&iacute;culo.
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <!-- /// AÑO  /// -->
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >AÑO DEL VEHICULO*</label
+                      >
+                      <input
+                        [(ngModel)]="auto.p_NYEAR"
+                        [ngClass]="{ deshabilitado: bLock02 }"
+                        type="text"
+                        formControlName="anho"
+                        (keypress)="soloNumeros($event)"
+                        (blur)="onBlurAnho()"
+                        maxlength="4"
+                        class="form-control input-text-formulario"
+                        [ngClass]="{
+                          'error-validate':
+                            !vehiculoForm.get('anho').valid &&
+                            vehiculoForm.get('anho').touched
+                        }"
+                        placeholder="Ingrese el año del vehiculo"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !vehiculoForm.get('anho').valid &&
+                          vehiculoForm.get('anho').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer el año de tu veh&iacute;culo.
+                        <br />
+                      </span>
+                      <span
+                        *ngIf="vehiculoForm.get('anho').valid && byear"
+                        class="mensaje-error-control new-error"
+                        >El año de tu veh&iacute;culo no puede ser mayor al
+                        actual.
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="d-row"></div>
+                  </div>
+
+                  <div class="col-lg-4"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-12">
+          <div class="form-group row">
+            <div class="col-lg-8">
+              <app-title-step
+                actual="3"
+                titulo="Datos del Contratante."
+                [anterior]="false"
+              ></app-title-step>
+            </div>
+            <div class="col-lg-4"></div>
+          </div>
+          <div class="form-group row">
+            <div class="col-lg-12">
+              <form [formGroup]="contratanteForm">
+                <!-- DATOS DOCUMENTOS DEL CLIENTE -->
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >TIPO DE DOCUMENTO*</label
+                      >
+                      <select
+                        formControlName="tipodocumento"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        class="form-control select-formulario"
+                        [(ngModel)]="Cliente.p_NDOCUMENT_TYP"
+                        (change)="callTypeDocument($event.target.value)"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('tipodocumento').valid &&
+                            contratanteForm.get('tipodocumento').touched
+                        }"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione el tipo de documento</option
+                        >
+                        <option
+                          *ngFor="let tipoDocumento of ListaTipoDocumento"
+                          value="{{ tipoDocumento.niddoC_TYPE }}"
+                          >{{ tipoDocumento.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('tipodocumento').valid &&
+                          contratanteForm.get('tipodocumento').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu tipo de documento
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >NÚMERO DE DOCUMENTO*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SDOCUMENT"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="numdocumento"
+                        maxlength="{{ this.tamanoTipoDocumento }}"
+                        (blur)="onBlurNumeroDocument()"
+                        (keypress)="soloNumeros($event)"
+                        type="text"
+                        class="form-control input-text-formulario input-text-help"
+                        placeholder="Ingresa tu numero de documento"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('numdocumento').valid &&
+                            contratanteForm.get('numdocumento').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('numdocumento').valid &&
+                          contratanteForm.get('numdocumento').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer el n&uacute;mero de tu documento
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row"></div>
+                  </div>
+                </div>
+                <!-- DATOS NOMBRES DEL CLIENTE -->
+                <div *ngIf="!besEmpresa" class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >APELLIDO PATERNO*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SCLIENT_APPPAT"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="apepaterno"
+                        maxlength="50"
+                        type="text"
+                        class="form-control input-text-formulario"
+                        m
+                        placeholder="Ej. Perez"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('apepaterno').valid &&
+                            contratanteForm.get('apepaterno').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('apepaterno').valid &&
+                          contratanteForm.get('apepaterno').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu apellido paterno
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >APELLIDO MATERNO*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SCLIENT_APPMAT"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="apematerno"
+                        maxlength="50"
+                        type="text"
+                        class="form-control input-text-formulario"
+                        placeholder="Ej. Morales"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('apematerno').valid &&
+                            contratanteForm.get('apematerno').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('apematerno').valid &&
+                          contratanteForm.get('apematerno').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu apellido materno
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >NOMBRE COMPLETO*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SCLIENT_NAME"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="nombres"
+                        maxlength="50"
+                        type="text"
+                        class="form-control input-text-formulario input-text-help"
+                        placeholder="Ej. Juan Diego"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('nombres').valid &&
+                            contratanteForm.get('nombres').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('nombres').valid &&
+                          contratanteForm.get('nombres').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tus nombres
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!-- DATOS DE LA EMPRESA -->
+                <div *ngIf="besEmpresa" class="form-group row">
+                  <div class="col-lg-8">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >Razon Social*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SLEGALNAME"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="razonsocial"
+                        maxlength="50"
+                        type="text"
+                        class="form-control input-text-formulario"
+                        placeholder="Ej. Protecta SAC"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('razonsocial').valid &&
+                            contratanteForm.get('razonsocial').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('razonsocial').valid &&
+                          contratanteForm.get('razonsocial').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu Razon Social
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!-- DATOS UBIGEO DEL CLIENTE -->
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >DEPARTAMENTO*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="departamento"
+                        [(ngModel)]="Cliente.p_NPROVINCE"
+                        (change)="
+                          listarProvinciasPorDepartamento(
+                            $event.target.value,
+                            null,
+                            null
+                          )
+                        "
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('departamento').valid &&
+                            contratanteForm.get('departamento').touched
+                        }"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione el departamento</option
+                        >
+                        <option
+                          *ngFor="let departamento of departamentos"
+                          value="{{ departamento.nprovince }}"
+                          >{{ departamento.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('departamento').valid &&
+                          contratanteForm.get('departamento').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu departamento
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >PROVINCIA*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="provincia"
+                        [(ngModel)]="Cliente.p_NLOCAT"
+                        (change)="
+                          listarDistritosPorProvincia($event.target.value, null)
+                        "
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('provincia').valid &&
+                            contratanteForm.get('provincia').touched
+                        }"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione la provincia</option
+                        >
+                        <option
+                          *ngFor="let provincia of provincias"
+                          value="{{ provincia.nlocal }}"
+                          >{{ provincia.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('provincia').valid &&
+                          contratanteForm.get('provincia').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu provincia
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >DISTRITO*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        formControlName="distrito"
+                        [(ngModel)]="Cliente.p_NMUNICIPALITY"
+                        (change)="recalculateTarifa()"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('distrito').valid &&
+                            contratanteForm.get('distrito').touched
+                        }"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione el distrito</option
+                        >
+                        <option
+                          *ngFor="let distrito of distritos"
+                          value="{{ distrito.nmunicipality }}"
+                          >{{ distrito.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('distrito').valid &&
+                          contratanteForm.get('distrito').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu distrito
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!-- DATOS PERSONALES DEL CLIENTE -->
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >DIRECCIÓN*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SADDRESS"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        type="text"
+                        formControlName="direccion"
+                        maxlength="80"
+                        class="form-control input-text-formulario"
+                        placeholder="Ingresa la direccion de domicilio"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('direccion').valid &&
+                            contratanteForm.get('direccion').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('direccion').valid &&
+                          contratanteForm.get('direccion').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu direccion
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >CORREO ELECTRÓNICO*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SMAIL"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        type="text"
+                        formControlName="correo"
+                        maxlength="100"
+                        onkeyup="this.value = this.value.toLowerCase();"
+                        class="form-control input-text-formulario input-text-formulario-mail "
+                        placeholder="correo@gmail.com"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('correo').valid &&
+                            contratanteForm.get('correo').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('correo').valid &&
+                          contratanteForm.get('correo').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu correo
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >NRO. DE CELULAR*</label
+                      >
+                      <input
+                        [(ngModel)]="Cliente.p_SPHONE"
+                        [ngClass]="{ deshabilitado: bLock03 }"
+                        type="text"
+                        formControlName="celular"
+                        maxlength="9"
+                        class="form-control input-text-formulario"
+                        placeholder="Ingresa tu número de celular"
+                        [ngClass]="{
+                          'error-validate':
+                            !contratanteForm.get('celular').valid &&
+                            contratanteForm.get('celular').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !contratanteForm.get('celular').valid &&
+                          contratanteForm.get('celular').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu celular
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-12">
+          <div class="form-group row">
+            <div class="col-lg-8">
+              <app-title-step
+                actual="4"
+                titulo="Datos del Certificado."
+                [anterior]="false"
+              ></app-title-step>
+            </div>
+            <div class="col-lg-4">
+              <!--<button type="button" [disabled]="!certificadoForm.valid" [ngClass]="{ 'deshabilitado-boton': bBoton04 }" class="btn btn-siguiente" (click)="SiguientePaso04()">
+                                Validar: Certificado</button>-->
+              <!--<button type="button" [ngClass]="{ 'deshabilitado-boton': bBoton04 }" class="btn btn-siguiente" (click)="SiguientePaso04()">Validar: Certificado</button>-->
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-lg-12">
+              <form [formGroup]="certificadoForm">
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >FECHA DE INICIO DE VIGENCIA*</label
+                      >
+                      <app-input-date
+                        [inputValue]="fecha_vigencia"
+                        [inputHolder]="'DD/MM/YYYY*'"
+                        [iconFilter]="true"
+                        [returnString]="true"
+                        [returnFormat]="'yyyy-MM-dd'"
+                        [ngClass]="{ deshabilitado: bLock04 }"
+                        [inputStyle]="{ height: '35px' }"
+                        [minDate]="minDateEmission"
+                        (inputValueChange)="onFechaVigenciaChange($event)"
+                        #fv
+                      ></app-input-date>
+
+                      <span
+                        *ngIf="
+                          !certificadoForm.get('fechavigencia').valid &&
+                          certificadoForm.get('fechavigencia').touched
+                        "
+                        class="mensaje-error-control new-error-comp"
+                      >
+                        Ingresa una fecha valida para el inicio de vigencia de
+                        tu SOAT
+                        <br />
+                      </span>
+                      <span
+                        *ngIf="mensajeVigencia"
+                        class="mensaje-error-control new-error-comp"
+                        >{{ mensajeVigencia }}
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div *ngIf="bMostrar" class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >NRO. DE P&Oacute;LIZA</label
+                      >
+                      <div style="position:relative;">
+                        <input
+                          class="form-control input-text-formulario"
+                          style="float: left;"
+                          formControlName="poliza"
+                          type="text"
+                          readonly="readonly"
+                          placeholder="Ingresa el nro. de la p&oacute;liza"
+                          [(ngModel)]="Certificado.P_NPOLICY"
+                        />
+                        <a
+                          (click)="openNumerador()"
+                          style="position: absolute;float: right;top: 2px; margin-left: -26px;"
+                        >
+                          <img alt="" src="assets/icons/dropdown_icon.png" />
+                        </a>
+                        <span
+                          *ngIf="
+                            !certificadoForm.get('poliza').valid &&
+                            certificadoForm.get('poliza').touched
+                          "
+                          class="mensaje-error-control new-error"
+                          >Necesitamos conocer el numero de P&oacute;liza
+                          <br />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="!bMostrar" class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >NRO. DE P&Oacute;LIZA</label
+                      >
+                      <input
+                        class="form-control input-text-formulario"
+                        formControlName="poliza"
+                        type="text"
+                        readonly="readonly"
+                        placeholder="Ingresa el nro. de la p&oacute;liza"
+                        [(ngModel)]="Certificado.P_NPOLICY"
+                      />
+                      <span
+                        *ngIf="
+                          !certificadoForm.get('poliza').valid &&
+                          certificadoForm.get('poliza').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer el numero de P&oacute;liza
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >TARIFARIO*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: bLock04 }"
+                        formControlName="plan"
+                        [(ngModel)]="Certificado.P_IDTARIFARIO"
+                        (change)="setTarifario($event.target.value)"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione su tarifario</option
+                        >
+                        <option
+                          *ngFor="let tarifa of lstTarifarios"
+                          value="{{ tarifa.id }}"
+                          >{{ tarifa.descripcion }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !certificadoForm.get('plan').valid &&
+                          certificadoForm.get('plan').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer el tarifario
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >PRECIO DEL SOAT*</label
+                      >
+                      <input
+                        type="text"
+                        formControlName="precio"
+                        [(ngModel)]="Certificado.P_NPREMIUM"
+                        min="1"
+                        [readonly]="bEditPrecio"
+                        (keypress)="soloNumeros($event)"
+                        maxlength="4"
+                        value=""
+                        class="form-control input-text-formulario"
+                        placeholder="Ingresa el valor total del SOAT"
+                      />
+                      <span
+                        *ngIf="
+                          !certificadoForm.get('precio').valid &&
+                          certificadoForm.get('precio').hasError('min')
+                        "
+                        class="mensaje-error-control new-error"
+                        >El precio del SOAT debe ser mayor a 0
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 spiner">
+                    <img
+                      alt=""
+                      [hidden]="!bSpinner"
+                      src="assets/icons/loading.gif"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showSeccionEntrega" class="form-group row">
+        <div class="col-lg-12">
+          <div class="form-group row">
+            <div class="col-lg-8">
+              <app-title-step
+                actual="5"
+                titulo="Datos de Entrega."
+                [anterior]="false"
+              ></app-title-step>
+            </div>
+            <div class="col-lg-4"></div>
+          </div>
+          <div class="form-group row">
+            <div class="col-lg-12">
+              <form [formGroup]="datosEntregaForm">
+                <!-- DATOS DOCUMENTOS DEL CLIENTE -->
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >FECHA DE ENTREGA*</label
+                      >
+                      <app-input-date
+                        [inputValue]="fecha_entrega"
+                        [inputHolder]="'DD/MM/YYYY*'"
+                        [iconFilter]="true"
+                        [returnString]="true"
+                        [returnFormat]="'yyyy-MM-dd'"
+                        [ngClass]="{ deshabilitado: bLock04, inputdev: true }"
+                        [inputStyle]="{ height: '35px' }"
+                        [minDate]="minDateEntrega"
+                        (inputValueChange)="onFechaEntregaChange($event)"
+                        #fv
+                      ></app-input-date>
+
+                      <span
+                        *ngIf="
+                          !datosEntregaForm.get('fechaentrega').valid &&
+                          datosEntregaForm.get('fechaentrega').touched
+                        "
+                        class="mensaje-error-control new-error-comp"
+                      >
+                        Ingresa una fecha de entrega válida
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >TURNO DE ENTREGA*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        [ngClass]="{ deshabilitado: !deshabilitarNuevoSoat }"
+                        formControlName="turnoentrega"
+                        [(ngModel)]="Certificado.P_STURNOENTREGADELIVERY"
+                        (change)="setTurnoEntrega($event.target.value)"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione su turno de entrega</option
+                        >
+                        <option
+                          *ngFor="let turno of turnos"
+                          value="{{ turno.id }}"
+                          >{{ turno.description }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !datosEntregaForm.get('turnoentrega').valid &&
+                          datosEntregaForm.get('turnoentrega').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer el turno de entrega
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >FORMA DE PAGO*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: !deshabilitarNuevoSoat }"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        formControlName="formapago"
+                        [(ngModel)]="Certificado.P_SFORMAPAGODELIVERY"
+                        (change)="setFormaPago($event.target.value)"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione la forma de pago</option
+                        >
+                        <option
+                          *ngFor="let fpago of formasDePago"
+                          value="{{ fpago.id }}"
+                          >{{ fpago.description }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !datosEntregaForm.get('formapago').valid &&
+                          datosEntregaForm.get('formapago').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer la forma de pago
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!-- DATOS NOMBRES DEL CLIENTE -->
+                <div class="form-group row">
+                  <div class="col-lg-8">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >DIRECCION DE ENTREGA*</label
+                      >
+                      <input
+                        [(ngModel)]="Certificado.P_SDIRECCIONENTREGADELIVERY"
+                        [ngClass]="{ deshabilitado: !deshabilitarNuevoSoat }"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        formControlName="direccionentrega"
+                        maxlength="150"
+                        type="text"
+                        class="form-control input-text-formulario"
+                        m
+                        placeholder="Ingrese la dirección de entrega"
+                        [ngClass]="{
+                          'error-validate':
+                            !datosEntregaForm.get('direccionentrega').valid &&
+                            datosEntregaForm.get('direccionentrega').touched
+                        }"
+                        value=""
+                      />
+                      <span
+                        *ngIf="
+                          !datosEntregaForm.get('direccionentrega').valid &&
+                          datosEntregaForm.get('direccionentrega').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer la dirección de entrega
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >COMENTARIO*</label
+                      >
+                      <input
+                        [(ngModel)]="Certificado.P_SCOMENTARIODELIVERY"
+                        [ngClass]="{ deshabilitado: !deshabilitarNuevoSoat }"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        formControlName="comentario"
+                        maxlength="50"
+                        type="text"
+                        class="form-control input-text-formulario"
+                        placeholder="Ej. Altura cdra. 26"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- DATOS UBIGEO DEL CLIENTE -->
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >DEPARTAMENTO ENTREGA*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: !deshabilitarNuevoSoat }"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        formControlName="departamentoentrega"
+                        [(ngModel)]="Certificado.P_NPROVINCEDELIVERY"
+                        (change)="
+                          listarProvinciasDelivery(
+                            $event.target.value,
+                            null,
+                            null
+                          )
+                        "
+                        [ngClass]="{
+                          'error-validate':
+                            !datosEntregaForm.get('departamentoentrega')
+                              .valid &&
+                            datosEntregaForm.get('departamentoentrega').touched
+                        }"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione departamento de entrega</option
+                        >
+                        <option
+                          *ngFor="let departamento of departamentos"
+                          value="{{ departamento.nprovince }}"
+                          >{{ departamento.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !datosEntregaForm.get('departamentoentrega').valid &&
+                          datosEntregaForm.get('departamentoentrega').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu departamento de entrega
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >PROVINCIA ENTREGA*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: !deshabilitarNuevoSoat }"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        formControlName="provinciaentrega"
+                        [(ngModel)]="Certificado.P_NLOCATDELIVERY"
+                        (change)="
+                          listarDistritosDelivery($event.target.value, null)
+                        "
+                        [ngClass]="{
+                          'error-validate':
+                            !datosEntregaForm.get('provinciaentrega').valid &&
+                            datosEntregaForm.get('provinciaentrega').touched
+                        }"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione la provincia</option
+                        >
+                        <option
+                          *ngFor="let provincia of provinciasDelivery"
+                          value="{{ provincia.nlocal }}"
+                          >{{ provincia.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !datosEntregaForm.get('provinciaentrega').valid &&
+                          datosEntregaForm.get('provinciaentrega').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu provincia de entrega
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-row">
+                      <label for="disabledTextInput" class="label-formulario"
+                        >DISTRITO ENTREGA*</label
+                      >
+                      <select
+                        class="form-control select-formulario"
+                        [ngClass]="{ deshabilitado: !deshabilitarNuevoSoat }"
+                        [disabled]="!deshabilitarNuevoSoat"
+                        formControlName="distritoentrega"
+                        [(ngModel)]="Certificado.P_NMUNICIPALITYDELIVERY"
+                        [ngClass]="{
+                          'error-validate':
+                            !datosEntregaForm.get('distritoentrega').valid &&
+                            datosEntregaForm.get('distritoentrega').touched
+                        }"
+                      >
+                        <option value="undefined" disabled selected
+                          >Seleccione el distrito de entrega</option
+                        >
+                        <option
+                          *ngFor="let distrito of distritosDelivery"
+                          value="{{ distrito.nmunicipality }}"
+                          >{{ distrito.sdescript }}</option
+                        >
+                      </select>
+                      <span
+                        *ngIf="
+                          !datosEntregaForm.get('distritoentrega').valid &&
+                          datosEntregaForm.get('distritoentrega').touched
+                        "
+                        class="mensaje-error-control new-error"
+                        >Necesitamos conocer tu distrito de entrega
+                        <br />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-12">
+          <div class="form-group row">
+            <div class="col-lg-4">
+              <button
+                type="button"
+                class="btn btn-siguiente resumen"
+                [disabled]="!deshabilitarNuevoSoat"
+                (click)="guardarIrResumen()"
+              >
+                Ir al Resumen
+              </button>
+              <img alt="" *ngIf="bSpinner2" src="assets/icons/loading.gif" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #modalPolizas [close]="true">
+  <div class="m-body">
+    <div class="titulo">
+      <h4>Selecciona tu certificado</h4>
+      <h5 class="soats-disponibles">{{ this.totalSoats }} SOATS disponibles</h5>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-lg-12">
+        <input
+          type="text"
+          class="input-search"
+          placeholder="Busca el numero del certificado SOAT..."
+          (input)="searchCertificado($event.target.value)"
+          (keypress)="soloNumeros($event)"
+        />
+      </div>
+    </div>
+    <hr />
+    <!--Lista de Polizas -->
+    <div class="lista-polizas">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th class="text-center">NROS DE SOATS</th>
+            <th class="text-center">TIPO DE PAPEL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="lstPolizasFilter.length === 0">
+            <td colspan="2">No existen SOATs para listar</td>
+          </tr>
+          <tr *ngFor="let item of lstPolizasFilter">
+            <td class="text-center">
+              <label for="{{ item.npolesP_COMP }}">
+                <input
+                  id="{{ item.npolesP_COMP }}"
+                  [value]="item.npolesP_COMP"
+                  (click)="setPoliza(item)"
+                  type="radio"
+                  name="polizas"
+                />
+                {{ item.npolesP_COMP }}
+              </label>
+            </td>
+            <td class="text-center">
+              <label for="{{ item.ntippoldes }}">
+                {{ item.ntippoldes }}
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="botones">
+      <button
+        type="button"
+        class="btn btn-escoge"
+        (click)="modalPolizas.hide()"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,664 @@
+<app-pixel-facebook></app-pixel-facebook>
+<app-pixel-google-analytics></app-pixel-google-analytics>
+<app-pixel-google-tag-manager></app-pixel-google-tag-manager>
+<app-miga-pan
+  [paso01]="true"
+  [paso02]="false"
+  [paso03]="false"
+  [paso04]="false"
+></app-miga-pan>
+<app-sidebar></app-sidebar>
+<div class="container-main">
+  <app-title-step
+    actual="2"
+    titulo="Datos del Veh&iacute;culo"
+    url="../placa"
+  ></app-title-step>
+  <div class="contenido">
+    <div class="imagenes">
+      <div class="tarjeta">
+        <img
+          *ngIf="tipoImagen === 0"
+          src="assets/icons/carnet_vehicular.png"
+          class="img-fluid"
+          alt="Tarjeta de Propiedad"
+        />
+        <img
+          *ngIf="tipoImagen === 1"
+          src="assets/icons/carnet_vehicular_tooltip_serie.png"
+          class="img-fluid"
+          alt="Tarjeta de Propiedad"
+        />
+        <img
+          *ngIf="tipoImagen === 2"
+          src="assets/icons/carnet_vehicular_tooltip_asientos.png"
+          class="img-fluid"
+          alt="Tarjeta de Propiedad"
+        />
+      </div>
+      <div class="mini-card-hrule"></div>
+      <div class="mini-card">
+        <div class="mini-card-row">
+          <img
+            src="assets/icons/reminder_icon.svg"
+            width="80px"
+            height="60px"
+            class="img-fluid"
+            alt=""
+          />
+        </div>
+        <div class="mini-card-row">
+          <div class="mini-card-cell">
+            <div class="mini-card-title">RECUERDA:</div>
+            <div class="mini-card-subtitle">
+              Todos los datos de tu vehículo los podrás encontrar dentro de tu
+              tarjeta de propiedad.
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="vehiculo-especial">
+        <div class="cuadro">
+          <div class="img-vehiculo"><img src="assets/clases_carro/modelo-especial.svg"  class="img-fluid" alt="Modelo Especial"></div>
+          <p>¿Cuentas con un<br>veh&iacute;culo especial?</p>
+          <a (click)="modalVehiculosEspeciales.show()"><span>Ver listado de veh&iacute;culos</span></a>
+        </div>
+      </div> -->
+    </div>
+    <form [formGroup]="vehiculoForm" (ngSubmit)="onGuardar()">
+      <div class="texto">
+        <!--  <br class="no-mobile" /> -->
+
+        <!-- ////////////////// MARCA ////////////////// -->
+        <span>La marca de mi vehículo es </span>
+        <div class="d-row">
+          <div>
+            <select
+              tabindex="3"
+              [ngClass]="{
+                deshabilitado: bLoading,
+                'error-validate':
+                  !vehiculoForm.get('marcacodigo').valid &&
+                  vehiculoForm.get('marcacodigo').touched &&
+                  !marcaSeleccionada
+              }"
+              class="ll lcv"
+              formControlName="marcacodigo"
+              (change)="setMarca($event.target.value)"
+            >
+              <option value=""
+                >Selecciona la marca de tu veh&iacute;culo*</option
+              >
+              <option
+                *ngFor="let marca of marcas"
+                value="{{ marca.nvehbrand }}"
+                >{{ marca.sdescript }}</option
+              >
+            </select>
+            <span
+              *ngIf="
+                !vehiculoForm.get('marcacodigo').valid &&
+                modalMarcasAbierto &&
+                !marcaSeleccionada
+              "
+              class="mensaje-error-control new-error"
+              >{{ errMarca }}
+              <br />
+            </span>
+          </div>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('marcacodigo').valid &&
+              modalMarcasAbierto &&
+              !marcaSeleccionada
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errMarca }}
+            <br />
+          </span>
+        </div>
+
+        <!-- ////////////////// MODELO ////////////////// -->
+        <!--         <span>, modelo </span>
+        <div class="d-row">
+          <select
+            tabindex="4"
+            [ngClass]="{
+              deshabilitado: bLoading,
+              'error-validate':
+                !vehiculoForm.get('modeloprincipal').valid &&
+                vehiculoForm.get('modeloprincipal').touched
+            }"
+            class="xl"
+            formControlName="modeloprincipal"
+            (change)="setModeloPrincipal($event.target.value)"
+          >
+            <option value=""
+              >Selecciona el modelo de tu veh&iacute;culo*</option
+            >
+            <option
+              *ngFor="let modelo of modelosPrincipales"
+              value="{{ modelo.nvehmodel }}"
+              >{{ modelo.sdescript }}</option
+            >
+          </select>
+          <span
+            *ngIf="
+              !vehiculoForm.get('modeloprincipal').valid &&
+              vehiculoForm.get('modeloprincipal').touched
+            "
+            class="mensaje-error-control new-error"
+            >{{ errModelo }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('modeloprincipal').valid &&
+              vehiculoForm.get('modeloprincipal').touched
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errModelo }}
+            <br />
+          </span>
+        </div> -->
+
+        <!-- ////////////////// VERSION ////////////////// -->
+        <span>, modelo </span>
+        <div class="d-row">
+          <select
+            tabindex="5"
+            [ngClass]="{
+              deshabilitado: bLoading,
+              'error-validate':
+                !vehiculoForm.get('modelo').valid &&
+                vehiculoForm.get('modelo').touched
+            }"
+            class="xl"
+            formControlName="modelo"
+            (change)="setModelo($event.target.value)"
+          >
+            <option value=""
+              >Selecciona el modelo de tu veh&iacute;culo*</option
+            >
+            <option
+              *ngFor="let modelo of modelos"
+              value="{{ modelo.sdescript }}"
+              >{{ modelo.sdescript }}</option
+            >
+          </select>
+          <span
+            *ngIf="
+              !vehiculoForm.get('modelo').valid &&
+              vehiculoForm.get('modelo').touched
+            "
+            class="mensaje-error-control new-error"
+            >{{ errVersion }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('modelo').valid &&
+              vehiculoForm.get('modelo').touched
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errVersion }}
+            <br />
+          </span>
+        </div>
+
+        <br class="no-mobile" />
+
+        <!-- ////////////////// CLASE ////////////////// -->
+        <span>y clase </span>
+        <div class="d-row">
+          <select
+            tabindex="1"
+            [ngClass]="{
+              deshabilitado: bLoading,
+              'error-validate':
+                !vehiculoForm.get('clasecodigo').valid &&
+                vehiculoForm.get('clasecodigo').touched &&
+                !claseSeleccionada
+            }"
+            class="ll lcv"
+            formControlName="clasecodigo"
+            (change)="setClase($event.target.value)"
+          >
+            <option value="">Selecciona la clase de tu veh&iacute;culo*</option>
+            <option
+              *ngFor="let clase of clasesModel"
+              value="{{ clase.nvehclass }}"
+              >{{ clase.sdescript }}</option
+            >
+          </select>
+          .
+          <span
+            *ngIf="
+              !vehiculoForm.get('clasecodigo').valid &&
+              modalClasesAbierto &&
+              !claseSeleccionada
+            "
+            class="mensaje-error-control new-error"
+            >{{ errClaseVehiculo }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('clasecodigo').valid &&
+              modalClasesAbierto &&
+              !claseSeleccionada
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errClaseVehiculo }}
+            <br />
+          </span>
+        </div>
+
+        <!-- ////////////////// USO ////////////////// -->
+        <div class="d-row">
+          <span>El tipo de uso que le doy a mi vehículo es </span>
+        </div>
+        <div class="d-row" style="margin: 0 auto !important;">
+          <select
+            tabindex="2"
+            [ngClass]="{
+              deshabilitado: bLoading,
+              'error-validate':
+                !vehiculoForm.get('uso').valid &&
+                vehiculoForm.get('uso').touched
+            }"
+            data-size="5"
+            class="ll xstipo-uso"
+            formControlName="uso"
+            (invalid)="onTouchEnd()"
+          >
+            <option value="">Selecciona el tipo de uso*</option>
+            <option *ngFor="let uso of usos" value="{{ uso.niduso }}">{{
+              uso.sdescript
+            }}</option>
+          </select>
+          <span
+            *ngIf="
+              !vehiculoForm.get('uso').valid && vehiculoForm.get('uso').touched
+            "
+            class="mensaje-error-control new-error"
+            >{{ errTipoUso }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('uso').valid && vehiculoForm.get('uso').touched
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errTipoUso }}
+            <br />
+          </span>
+        </div>
+
+        <br class="no-mobile" />
+
+        <span>El n&uacute;mero de serie de mi auto es </span>
+        <div class="d-row">
+          <div>
+            <input
+              tabindex="6"
+              [ngClass]="{
+                deshabilitado: bLoading,
+                'error-validate':
+                  !vehiculoForm.get('serie').valid &&
+                  vehiculoForm.get('serie').touched &&
+                  !bserie
+              }"
+              class="mm xsserie"
+              type="text"
+              placeholder="XXXXXXXXXXXXXXXXX*"
+              formControlName="serie"
+              maxlength="17"
+              (blur)="onBlurSerie()"
+              (keypress)="soloNumerosLetras($event)"
+            />
+            <a (click)="setImagen(1)" class="link-seats">
+              <img alt="" 
+                class="tooltip_icon"
+                src="assets/icons/tooltip.svg"
+                width="23px"
+              />
+            </a>
+          </div>
+
+          <span
+            *ngIf="
+              !vehiculoForm.get('serie').valid &&
+              vehiculoForm.get('serie').touched &&
+              vehiculoForm.get('serie').value.length == 0
+            "
+            class="mensaje-error-control new-error"
+            >{{ errSerie }}
+            <br />
+          </span>
+          <span
+            *ngIf="
+              vehiculoForm.get('serie').touched &&
+              vehiculoForm.get('serie').value.length > 0 &&
+              !bserie
+            "
+            class="mensaje-error-control new-error"
+            >{{ errSerie2 }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('serie').valid &&
+              vehiculoForm.get('serie').touched &&
+              vehiculoForm.get('serie').value.length == 0
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errSerie }}
+            <br />
+          </span>
+          <span
+            *ngIf="
+              vehiculoForm.get('serie').touched &&
+              vehiculoForm.get('serie').value.length > 0 &&
+              !bserie
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errSerie2 }}
+            <br />
+          </span>
+        </div>
+
+        <span>, y tiene </span>
+        <div class="d-row">
+          <div>
+            <input
+              tabindex="7"
+              type="text"
+              [ngClass]="{
+                deshabilitado: bLoading,
+                'error-validate':
+                  !vehiculoForm.get('asientos').valid &&
+                  vehiculoForm.get('asientos').touched
+              }"
+              (keypress)="soloNumeros($event)"
+              class="xs xsasiento"
+              placeholder="XX*"
+              formControlName="asientos"
+              maxlength="2"
+            />
+            <a (click)="setImagen(2)" class="link-seats">
+              <img alt="" 
+                class="tooltip_icon"
+                src="assets/icons/tooltip.svg"
+                width="23px"
+              />
+            </a>
+            asientos.
+          </div>
+          <span
+            *ngIf="
+              !vehiculoForm.get('asientos').valid &&
+              vehiculoForm.get('asientos').touched
+            "
+            class="mensaje-error-control new-error"
+            >{{ errAsientos }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('asientos').valid &&
+              vehiculoForm.get('asientos').touched
+            "
+            class="mensaje-error-control ico-error"
+            >{{ errAsientos }}
+            <br />
+          </span>
+        </div>
+        <br class="no-mobile" />
+        <span>Mi carro es del año </span>
+        <div class="d-row">
+          <div>
+            <input
+              tabindex="8"
+              type="text"
+              [ngClass]="{
+                deshabilitado: bLoading,
+                'error-validate':
+                  !vehiculoForm.get('anho').valid &&
+                  vehiculoForm.get('anho').touched
+              }"
+              (keypress)="soloNumeros($event)"
+              (blur)="onBlurAnho()"
+              class="xs anio"
+              placeholder="AAAA*"
+              formControlName="anho"
+              maxlength="4"
+            />
+          </div>
+
+          <span
+            *ngIf="
+              !vehiculoForm.get('anho').valid &&
+              vehiculoForm.get('anho').touched
+            "
+            class="mensaje-error-control new-error"
+            >{{ errAnio }}
+            <br />
+          </span>
+          <span
+            *ngIf="vehiculoForm.get('anho').touched && !byear"
+            class="mensaje-error-control new-error ico-error"
+            >{{ errAnio2 }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="
+              !vehiculoForm.get('anho').valid &&
+              vehiculoForm.get('anho').touched
+            "
+            class="mensaje-error-control"
+            >{{ errAnio }}
+            <br />
+          </span>
+          <span
+            *ngIf="vehiculoForm.get('anho').touched && !byear"
+            class="mensaje-error-control ico-error"
+            >{{ errAnio2 }}
+            <br />
+          </span>
+        </div>
+
+        <span class="simple-line"
+          >, me gustar&iacute;a que la vigencia de mi SOAT inicie el
+        </span>
+        <div class="d-row">
+          <div class="mm yy">
+            <app-input-date
+              tabindex="9"
+              [borderBottom]="true"
+              [iconFilter]="true"
+              [inputHolder]="'DD/MM/YYYY*'"
+              [inputValue]="vFecha"
+              [inputStyle]="{
+                'font-size': '15px',
+                'text-align': 'center',
+                'padding-left': '0px',
+                'font-weight': 'bold'
+              }"
+              (inputValueChange)="validarFechaVigencia($event)"
+              [returnString]="true"
+              [returnFormat]="'yyyy-MM-dd'"
+              [inputError]="
+                !bDateSelected ? false : !vehiculoForm.get('vigencia').valid
+              "
+              (outsideClick)="onOutsideClick()"
+              [minDate]="minDate"
+              #fv
+            ></app-input-date>
+            <!-- <span *ngIf="!vehiculoForm.get('vigencia').valid && bDateSelected" class="mensaje-error-control">Por favor,
+              ingresa una fecha valida para el inicio de vigencia de tu SOAT<br></span>  -->
+          </div>
+          <span
+            *ngIf="!vehiculoForm.get('vigencia').valid && bDateSelected"
+            class="mensaje-error-control new-error"
+            >{{ errVigencia }}
+            <br />
+          </span>
+        </div>
+        <div class="d-row si-mobile">
+          <span
+            *ngIf="!vehiculoForm.get('vigencia').valid && bDateSelected"
+            class="mensaje-error-control ico-error"
+            >{{ errVigencia }}
+            <br />
+          </span>
+        </div>
+      </div>
+      <div class="botones">
+        <button
+          [ngClass]="{ deshabilitado: bFlagBoton }"
+          [disabled]="
+            !vehiculoForm.valid || !bFechaInvalida || !byear || !bserie
+          "
+          type="submit"
+          class="btn btn-siguiente"
+        >
+          Continuar al paso 3: Ingresa tus datos
+        </button>
+        <!-- <ul>
+          <li><b>{{!vehiculoForm.valid || !bFechaInvalida || !byear || !bserie}}</b></li>
+          <li>!vehiculoForm.valid: {{!vehiculoForm.valid}}</li>
+          <li>!bFechaInvalida: {{!bFechaInvalida}}</li>
+          <li>!byear: {{!byear}}</li>
+          <li>!bserie: {{!bserie}}</li>
+          <li><hr></li>
+          <li>!vehiculoForm.get('vigencia').valid && bDateSelected: {{!vehiculoForm.get('vigencia').valid && bDateSelected}}</li>
+          <li>vehiculoForm.get('vigencia').valid: {{vehiculoForm.get('vigencia').valid}}</li>
+          <li>bDateSelected: {{bDateSelected}}</li>
+        </ul>  -->
+        <img  alt="" *ngIf="bSpinner" src="assets/icons/loading.gif" />
+        <div class="mensajes-validacion">
+          <!-- <span *ngIf="!vehiculoForm.get('clasecodigo').valid && modalClasesAbierto && !claseSeleccionada" class="mensaje-error-control">Necesitamos
+            conocer la clase de tu veh&iacute;culo <br></span>
+          <span *ngIf="!vehiculoForm.get('marcacodigo').valid && modalMarcasAbierto && !marcaSeleccionada" class="mensaje-error-control">Necesitamos
+            conocer la marca de tu veh&iacute;culo <br></span>
+          <span *ngIf="!vehiculoForm.get('uso').valid && vehiculoForm.get('uso').touched" class="mensaje-error-control">Necesitamos
+            conocer el uso que le das a tu veh&iacute;culo <br></span>
+          <span *ngIf="!vehiculoForm.get('modelo').valid && vehiculoForm.get('modelo').touched" class="mensaje-error-control">Necesitamos
+            conocer el modelo de tu veh&iacute;culo <br></span>
+          <span *ngIf="!vehiculoForm.get('serie').valid && vehiculoForm.get('serie').touched" class="mensaje-error-control">Necesitamos
+            conocer la serie de tu veh&iacute;culo <br></span>
+          <span *ngIf="!vehiculoForm.get('asientos').valid && vehiculoForm.get('asientos').touched" class="mensaje-error-control">Necesitamos
+            conocer la cantidad de asientos que tiene tu veh&iacute;culo<br></span>
+          <span *ngIf="!vehiculoForm.get('anho').valid && vehiculoForm.get('anho').touched" class="mensaje-error-control">Necesitamos
+            conocer el año de tu veh&iacute;culo<br></span>
+          <span *ngIf="vehiculoForm.get('anho').touched && !byear" class="mensaje-error-control">El año de tu
+            veh&iacute;culo no puede ser mayor al actual.<br></span>
+          <span *ngIf="vehiculoForm.get('serie').touched && vehiculoForm.get('serie').value.length > 0 && !bserie" class="mensaje-error-control">El chassis o serie
+            de tu veh&iacute;culo, debe tener 17 d&iacute;gitos.<br></span>
+          <span *ngIf="!vehiculoForm.get('zona').valid && vehiculoForm.get('zona').touched" class="mensaje-error-control">Necesitamos
+            conocer tu zona de circulaci&oacute;n<br></span>
+          <span *ngIf="!vehiculoForm.get('vigencia').valid && bDateSelected" class="mensaje-error-control">Por favor,
+            ingresa una fecha valida para el inicio de vigencia de tu SOAT<br></span>  -->
+          <span *ngIf="mensajeValidacion" class="mensaje-error-control">{{
+            mensajeValidacion
+          }}</span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-modal #modalVehiculosEspeciales>
+  <div class="m-body">
+    <div class="especiales">
+      <h4>¿Que son los veh&iacute;culos <br />especiales?</h4>
+      <div class="especiales-list"></div>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal #modalClases [close]="false" [mobileVehiculo]="true">
+  <div class="m-body">
+    <div class="filters">
+      <input
+        type="text"
+        placeholder="Buscar clase de vehiculo"
+        (input)="searchClases($event.target.value)"
+      />
+    </div>
+    <hr />
+    <div class="lista-grid">
+      <div *ngFor="let item of clases" class="item-grid">
+        <a (click)="setClase(item)">
+          <div class="cuadro-item">
+            <div class="clase-img">
+              <img alt="" 
+                src="assets/clases_carro/{{ item.simagE_NAME }}"
+                *ngIf="item.simagE_NAME"
+              />
+              <div class="clase-descripcion">{{ item.sdescript }}</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal #modalMarcas [close]="false" [mobileVehiculo]="true">
+  <div class="m-body">
+    <div class="filters">
+      <input
+        type="text"
+        placeholder="Buscar marca"
+        (input)="searchMarcas($event.target.value)"
+      />
+    </div>
+    <hr />
+    <div class="lista-grid">
+      <div *ngFor="let item of marcas" class="item-grid">
+        <a (click)="setMarca(item); modalMarcas.hide()">
+          <div class="cuadro-item">
+            <div class="clase-img">
+              <img alt="" 
+                src="assets/logos/autos/{{ item.simagE_NAME }}"
+                alt="{{ item.sdescript }}"
+                *ngIf="item.simagE_NAME"
+              />
+              <span *ngIf="!item.simagE_NAME">{{ item.sdescript }}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<!-- <select style="width: 100%;">
+  <option>Option 1</option>
+  <option>Option 2</option>
+  <option>Option 3</option>
+  <option>Option 4</option>
+  <option>Option 5</option>
+  <option>Option 6</option>
+  <option>Option 7</option>
+  <option>Option 8</option>
+  <option>Option 9</option>
+</select> -->

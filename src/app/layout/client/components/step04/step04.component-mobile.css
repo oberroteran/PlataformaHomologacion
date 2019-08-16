@@ -1,0 +1,197 @@
+/*
+@media screen and (max-width: 1100px) {
+    .container-resumen {
+      width: 100%;
+      height: 100%;
+      float: left;
+      margin-bottom: 10px;
+  }
+  .container-left{
+      display: none;
+  }
+}
+
+@media screen and (max-width: 800px) {
+    .resumen-top {
+        width: 95%;
+        border: 2px solid #2B0D61;
+        margin: auto;
+        border-radius: 6px;
+    }
+    .resumen-top .texto {
+        color: #2B0D61;
+        font-family: "Bliss Pro";
+        float: left;
+        width: 45%;
+        padding-top: 5px;
+        padding-left: 50px;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .resumen-top span {
+        font-size: 25px;
+        font-weight: 800;
+    }
+}
+
+@media screen and (max-width: 840px) {
+  .acciones .accion {
+    clear: both;
+    width: 95%;
+  }
+}
+*/
+
+@media screen and (max-width: 768px) {
+  /* 1100px */
+  .container-resumen {
+    width: 100%;
+    height: 100%;
+    float: left;
+    margin: 0px;
+    margin-bottom: 10px;
+    /* padding-left: 0px; */
+    padding: 0px 10px;
+    margin-top: 20px;
+  }
+  .container-left {
+    display: none;
+  }
+  /* 800px*/
+  .resumen-top {
+    width: 95%;
+    border: 2px solid #2b0d61;
+    margin: auto;
+    border-radius: 6px;
+  }
+  .resumen-top .texto {
+    color: #2b0d61;
+    font-family: "Bliss Pro";
+    float: left;
+    width: 45%;
+    padding-top: 5px;
+    padding-left: 50px;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .resumen-top span {
+    font-size: 25px;
+    font-weight: 800;
+  }
+  /* YPC */
+  .acciones .accion {
+    padding: 0px;
+    /* padding-left: 35px; */
+    padding-left: 20px;
+    margin: 0px;
+    text-align: left !important;
+    clear: both;
+    width: 100%;
+    line-height: 1;
+  }
+  /* .resumen-top .jumper {
+    display: block;
+    clear: both;
+  } */
+  .resumen-top .texto,
+  .resumen-top .monto {
+    float: none;
+    text-align: center;
+    clear: both;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .ejemplo_soat img {
+    width: 100%;
+    height: initial;
+  }
+  .contenido .resumen-top {
+    display: table;
+  }
+  .accion-right {
+    margin-top: 15px !important;
+  }
+  .contenido .resumen-top .texto,
+  .contenido .resumen-top .monto {
+    margin: 0px !important;
+    padding: 10px 15px !important;
+    font-size: 24px !important;
+    display: table-cell;
+    text-align: left;
+    font-family: "Bliss Pro Bold";
+    line-height: 1;
+    vertical-align: middle;
+  }
+  .contenido .resumen-top .monto {
+    text-align: right;
+    white-space: nowrap;
+    font-size: 32px;
+  }
+  .contenido .pago > div {
+    clear: both;
+  }
+  .contenido .pago .formas-pago > div {
+    clear: both;
+    margin-top: 10px;
+  }
+
+  .pago .formas-pago {
+    width: 100%;
+  }
+
+  .btn-visa[_ngcontent-c4] {
+    width: 100%;
+  }
+
+  .line-texto {
+    width: 90%;
+    margin-left: 20px;
+  }
+  .pago .texto {
+    margin-top: 0px;
+  }
+
+  .pago .texto {
+    width: 90%;
+    text-align: center;
+    margin-top: 0px;
+  }
+  .pago .texto h5 {
+    font-family: "Bliss Pro Bold";
+  }
+  .btn-visa {
+    margin-right: unset;
+    float: initial;
+  }
+
+  .btn-pago-efectivo {
+    text-align: center;
+    width: 100%;
+    margin-right: -8px;
+  }
+
+  .btn-visacontainer {
+    float: initial;
+  }
+  .btn-visacontainer img {
+    height: 32px;
+    margin-left: 22px;
+  }
+  .btn-pago-efectivo img {
+    width: 154px;
+    height: 51px;
+    margin-top: 15px;
+  }
+
+  .resumen-bottom {
+    margin-top: 15px;
+  }
+
+  .acciones {
+    margin-bottom: 0px;
+  }
+}

@@ -1,0 +1,56 @@
+ @media screen and (max-width: 450px) {
+     .container-miga .steps {
+         width: 97%;
+     }
+
+     .container-miga .steps .step h5 {
+        font-size: 12px;
+      }
+ }
+
+ @media screen and (max-width: 768px) {
+    .container-miga .steps .step h5 {
+        font-size: 12.7px;
+      }     
+     .separador, .separador-done {
+         top: 21%;
+         left: -15px;
+         right: -15px;
+     }
+     .container-miga .steps {
+        display: table;
+        width: 80%;
+        margin: auto;
+        padding-top: 16px;
+      }
+      .container-miga {
+        display: block;
+        text-align: center;
+        height: 120px;
+        border-bottom: 1px solid #806EA0;
+      }
+      .container-miga .steps .step div {
+        height: 88px;
+        position: relative;
+      }
+     .container-miga .steps .step01 {
+         background-image: url('../../../../../../assets/icons/step1.svg');
+         background-size: 50px 50px;
+     }
+     .container-miga .steps .step02 {
+        background-image: url('../../../../../../assets/icons/step2.svg');
+        background-size: 50px 50px;
+     }
+     .container-miga .steps .step03 {
+        background-image: url('../../../../../../assets/icons/step3.svg');
+        background-size: 50px 50px;
+     }
+     .container-miga .steps .step04 {
+        background-image: url('../../../../../../assets/icons/step4.svg');
+        background-size: 50px 50px;
+     }
+     .container-miga .steps .step-done {
+         background-image: url('../../../../../../assets/icons/validacion.svg');
+         background-size: 50px 50px;
+     }
+ }

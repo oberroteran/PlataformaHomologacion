@@ -1,0 +1,706 @@
+.si-mobile {
+  display: none;
+}
+
+.container-resumen {
+  width: 70%;
+  min-height: 770px;
+  margin: auto;
+  /*margin-left: 2%;*/
+  padding-left: 15px;
+  /* float: left; */
+  margin: 5px 10px;
+  /*border: 1px solid #000;*/
+  margin-left: 15%;
+  margin-top: 20px;
+}
+
+.contenido {
+  width: 100%;
+  text-align: center;
+}
+
+.resumen-top {
+  width: 95%;
+  border: 2px solid #2b0d61;
+  /* height: 116px; */
+  margin: auto;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.resumen-top .jumper {
+  display: none;
+}
+
+.resumen-top .texto {
+  color: #2b0d61;
+  font-family: "Bliss Pro Bold";
+  float: left;
+  width: 45%;
+  padding-top: 5px;
+  padding-left: 50px;
+  text-align: left;
+  text-transform: uppercase;
+  padding-top: 15px;
+  line-height: 36px;
+}
+
+.resumen-top .monto {
+  color: #ed6e00;
+  font-family: "Bliss Pro Bold";
+  font-size: 65px;
+  font-weight: 900;
+  float: right;
+  padding-right: 50px;
+}
+
+.resumen-top span {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 33px;
+  font-weight: 800;
+  float: left;
+}
+
+.resumen-bottom {
+  width: 95%;
+  /* height: 440px; */
+  overflow: hidden;
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 5px;
+  border: 2px solid #2b0d61;
+  border-radius: 6px;
+  padding-bottom: 10px;
+}
+
+.resumen-bottom .compra {
+  width: 100%;
+  padding: 24px 0px;
+}
+
+.resumen-bottom .compra .titulo {
+  width: 100%;
+  float: left;
+}
+
+.resumen-bottom .compra .titulo h4 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+  font-weight: 800;
+  /* margin-top: 20px; */
+  padding-left: 20px;
+  text-align: left;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos {
+  width: 100%;
+  height: 48px;
+  text-align: left;
+  margin-top: 20px;
+  padding-left: 20px;
+  float: left;
+  font-weight: bold;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos img {
+  float: left;
+  margin-top: 5px;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos .subtitulos {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: bold;
+  float: left;
+  margin-left: 10px;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos .subtitulos h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos .subtitulos h6 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+}
+
+.resumen-bottom .compra .datos-vehiculo {
+  width: 100%;
+  text-align: left;
+}
+
+.resumen-bottom .compra .datos-vehiculo .item-vehiculo {
+  float: left;
+  width: 40%;
+  text-align: left;
+  margin-top: 15px;
+  margin-left: 25px;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.resumen-bottom .compra .hr {
+  width: 95%;
+  height: 1px;
+  border: 0.96px solid #2b0d61;
+  margin-top: 15px;
+  margin-left: 2.5%;
+  float: left;
+}
+
+.resumen-bottom .compra .encabezado-personas {
+  width: 100%;
+  height: 48px;
+  text-align: left;
+  margin-top: 20px;
+  padding-left: 20px;
+  float: left;
+}
+
+.resumen-bottom .compra .encabezado-personas img {
+  float: left;
+}
+
+.resumen-bottom .compra .encabezado-personas .subtitulos {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: bold;
+  float: left;
+  margin-left: 10px;
+}
+
+.resumen-bottom .compra .encabezado-personas .subtitulos h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.resumen-bottom .compra .encabezado-personas .subtitulos h6 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+}
+
+.resumen-bottom .compra .datos-personales {
+  width: 100%;
+  /*height: auto;*/
+  text-align: left;
+}
+
+.resumen-bottom .compra .datos-personales .item-personal {
+  float: left;
+  width: 45%;
+  text-align: left;
+  margin-top: 15px;
+  margin-left: 25px;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.acciones {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.acciones .accion {
+  width: 45%;
+  float: left;
+  margin-left: 40px;
+  margin-top: 5px;
+  text-align: left;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.acciones .accion a {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 800;
+  /*text-decoration: none;*/
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.pago {
+  width: 100%;
+  float: left;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.pago .texto {
+  width: 30%;
+  float: left;
+  text-align: left;
+  margin-left: 30px;
+  /*border: 1px solid #000;*/
+}
+
+.pago .texto h6 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+  /*margin-top: 2px;*/
+}
+
+.pago .texto h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+}
+
+.pago .formas-pago {
+  width: 65%;
+  height: 100%;
+  float: left;
+}
+
+.pago .formas-pago .forma-pago {
+  float: right;
+  width: 33%;
+  height: 46px;
+  padding-top: 10px;
+  margin-left: 20px;
+}
+
+.pago .formas-pago .forma-pago .btn-normal {
+  text-decoration: none;
+  color: #ed6e00;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #ed6e00;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.pago .forma-pago .btn-selected {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #ed6e00;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-pago-efectivo {
+  float: right;
+  margin-right: 40px;
+}
+
+.btn-pago-efectivo a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-pago-efectivo img {
+  border-radius: 6px;
+  width: 130px;
+  height: 45px;
+}
+
+.frame-result {
+  width: 100%;
+  /*min-height: 400px;*/
+}
+
+.botones {
+  width: 100%;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.loading {
+  float: right;
+  width: 50%;
+  height: 46px;
+  padding-top: 10px;
+  margin-left: 20px;
+}
+
+.loading p {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-orange {
+  text-decoration: none;
+  color: #ffffff;
+  font-family: "Bliss Pro";
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: #ed6e00;
+  cursor: pointer;
+  width: 120px;
+}
+
+/*Rightbar*/
+
+.container-right {
+  display: none;
+  width: 20%;
+  float: left;
+  text-align: center;
+  padding-top: 130px;
+  /*padding-left: 5px;*/
+}
+
+.container-right .row-01 {
+  width: 90%;
+}
+
+.container-right .row-01 p {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 18px;
+  text-align: justify;
+}
+
+.container-right .cuadro {
+  height: 524px;
+  width: 90%;
+  border: 2px solid #d5cfdf;
+  border-radius: 4px;
+  background-color: #e9e6ef;
+  padding: 15px;
+}
+
+.container-right .cuadro .img {
+  height: 108px;
+  width: 90%;
+  border-radius: 6px;
+  background-color: #8a86ae;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.container-right .cuadro h3 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 24px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.container-right .cuadro .textos {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 16px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.container-right .cuadro .textos span {
+  text-transform: uppercase;
+}
+
+.container-right .cuadro h4 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+.container-right .cuadro .combo-plus {
+  height: 64px;
+  width: 234px;
+  border: 1px solid #2b0d61;
+  border-radius: 4px;
+}
+
+.container-right .cuadro .combo-plus .costo {
+  width: 50%;
+  height: 100%;
+  float: left;
+  text-align: center;
+}
+
+.container-right .cuadro .combo-plus .costo div {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 36px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.container-right .cuadro .combo-plus .button-combo-plus {
+  width: 50%;
+  height: 100%;
+  float: left;
+  background-color: #2b0d61;
+  text-align: center;
+}
+
+.container-right .cuadro .combo-plus a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.container-right .cuadro .combo-plus a div {
+  padding-top: 15px;
+  width: 100%;
+  height: 100%;
+}
+
+.ejemplo_soat {
+  width: 100%;
+  overflow: auto;
+  text-align: center;
+}
+
+.ejemplo_soat img {
+  width: 440px;
+  height: 680px;
+}
+
+.terminos-titulo {
+  width: 100%;
+  min-height: 84px;
+}
+
+.terminos-titulo h1 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 36px;
+  font-weight: 900;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.terminos-titulo .close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: #ffffff;
+  background-color: #d5cede;
+  border-radius: 50%;
+  /* padding: 5px; */
+  width: 24px;
+  height: 24px;
+}
+
+.terminos-titulo .close span {
+  position: absolute;
+  top: -2px;
+  left: 6px;
+}
+
+.terminos-texto {
+  width: 100%;
+  /* height: 340px; */
+  height: 290px;
+  overflow: auto;
+  padding: 10px;
+}
+
+.terminos-texto h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.terminos-texto h3 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.terminos-texto p {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: justify;
+}
+
+.btn-visa {
+  float: left;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.btn-visacontainer {
+  height: 32px;
+  float: left;
+  margin-top: 7px;
+}
+
+.btn-visacontainer img {
+  height: 32px;
+  margin-left: 27px;
+}
+
+:host ::ng-deep .start-js-btn {
+  cursor: pointer !important;
+}
+
+.acceptar {
+  margin-left: 6px;
+  text-decoration: underline;
+}
+
+/*checkbox*/
+
+/* Hide the browser's default checkbox */
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+label {
+  display: inline;
+}
+
+/* Create a custom checkbox */
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  /*background-color: #eee;*/
+  background-color: #cecccc;
+}
+
+/* On mouse-over, add a grey background color */
+
+.container:hover input ~ .checkmark {
+  background-color: #cecccc;
+  /*border: 1px solid;*/
+}
+
+/* When the checkbox is checked, add a blue background */
+
+.container input:checked ~ .checkmark {
+  background-color: #5dcd1c;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+
+.container .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.formas-pago-locked,
+.cupon-locked {
+  pointer-events: none;
+  background: rgb(255, 255, 255);
+  z-index: 9999999;
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+  /* For IE8 and earlier */
+}
+
+.accion-right {
+  text-align: right !important;
+  padding-right: 20px;
+}
+
+/* CUPON */
+
+.cupon {
+  overflow: hidden;
+  clear: both;
+  margin-left: 12px;
+  margin-right: 10px;
+}
+
+.cupon-title {
+  border-top: 1px solid #2b0d61;
+  font-size: 12px;
+  text-align: left !important;
+  font-family: "Bliss Pro Bold";
+  color: #2b0d61;
+  padding-top: 20px;
+  padding-bottom: 8px;
+}
+
+.cupon-input {
+  font-size: 13px;
+  padding: 10px;
+}
+
+.cupon-input::placeholder {
+  color: #d5cede !important;
+}
+
+.cupon-addon {
+  background-color: #2b0d61;
+  color: #ffffff;
+  font-size: 12px;
+  font-family: "Bliss Pro";
+  width: 120px;
+  cursor: pointer;
+}

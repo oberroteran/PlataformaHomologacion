@@ -1,0 +1,60 @@
+<div class="form-group row">
+  <div class="col-sm-12">
+    <div class="container-fluid">
+      <div class="form-group row row-title-principal">
+        <div class="col-sm-12 text-center">
+          <div class="title-princial">
+            Bienvenido a Protecta Security, {{ nombre }}.
+          </div>
+        </div>
+        <div class="col-sm-12 text-center">
+          <div class="text-descripcion">
+            <span>
+              ¿Qué desea vender hoy? <br>
+              En la parte inferior elige el producto que vas a vender.
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-sm-3">
+          <div class="rectangle">
+            <div class="cabera">
+              <img src="assets/icons/certificado_manual.svg" class="fill-18 " alt="" />
+            </div>
+            <div class="title-rectangle">
+              {{ soat }}
+            </div>
+
+            <div class="rectangle-footer">
+              <button type="button" class="btn-compra active" (click)="goToSoat()">
+                EMPEZAR
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="rectangle">
+            <div class="cabera">
+              <img src="assets/icons/certificado_laser.svg" class="fill-18 " alt="" />
+            </div>
+            <div class="title-rectangle">
+              {{ sctr }}
+            </div>
+            <div class="rectangle-footer">
+              <button type="button" class="btn-compra active" (click)="goToSctr()">
+                EMPEZAR
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+
+</div>

@@ -1,0 +1,44 @@
+<div class="form-group row">
+  <div class="col-lg-3">
+      <nav-menu></nav-menu>
+  </div>
+  <div class="col-lg-9">
+    <div class="container-fluid">
+      <div class="contenido">
+        <div *ngIf="bLoading" class="mensaje-carga">
+          <h4>Por favor espere unos segundos mientras procesamos su pago...</h4>
+        </div>
+        <!-- <div *ngIf="!bLoading && bAprobado" class="mensaje-aprobado">
+          <h4>A partir de este momento gozas de la cobertura de un SOAT Protecta Security</h4>
+          <p>
+              Gracias por confiar tu seguridad y la de tu familia en Protecta Security. La Constancia del SOAT electr&oacute;nico adquirido ha sido
+              enviada al correo: {{ cliente.p_SMAIL }}.
+              <br>
+              <br> Si no recibes el correo con tu constancia electronica SOAT una vez que hayas realizado el pago,
+              comunicate al 000000 o escribenos a xxx@protecta.com.pe
+          </p>
+
+          <a *ngIf="certificado.P_NCODCHANNEL_BO === 2" class="btn-white-blue" (click)="onImprimir()">Imprimir Reporte</a>
+        </div> -->
+
+        <app-visa-result [loading]="bLoading" [resultOK]="bAprobado" [result]="resultado" [downloadUrl]="downloadPdfUrl"></app-visa-result>
+
+        <div *ngIf="!bLoading && bAprobado">            
+            <div class="div-center">
+                <button type="button" class="btn-compra" (click)="IrPlaca()">Realizar otra Compra</button>
+                </div>
+        </div>
+
+        <div *ngIf="!bLoading && !bAprobado" class="mensaje-denegado">
+       <!--   <h4>Lamentablemente tu pago no se realizo satisfactoriamente</h4>
+          <p>Estimado cliente, ha ocurrido un error al intentar comunicarnos con la entidad financiera que seleccionaste,
+              vuelve a intentar nuevamente por favor</p>-->
+          <div class="div-center">
+           <button class="btn-compra" (click)="IrAResumen()" >Volver a Intentar</button>
+          <!--<a class="btn-compra"   routerLink="./step05">Volver a Intentar</a>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

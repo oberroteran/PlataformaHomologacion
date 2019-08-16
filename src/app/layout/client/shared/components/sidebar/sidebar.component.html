@@ -1,0 +1,63 @@
+<br>
+<hr class="hr-mobile" *ngIf="visibleMobile">
+<div class="container-left" [ngClass]="{'si-mobile': visibleMobile, 'no-mobile': !visibleMobile}">
+  <div class="row-01">
+    <div class="row-header">
+      <h4>¿Por qu&eacute; comprar el SOAT Protecta Security?</h4>
+      <i *ngIf="visibleMobile" class="chevron-down" [ngClass]="{'chevron-up': bDown1}" (click)="toggleVisibleBody1()"></i>
+    </div>
+    <p *ngIf="visibleMobile === false ? true : visibleBody1;">Nuestros clientes no tienen que sufrir un accidente para
+      acceder
+      a m&uacute;ltiples beneficios. Desde que reciben su SOAT electr&oacute;nico
+      podrán gozar del programa "Protecci&oacute;n que Premia" con descuentos en
+      establecimientos y cl&iacute;nicas a nivel nacional.
+    </p>
+  </div>
+  <hr>
+  <div class="row-02">
+    <div class="row-header">
+      <h4>Obt&eacute;n estos beneficios:</h4>
+      <i *ngIf="visibleMobile" class="chevron-down" [ngClass]="{'chevron-up': bDown2}" (click)="toggleVisibleBody2()"></i>
+    </div>
+    <ul *ngIf="visibleMobile === false ? true : visibleBody2;">
+      <li>
+        <div class="li-01"></div>
+        <div class="li-02">Asistencia M&eacute;dica</div>
+      </li>
+      <li>
+        <div class="li-01"></div>
+        <div class="li-02">Asistencia Legal</div>
+      </li>
+      <li>
+        <div class="li-01"></div>
+        <div class="li-02">Asistencia Vial (Solo autom&oacute;viles)</div>
+      </li>
+      <li>
+        <div class="li-01"></div>
+        <div class="li-02">Servicios de Referencia y Coordinaci&oacute;n en Lima</div>
+      </li>
+    </ul>
+    <div *ngIf="visibleMobile === false ? true : visibleBody2;" class="beneficios">
+      <div class="col01">
+        <img class="ico-beneficios" src="assets/icons/check_mas_beneficios.svg" alt="Mas beneficios">
+      </div>
+      <div class="col02">
+        <span>Descubre m&aacute;s sobre estos y otros beneficios que tenemos para ti</span>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <!-- <div class="row-03">
+    <h4>
+      Ahora puedes adquirir tu SOAT Plus con Protecta Security
+    </h4>
+    <h3>
+      Adquiere tu soat
+      plus agregando tan
+      solo S/. 25 a tu SOAT
+    </h3>
+    <button type="button" class="btn-white">Quiero conocer m&aacute;s</button>
+    <br>
+    <br>
+  </div> -->
+</div>

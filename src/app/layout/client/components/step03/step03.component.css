@@ -1,0 +1,373 @@
+.d-row {
+  display: inline-block;
+  position: relative;
+  line-height: 2;
+  margin-right: 6px;
+}
+
+.d-row > * {
+  display: inline-block;
+}
+
+.si-mobile {
+  display: none;
+}
+
+.container-left {
+  width: 20%;
+  box-shadow: 1px 0 0 0 #d5cfdf;
+  float: left;
+}
+
+.fee-validation {
+  width: 100%;
+  overflow: auto;
+  padding-right: 10%;
+  padding-left: 10%;
+  color: #2b0d61;
+  text-align: center;
+  font-size: 15px;
+  padding-bottom: 15px;
+}
+
+.container-left h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 24px;
+  padding-left: 15px;
+}
+
+.container-left .row-01 {
+  width: 100%;
+  height: auto;
+  padding-left: 15px;
+}
+
+.container-left .row-01 .cabecera {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.container-left .row-01 .cabecera .vineta {
+  width: 25%;
+  float: left;
+  padding-top: 8px;
+}
+
+.container-left .row-01 .cabecera .subtitulos {
+  width: 70%;
+  float: left;
+  margin-left: 10px;
+}
+
+.container-left .row-01 .cabecera .subtitulos h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 24px;
+}
+
+.container-left .row-01 .cabecera .subtitulos h6 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 24px;
+}
+
+.container-left .row-01 .datos {
+  width: 100%;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 36px;
+}
+
+.container-left .row-01 .datos .column-01 {
+  width: 45%;
+  text-align: left;
+}
+
+.container-left .row-01 .datos .column-02 {
+  width: 5%;
+  text-align: center;
+}
+
+.container-left .row-01 .datos .column-03 {
+  width: 45%;
+  text-align: left;
+}
+
+.container-left hr {
+  width: 95%;
+  border: 1px solid #d5cfdf;
+}
+
+.container-left .row-03 {
+  width: 100%;
+  text-align: center;
+}
+
+.container-left .row-03 h4 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+  font-weight: 700;
+  padding-left: 10px;
+  margin: 18px;
+}
+
+.container-left .row-03 h3 {
+  padding-left: 10px;
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 18px;
+}
+
+.container-left .row-03 .btn-white {
+  border: 1px solid #ed6e00;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #ed6e00;
+  font-family: "Bliss Pro";
+  padding: 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  margin: auto;
+  cursor: pointer;
+}
+
+.contenido {
+  width: 100%;
+}
+
+.contenido .imagenes {
+  width: 100%;
+  height: 300px;
+}
+
+.contenido .texto {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 19px;
+  text-align: left;
+  font-weight: bold;
+  line-height: 41px;
+  width: 100%;
+}
+
+.texto select {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 15px;
+  font-weight: 500;
+  text-align-last: center;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #806ea0;
+  box-shadow: none;
+  appearance: none;
+  background: url("assets/icons/placeholder_icon.svg") no-repeat 99%;
+}
+
+.contenido .texto select > option {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.texto select::-ms-expand {
+  display: none;
+}
+
+.texto input[type="text"] {
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid #806ea0;
+  outline: none;
+}
+
+.botones {
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.btn-siguiente {
+  border-radius: 6px;
+  background-color: #ed6e00;
+  color: #ffffff;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 324px;
+  height: 46px;
+}
+
+.contenido .texto .xs {
+  width: 5rem;
+}
+
+.contenido .texto .ss {
+  width: 10rem;
+  height: 21px;
+}
+
+.contenido .texto .mm {
+  width: 15rem;
+}
+
+.contenido .texto .ll {
+  width: 18rem;
+  height: 30px;
+}
+
+.contenido .texto .xl {
+  width: 23rem;
+}
+
+.contenido .texto .xxl {
+  width: 28rem;
+}
+
+.autocomplete-title {
+  width: 100%;
+}
+
+.autocomplete-title h1 {
+  color: #ed6e00;
+  font-family: "Bliss Pro";
+  font-size: 25px;
+  font-weight: 900;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.autocomplete-content {
+  width: 100%;
+  overflow: auto;
+  padding-right: 10%;
+  padding-left: 10%;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  color: #2b0d61;
+  text-align: center;
+  font-size: 15px;
+}
+
+.autocomplete-content h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.autocomplete-content h3 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.autocomplete-content p {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: justify;
+}
+
+.autocomplete-warning {
+  color: #2b0d61;
+  text-align: center;
+  font-weight: normal;
+  padding: 40px 20% 20px 20%;
+}
+
+.botones {
+  width: 100%;
+}
+
+.botonespopup {
+  width: 100%;
+  text-align: center;
+}
+
+.btn-orange {
+  text-decoration: none;
+  color: #ffffff;
+  font-family: "Bliss Pro";
+  font-size: 15px;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: #ed6e00;
+  cursor: pointer;
+  width: 120px;
+}
+::placeholder {
+  color: #806ea0;
+}
+
+.tooltip_icon {
+  cursor: pointer;
+}
+
+.contenido .texto input[type="text"] {
+  height: 21px !important;
+  line-height: 1;
+}
+
+.error-validate {
+  border-bottom: 1px solid red !important;
+  color: red !important;
+}
+
+.error-validate::placeholder {
+  border-bottom: 1px solid red !important;
+  color: red !important;
+}
+
+.new-error {
+  position: absolute;
+  bottom: -8px;
+  white-space: nowrap;
+  display: run-in !important;
+}
+
+.new-error,
+.ico-error {
+  background-image: url("../../../../../assets/icons/error.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+
+.ico-error {
+  display: block !important;
+  text-align: left !important;
+}
+
+.contenido .texto .d-row select,
+.contenido .texto .d-row input[type="text"] {
+  border-radius: 0px;
+}

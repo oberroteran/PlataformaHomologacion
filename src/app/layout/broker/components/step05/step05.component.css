@@ -1,0 +1,531 @@
+.linea {
+  border-top: 2px solid #bdafd8;
+}
+
+.border {
+  border: 1px solid #000;
+}
+
+.container-resumen {
+  width: 55%;
+  min-height: 770px;
+  margin: auto;
+  /*margin-left: 2%;*/
+  padding-left: 15px;
+  /*border: 1px solid #000;*/
+}
+
+:host ::ng-deep .volver {
+  margin-bottom: 7px;
+}
+
+.contenido {
+  width: 100%;
+  text-align: center;
+}
+
+.creaunsoatmanual {
+  height: 31px;
+  width: 100%;
+  color: #553d81;
+  font-family: "Bliss Pro";
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 31px;
+  margin-top: 10px;
+}
+
+.resumen-top {
+  width: 100%;
+  border: 2px solid #2b0d61;
+  height: 92px;
+  margin: auto;
+  border-radius: 6px;
+}
+
+.resumen-top .texto {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  float: left;
+  width: 60%;
+  padding-top: 20px;
+  padding-left: 50px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.resumen-top .monto {
+  color: #ed6e00;
+  font-family: "Bliss Pro";
+  font-size: 60px;
+  width: 40%;
+  font-weight: 900;
+  float: right;
+  padding-right: 50px;
+}
+
+.resumen-top span {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 33px;
+  font-weight: 800;
+  float: left;
+}
+
+.resumen-bottom {
+  width: 100%;
+  /* height: 600px; */
+  overflow: hidden;
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 5px;
+  border: 2px solid #2b0d61;
+  border-radius: 6px;
+  padding-bottom: 30px;
+}
+
+.resumen-bottom .compra {
+  width: 100%;
+}
+
+.resumen-bottom .compra .titulo {
+  width: 100%;
+  float: left;
+}
+
+.resumen-bottom .compra .titulo h4 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 20px;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos {
+  width: 100%;
+  /* height: 48px; */
+  overflow: hidden;
+  text-align: left;
+  margin-top: 20px;
+  padding-left: 20px;
+  float: left;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos img {
+  float: left;
+  margin-top: 5px;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos .subtitulos {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: 500;
+  float: left;
+  margin-left: 12px;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos .subtitulos h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.resumen-bottom .compra .encabezado-vehiculos .subtitulos h6 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+}
+
+.resumen-bottom .compra .datos-vehiculo {
+  width: 100%;
+  text-align: left;
+}
+
+.resumen-bottom .compra .datos-vehiculo .item-vehiculo {
+  float: left;
+  width: 40%;
+  text-align: left;
+  margin-top: 15px;
+  margin-left: 25px;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.resumen-bottom .compra .hr {
+  width: 95%;
+  height: 1px;
+  border: 0.96px solid #2b0d61;
+  margin-top: 15px;
+  margin-left: 2.5%;
+  float: left;
+}
+
+.resumen-bottom .compra .encabezado-personas {
+  width: 100%;
+  /* height: 48px; */
+  overflow: hidden;
+  text-align: left;
+  margin-top: 20px;
+  padding-left: 20px;
+  float: left;
+}
+
+.resumen-bottom .compra .encabezado-personas img {
+  float: left;
+}
+
+.resumen-bottom .compra .encabezado-personas .subtitulos {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: 500;
+  float: left;
+  margin-left: 19px;
+}
+
+.resumen-bottom .compra .encabezado-personas .subtitulos h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.resumen-bottom .compra .encabezado-personas .subtitulos h6 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+}
+
+.resumen-bottom .compra .datos-personales {
+  width: 100%;
+  /*height: auto;*/
+  text-align: left;
+}
+
+.resumen-bottom .compra .datos-personales .item-personal {
+  float: left;
+  width: 45%;
+  text-align: left;
+  margin-top: 15px;
+  margin-left: 25px;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.acciones {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.acciones .accion {
+  /*
+  width: 45%;
+  float: left;
+  margin-left: 40px;
+  margin-top: 5px;
+  text-align: left;
+
+  color: #806EA0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+  */
+  /* width: 45%; */
+  /* float: left; */
+  margin-left: 5px;
+  margin-top: 5px;
+  text-align: left;
+  color: #806ea0;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.acciones .accion a {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 800;
+  /*text-decoration: none;*/
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.pago {
+  width: 100%;
+  float: left;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.pago .texto {
+  width: 30%;
+  float: left;
+  text-align: left;
+  margin-left: 20px;
+  /*border: 1px solid #000;*/
+}
+
+.pago .texto h6 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+  /*margin-top: 2px;*/
+}
+
+.pago .texto h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 20px;
+}
+
+.pago .formas-pago {
+  width: 100%;
+  height: 100%;
+  float: left;
+  /*border: 1px solid #000;*/
+}
+
+.pago .formas-pago .forma-pago {
+  /* float: right; */
+  /* width: 30%; */
+  height: 70px;
+  padding-top: 10px;
+}
+
+.formas-pago-locked {
+  pointer-events: none;
+  background: rgb(255, 255, 255);
+  z-index: 9999999;
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+  /* For IE8 and earlier */
+}
+
+.pago .formas-pago .forma-pago .btn-normal {
+  text-decoration: none;
+  color: #ed6e00;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: 100 !important;
+  text-transform: uppercase;
+  padding: 11px;
+  border-radius: 6px;
+  border: 1px solid #ed6e00;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.pago .forma-pago .btn-selected {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #ed6e00;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  padding: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.ejemplo_soat {
+  width: 100%;
+  overflow: auto;
+  text-align: center;
+}
+
+.ejemplo_soat img {
+  width: 440px;
+  height: 680px;
+}
+
+.terminos-titulo {
+  width: 100%;
+  /* height: 50px; */
+  overflow: hidden;
+  /*background-color: #2B0D61;*/
+}
+
+.terminos-titulo h1 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 25px;
+  font-weight: 900;
+  /*line-height: 30px;*/
+  text-align: center;
+  padding-top: 20px;
+}
+
+.terminos-texto {
+  width: 100%;
+  /* height: 500px; */
+  overflow: auto;
+  padding-top: 10px;
+  color: #806ea0;
+  font-weight: normal;
+}
+
+.terminos-texto h5 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.terminos-texto h3 {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.terminos-texto p {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: justify;
+}
+
+.loading {
+  float: right;
+  width: 50%;
+  height: 46px;
+  padding-top: 10px;
+  margin-left: 20px;
+}
+
+.loading p {
+  color: #2b0d61;
+  font-family: "Bliss Pro";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-orange {
+  text-decoration: none;
+  color: #ffffff;
+  font-family: "Bliss Pro";
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: #ed6e00;
+  cursor: pointer;
+  width: 120px;
+}
+
+.mensaje-validation {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mensaje-validation p {
+  color: #fd2f21;
+  font-family: "Bliss Pro";
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 40px;
+}
+
+.terminos-boton {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.terminos-boton .btn-orange {
+  font-weight: normal;
+}
+
+.m-body {
+  padding: 20px;
+  max-width: 700px !important;
+}
+
+.close-button {
+  background-color: rgba(214, 207, 223, 1);
+  /* min-width: initial; */
+  /* font-size: initial; */
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  /* padding: 5px; */
+  float: right;
+  z-index: 999999999;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  opacity: 1;
+}
+
+.close-button span {
+  margin: auto;
+  color: #fff;
+  font-family: Arial;
+}
+
+.overlay {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.img-pago-efectivo {
+  border-radius: 6px;
+  width: 130px;
+  height: 45px;
+  margin-bottom: 15px;
+}
+
+.btn-visa {
+  margin-bottom: 15px;
+}
+
+.frame-result {
+  height: calc(100vh - (100vh * 0.3));
+}
+
+@media (max-width: 1059px) {
+  .resumen-top {
+    overflow: hidden;
+    height: fit-content;
+  }
+  .resumen-top .texto {
+    width: 100%;
+    font-size: 22px;
+    padding-top: 8px;
+  }
+  .resumen-top .monto {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-size: 50px;
+  }
+}
+
+:host ::ng-deep .paso[_ngcontent-c6] {
+  width: 100%;
+  height: 0px !important;
+  margin-top: 0px !important;
+  padding-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+@media (max-width: 530px) {
+  .modal-body {
+    max-height: calc(100vh);
+  }
+}

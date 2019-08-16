@@ -1,0 +1,894 @@
+<div class="form-group row">
+    <div class="col-lg-3">
+        <navmenusctr></navmenusctr>
+    </div>
+    <div class="col-lg-9">
+        <div class="container-fluid p-0">
+            <div class="header-content mb-3">
+                <div class="containt-item">
+                    <div class="header-item">
+                        <span class="title">Cotizador</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapse-list">
+                <div>
+                    <input class="collapse-open "
+                           type="checkbox"
+                           id="cotizador" />
+                    <label class="collapse-btn title"
+                           for="cotizador">Datos del Contratante</label>
+                    <div class="collapse-panel">
+                        <div class="collapse-inner collapse-border">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label><span>BÚSQUEDA:</span></label>
+                                    <label><span><input type="radio"
+                                                   [(ngModel)]="InputsQuotation.P_TYPE_SEARCH"
+                                                   name="searchContractor"
+                                                   value="1"
+                                                   (ngModelChange)="onSelectTypeSearch()"
+                                                   class="t-search" /> POR NRO.
+                                            DOCUMENTO</span></label>
+                                    <label><span><input type="radio"
+                                                   [(ngModel)]="InputsQuotation.P_TYPE_SEARCH"
+                                                   name="searchContractor"
+                                                   value="2"
+                                                   (ngModelChange)="onSelectTypeSearch()"
+                                                   class="t-search" /> POR NOMBRES</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div *ngIf="blockSearch"
+                                     class="col-sm-3">
+                                    <span>TIPO DOCUMENTO (*)</span>
+                                    <select (change)="onSelectTypeDocument($event.target.value)"
+                                            [disabled]="stateSearch"
+                                            (click)="Clear(0)"
+                                            [ngClass]="{'error-validate': VAL_QUOTATION[0] != ''}"
+                                            [(ngModel)]="InputsQuotation.P_NIDDOC_TYPE">
+                                        <option value="-1"
+                                                selected>Seleccionar</option>
+                                        <option *ngFor="let documenttype of documentTypeList"
+                                                value="{{documenttype.Id}}">
+                                            {{documenttype.Name}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="!blockSearch"
+                                     class="col-sm-3">
+                                    <span>TIPO DE PERSONA (*)</span>
+                                    <select (change)="onSelectTypePerson($event.target.value)"
+                                            [(ngModel)]="InputsQuotation.P_PERSON_TYPE">
+                                        <option value="1"
+                                                selected>Persona Natural</option>
+                                        <option value="2">Persona Jurídica</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="blockSearch"
+                                     class="col-sm-3">
+                                    <span>NRO DE DOCUMENTO (*)</span>
+                                    <input type="text"
+                                           placeholder="Nro Documento"
+                                           [(ngModel)]="InputsQuotation.P_SIDDOC"
+                                           (click)="Clear(1)"
+                                           [ngClass]="{'error-validate': VAL_QUOTATION[1] != ''}"
+                                           (keypress)="documentNumberKeyPress($event)"
+                                           (ngModelChange)="changeSDOC($event)"
+                                           [disabled]="stateSearch"
+                                           maxlength={{maxlength}}
+                                           (keyup.enter)="BuscarContratante()" />
+                                </div>
+                                <div class="col-sm-3"
+                                     style="margin-top: 35px;">
+                                    <button (click)="BuscarContratante()"
+                                            style="margin: 0">
+                                        <img src="assets/icons/buscar_certificado.png" />
+                                        <span>Buscar</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div *ngIf="blockDoc"
+                                     class="col-sm-3">
+                                    <span>NOMBRES</span>
+                                    <input type="text"
+                                           placeholder="Nombres"
+                                           [disabled]="!stateSearch"
+                                           [(ngModel)]="InputsQuotation.P_SFIRSTNAME"
+                                           (keyup.enter)="BuscarContratante()"
+                                           (keypress)="valText($event, 5)" />
+                                </div>
+                                <div *ngIf="!blockDoc"
+                                     class="col-sm-9">
+                                    <span>RAZÓN SOCIAL (*)</span>
+                                    <input type="text"
+                                           placeholder="Razón Social"
+                                           [disabled]="!stateSearch"
+                                           [(ngModel)]="InputsQuotation.P_SLEGALNAME"
+                                           (keyup.enter)="BuscarContratante()"
+                                           (keypress)="valText($event, 4)" />
+                                </div>
+                                <div *ngIf="blockDoc"
+                                     class="col-sm-3">
+                                    <span>APELLIDO PATERNO</span>
+                                    <input type="text"
+                                           placeholder="Apellido Paterno"
+                                           [disabled]="!stateSearch"
+                                           [(ngModel)]="InputsQuotation.P_SLASTNAME"
+                                           (keyup.enter)="BuscarContratante()"
+                                           (keypress)="valText($event, 5)" />
+                                </div>
+                                <div *ngIf="blockDoc"
+                                     class="col-sm-3">
+                                    <span>APELLIDO MATERNO</span>
+                                    <input type="text"
+                                           placeholder="Apellido Materno"
+                                           [disabled]="!stateSearch"
+                                           [(ngModel)]="InputsQuotation.P_SLASTNAME2"
+                                           (keyup.enter)="BuscarContratante()"
+                                           (keypress)="valText($event, 5)" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <span>DIRECCIÓN</span>
+                                    <input type="text"
+                                           placeholder="Dirección"
+                                           disabled
+                                           [(ngModel)]="InputsQuotation.P_SDESDIREBUSQ" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <span>CORREO ELECTRÓNICO</span>
+                                    <input type="text"
+                                           placeholder="Correo Electrónico"
+                                           disabled
+                                           [(ngModel)]="InputsQuotation.P_SE_MAIL" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapse-list">
+                <div>
+                    <input class="collapse-open "
+                           type="checkbox"
+                           id="comercializador" />
+                    <label class="collapse-btn title"
+                           for="comercializador">Datos del Comercializador</label>
+                    <div class="collapse-panel">
+                        <div class="collapse-inner collapse-border">
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <span>TIPO DOCUMENTO</span>
+                                    <select [(ngModel)]="InputsQuotation.P_NIDDOC_TYPE_COM"
+                                            disabled>
+                                        <option value="-1"
+                                                selected>Seleccionar</option>
+                                        <option *ngFor="let documenttype of documentTypeList"
+                                                value="{{documenttype.Id}}">
+                                            {{documenttype.Name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span>NRO. DOCUMENTO</span>
+                                    <input type="text"
+                                           placeholder="Documento"
+                                           id=""
+                                           [(ngModel)]="InputsQuotation.P_SIDDOC_COM"
+                                           disabled />
+                                </div>
+                                <div [hidden]="!canAddSecondaryBroker"
+                                     class="col-sm-6"
+                                     *ngIf="brokerList.length < 2">
+                                    <span>&nbsp;</span>
+                                    <a class=" pull-right"
+                                       (click)="AddBroker()"
+                                       title="Agregar">
+                                        <img src="assets/icons/add_button_calendar.png" />
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <span>RAZÓN SOCIAL</span>
+                                    <input type="text"
+                                           placeholder="Nombres"
+                                           [(ngModel)]="InputsQuotation.P_SFIRSTNAME_COM"
+                                           disabled />
+                                </div>
+                            </div>
+                            <div class="row  mb-3">
+                                <div class="col-sm-3"
+                                     [hidden]="listaTasasSalud?.length == 0">
+                                    <span>COMISIÓN SALUD</span>
+                                    <input type="text"
+                                           placeholder="0"
+                                           disabled
+                                           [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_SALUD" />
+                                </div>
+                                <div class="col-sm-3"
+                                     [hidden]="listaTasasSalud?.length == 0">
+                                    <span><input [disabled]="!canProposeComission"
+                                               type="checkbox"
+                                               style="top: 3px;"
+                                               [(ngModel)]="InputsQuotation.P_SCTR_SALUD"
+                                               class="checkbox"
+                                               (change)="primaPropuesta(1)">
+                                        COMISIÓN PROPUESTA</span>
+                                    <input type="text"
+                                           placeholder="0"
+                                           [disabled]="stateBrokerSalud"
+                                           [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_SALUD_PRO"
+                                           FloatDirective />
+                                </div>
+                                <div class="col-sm-3"
+                                     [hidden]="listaTasasPension?.length == 0">
+                                    <span>COMISIÓN PENSIÓN</span>
+                                    <input type="text"
+                                           placeholder="0"
+                                           disabled
+                                           [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_PENSION" />
+                                </div>
+                                <div class="col-sm-3"
+                                     [hidden]="listaTasasPension?.length == 0">
+                                    <span><input [disabled]="!canProposeComission"
+                                               type="checkbox"
+                                               style="top: 3px;"
+                                               [(ngModel)]="InputsQuotation.P_SCTR_PENSION"
+                                               class="checkbox"
+                                               (change)="primaPropuesta(2)">
+                                        COMISIÓN PROPUESTA</span>
+                                    <input type="text"
+                                           placeholder="0"
+                                           [disabled]="stateBrokerPension"
+                                           [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_PENSION_PRO"
+                                           FloatDirective />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12"
+                                     *ngIf="brokerList.length > 0">
+                                    <table class="table table-borderless riesgo tblbroker">
+                                        <thead>
+                                            <tr class="d-flex">
+                                                <th class="col-sm text-center"><label>Tipo Documento</label></th>
+                                                <th class="col-sm text-center"><label>Nro Documento</label></th>
+                                                <th class="col-sm text-center"><label>Nombres y Apellidos</label></th>
+                                                <th class="col-sm text-center"
+                                                    [hidden]="listaTasasSalud?.length == 0"><label>Comisión
+                                                        Salud</label>
+                                                </th>
+                                                <th class="col-sm text-center ctasa"
+                                                    [hidden]="listaTasasSalud?.length == 0"><label><input
+                                                               [disabled]="!canProposeComission"
+                                                               type="checkbox"
+                                                               class="checkbox"
+                                                               [(ngModel)]="COM_SAL_PRO"
+                                                               (change)="primaPropuesta(7)"><span class="schk">
+                                                            Propuesta</span></label></th>
+                                                <th class="col-sm text-center"
+                                                    [hidden]="listaTasasPension?.length == 0"><label>Comisión
+                                                        Pensión</label></th>
+                                                <th class="col-sm text-center ctasa"
+                                                    [hidden]="listaTasasPension?.length == 0"><label><input
+                                                               [disabled]="!canProposeComission"
+                                                               type="checkbox"
+                                                               class="checkbox"
+                                                               [(ngModel)]="COM_PEN_PRO"
+                                                               (change)="primaPropuesta(8)"><span class="schk">
+                                                            Propuesta</span></label></th>
+                                                <th class=""><label>Acción</label></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="d-flex"
+                                                *ngIf="brokerList.length == 0">
+                                                <td class="col-sm text-center">No hay tasas asociadas</td>
+                                            </tr>
+                                            <tr class="d-flex"
+                                                *ngFor="let broker of brokerList; let row = index">
+                                                <td class="col-sm text-center">
+                                                    <span>{{ broker.NTIPDOC | typeDocument }}</span>
+                                                </td>
+                                                <td class="col-sm text-center"><span>{{ broker.NNUMDOC}}</span></td>
+                                                <td class="col-sm text-center"><span>{{ broker.RAZON_SOCIAL }}</span>
+                                                </td>
+                                                <td class="col-sm text-center"
+                                                    [hidden]="listaTasasSalud?.length == 0">
+                                                    <span>{{ broker.P_COM_SALUD }}</span></td>
+                                                <td class="col-sm"
+                                                    [hidden]="listaTasasSalud?.length == 0"><input type="text"
+                                                           class="text-center"
+                                                           [disabled]="stateBrokerTasaSalud"
+                                                           placeholder="0"
+                                                           [(ngModel)]="P_COM_SAL_PRO[row]"
+                                                           (ngModelChange)="changeSaludPropuesta($event, broker.SCLIENT)"
+                                                           FloatDirective />
+                                                <td class="col-sm text-center"
+                                                    [hidden]="listaTasasPension?.length == 0">
+                                                    <span>{{broker.P_COM_PENSION}}</span></td>
+                                                <td class="col-sm"
+                                                    [hidden]="listaTasasPension?.length == 0"><input type="text"
+                                                           class="text-center"
+                                                           [disabled]="stateBrokerTasaPension"
+                                                           placeholder="0"
+                                                           [(ngModel)]="P_COM_PEN_PRO[row]"
+                                                           (ngModelChange)="changePensionPropuesta($event, broker.SCLIENT)"
+                                                           FloatDirective />
+                                                </td>
+                                                <td class=""><span style="padding: 0 12px;"><img
+                                                             src="assets/icons/anular.png"
+                                                             (click)="deleteBroker(row)"
+                                                             title="Eliminar"
+                                                             alt="Eliminar" /></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse-list">
+            <div>
+                <input class="collapse-open "
+                       type="checkbox"
+                       id="cotizacion" />
+                <label class="collapse-btn title"
+                       for="cotizacion">Datos de la Cotización</label>
+                <div class="collapse-panel">
+                    <div class="collapse-inner collapse-border">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <span>PRODUCTOS</span>
+                                <select (change)="onSelectProducto($event.target.value)"
+                                        [(ngModel)]="InputsQuotation.P_NPRODUCT"
+                                        (click)="Clear(11)"
+                                        [ngClass]="{'error-validate': VAL_QUOTATION[11] != ''}">
+                                    <option value="-1">SELECCIONE</option>
+                                    <option value="0">Ambos productos</option>
+                                    <option *ngFor="let product of productList"
+                                            value="{{product.COD_PRODUCT}}">
+                                        {{product.DES_PRODUCT}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <span>MONEDA</span>
+                                <select (change)="onSelectMoneda($event.target.value)"
+                                        [(ngModel)]="InputsQuotation.P_NCURRENCY"
+                                        [disabled]="stateQuotation">
+                                    <option *ngFor="let currency of currencyList"
+                                            value="{{currency.NCODIGINT}}">
+                                        {{currency.SDESCRIPT}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3"
+                                 style="display: none;">
+                                <span>PERÍODO VIGENCIA</span>
+                                <input type="text"
+                                       placeholder="dd/MM/yyyy"
+                                       #dp="bsDatepicker"
+                                       [bsConfig]="bsConfig"
+                                       bsDatepicker
+                                       [(bsValue)]="bsValueIni"
+                                       value="{{ bsValueIni | date:'yyyy-MM-dd HH:mm:ss Z' }}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <span>SEDE</span>
+                                <ng-select [(ngModel)]="InputsQuotation.P_NIDSEDE"
+                                           (ngModelChange)="onSelectSede()"
+                                           [clearable]="true"
+                                           (click)="Clear(2)"
+                                           [ngClass]="{'error-validate': VAL_QUOTATION[2] != ''}"
+                                           class="border-ng"
+                                           [disabled]="stateQuotation"
+                                           placeholder="Seleccionar"
+                                           dropdownPosition="bottom"
+                                           notFoundText="No hay resultados"
+                                           style="margin-top:0px !important">
+                                    <ng-option [value]="0">AGREGAR SEDE</ng-option>
+                                    <ng-option *ngFor="let sede of sedesList"
+                                               [value]="sede.Id">{{sede.Description}}</ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-sm-3">
+                                <span>ACTIVIDAD TÉCNICA</span>
+                                <ng-select [items]="technicalList"
+                                           (change)="onSelectTechnicalActivity()"
+                                           bindLabel="Name"
+                                           [ngClass]="{'error-validate': VAL_QUOTATION[12] != ''}"
+                                           bindValue="Id"
+                                           [(ngModel)]="InputsQuotation.P_NTECHNICAL"
+                                           class="border-ng"
+                                           [clearable]="true"
+                                           [disabled]="!stateQuotation"
+                                           placeholder="Seleccionar"
+                                           dropdownPosition="bottom"
+                                           notFoundText="No hay resultados">
+                                </ng-select>
+                            </div>
+                            <div class="col-sm-4">
+                                <span>ACTIVIDAD ECONÓMICA</span>
+                                <ng-select [items]="economicActivityList"
+                                           (change)="onSelectEconomicActivity()"
+                                           bindLabel="Name"
+                                           [ngClass]="{'error-validate': VAL_QUOTATION[3] != ''}"
+                                           bindValue="Id"
+                                           [(ngModel)]="InputsQuotation.P_NECONOMIC"
+                                           class="border-ng"
+                                           [clearable]="true"
+                                           [disabled]="!stateQuotation"
+                                           placeholder="Seleccionar"
+                                           dropdownPosition="bottom"
+                                           notFoundText="No hay resultados">
+                                </ng-select>
+                            </div>
+                            <div class="col-sm-2">
+                                <span>&nbsp;</span>
+                                <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+                                           [(ngModel)]="InputsQuotation.P_DELIMITER"
+                                           class="checkbox"
+                                           disabled><span class="schk"
+                                          style="margin-top: 5px; font-size: 13px;">Delimitación</span></label>
+                                <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+                                           [(ngModel)]="InputsQuotation.P_MINA"
+                                           class="checkbox"><span class="schk"
+                                          style="margin-top: 5px;; font-size: 13px;">¿Se realiza en
+                                        mina?</span></label>
+                            </div>
+                            <div class="col-sm-3">
+                                <span>DEPARTAMENTO (*)</span>
+                                <ng-select [items]="departmentList"
+                                           (change)="onSelectDepartment()"
+                                           bindLabel="Name"
+                                           bindValue="Id"
+                                           [ngClass]="{'error-validate': VAL_QUOTATION[4] != ''}"
+                                           class="border-ng"
+                                           [(ngModel)]="InputsQuotation.P_NPROVINCE"
+                                           [clearable]="true"
+                                           [disabled]="!stateQuotation"
+                                           placeholder="Seleccionar"
+                                           dropdownPosition="bottom"
+                                           notFoundText="No hay resultados">
+                                </ng-select>
+                            </div>
+                            <div class="col-sm-3">
+                                <span>PROVINCIA (*)</span>
+                                <ng-select [items]="provinceList"
+                                           (change)="onSelectProvince()"
+                                           bindLabel="Name"
+                                           bindValue="Id"
+                                           [ngClass]="{'error-validate': VAL_QUOTATION[5] != ''}"
+                                           class="border-ng"
+                                           [(ngModel)]="InputsQuotation.P_NLOCAL"
+                                           [clearable]="true"
+                                           [disabled]="!stateQuotation"
+                                           placeholder="Seleccionar"
+                                           dropdownPosition="bottom"
+                                           notFoundText="No hay resultados">
+                                </ng-select>
+                            </div>
+                            <div class="col-sm-3">
+                                <span>DISTRITO (*)</span>
+                                <ng-select [items]="districtList"
+                                           (change)="onSelectDistrict()"
+                                           bindLabel="Name"
+                                           bindValue="Id"
+                                           [ngClass]="{'error-validate': VAL_QUOTATION[6] != ''}"
+                                           class="border-ng"
+                                           [(ngModel)]="InputsQuotation.P_NMUNICIPALITY"
+                                           [clearable]="true"
+                                           [disabled]="!stateQuotation"
+                                           placeholder="Seleccionar"
+                                           dropdownPosition="bottom"
+                                           notFoundText="No hay resultados">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse-list">
+            <div>
+                <input class="collapse-open "
+                       type="checkbox"
+                       id="calculadora" />
+                <label class="collapse-btn title"
+                       for="calculadora">Cotizador</label>
+                <div class="collapse-panel">
+                    <div class="collapse-inner collapse-border">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label><span>TRABAJADORES:</span></label>
+                                <label><span><input type="radio"
+                                               [(ngModel)]="InputsQuotation.P_CANT_WORKER"
+                                               name="searchWorker"
+                                               value="1"
+                                               (change)="onSelectWorker()"
+                                               class="t-search" /> MENOR O IGUAL 50</span> </label> <label>
+                                    <span><input type="radio"
+                                               [(ngModel)]="InputsQuotation.P_CANT_WORKER"
+                                               name="searchWorker"
+                                               value="2"
+                                               (change)="onSelectWorker()"
+                                               class="t-search" /> MAYOR A
+                                        50</span></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <table class="table table-borderless riesgo">
+                                    <thead>
+                                        <tr class="d-flex"
+                                            style="border-bottom: 1px solid #ddd;">
+                                            <th class="col-sm-4"><label style="font-weight: 100;">Categoría</label></th>
+                                            <th class="col-sm-4"><label style="font-weight: 100;">Total
+                                                    Trabajadores</label></th>
+                                            <th class="col-sm-4"><label style="font-weight: 100;">Monto Planilla</label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="d-flex"
+                                            *ngIf="tasasList.length == 0">
+                                            <td class="col-sm-12 text-center"
+                                                style="padding: .5rem !important;"><label>No hay tasas</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="d-flex"
+                                            *ngFor="let tasa of tasasList; let row = index">
+                                            <td class="col-sm-4"
+                                                style="padding: .5rem !important;"><span>{{tasa.description}}</span>
+                                            </td>
+                                            <td class="col-sm-4 text-center"
+                                                style="padding: .5rem !important;"><input type="text"
+                                                       placeholder="0"
+                                                       [(ngModel)]="P_TOTAL_TRAB[row]"
+                                                       (ngModelChange)="changeTrabajadores($event, tasa.id)"
+                                                       [disabled]="stateCotizador"
+                                                       OnlyNumberDirective /></td>
+                                            <td class="col-sm-4"
+                                                style="padding: .5rem !important;"><input type="text"
+                                                       placeholder="0"
+                                                       [(ngModel)]="P_TOTAL_PLAN[row]"
+                                                       (ngModelChange)="changePlanilla($event, tasa.id)"
+                                                       [disabled]="stateCotizador"
+                                                       FloatDirective />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"
+                                 *ngIf="stateWorker">
+                                <p class="msg-error">{{messageWorker}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6"
+                                 [hidden]="listaTasasSalud?.length == 0">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <span>PRIMA MÍNIMA SALUD</span>
+                                        <input type="text"
+                                               placeholder="0"
+                                               disabled
+                                               [(ngModel)]="InputsQuotation.P_PRIMA_MIN_SALUD" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span><input [disabled]="!canProposeMinimunPremium"
+                                                   type="checkbox"
+                                                   style="top: 3px;"
+                                                   class="checkbox"
+                                                   (change)="primaPropuesta(3)"
+                                                   [(ngModel)]="PRIM_MIN_SAL">
+                                            PRIMA MÍNIMA PROPUESTA</span>
+                                        <input type="text"
+                                               placeholder="0"
+                                               [disabled]="statePrimaSalud"
+                                               disabled
+                                               [(ngModel)]="InputsQuotation.P_PRIMA_MIN_SALUD_PRO"
+                                               FloatDirective />
+                                    </div>
+                                </div>
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <h5>SCTR SALUD</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-borderless riesgo tblTasas">
+                                                <thead>
+                                                    <tr class="d-flex">
+                                                        <th class="col-sm text-center"><label>Categoría</label></th>
+                                                        <th class="col-sm text-center"><label>Tasa Calculada</label>
+                                                        </th>
+                                                        <th class="col-sm text-center ctasa"><label><input
+                                                                       [disabled]="!canProposeRate"
+                                                                       type="checkbox"
+                                                                       id=""
+                                                                       class="checkbox"
+                                                                       (change)="primaPropuesta(5)"><span class="schk">
+                                                                    Propuesta</span></label></th>
+                                                        <th class="col-sm text-center"><label>Prima Mensual</label></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasSalud?.length == 0">
+                                                        <td class="col-sm text-center">No hay tasas asociadas</td>
+                                                    </tr>
+                                                    <tr class="d-flex"
+                                                        *ngFor="let tasa of listaTasasSalud; let row = index">
+                                                        <td class="col-sm text-center"><span>{{tasa.description}}</span>
+                                                        </td>
+                                                        <td class="col-sm text-center"><span>{{tasa.rate}}</span></td>
+                                                        <td class="col-sm"><input type="text"
+                                                                   class="text-center"
+                                                                   placeholder="0"
+                                                                   [(ngModel)]="P_PLAN_PRO[row]"
+                                                                   (ngModelChange)="changeTasaPropuestaSalud($event, tasa.id)"
+                                                                   [disabled]="stateTasaSalud"
+                                                                   FloatDirective />
+                                                        </td>
+                                                        <td class="col-sm text-center">
+                                                            <span>{{tasa.premiumMonth | miles}}</span></td>
+                                                    </tr>
+                                                    <hr style="margin-bottom: 0;"
+                                                        *ngIf="listaTasasSalud?.length > 0">
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasSalud?.length > 0">
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-right"><span>Prima Total Neta</span></td>
+                                                        <td class="col-sm text-center">
+                                                            <span>{{totalNetoSalud | miles}}</span></td>
+                                                    </tr>
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasSalud?.length > 0">
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-right"><span>IGV</span></td>
+                                                        <td class="col-sm text-center"><span>{{igvSalud | miles}}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasSalud?.length > 0">
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-right"><span>Prima Bruta Total</span>
+                                                        </td>
+                                                        <td class="col-sm text-center">
+                                                            <span>{{brutaTotalSalud | miles}}</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="col-sm-12">
+                                                <p class="msg-error">{{mensajePrimaSalud}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"
+                                 [hidden]="listaTasasPension?.length == 0">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <span>PRIMA MÍNIMA PENSIÓN</span>
+                                        <input type="text"
+                                               placeholder="0"
+                                               id=""
+                                               disabled
+                                               [(ngModel)]="InputsQuotation.P_PRIMA_MIN_PENSION" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span><input [disabled]="!canProposeMinimunPremium"
+                                                   type="checkbox"
+                                                   style="top: 3px;"
+                                                   class="checkbox"
+                                                   (change)="primaPropuesta(4)"
+                                                   [(ngModel)]="PRIM_MIN_PEN">
+                                            PRIMA MÍNIMA PROPUESTA</span>
+
+                                        <input type="text"
+                                               placeholder="0"
+                                               id=""
+                                               [disabled]="statePrimaPension"
+                                               disabled
+                                               [(ngModel)]="InputsQuotation.P_PRIMA_MIN_PENSION_PRO"
+                                               FloatDirective />
+                                    </div>
+                                </div>
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <h5>SCTR PENSIÓN</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-borderless riesgo tblTasas">
+                                                <thead>
+                                                    <tr class="d-flex">
+                                                        <th class="col-sm text-center"><label>Categoría</label></th>
+                                                        <th class="col-sm text-center"><label>Tasa Calculada</label>
+                                                        </th>
+                                                        <th class="col-sm text-center ctasa"><label><input
+                                                                       [disabled]="!canProposeRate"
+                                                                       type="checkbox"
+                                                                       id=""
+                                                                       class="checkbox"
+                                                                       (change)="primaPropuesta(6)"><span class="schk">
+                                                                    Propuesta</span></label>
+                                                        </th>
+                                                        <th class="col-sm text-center"><label>Prima Mensual</label></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasPension?.length == 0">
+                                                        <td colspan="4"
+                                                            class="col-sm text-center">No hay tasas asociadas</td>
+                                                    </tr>
+                                                    <tr class="d-flex"
+                                                        *ngFor="let tasa of listaTasasPension; let row = index">
+                                                        <td class="col-sm text-center"><span>{{tasa.description}}</span>
+                                                        </td>
+                                                        <td class="col-sm text-center"><span>{{tasa.rate}}</span></td>
+                                                        <td class="col-sm"><input type="text"
+                                                                   class="text-center"
+                                                                   placeholder="0"
+                                                                   [(ngModel)]="P_PLAN_PRO_PEN[row]"
+                                                                   (ngModelChange)="changeTasaPropuestaPension($event, tasa.id)"
+                                                                   [disabled]="stateTasaPension"
+                                                                   FloatDirective />
+                                                        </td>
+                                                        <td class="col-sm text-center">
+                                                            <span>{{tasa.premiumMonth | miles}}</span></td>
+                                                    </tr>
+                                                    <hr style="margin-bottom: 0;"
+                                                        *ngIf="listaTasasPension?.length > 0">
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasPension?.length > 0">
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-right"><span>Prima Total Neta</span></td>
+                                                        <td class="col-sm text-center">
+                                                            <span>{{totalNetoPension | miles}}</span></td>
+                                                    </tr>
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasPension?.length > 0">
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-right"><span>IGV + DE</span></td>
+                                                        <td class="col-sm text-center">
+                                                            <span>{{igvPension | miles}}</span></td>
+                                                    </tr>
+                                                    <tr class="d-flex"
+                                                        *ngIf="listaTasasPension?.length > 0">
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-center"></td>
+                                                        <td class="col-sm text-right"><span>Prima Bruta Total</span>
+                                                        </td>
+                                                        <td class="col-sm text-center">
+                                                            <span>{{brutaTotalPension | miles}}</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="col-sm-12">
+                                                <p class="msg-error">{{mensajePrimaPension}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <span>COMENTARIO</span>
+                                <textarea rows="4"
+                                          placeholder="Comentario"
+                                          [(ngModel)]="InputsQuotation.P_SCOMMENT"
+                                          (keypress)="valText($event, 4)"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="button"
+                                        (click)="fileInput.click()"
+                                        style="margin: 15px 0;">
+                                    <span>Selecionar Archivo</span></button>
+                                <input hidden
+                                       #fileInput
+                                       ngfSelect
+                                       multiple
+                                       type="file"
+                                       [(files)]="files"
+                                       [maxSize]="maxSize"
+                                       (filesChange)="lastFileAt=getDate()"
+                                       accept="application/pdf,image/png,image/jpeg,application/msword,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div *ngIf="files.length > 0">
+                                    <div style="margin-bottom: 0px">
+                                        <h6>Archivos Seleccionados ({{files.length}})</h6>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col">Nombre</th>
+                                                    <th class="col">Tipo</th>
+                                                    <th class="col">Tamaño</th>
+                                                    <th class="col">Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of files;let i=index">
+                                                    <td class="col"> <strong>{{ item.name }}</strong> </td>
+                                                    <td class="col"> {{ item.type }} </td>
+                                                    <td class="col"
+                                                        nowrap> {{ item.size/1024/1024 | number:'.2' }} MB </td>
+                                                    <td class="col"><span
+                                                              style="display: block;text-align: center;margin: 0 !important;"><img
+                                                                 src="assets/icons/anular.png"
+                                                                 (click)="files.splice(i,1)"
+                                                                 title="Eliminar"
+                                                                 alt="Eliminar" /></span>
+                                                        <!-- <button type="button" class="btn btn-danger active btn-sm "
+                                          (click)="files.splice(i,1)">
+                                          Eliminar </button>-->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="accordion mt-2">
+
+
+            <div class="row pull-right mt-2">
+                <button>
+                    <span>Cancelar</span>
+                </button>
+                <button class="full-color"
+                        (click)="GrabarCotizacion()">
+                    <span>Aceptar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Pantalla de carga -->
+<div [hidden]="isLoading==false"
+     class="loadingScreen">
+    <div style="display:flex;height: 100%;width:100%">
+        <i style="margin:auto;font-size: 50px"
+           class="fas fa-spinner fa-spin"></i>
+    </div>
+</div>

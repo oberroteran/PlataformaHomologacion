@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{txtAccion}}</h4>
+  <input type="button" class="close" aria-label="Close" (click)="reference.dismiss('Cross click')" value="&times;" />
+
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <span>PARENTESCO (*)</span>
+        <select (change)="onSelectContactType($event)" [(ngModel)]="InputsContact.P_NTIPCONT" [ngClass]="{'error-validate': VAL_CONTACT[0] != ''}" (click)="Clear(0)" >
+          <option value="0" selected>Seleccionar</option>
+          <option *ngFor="let contactType of contactTypeList" value="{{contactType.NCODIGO}}">{{contactType.SDESCRIPT}}
+          </option>
+        </select>
+      </div>
+      <div class="col-sm-6">
+        <span>NOMBRES (*)</span>
+        <input type="text" [(ngModel)]="InputsContact.P_SNOMBRES" [ngClass]="{'error-validate': VAL_CONTACT[1] != ''}" (click)="Clear(1)" (keypress)="valText($event, 5)" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <span>APELLIDO PATERNO (*)</span>
+        <input type="text" [(ngModel)]="InputsContact.P_SAPEPAT" [ngClass]="{'error-validate': VAL_CONTACT[2] != ''}" (click)="Clear(2)" (keypress)="valText($event, 5)" />
+      </div>
+      <div class="col-sm-6">
+        <span>APELLIDO MATERNO</span>
+        <input type="text" [(ngModel)]="InputsContact.P_SAPEMAT" (keypress)="valText($event, 5)" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <span>TIPO DOCUMENTO (*)</span>
+        <select (change)="onSelectDocumentType($event)" [(ngModel)]="InputsContact.P_NIDDOC_TYPE" [ngClass]="{'error-validate': VAL_CONTACT[3] != ''}" (click)="Clear(3)">
+          <option value="0" selected>Seleccionar</option>
+          <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
+            {{documenttype.Name}}</option>
+        </select>
+      </div>
+      <div class="col-sm-6">
+        <span>DOCUMENTO (*)</span>
+        <input type="text" [(ngModel)]="InputsContact.P_SIDDOC" maxlength="{{maxlength}}" (keypress)="documentNumberKeyPress($event)" [ngClass]="{'error-validate': VAL_CONTACT[4] != ''}" (click)="Clear(4)" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <span>TELÉFONO (*)</span>
+        <input type="text" [(ngModel)]="InputsContact.P_SPHONE" maxlength="12" [ngClass]="{'error-validate': VAL_CONTACT[5] != ''}" (click)="Clear(5)" (keypress)="valText($event, 1)" />
+      </div>
+      <div class="col-sm-6">
+        <span>CORREO ELECTRÓNICO (*)</span>
+        <input type="text" [(ngModel)]="InputsContact.P_SE_MAIL" [ngClass]="{'error-validate': VAL_CONTACT[6] != ''}" (click)="Clear(6)" (keypress)="valText($event, 6)"/>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="full-color" (click)="EventSave()"><span>{{txtAccion}}</span></button>
+</div>

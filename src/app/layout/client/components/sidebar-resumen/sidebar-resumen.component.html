@@ -1,0 +1,28 @@
+<br />
+<div class="container-left">
+  <div class="row-01">
+    <h4>Te mostramos un ejemplo de tu SOAT electr&oacute;nico</h4>
+  </div>
+  <div class="row-02">
+    <img
+      alt=""
+      src="assets/images/soat_large_view.jpg"
+      alt="SOAT electr&oacute;nico"
+    />
+    <img
+      class="eye"
+      src="assets/icons/preview_soat_box.png"
+      alt="SOAT electr&oacute;nico"
+      (click)="verEjemploSOAT()"
+    />
+  </div>
+  <hr />
+</div>
+
+<app-modal #modalEjemploSoat>
+  <div class="m-body">
+    <div class="ejemplo_soat">
+      <img alt="" src="assets/images/soat_large_view.jpg" />
+    </div>
+  </div>
+</app-modal>

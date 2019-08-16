@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{txtAccion}}</h4>
+  <input type="button" class="close" aria-label="Close" (click)="reference.dismiss('Cross click')" value="&times;" />
+
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <span>TIPO DE TELÉFONO (*)</span>
+        <select (change)="onSelectTypePhone($event)" [(ngModel)]="InputsTelephone.P_NPHONE_TYPE" [ngClass]="{'error-validate': VAL_PHONE[0] != ''}" (click)="Clear(0)">
+          <option value="0" selected>Seleccionar</option>
+          <option *ngFor="let phoneType of phoneTypeList" value="{{phoneType.NPHONE_TYPE}}">{{phoneType.SDESCRIPT}}</option>
+        </select>
+      </div>
+      <div  *ngIf="!blockCelular" class="col-sm-6">
+        <span>CÓDIGO DE ÁREA (*)</span>
+        <select (change)="onSelectCode($event)" [(ngModel)]="InputsTelephone.P_NAREA_CODE" [ngClass]="{'error-validate': VAL_PHONE[1] != ''}" (click)="Clear(1)">
+          <option value="0" selected>Seleccionar</option>
+          <option *ngFor="let cityCode of cityCodeList" value="{{cityCode.NAREA_CODE}}">{{cityCode.SDESCRIPT}}</option>
+        </select>
+      </div>
+      <div class="col-sm-6">
+        <span>NÚMERO DE TELÉFONO (*)</span>
+        <input type="text" [(ngModel)]="InputsTelephone.P_SPHONE" maxlength="{{maxlength}}" [ngClass]="{'error-validate': VAL_PHONE[2] != ''}" (click)="Clear(2)" (keypress)="valText($event, 1)" />
+      </div>
+      <div *ngIf="!blockAnexo" class="col-sm-6">
+        <span>ANEXO</span>
+        <input type="text" [(ngModel)]="InputsTelephone.P_NEXTENS1" maxlength="5" (keypress)="valText($event, 1)" />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="full-color" (click)="EventSave()"><span>{{txtAccion}}</span></button>
+</div>
