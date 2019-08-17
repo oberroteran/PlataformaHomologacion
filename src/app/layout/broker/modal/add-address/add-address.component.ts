@@ -75,6 +75,9 @@ export class AddAddressComponent implements OnInit {
     this.getCountryList();
     this.getDepartmentList();
 
+    this.InputsStreet.P_SORIGEN = "SCTR";
+    this.InputsStreet.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+
     if (this.itemDireccion != null) {
       console.log(this.itemDireccion);
       this.txtAccion = "Editar Dirección";
@@ -496,15 +499,16 @@ export class AddAddressComponent implements OnInit {
 
 
   EventSave(event) {
-    this.InputsStreet.P_SNOM_DIRECCION = this.InputsStreet.P_SNOM_DIRECCION.toUpperCase()
-    this.InputsStreet.P_SNUM_DIRECCION = this.InputsStreet.P_SNUM_DIRECCION.toUpperCase()
-    this.InputsStreet.P_SNUM_INTERIOR = this.InputsStreet.P_SNUM_INTERIOR.toUpperCase()
-    this.InputsStreet.P_SMANZANA = this.InputsStreet.P_SMANZANA.toUpperCase()
-    this.InputsStreet.P_SLOTE = this.InputsStreet.P_SLOTE.toUpperCase()
-    this.InputsStreet.P_SETAPA = this.InputsStreet.P_SETAPA.toUpperCase()
-    this.InputsStreet.P_SNOM_CJHT = this.InputsStreet.P_SNOM_CJHT.toUpperCase()
-    this.InputsStreet.P_SBLOCKCHALET = this.InputsStreet.P_SBLOCKCHALET.toUpperCase()
-    this.InputsStreet.P_SREFERENCE = this.InputsStreet.P_SREFERENCE.toUpperCase()
+
+    this.InputsStreet.P_SNOM_DIRECCION = this.InputsStreet.P_SNOMBRES == null ? "" : this.InputsStreet.P_SNOMBRES.toUpperCase()
+    this.InputsStreet.P_SNUM_DIRECCION = this.InputsStreet.P_SNUM_DIRECCION == null ? "" : this.InputsStreet.P_SNUM_DIRECCION.toUpperCase()
+    this.InputsStreet.P_SNUM_INTERIOR = this.InputsStreet.P_SNUM_INTERIOR == null ? "" : this.InputsStreet.P_SNUM_INTERIOR.toUpperCase()
+    this.InputsStreet.P_SMANZANA = this.InputsStreet.P_SMANZANA == null ? "" : this.InputsStreet.P_SMANZANA.toUpperCase()
+    this.InputsStreet.P_SLOTE = this.InputsStreet.P_SLOTE == null ? "" : this.InputsStreet.P_SLOTE.toUpperCase()
+    this.InputsStreet.P_SETAPA = this.InputsStreet.P_SETAPA == null ? "" : this.InputsStreet.P_SETAPA.toUpperCase()
+    this.InputsStreet.P_SNOM_CJHT = this.InputsStreet.P_SNOM_CJHT == null ? "" : this.InputsStreet.P_SNOM_CJHT.toUpperCase()
+    this.InputsStreet.P_SBLOCKCHALET = this.InputsStreet.P_SBLOCKCHALET == null ? "" : this.InputsStreet.P_SBLOCKCHALET.toUpperCase()
+    this.InputsStreet.P_SREFERENCE = this.InputsStreet.P_SREFERENCE == null ? "" : this.InputsStreet.P_SREFERENCE.toUpperCase()
 
     this.sDireccion = this.InputsStreet.P_SNOM_DIRECCION !== "" ? this.InputsStreet.P_SNOM_DIRECCION + " " : "";
     this.sNumero = this.InputsStreet.P_SNUM_DIRECCION !== "" ? this.InputsStreet.P_SNUM_DIRECCION + " " : "";

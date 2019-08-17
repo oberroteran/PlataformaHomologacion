@@ -35,7 +35,7 @@ export class AuthenticationService {
                 { observe: 'response' }
             )
             .map(response => {
-                // console.log(response);
+                console.log(response);
                 // Iniciar sesión correctamente si hay un token jwt en la respuesta
                 const token = response.body && response.body['token'];
                 const id = response.body && response.body['id'];
@@ -117,7 +117,7 @@ export class AuthenticationService {
         });
 
         return this.http
-            .post(this.config.apiUrl + '/broker/logout', {}, { headers: mHeaders })
+            .post(this.config.apiUrl + '/user/logout', {}, { headers: mHeaders })
             .map(
                 () => {
                     // console.log('success: ', response);
@@ -138,15 +138,17 @@ export class AuthenticationService {
 
     removeSession() {
         this.token = null;
-        this.firstName = null;
-        this.lastName = null;
-        this.canal = null;
-        this.puntoVenta = null;
-        this.menu = null;
-        this.desCanal = null;
-        this.desPuntoVenta = null;
-        this.tipoCanal = null;
+		this.firstName = null;
+		this.lastName = null;
+		this.canal = null;
+		this.puntoVenta = null;
+		this.menu = null;
+		this.desCanal = null;
+		this.desPuntoVenta = null;
+		this.tipoCanal = null;
 
-        localStorage.removeItem('currentUser');
+		localStorage.removeItem("currentUser");
+		localStorage.removeItem("productUser");
+		localStorage.removeItem("systemUser");
     }
 }

@@ -32,6 +32,9 @@ export class AddEmailComponent implements OnInit {
   ngOnInit() {
     this.getEmailTypeList();
 
+    this.InputsEmail.P_SORIGEN = "SCTR";
+    this.InputsEmail.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+
     if (this.itemCorreo != null) {
       this.txtAccion = "Editar Correo";
       this.InputsEmail.P_DESTICORREO = this.itemCorreo.P_DESTICORREO;
@@ -85,7 +88,8 @@ export class AddEmailComponent implements OnInit {
   }
 
   EventSave() {
-    this.InputsEmail.P_SE_MAIL = this.InputsEmail.P_SE_MAIL.toUpperCase()
+    
+    this.InputsEmail.P_SE_MAIL = this.InputsEmail.P_SE_MAIL == null ? "" : this.InputsEmail.P_SE_MAIL.toUpperCase()
 
     if (this.itemCorreo == null) {
       let existe = 0;

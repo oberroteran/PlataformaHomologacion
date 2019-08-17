@@ -28,6 +28,9 @@ export class AddCiiuComponent implements OnInit {
 
     this.getCiiuList();
 
+    this.InputsCiiu.P_SORIGEN = "SCTR";
+    this.InputsCiiu.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+
     if (this.itemCiiu != null) {
       this.txtAccion = "Editar Ciiu";
       this.InputsCiiu.P_SDESCIIU = this.itemCiiu.P_SDESCIIU;
