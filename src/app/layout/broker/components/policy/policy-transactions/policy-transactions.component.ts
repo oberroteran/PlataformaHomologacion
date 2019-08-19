@@ -857,7 +857,7 @@ export class PolicyTransactionsComponent implements OnInit {
       //Agregando los brokerId y middlemanId | Lista de comercializadores
       if (this.polizaEmitComer.length > 0) {
         this.polizaEmitComer.forEach(broker => {
-          if (broker.TIPO_CANAL == "6") {
+          if (broker.TIPO_CANAL == "6" || broker.TIPO_CANAL == "8") {
             let brokerItem: any = {};
             brokerItem.brokerId = broker.CANAL;
             data.channel.push(brokerItem);
@@ -870,7 +870,7 @@ export class PolicyTransactionsComponent implements OnInit {
       }
 
       //Agregando los brokerId y middlemanId | Comercializador principal
-      if (this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "6") {
+      if (this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "6" || this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "8") {
         let brokerItem: any = {};
         brokerItem.brokerId = this.polizaEmitComerDTOPrincipal.CANAL;
         data.channel.push(brokerItem);

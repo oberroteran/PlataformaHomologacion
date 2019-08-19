@@ -64,7 +64,7 @@ export class PolicyIndexComponent implements OnInit {
     public currentPage = 1; //página actual
     public rotate = true; //
     public maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
-    public itemsPerPage = 6; // limite de items por página
+    public itemsPerPage = 5; // limite de items por página
     public totalItems = 0; //total de items encontrados
 
     constructor(
@@ -321,7 +321,7 @@ export class PolicyIndexComponent implements OnInit {
                     this.isLoading = false;
                     this.policyList = res.C_TABLE;
                     this.totalItems = this.policyList.length;
-                    this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+                    this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
                     if (this.policyList.length == 0) {
                         swal.fire({
                             title: "Información",

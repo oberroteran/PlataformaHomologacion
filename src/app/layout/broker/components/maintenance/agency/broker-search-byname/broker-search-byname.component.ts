@@ -31,7 +31,7 @@ export class BrokerSearchBynameComponent implements OnInit {
   ngOnInit() {
     this.isLoading=true;
     this.totalItems = this.foundResults.length;
-    this.listToShow = this.foundResults.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+    this.listToShow = this.foundResults.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
     this.isLoading=false;
   }
 
@@ -51,7 +51,7 @@ export class BrokerSearchBynameComponent implements OnInit {
   }
   pageChanged(currentPage) {
     this.currentPage = currentPage;
-    this.listToShow = this.foundResults.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+    this.listToShow = this.foundResults.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
 
   }
 }

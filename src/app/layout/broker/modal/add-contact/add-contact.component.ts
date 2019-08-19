@@ -43,10 +43,10 @@ export class AddContactComponent implements OnInit {
 
     if (this.itemContacto != null) {
       this.txtAccion = "Editar Contacto";
-      this.InputsContact.P_NROW = this.itemContacto.P_NROW;
+      this.InputsContact.P_NROW =  parseInt(this.itemContacto.P_NROW);
       this.InputsContact.P_DESTICONTACTO = this.itemContacto.P_DESTICONTACTO;
       this.InputsContact.P_DESTIDOCUMENTO = this.itemContacto.P_DESTIDOCUMENTO;
-      this.InputsContact.P_NIDDOC_TYPE = this.itemContacto.P_NIDDOC_TYPE;
+      this.InputsContact.P_NIDDOC_TYPE = this.itemContacto.P_NIDDOC_TYPE == null ? "0": parseInt(this.itemContacto.P_NIDDOC_TYPE);
       this.InputsContact.P_NTIPCONT = this.itemContacto.P_NTIPCONT;
       this.InputsContact.P_SE_MAIL = this.itemContacto.P_SE_MAIL;
       this.InputsContact.P_SIDDOC = this.itemContacto.P_SIDDOC;

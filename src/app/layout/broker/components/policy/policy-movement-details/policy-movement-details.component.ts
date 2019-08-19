@@ -82,7 +82,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
 
   pageChanged(currentPage) {
     this.currentPage = currentPage;
-    this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+    this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
   }
 
   anularMov(nroMov: any) {

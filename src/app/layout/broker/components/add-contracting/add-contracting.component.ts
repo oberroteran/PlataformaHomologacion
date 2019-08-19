@@ -118,6 +118,14 @@ export class AddContractingComponent implements OnInit {
         if (this.InputsContracting.P_NIDDOC_TYPE != undefined && this.InputsContracting.P_SIDDOC != undefined && this.InputsContracting.P_NIDDOC_TYPE != "" && this.InputsContracting.P_SIDDOC != "" &&
             this.receiverApp != undefined && this.receiverApp != "") {
 
+            if (this.InputsContracting.P_NIDDOC_TYPE == 1 && this.InputsContracting.P_SIDDOC.trim().length > 1) {
+                if (this.InputsContracting.P_SIDDOC.substr(0, 2) != "10" && this.InputsContracting.P_SIDDOC.substr(0, 2) != "15" && this.InputsContracting.P_SIDDOC.substr(0, 2) != "17" && this.InputsContracting.P_SIDDOC.substr(0, 2) != "20") {
+                    console.log(this.InputsContracting.P_SIDDOC.substr(0, 2))
+                    swal.fire("Información", "El número de RUC no es válido, debe empezar con 10, 15, 17, 20", "error");
+                    return
+                }
+            }
+
             let data = new ClientDataToSearch();
             data.P_CodAplicacion = "SCTR";
             data.P_TipOper = "CON";
@@ -141,6 +149,10 @@ export class AddContractingComponent implements OnInit {
                             this.InputsContracting.P_SLASTNAME2 = res.EListClient[0].P_SLASTNAME2;
                             this.InputsContracting.P_SLEGALNAME = res.EListClient[0].P_SLEGALNAME;
                             this.InputsContracting.P_SSEXCLIEN = res.EListClient[0].P_SSEXCLIEN != "" ? res.EListClient[0].P_SSEXCLIEN : "3";
+                            let dd = res.EListClient[0].P_DBIRTHDAT.substr(0, 2);
+                            let mm = res.EListClient[0].P_DBIRTHDAT.substr(3, 2);
+                            let yy = res.EListClient[0].P_DBIRTHDAT.substr(6, 4);
+                            this.bsValueFNac = new Date(mm + "/" + dd + "/" + yy);
                             this.InputsContracting.P_DBIRTHDAT = res.EListClient[0].P_DBIRTHDAT;
                             this.InputsContracting.P_NSPECIALITY = res.EListClient[0].P_NSPECIALITY != "" ? res.EListClient[0].P_NSPECIALITY : "99";
                             this.InputsContracting.P_NCIVILSTA = res.EListClient[0].P_NCIVILSTA != "" ? res.EListClient[0].P_NCIVILSTA : "6";
@@ -178,12 +190,42 @@ export class AddContractingComponent implements OnInit {
                             this.InputsContracting.P_FIRMA_RENIEC = null;
                             this.InputsContracting.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
                             this.InputsContracting.P_CodAplicacion = "SCTR";
+                            this.listaDirecciones = res.EListClient[0].EListAddresClient;
                             this.InputsContracting.EListAddresClient = this.listaDirecciones;
+                            let numdir = 1;
+                            this.listaDirecciones.forEach(item => {
+                                item.P_NROW = numdir++;
+                                item.P_CLASS = "";
+                            });
+                            this.listaTelefonos = res.EListClient[0].EListPhoneClient;
                             this.InputsContracting.EListPhoneClient = this.listaTelefonos;
+                            let numtel = 1;
+                            this.listaTelefonos.forEach(item => {
+                                item.P_NROW = numtel++;
+                                item.P_CLASS = "";
+                            });
+                            this.listaCorreos = res.EListClient[0].EListEmailClient;
                             this.InputsContracting.EListEmailClient = this.listaCorreos;
+                            let numcor = 1;
+                            this.listaCorreos.forEach(item => {
+                                item.P_NROW = numcor++;
+                                item.P_CLASS = "";
+                            });
+                            this.listaContactos = res.EListClient[0].EListContactClient;
                             this.InputsContracting.EListContactClient = this.listaContactos;
-                            this.InputsContracting.EListSedesClient = this.listaSedes;
+                            let numcon = 1;
+                            this.listaContactos.forEach(item => {
+                                item.P_NROW = numcon++;
+                                item.P_CLASS = "";
+                            });
+                            this.listaCiiu = res.EListClient[0].EListCIIUClient;
                             this.InputsContracting.EListCIIUClient = this.listaCiiu;
+                            let numciiu = 1;
+                            this.listaCiiu.forEach(item => {
+                                item.P_NROW = numciiu++;
+                                item.P_CLASS = "";
+                            });
+                            this.InputsContracting.EListSedesClient = this.listaSedes;
                             this.typeContact.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
                             this.typeContact.P_SIDDOC = this.InputsContracting.P_SIDDOC;
                         }
@@ -936,10 +978,10 @@ export class AddContractingComponent implements OnInit {
 
     EventSave(event) {
 
-        this.InputsContracting.P_SFIRSTNAME = this.InputsContracting.P_SFIRSTNAME.toUpperCase()
-        this.InputsContracting.P_SLEGALNAME = this.InputsContracting.P_SLEGALNAME.toUpperCase()
-        this.InputsContracting.P_SLASTNAME = this.InputsContracting.P_SLASTNAME.toUpperCase()
-        this.InputsContracting.P_SLASTNAME2 = this.InputsContracting.P_SLASTNAME2.toUpperCase()
+        this.InputsContracting.P_SFIRSTNAME = this.InputsContracting.P_SFIRSTNAME == null ? "" : this.InputsContracting.P_SFIRSTNAME.toUpperCase()
+        this.InputsContracting.P_SLEGALNAME = this.InputsContracting.P_SLEGALNAME == null ? "" : this.InputsContracting.P_SLEGALNAME.toUpperCase()
+        this.InputsContracting.P_SLASTNAME = this.InputsContracting.P_SLASTNAME == null ? "" : this.InputsContracting.P_SLASTNAME.toUpperCase()
+        this.InputsContracting.P_SLASTNAME2 = this.InputsContracting.P_SLASTNAME2 == null ? "" : this.InputsContracting.P_SLASTNAME2.toUpperCase()
 
         //Fecha Inicio
         let dayIni = this.bsValueFNac.getDate() < 10 ? "0" + this.bsValueFNac.getDate() : this.bsValueFNac.getDate();

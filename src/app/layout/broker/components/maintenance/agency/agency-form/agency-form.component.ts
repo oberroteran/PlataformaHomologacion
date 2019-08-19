@@ -441,7 +441,7 @@ export class AgencyFormComponent implements OnInit {
                             }, (reason) => {
                                 //nothing
                             });
-                        } else {
+                        } else if (res.EListClient[0].P_SCLIENT != null) {
                             this.contractor.Id = res.EListClient[0].P_SCLIENT;
                             this.contractor.DocumentNumber = res.EListClient[0].P_SIDDOC;
 
@@ -467,7 +467,13 @@ export class AgencyFormComponent implements OnInit {
 
                             this.getLastBrokerList();
 
+                        } else {
+                            this.isLoading = false;
+                            Swal.fire("Información", this.NotFoundMessage, "error");
+                            this.contractor = new ContractorForTable();
+                            console.log(this.contractor);
                         }
+
 
                     } else {
                         this.isLoading = false;
