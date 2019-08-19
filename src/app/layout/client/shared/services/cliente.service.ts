@@ -5,41 +5,41 @@ import { TipoDocumento } from '../models/tipo-documento.model';
 import { Observable } from 'rxjs/Observable';
 import { Auto } from '../models/auto.model';
 import { PrimaFilter } from '../models/prima.model';
-// import { PlanFilter } from '../../../broker/models/plan/planfilter';
+import { PlanFilter } from '../../../broker/models/plan/planfilter';
 import { HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class ClienteService {
-    private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    constructor(private api: ApiService) { }
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
+  constructor(private api: ApiService) { }
 
-    getTiposPersona(tipoPersona: number = 0) {
-        const endpoint = 'cliente';
-        const action = 'GetListTipoPersona';
-        const url = `${endpoint}/${action}/${tipoPersona}`;
+  getTiposPersona(tipoPersona: number = 0) {
+    const endpoint = 'cliente';
+    const action = 'GetListTipoPersona';
+    const url = `${endpoint}/${action}/${tipoPersona}`;
 
-        return this.api.get(url);
-    }
+    return this.api.get(url);
+  }
 
-    getTiposDocumento(id, idtipo): Observable<TipoDocumento[]> {
-        const endpoint = 'cliente';
-        const action = 'GetListTipoDocumento';
-        const url = `${endpoint}/${action}/${id}/${idtipo}`;
+  getTiposDocumento(id, idtipo): Observable<TipoDocumento[]> {
+    const endpoint = 'cliente';
+    const action = 'GetListTipoDocumento';
+    const url = `${endpoint}/${action}/${id}/${idtipo}`;
 
-        return this.api.get(url);
-    }
+    return this.api.get(url);
+  }
 
-    registrar(cliente: Contratante) {
-        const endpoint = 'cliente';
-        const data = JSON.stringify(cliente);
+  registrar(cliente: Contratante) {
+    const endpoint = 'cliente';
+    const data = JSON.stringify(cliente);
 
-        return this.api.postHeader(endpoint, data, this.headers);
-    }
+    return this.api.postHeader(endpoint, data,this.headers);
+  }
 
 
-    obtenerCliente(id): Observable<Contratante> {
-        const endpoint = 'cliente';
-        const url = `${endpoint}/${id}`;
+  obtenerCliente(id): Observable<Contratante> {
+    const endpoint = 'cliente';
+    const url = `${endpoint}/${id}`;
 
-        return this.api.get(endpoint);
-    }
+    return this.api.get(endpoint);
+  }
 }

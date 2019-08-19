@@ -1,14 +1,12 @@
 .container-left {
   width: 20%;
-  box-shadow: 1px 0 0 0 #D5CFDF;
+  box-shadow: 1px 0 0 0 #d5cfdf;
   float: left;
   padding: 0px 15px;
 }
 
 .container-left .row-01 {
   width: 100%;
-  /*padding-left: 8px;
-  padding-right: 6px;*/
 }
 
 .container-left .row-01 h4 {
@@ -17,7 +15,7 @@
   font-family: "Bliss Pro";
   font-weight: bold;
   font-size: 24px;
-  color: #2B0D61;
+  color: #2b0d61;
   margin-top: 2px;
   margin-left: 1px;
 }
@@ -32,13 +30,13 @@
 .container-left .row-02 img {
   width: 95%;
   margin-left: 8px;
-  border: 1px solid #2B0D61;
+  border: 1px solid #2b0d61;
   border-radius: 6px;
 }
 
 .container-left hr {
   width: 95%;
-  border: 1px solid #D5CFDF;
+  border: 1px solid #d5cfdf;
 }
 
 .container-left .row-03 {
@@ -49,7 +47,7 @@
 }
 
 .container-left .row-03 h4 {
-  color: #2B0D61;
+  color: #2b0d61;
   font-family: "Bliss Pro";
   font-size: 20px;
   font-weight: 700;
@@ -59,7 +57,7 @@
 
 .container-left .row-03 h3 {
   padding-left: 10px;
-  color: #2B0D61;
+  color: #2b0d61;
   font-family: "Bliss Pro";
   font-size: 22px;
   font-weight: bold;
@@ -69,10 +67,10 @@
 }
 
 .container-left .row-03 .btn-white {
-  border: 1px solid #ED6E00;
+  border: 1px solid #ed6e00;
   border-radius: 6px;
   background-color: #ffffff;
-  color: #ED6E00;
+  color: #ed6e00;
   font-family: "Bliss Pro";
   padding: 15px 30px;
   text-align: center;

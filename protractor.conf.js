@@ -11,7 +11,6 @@ exports.config = {
   },
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
-  // baseUrl: 'http://protecta.ngqa.com:8085/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,

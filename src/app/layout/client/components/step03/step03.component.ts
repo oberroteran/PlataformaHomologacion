@@ -27,7 +27,7 @@ import { VisaService } from '../../../../shared/services/pago/visa.service';
 import { SessionToken } from '../../shared/models/session-token.model';
 import { isNullOrUndefined } from 'util';
 import { environment } from '../../../../../environments/environment';
-
+import { SessionStorageService } from '../../../../shared/services/storage/storage-service';
 
 @Component({
   selector: 'app-step03',
@@ -84,11 +84,11 @@ export class Step03Component implements OnInit {
     private clienteService: ClienteService,
     private ubigeoService: UbigeoService,
     private emisionService: EmisionService,
-    private utilityService: UtilityService,
     private router: Router,
     private fb: FormBuilder,
     private appConfig: AppConfig,
     private visaService: VisaService,
+    private sessionStorageService: SessionStorageService
   ) { }
 
   ngOnInit() {
@@ -360,16 +360,13 @@ export class Step03Component implements OnInit {
   private obtenerCanalVenta() {
     if (!isNullOrUndefined(this.referencechannel.referenteCanal) && this.referencechannel.referenteCanal !== '') {
       this.canalVenta = this.referencechannel.referenteCanal;
-      /*  if (!isNullOrUndefined(this.referencechannel.referentePlan) && this.referencechannel.referentePlan !== '0') {
-         this.canalVenta = this.referencechannel.referentePlan;
-       } */
       this.puntoVenta = this.referencechannel.referentePuntoVenta;
     } else {
       this.canalVenta = environment.canaldeventadefault;
       this.puntoVenta = environment.puntodeventadefault;
     }
-    sessionStorage.setItem('canalVentaCliente', this.canalVenta);
-    sessionStorage.setItem('puntoVentaCliente', this.puntoVenta);
+    this.sessionStorageService.setItem('canalVentaCliente', this.canalVenta);
+    this.sessionStorageService.setItem('puntoVentaCliente', this.puntoVenta);
     this.obtenerPoliza();
   }
 
@@ -399,24 +396,6 @@ export class Step03Component implements OnInit {
       }
     );
   }
-
-  /* private obtenerPlan() {
-    if (this.referencechannel.referenteCanal != null && this.referencechannel.referenteCanal !== '' &&
-      this.referencechannel.referenteAplicaCupon === '0') {
-      this.setPlanes(this.referencechannel.referenteCanal, this.modalidad);
-      return;
-    }
-    const filter = new Parameter('PLATAFORMA_DIGITAL', 'EMISION_CLIENTE', 'PLAN', '0', '');
-    this.utilityService.getParameter(filter).subscribe(
-      res => {
-        this.plan = (<Parameter>res).outsvalue;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-
-  } */
 
   generateSessionToken() {
     this.visaService.generarSessionToken(this.tarifa.precio, '').subscribe(

@@ -40,52 +40,45 @@ export class PayrollComponent implements OnInit {
   flagConfirmacion: string;
   msjHeader: string;
   selectedAll: any;
+  public currentPage = 0;
   public bsConfig: Partial<BsDatepickerConfig>;
-  // Array para los campos de tipo texto
   public InputsFilter: any = {};
-  // Variable indica si se obtuvo o no Informacion
   fExistRegistro: any = false;
   msgErrorLista = '';
-  // Objecto Payroll
   ObjPayroll = new Payroll('01/01/2017', '31/12/2017', 0, 0, '', 0, 0, 0, 0, '', '', '', '', 0, 0, 0, 0, false);
-  /*Variables de paginacion */
   strPlanilla: string;
   strPrecio: string;
   npage = 1;
   paginacion: any = {};
-  // rotate = true;
-  // maxSize = 5;
+  rotate = true;
+  maxSize = 5;
   public itemsPerPage = 5;
   public totalItems = 0;
   public tipoCanal = 0;
   fecha = new Date();
   dia = this.fecha.getDate();
-  mes = this.fecha.getMonth() == 0 ? 1 : this.fecha.getMonth();
+  mes = this.fecha.getMonth() === 0 ? 1 : this.fecha.getMonth();
   anio = this.fecha.getFullYear();
 
   bsValueIni: Date = new Date(this.anio + '-' + this.mes + '-' + this.dia);
   bsValueFin: Date = new Date();
   ListStateID = '';
   ListCodChannel = '';
-  // Lista
   ListPayroll: Payroll[];
   ListPayrollExport: Payroll[];
   arrayIdPayroll = '';
-  // Estado de Planilla
   ListChannelSales: any[];
   channelSales: ChannelSales;
   public lstStateChannel: StateChannelType[];
   planillaBuscar = '';
   concpayroll = new ConcPayroll(0, 0, '', 0, '', 0, '');
   public result: any = {};
-  @ViewChild("myButton", { static: false }) myButton: ElementRef;
+  @ViewChild('myButton', { static: false }) myButton: ElementRef;
   node: string;
-  // Envio de planilla
   planillaID: number;
   stateID: number;
   strMedioPago: string;
   strFechaEliminar: string;
-  //
 
   constructor(private payrollService: PayrollService,
     private service: StateService,
@@ -104,12 +97,10 @@ export class PayrollComponent implements OnInit {
         containerClass: 'theme-dark-blue',
         showWeekNumbers: true
       });
-    // Setear variables de tipo filtro
     this.InputsFilter.P_DATEBEGIN = '';
     this.InputsFilter.P_DATEEND = '';
     this.InputsFilter.P_NIDPAYROLL = '';
     this.InputsFilter.P_NSTATE = 0;
-    // Variables de salida
     this.InputsFilter.NAMOUNTTOTAL = 0;
     this.InputsFilter.NQUANTITY = 0;
     this.InputsFilter.NIDPAYROLL = 0;
@@ -128,7 +119,6 @@ export class PayrollComponent implements OnInit {
   ngOnInit() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.tipoCanal = +currentUser.tipoCanal;
-    // this.InputsFilter.P_NID_NCHANNELTYPE = this.tipoCanal;
     this.onGetLstState();
     this.LoadChannelSales();
 
@@ -155,7 +145,6 @@ export class PayrollComponent implements OnInit {
       );
   }
 
-  // Evento para buscar
   onEventSearch() {
     this.InputsFilter.P_DATEBEGIN = this.datePipe.transform(this.bsValueIni, 'dd/MM/yyyy');
     this.InputsFilter.P_DATEEND = this.datePipe.transform(this.bsValueFin, 'dd/MM/yyyy');
@@ -232,7 +221,7 @@ export class PayrollComponent implements OnInit {
   checkIfAllSelected() {
     this.ListPayroll.every(function (item: Payroll) { return item.selected === true; });
   }
-  // Metodo de busqueda
+
   onLoadPayroll() {
     if (this.InputsFilter.P_NIDPAYROLL === '') {
       this.InputsFilter.P_NIDPAYROLL = 0;
@@ -301,7 +290,6 @@ export class PayrollComponent implements OnInit {
       } else {
         this.msjHeader = 'Esta seguro de anular las planillas seleccionadas?';
         this.bHideBody = true;
-        //this.message = 'Esta seguro de anular las planillas seleccionadas?';
         this.flagConfirmacion = 'anulacionmasivo';
         this.childModalConfirmasivo.show();
       }
@@ -309,15 +297,13 @@ export class PayrollComponent implements OnInit {
   }
 
   openModalConfirmacion(idpayroll: string) {
-    const elemento = this.ListPayroll.filter(e => e.splanilla.toString() == idpayroll.toString());
-    //this.childModalConfirmasivo.show();
+    const elemento = this.ListPayroll.filter(e => e.splanilla.toString() === idpayroll.toString());
     this.childModalEliminarIndividual.show();
     this.msjHeader = 'Esta seguro de anular la planilla ' + elemento[0].splanilla + ' ?';
     this.strPlanilla = elemento[0].splanilla;
     this.strPrecio = elemento[0].namounttotal.toString();
     this.strMedioPago = elemento[0].stype.toString();
     this.strFechaEliminar = elemento[0].sregister.toString();
-    //this.message = 'Esta seguro de anular la planilla? ' + elemento[0].splanilla;
     this.flagConfirmacion = 'anulacionindividual';
     this.IdPayroll = +idpayroll;
   }
@@ -354,7 +340,7 @@ export class PayrollComponent implements OnInit {
     this.paginacion.npage = event.page;
     this.onLoadPayroll();
   }
-  // Obtener estados
+
   onGetLstState() {
     const StateChannel = new StateChannelType(0, '', this.tipoCanal, 0);
     this.service.GetStatexChannelType(StateChannel).subscribe(

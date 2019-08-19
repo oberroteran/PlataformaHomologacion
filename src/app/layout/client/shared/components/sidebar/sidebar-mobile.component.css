@@ -1,15 +1,15 @@
 @media screen and (max-width: 768px) {
-  .row-header {
+  .row-header-sidebar {
     display: table-row;
   }
 
-  .row-header h4 {
+  .row-header-sidebar h4 {
     display: table-cell !important;
     font-size: 18px !important;
     font-family: "Bliss Pro Bold" !important;
   }
 
-  .row-header i {
+  .row-header-sidebar i {
     display: table-cell !important;
     vertical-align: middle;
     font-size: 24px;
@@ -17,18 +17,19 @@
     margin-right: 10px;
     width: 50px;
     text-align: center;
-    color: #2B0D61;
+    color: #2b0d61;
   }
 
-  .container-left {
+  .container-left-sidebar {
     display: none;
     -webkit-box-shadow: none;
     box-shadow: none;
   }
-  .container-left hr {
+  .container-left-sidebar hr {
     width: 100%;
   }
-  .container-left .row-01, .container-left .row-02 {
+  .container-left-sidebar .row-01-sidebar,
+  .container-left-sidebar .row-02-sidebar {
     width: 100%;
     display: table;
   }
@@ -42,7 +43,7 @@
     display: block;
     width: 100%;
   }
-  .si-mobile .container-left {
+  .si-mobile .container-left-sidebar {
     width: 100%;
   }
 
@@ -53,6 +54,6 @@
     background-position-y: center;
   }
   .chevron-up {
-    background-image: url(../../../../../../assets/icons/arrow_up.svg);            
+    background-image: url(../../../../../../assets/icons/arrow_up.svg);
   }
 }

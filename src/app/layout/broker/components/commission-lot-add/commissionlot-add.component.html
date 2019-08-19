@@ -138,8 +138,8 @@
                 <option value="0" selected>Todos</option>
                 <option
                   *ngFor="let Item of lstCommisionState"
-                  value="{{ Item.nidstate }}"
-                  >{{ Item.sdescription }}
+                  value="{{ Item.NIDSTATE }}"
+                  >{{ Item.SDESCRIPTION }}
                 </option>
               </select>
             </div>
@@ -386,8 +386,8 @@
                         <option value="0" selected>Seleccione</option>
                         <option
                           *ngFor="let Item of lstVoucherType"
-                          value="{{ Item.nid }}"
-                          >{{ Item.sdescript }}</option
+                          value="{{ Item.NID }}"
+                          >{{ Item.SDESCRIPT }}</option
                         >
                       </select>
                     </div>
@@ -557,8 +557,8 @@
                         <option value="0" selected>Seleccione</option>
                         <option
                           *ngFor="let Item of lstAccountType"
-                          value="{{ Item.nid }}"
-                          >{{ Item.sdescript }}</option
+                          value="{{ Item.NID }}"
+                          >{{ Item.SDESCRIPT }}</option
                         >
                       </select>
                     </div>
@@ -852,11 +852,7 @@
                 </div>
                 <div class="form-group row ">
                   <div class="col-lg-12" style="text-align: center">
-                    <button
-                      style="width: 50%"
-                      class="full-color"
-                      (click)="derivarPlanilla()"
-                    >
+                    <button style="width: 50%" class="full-color">
                       <span>Enviar Planilla</span>
                     </button>
                   </div>

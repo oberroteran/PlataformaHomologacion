@@ -66,6 +66,12 @@ export class CampaignListComponent implements OnInit {
   strFechaInicio: string;
   strFechaFin: string;
 
+  oDatePipe: DatePipe;
+
+  public currentPage = 0;
+  rotate = true;
+  maxSize = 5;
+
   constructor(
     private campaignService: CampaignService,
     private router: Router,
@@ -73,6 +79,7 @@ export class CampaignListComponent implements OnInit {
     private datePipe: DatePipe,
     private excelService: ExcelService
   ) {
+    this.oDatePipe = datePipe;
     this.bsConfig = Object.assign(
       {},
       {

@@ -105,6 +105,7 @@
 
 .tipo-vehiculo .imagenes {
   margin: auto;
+  display: block;
   text-align: center;
 }
 

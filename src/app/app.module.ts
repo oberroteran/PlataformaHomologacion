@@ -9,10 +9,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from './layout/broker/services/authentication.service';
 import { AppConfig } from './app.config';
 import { SidebarService } from './shared/services/sidebar/sidebar.service';
-
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { BsDatepickerModule } from 'ngx-bootstrap';
 import { VersionCheckService } from './shared/services/check-service/version-check.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [AppComponent, LogoutDialogComponent],
   imports: [
@@ -21,7 +22,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    NgxSpinnerModule
   ],
   providers: [
     LogoutService,

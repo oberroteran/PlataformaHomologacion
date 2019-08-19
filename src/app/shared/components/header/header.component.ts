@@ -1,20 +1,8 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Input,
-  EventEmitter,
-  Output,
-  SimpleChanges,
-  SimpleChange,
-  OnChanges,
-  ViewChild,
-  ElementRef
-} from '@angular/core';
+import { environment } from './../../../../environments/environment';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
-import { AppConfig } from '../../../app.config';
 import { Router, NavigationEnd } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { SessionStorageService } from '../../services/storage/storage-service';
 
 @Component({
   selector: 'app-header',
@@ -23,8 +11,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   haveUser = false;
-  show = false;
+  show = true;
   showSidebar = false;
+  showLogo = false;
   showLeftButton = false;
   imagePaths: '';
   imagePath = '';
@@ -34,21 +23,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private sidebarService: SidebarService,
-    private appConfig: AppConfig,
-    private http: HttpClient,
+    private sessionStorageService: SessionStorageService,
     private router: Router) {
 
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.displayLeftButton();
         this.sidebarService.announceSidebar(false);
-        this.setImagebyCanal();
       }
     });
+
     this.sidebarService.node$.subscribe(val => {
       this.showSidebar = !val;
     });
 
+    this.sessionStorageService.watchStorage().subscribe((data: string) => {
+      if (data) {
+        this.setImagebyCanal();
+      }
+    });
   }
 
   toggleCollapse() {
@@ -61,7 +54,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.displayLeftButton();
-    this.setImagebyCanal();
   }
 
   ngOnDestroy(): void { }
@@ -75,30 +67,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  registerTracking(pageName: string) {
-  }
-
   setImagebyCanal() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    let pageInitial = JSON.parse(localStorage.getItem('PageInitial'));
-    let pageSecond = JSON.parse(localStorage.getItem('PageSecond'));
-    this.canal = currentUser && currentUser['canal'];
-
-    if (pageInitial === null || pageInitial === undefined) {
-      pageInitial = 0;
-    }
-    if (pageSecond === null || pageSecond === undefined) {
-      pageSecond = 0;
-    }
-    if (Number(pageInitial) === 0 && Number(pageSecond) === 1) {
+    this.showLogo = false;
+    this.canal = sessionStorage.getItem('canalVentaCliente');
+    if (environment.canaldeventadefault !== this.canal) {
       if (this.canal != null) {
+        this.showLogo = true;
         this.imagePath = 'assets/logos_Canal/' + this.canal + '.svg';
-      } else {
-        this.imagePath = null;
       }
-    } else {
-      this.imagePath = null;
     }
+    this.imagePath = 'assets/logos_Canal/' + this.canal + '.svg';
   }
 
 }

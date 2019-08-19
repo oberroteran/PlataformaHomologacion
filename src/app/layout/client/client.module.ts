@@ -38,9 +38,7 @@ import { BrokerHttpInterceptor } from '../broker/guards/broker-http-interceptor'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoggerService } from '../../shared/services/logger/logger.service';
 import { Step00Component } from './components/step00/step00.component';
-// import { InputDateComponent } from '../../shared/components/input-date/input-date.component';
-// import { InputDateComponent } from '../../shared/components/input-date/input-date.component';
-
+import { SessionStorageService } from '../../shared/services/storage/storage-service';
 @NgModule({
   imports: [
     CommonModule,
@@ -68,7 +66,6 @@ import { Step00Component } from './components/step00/step00.component';
     Step04Component,
     ResultadoVisaComponent,
     ResultadoPagoefectivoComponent
-    // InputDateComponent
   ],
   entryComponents: [],
   providers: [
@@ -89,7 +86,8 @@ import { Step00Component } from './components/step00/step00.component';
       useClass: ClientHttpInterceptor,
       multi: true
     },
-    DatePipe
+    DatePipe,
+    SessionStorageService
   ]
 })
 export class ClientModule { }

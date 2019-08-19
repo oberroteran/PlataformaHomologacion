@@ -1,3 +1,4 @@
+import { HeaderComponent } from './../../../../shared/components/header/header.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { VehiculoService } from '../../shared/services/vehiculo.service';
@@ -9,12 +10,13 @@ import { LoggerService } from '../../../../shared/services/logger/logger.service
 import { Logger } from '../../../../shared/models/logger/logger';
 import { environment } from '../../../../../environments/environment';
 import { isNullOrUndefined } from 'util';
-
+import { SessionStorageService } from '../../../../shared/services/storage/storage-service';
 
 @Component({
   selector: 'app-step01',
   templateUrl: './step01.component.html',
-  styleUrls: ['./step01.component.css', './step01.component-mobile.css']
+  styleUrls: ['./step01.component.css', './step01.component-mobile.css'],
+  providers: [HeaderComponent]
 })
 export class Step01Component implements OnInit {
   @ViewChild('modalTerminosCondiciones', { static: true }) modalTerminosCondiciones;
@@ -38,7 +40,6 @@ export class Step01Component implements OnInit {
   urlCanal = '';
   URL: string;
   var_data: string;
-  // Pixel
   pixelAnalytics;
   canalVenta: string;
   puntoVenta: string;
@@ -55,7 +56,9 @@ export class Step01Component implements OnInit {
     private router: Router,
     private vehiculoService: VehiculoService,
     private loggerService: LoggerService,
-    private appConfig: AppConfig
+    private appConfig: AppConfig,
+    private cmpHeader: HeaderComponent,
+    private sessionStorageService: SessionStorageService
   ) { }
 
   ngOnInit() {
@@ -117,9 +120,7 @@ export class Step01Component implements OnInit {
 
   addLogger() {
     this.loggerService.addLogger(this.logger).subscribe(
-      data => {
-        console.log(data);
-      },
+      data => { },
       error => {
         console.log(error);
       });
@@ -177,8 +178,7 @@ export class Step01Component implements OnInit {
         this.bValidar = false;
         this.bLoading = false;
         this.bPlacaOk = false;
-        this.mensaje =
-          'No se pudo realizar la validación de la placa. Por favor vuelve a intentarlo.';
+        this.mensaje = 'No se pudo realizar la validación de la placa. Por favor vuelve a intentarlo.';
       }
     );
   }
@@ -234,8 +234,8 @@ export class Step01Component implements OnInit {
       this.canalVenta = environment.canaldeventadefault;
       this.puntoVenta = environment.puntodeventadefault;
     }
-    sessionStorage.setItem('puntoVentaCliente', this.puntoVenta);
-    sessionStorage.setItem('canalVentaCliente', this.canalVenta);
+    this.sessionStorageService.setItem('puntoVentaCliente', this.puntoVenta);
+    this.sessionStorageService.setItem('canalVentaCliente', this.canalVenta);
   }
 
   acceptTerms(event) {

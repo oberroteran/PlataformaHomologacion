@@ -12,7 +12,6 @@ import { SidebarService } from '../../../../shared/services/sidebar/sidebar.serv
     templateUrl: 'login.component.html',
     styleUrls: ['login.component.css']
 })
-
 export class LoginComponent implements OnInit {
     model: any = {};
     loading = false;
@@ -31,9 +30,7 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private authenticationService: AuthenticationService,
         private formBuilder: FormBuilder,
-        private appConfig: AppConfig) {
-
-    }
+    private appConfig: AppConfig) { }
 
     ngOnInit() {
         this.initComponent();
@@ -42,10 +39,8 @@ export class LoginComponent implements OnInit {
     initComponent() {
         this.registerTracking();
         this.crearFormulario();
-        // Restablecer el estado de inicio
         this.authenticationService.logout();
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        // localStorage.clear();
     }
 
     registerTracking() {
@@ -70,7 +65,6 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(
                 result => {
-                    // console.log(result);
                     if (result === true) {
                         this.sidebarService.close();
                         this.menuTotal = JSON.parse(localStorage.getItem("currentUser"))["menu"];
@@ -95,8 +89,6 @@ export class LoginComponent implements OnInit {
                             this.router.navigate(["broker/panel"]);
                         }
                         // this.router.navigate(['broker/salepanel']);
-                        this.appConfig.registerPageInitial('0');
-                        this.appConfig.registerPageSecond('1');
                     } else {
                         this.error = 'Usuario o clave incorrectos.';
                         this.loading = false;
@@ -106,7 +98,6 @@ export class LoginComponent implements OnInit {
                     this.error = 'Usuario o clave incorrectos.';
                     this.loading = false;
                     console.log(<any>error);
-
                 });
     }
 
@@ -127,7 +118,7 @@ export class LoginComponent implements OnInit {
 
     resolved(token: string) {
         if (token === null) {
-            this.bCaptchaValid = true;
+            this.bCaptchaValid = false;
             this.loginForm.enable();
         } else {
             if (this.loginForm) {

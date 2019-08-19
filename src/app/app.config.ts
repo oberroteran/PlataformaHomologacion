@@ -94,14 +94,6 @@ export class AppConfig {
     }
     //#endregion
 
-    public registerPageSecond(Page: string) {
-        localStorage.setItem('PageSecond', Page);
-    }
-
-    public registerPageInitial(Page: string) {
-        localStorage.setItem('PageInitial', Page);
-    }
-
     public static get PATH_PDF_FILES(): string {
         return environment.domainurl + '/assets/files';
     }

@@ -41,8 +41,13 @@ a {
   background-color: #ffffff !important;
 }
 
+.navbar-nav {
+  flex-direction: row !important;
+}
+
 .navbar-nav .nav-link {
   white-space: nowrap !important;
+  padding-left: 11px;
 }
 
 .btn-menu {
