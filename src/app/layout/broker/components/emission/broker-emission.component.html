@@ -55,7 +55,7 @@
                           (blur)="validarPlaca()"
                         />
                         <div class="input-group-addon">
-                          <img
+                          <img *ngIf="!bLock01" 
                             alt=""
                             (click)="validarPlaca()"
                             src="assets/icons/buscar_certificado.png"

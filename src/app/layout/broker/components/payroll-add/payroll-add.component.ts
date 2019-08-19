@@ -73,12 +73,12 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
   public cantidadSoats = 0;
   public totalplanilla = 0;
   public totaldeclarado = 0;
-  public saldo=0;
+  public saldo = 0;
 
   public bsConfig: Partial<BsDatepickerConfig>;
   fecha = new Date();
   dia = this.fecha.getDate();
-  mes = this.fecha.getMonth()==0?1:this.fecha.getMonth();
+  mes = this.fecha.getMonth() === 0 ? 1 : this.fecha.getMonth();
   anio = this.fecha.getFullYear();
   bsValueIni: Date = new Date(this.anio + '-' + this.mes + '-' + this.dia);
   bsValueFin: Date = new Date();
@@ -159,7 +159,7 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
             this.showSelected = true;
             this.showTitleEvaluacion = true;
             this.showbtnGrabarTodo = false;
-          }         
+          }
         },
         error => { }
       );
@@ -185,7 +185,6 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
               }
               // sumar el importa total del payment
               console.log(this.listpayrollPaymentAdd);
-              debugger;
               for (let i = 0; i < this.listpayrollPaymentAdd.length; i++) {
                 this.totaldeclarado += this.listpayrollPaymentAdd[i].namount;
               }
@@ -366,16 +365,15 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
         data => {
           this.ListCertificado = <any[]>data;
           for (let e = 0; e < this.ListCertificado.length; e++) {
-            for (let e = 0; e < this.listPayrollDetail.length; e++) {
-              const objeto = this.ListCertificado.find(x => x.npolicy === this.listPayrollDetail[e].npolicy);
+            for (let f = 0; f < this.listPayrollDetail.length; f++) {
+              const objeto = this.ListCertificado.find(x => x.npolicy === this.listPayrollDetail[f].npolicy);
               const index = this.ListCertificado.indexOf(objeto);
               if (index >= 0) {
-                //this.ListCertificado.splice(index); 
                 this.ListCertificadoFilter.push(objeto);
               }
             }
           }
-          let missing = this.ListCertificado.filter(item => this.ListCertificadoFilter.indexOf(item) < 0);
+          const missing = this.ListCertificado.filter(item => this.ListCertificadoFilter.indexOf(item) < 0);
           this.ListCertificado = missing;
         },
         error => {
@@ -400,23 +398,22 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
           this.listPayrollDetail = pagoPlanilla.LISTPAYROLLDETAIL;
 
           for (let e = 0; e < this.ListCertificado.length; e++) {
-            for (let e = 0; e < this.listPayrollDetail.length; e++) {
-              const objeto = this.ListCertificado.find(x => x.npolicy === this.listPayrollDetail[e].npolicy);
+            for (let f = 0; f < this.listPayrollDetail.length; f++) {
+              const objeto = this.ListCertificado.find(x => x.npolicy === this.listPayrollDetail[f].npolicy);
               const index = this.ListCertificado.indexOf(objeto);
               if (index >= 0) {
-                //this.ListCertificado.splice(index); 
                 this.ListCertificadoFilter.push(objeto);
               }
             }
           }
-          let missing = this.ListCertificado.filter(item => this.ListCertificadoFilter.indexOf(item) < 0);
+          const missing = this.ListCertificado.filter(item => this.ListCertificadoFilter.indexOf(item) < 0);
           this.ListCertificado = missing;
 
           this.cantidadSoats = this.listPayrollDetail.length;
           for (let e = 0; e < this.listPayrollDetail.length; e++) {
             this.totalplanilla += this.listPayrollDetail[e].npremium;
-          } 
-          this.calcular();                   
+          }
+          this.calcular();
         },
         error => {
           console.log(error);
@@ -481,7 +478,7 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
       objeto.NIDPAYROLLDETAIL = 1000;
       objeto.NUSERREGISTER = 9999;
       this.totalplanilla += objeto.npremium;
-      
+
       this.listPayrollDetail.push(objeto);
       const Index = this.ListCertificado.indexOf(objeto);
       this.ListCertificado.splice(Index, 1);
@@ -584,7 +581,7 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
     payrollpayment.sstate = '2';
     payrollpayment.nuserregister = 9997;
     payrollpayment.selected = false;
-  
+
     if (this.listpayrollPaymentAdd.length > 0) {
 
       const objeto = this.listpayrollPaymentAdd.find(payrollpaymentsearch =>
@@ -678,10 +675,12 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
   }
 
   grabarTodo() {
-    let valido = this.validarLiquidacion();
-    if (valido == false) return;
+    const valido = this.validarLiquidacion();
+    if (!valido) {
+      return;
+    }
 
-    this.payrollCab.NAMOUNTTOTAL =Math.round(this.totalplanilla*100)/100;
+    this.payrollCab.NAMOUNTTOTAL = Math.round(this.totalplanilla * 100) / 100;
     this.payrollCab.NIDSTATE = 1;
     this.payrollCab.NQUANTITY = this.cantidadSoats;
     this.payrollCab.NUSERREGISTER = 999;
@@ -713,7 +712,7 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
   }
 
   validarPlanilla() {
-    if (this.cantidadSoats == 0) {
+    if (this.cantidadSoats === 0) {
       this.messageinfo = 'El monto de la planilla no puede ser cero';
       this.childModalInfo.show();
       return false;
@@ -721,21 +720,19 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
     return true;
   }
   validarLiquidacion() {
-    let valido = this.validarPlanilla();
-    if (valido == false) return false;
-    // if(this.totaldeclarado==0)
-    // {
-    //   this.messageinfo = 'El monto a liquidar no puede ser cero';
-    //   this.childModalInfo.show();
-    //   return false;
-    // }
+    const valido = this.validarPlanilla();
+    if (!valido) {
+      return false;
+    }
     return true;
   }
 
   //#region Pagos
   confirmarMedioPago(tipoPago: string, flag_grabar_planilla: boolean) {
-    let valido = this.validarPlanilla();
-    if (valido == false) return;
+    const valido = this.validarPlanilla();
+    if (!valido) {
+      return;
+    }
 
     if (flag_grabar_planilla === true) {
       this.flag_grabar_planilla = flag_grabar_planilla;
@@ -900,7 +897,7 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
         this.totalplanilla, // monto
         '', // proceso Id
         this.payrollCab.NIDPAYROLL, // planilla Id
-        AppConfig.FLUJO_PLANILLA, 
+        AppConfig.FLUJO_PLANILLA,
         this.usuario.id) // usuario Id
       .subscribe(
         res => {
@@ -953,7 +950,7 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
   }
 
   finalizar() {
-    document.body.classList.remove("modal-open");
+    document.body.classList.remove('modal-open');
     this.modalResultado.hide();
     this.router.navigate(['broker/payroll']);
   }
@@ -976,9 +973,8 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
   }
 
 
-  calcular()
-  {
-    this.saldo=(Math.round(this.totalplanilla*100)/100) - (Math.round(this.totaldeclarado*100)/100);
+  calcular() {
+    this.saldo = (Math.round(this.totalplanilla * 100) / 100) - (Math.round(this.totaldeclarado * 100) / 100);
 
   }
   obtenerTipoPagoCanal() {
@@ -987,8 +983,8 @@ export class PayrollAddComponent implements OnInit, OnDestroy {
     this.payrollService.getCanalTipoPago(this.channelSalesId, this.setting_pay).subscribe(
       res => {
         if (res != null) {
-          this.bVisa = res['bvisa'] == '1' ? true : false;
-          this.bPagoEfectivo = res['bpagoefectivo'] == '1' ? true : false;
+          this.bVisa = res['bvisa'] === '1' ? true : false;
+          this.bPagoEfectivo = res['bpagoefectivo'] === '1' ? true : false;
         }
       },
       err => {

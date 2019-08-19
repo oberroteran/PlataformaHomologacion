@@ -1,4 +1,4 @@
-import { environment } from './../environments/environment';
+import { environment } from './../environments/environment.prod';
 export class AppConfig {
     public readonly apiUrl = environment.backendapi;
 
@@ -93,14 +93,6 @@ export class AppConfig {
         return '3';
     }
     //#endregion
-
-    public registerPageSecond(Page: string) {
-        localStorage.setItem('PageSecond', Page);
-    }
-
-    public registerPageInitial(Page: string) {
-        localStorage.setItem('PageInitial', Page);
-    }
 
     public static get PATH_PDF_FILES(): string {
         return environment.domainurl + '/assets/files';

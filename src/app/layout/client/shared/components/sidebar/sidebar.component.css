@@ -9,20 +9,23 @@
 .hr-mobile {
   display: none;
 }
-.container-left {
+.container-left-sidebar {
   width: 20%;
   box-shadow: 1px 0 0 0 #d5cfdf;
+  background-color: white !important;
   float: left;
   padding: 15px;
 }
 
-.container-left .row-01 {
+.container-left-sidebar .row-01-sidebar {
   width: 95%;
-  /*padding-left: 8px;
-  padding-right: 6px;*/
 }
 
-.container-left .row-01 h4 {
+.parrafo {
+  display: block;
+}
+
+.container-left-sidebar .row-01-sidebar h4 {
   padding-left: 10px;
   text-align: left;
   font-family: "Bliss Pro";
@@ -30,9 +33,10 @@
   font-size: 24px;
   color: #2b0d61;
   margin-top: 5px;
+  display: block !important;
 }
 
-.container-left .row-01 p {
+.container-left-sidebar .row-01-sidebar p {
   padding-left: 10px;
   color: #806ea0;
   font-family: "Bliss Pro";
@@ -43,19 +47,12 @@
   margin-top: 15px;
 }
 
-.container-left .row-02 {
+.container-left-sidebar .row-02-sidebar {
   width: 100%;
   text-align: left;
-  /*padding-left: 6px;
-  padding-right: 6px;*/
 }
 
-.container-left .row-02 h4 {
-  /* color: #2B0D61;
-  font-family: "Bliss Pro";
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 10px; */
+.container-left-sidebar .row-02-sidebar h4 {
   padding-left: 10px;
   text-align: left;
   font-family: "Bliss Pro";
@@ -65,14 +62,14 @@
   margin-top: 5px;
 }
 
-.container-left .row-02 ul {
+.container-left-sidebar .row-02-sidebar ul {
   list-style: none;
   padding: 0px;
   margin: 10px;
   margin-top: 24px;
 }
 
-.container-left .row-02 li {
+.container-left-sidebar .row-02-sidebar li {
   padding-left: 1px;
   color: #806ea0;
   font-family: "Bliss Pro";
@@ -85,24 +82,24 @@
   line-height: 1;
 }
 
-.container-left .row-02 li div.li-01,
-.container-left .row-02 li div.li-02 {
+.container-left-sidebar .row-02-sidebar li div.li-01,
+.container-left-sidebar .row-02-sidebar li div.li-02 {
   display: table-cell;
 }
 
-.container-left .row-02 li div.li-01 {
+.container-left-sidebar .row-02-sidebar li div.li-01 {
   background: url("assets/icons/Check.svg") no-repeat;
   width: 22px;
   height: 22px;
 }
 
-.container-left .row-02 li div.li-02 {
+.container-left-sidebar .row-02-sidebar li div.li-02 {
   font-size: 14px;
   padding-top: 6px;
   padding-left: 10px;
 }
 
-.container-left .row-02 .beneficios {
+.container-left-sidebar .row-02-sidebar .beneficios {
   width: 246px;
   min-height: 52px;
   margin: auto;
@@ -111,7 +108,7 @@
   margin-bottom: 29px;
 }
 
-.container-left .row-02 .beneficios .col01 {
+.container-left-sidebar .row-02-sidebar .beneficios .col01 {
   width: 18%;
   height: 100%;
   float: left;
@@ -119,7 +116,7 @@
   padding-left: 10px;
 }
 
-.container-left .row-02 .beneficios span {
+.container-left-sidebar .row-02-sidebar .beneficios span {
   width: 82%;
   height: 100%;
   float: left;
@@ -132,17 +129,17 @@
   line-height: 16px;
 }
 
-.container-left hr {
+.container-left-sidebar hr {
   width: 95%;
   border: 1px solid #d5cfdf;
 }
 
-.container-left .row-03 {
+.container-left-sidebar .row-03 {
   width: 100%;
   text-align: center;
 }
 
-.container-left .row-03 h4 {
+.container-left-sidebar .row-03 h4 {
   color: #2b0d61;
   font-family: "Bliss Pro";
   font-size: 20px;
@@ -151,7 +148,7 @@
   margin: 18px;
 }
 
-.container-left .row-03 h3 {
+.container-left-sidebar .row-03 h3 {
   padding-left: 10px;
   color: #2b0d61;
   font-family: "Bliss Pro";
@@ -162,7 +159,7 @@
   margin: 18px;
 }
 
-.container-left .row-03 .btn-white {
+.container-left-sidebar .row-03 .btn-white {
   border: 1px solid #ed6e00;
   border-radius: 6px;
   background-color: #ffffff;

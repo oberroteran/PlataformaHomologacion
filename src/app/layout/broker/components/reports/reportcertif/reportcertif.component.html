@@ -165,10 +165,12 @@
                 <td>{{ result.npremium }}</td>
                 <td>{{ result.ndocuments }}</td>
                 <td>
-                  {{ this.datePipe.transform(result.dstartdate, "dd/MM/yyyy") }}
+                  {{
+                    this.oDatePipe.transform(result.dstartdate, "dd/MM/yyyy")
+                  }}
                 </td>
                 <td>
-                  {{ this.datePipe.transform(result.dexpirdat, "dd/MM/yyyy") }}
+                  {{ this.oDatePipe.transform(result.dexpirdat, "dd/MM/yyyy") }}
                 </td>
                 <td>{{ result.snamecomplete }}</td>
                 <td>{{ result.sregist }}</td>

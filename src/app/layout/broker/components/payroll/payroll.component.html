@@ -154,14 +154,14 @@
                     />
                   </td>
                   <td class="data-table-tr-td">{{ result.splanilla }}</td>
-                  <td class="data-table-tr-td">{{ result.nquantity }}</td>
+                  <td class="data-table-tr-td">{{ result.NQUANTITY }}</td>
                   <td class="data-table-tr-td">{{ result.sregister }}</td>
                   <td class="data-table-tr-td">{{ result.stype }}</td>
                   <td class="data-table-tr-td">S/ {{ result.namounttotal }}</td>
                   <td class="data-table-tr-td">{{ result.sdescription }}</td>
                   <td class="data-table-tr-td">
                     <a
-                      *ngIf="result.nidstate == '1' || result.nidstate == '3'"
+                      *ngIf="result.nidstate === 1 || result.nidstate === 3"
                       (click)="openModalConfirmacion(result.splanilla)"
                     >
                       <img

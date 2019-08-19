@@ -33,12 +33,9 @@ export class NavMenuComponent implements OnInit {
   lNombre = '';
   lApellido = '';
   Iniciales = '';
-
-  // Subscription for sidebar
   showSidebar = false;
 
   constructor(
-    // private http: HttpClient,
     private router: Router,
     private globalEventsManager: GlobalEventsManager,
     private authenticationService: AuthenticationService,
@@ -63,9 +60,6 @@ export class NavMenuComponent implements OnInit {
 
     this.featureList = this.getFeatureListByLoggedInUser();
     this.showNavBar = true;
-
-    this.config.registerPageInitial('0');
-    this.config.registerPageSecond('1');
   }
 
   ngOnInit(): void {

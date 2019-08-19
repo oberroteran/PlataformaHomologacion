@@ -7,8 +7,9 @@ export const environment = {
     visabuttonservice: 'https://static-content.vnforapps.com/v1/js/checkout.js',
     versioncheckurl: 'https://soatdigital.protectasecurity.pe/version.json',
     //   backendapi: 'https://soatservicios.protectasecurity.pe/RestDigital/api',
-    backendapi: 'http://190.216.170.173/RestDESAMG/api',
-    gestorapi: 'http://10.10.1.51/WSGClientesDesarrollo/Api',
-    kunturapi: 'http://10.10.1.56/WSPlataforma/Api',
+    backendapi: 'http://190.216.170.173/RestPRO/api',
+    // backendapi: 'http://localhost:2085/api',
+    kunturapi: 'http://190.216.170.173/WSPlataformaPRO/Api',
+    gestorapi: 'https://soatservicios.protectasecurity.pe/WSGestorCliente/Api',
     domainurl: 'https://soatdigital.protectasecurity.pe',
 };

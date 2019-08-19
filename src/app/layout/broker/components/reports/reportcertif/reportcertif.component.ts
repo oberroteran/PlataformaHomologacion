@@ -43,13 +43,14 @@ export class ReportsalescertificateComponent implements OnInit {
   filter: any = {};
   mensaje: string;
   ListReportSalesCV: any[];
-  ListReportSalesCertificateExport: any[]; 
+  ListReportSalesCertificateExport: any[];
   reportSalesCertificate: ReportSalesCertificate; // (0, 0, 0, 0, 0, 0, 0, 0, '01/01/2017', '01/01/2017', 0, '', '', 0, 0);
   canal = '';
   indpuntoVenta = '';
+  oDatePipe: DatePipe;
 
   constructor(private reportsalescertificateService: ReportSalesCertificateService, private excelService: ExcelService,
-              public utilityService: UtilityService, private validatorService: ValidatorService, private datePipe: DatePipe,) {
+    public utilityService: UtilityService, private validatorService: ValidatorService, private datePipe: DatePipe) {
     this.filter.FPrimaIni = '';
     this.filter.FPrimaFin = '';
     this.filter.FDateIni = '2017-01-01';
@@ -87,8 +88,8 @@ export class ReportsalescertificateComponent implements OnInit {
     this.resultSalesModeReport = idSalesMode;
   }
 
-  onVotedParentFlowType(idFlowType: string){
-   this.resultCertificateReport=idFlowType;
+  onVotedParentFlowType(idFlowType: string) {
+    this.resultCertificateReport = idFlowType;
   }
   onVotedParentStateSales(idStateSales: string) {
     this.resultStateSalesReport = idStateSales;
@@ -122,49 +123,46 @@ export class ReportsalescertificateComponent implements OnInit {
       this.resultError = false;
       return false;
     } else {
-        this.resultError = true;
-        return true;
+      this.resultError = true;
+      return true;
     }
   }
 
   loadReporteCF(): void {
     this.paginacion.CurrentPage = this.currentPage;
-    this.reportSalesCertificate = new ReportSalesCertificate (this.resultDepReport, this.resultProReport, this.resultDisReport, 
-                                            this.resultStateSalesReport, this.resultSalesModeReport,
-                                            this.utilityService.getValueDefault(this.filter.FPrimaIni),
-                                            this.utilityService.getValueDefault(this.filter.FPrimaFin), this.resultUsoReport,
-                                            this.utilityService.getFormatDate(this.filter.FDateIni),
-                                            this.utilityService.getFormatDate(this.filter.FDateFin),
-                                            this.utilityService.getValueDefault(this.filter.FPoliza),
-                                             this.resultChannelSalesReport,
-                                            this.resultChannelPointReport,
-                                            this.resultCertificateReport,
-                                            this.paginacion.CurrentPage, this.paginacion.ItemsPerPage, this.indpuntoVenta);
-    //console.log(this.reportSalesCV);
+    this.reportSalesCertificate = new ReportSalesCertificate(this.resultDepReport, this.resultProReport, this.resultDisReport,
+      this.resultStateSalesReport, this.resultSalesModeReport,
+      this.utilityService.getValueDefault(this.filter.FPrimaIni),
+      this.utilityService.getValueDefault(this.filter.FPrimaFin), this.resultUsoReport,
+      this.utilityService.getFormatDate(this.filter.FDateIni),
+      this.utilityService.getFormatDate(this.filter.FDateFin),
+      this.utilityService.getValueDefault(this.filter.FPoliza),
+      this.resultChannelSalesReport,
+      this.resultChannelPointReport,
+      this.resultCertificateReport,
+      this.paginacion.CurrentPage, this.paginacion.ItemsPerPage, this.indpuntoVenta);
     this.reportsalescertificateService.getPostReportSalesCertificate(this.reportSalesCertificate)
-    .subscribe(
-      data => {
-        //console.log('datarportcertificate', data);
-        this.ListReportSalesCV = <any[]>data;        
-        this.msgErrorLista = '';
-        if (this.ListReportSalesCV.length > 0) {
-          this.fExistRegistro = true;
-          this.totalItems = data[0].nrecorD_COUNT;
-        } else {
+      .subscribe(
+        data => {
+          this.ListReportSalesCV = <any[]>data;
+          this.msgErrorLista = '';
+          if (this.ListReportSalesCV.length > 0) {
+            this.fExistRegistro = true;
+            this.totalItems = data[0].nrecorD_COUNT;
+          } else {
+            this.fExistRegistro = false;
+            this.msgErrorLista = 'No se encontraron Registros..';
+          }
+        },
+        error => {
+          console.log('error:' + error);
           this.fExistRegistro = false;
-          this.msgErrorLista = 'No se encontraron Registros..';
+          this.msgErrorLista = 'Error de Sistemas. Comunicarse con Soporte!';
         }
-      },
-      error => {
-        console.log('error:' + error);
-        this.fExistRegistro = false;
-        this.msgErrorLista = 'Error de Sistemas. Comunicarse con Soporte!';
-      }
-    );
+      );
   }
 
   setPage(pageNo: number): void {
-    // tslint:disable-next-line:no-debugger
     this.currentPage = pageNo;
   }
   pageChanged(event: any): void {
@@ -174,32 +172,32 @@ export class ReportsalescertificateComponent implements OnInit {
   }
 
   EventDownload(event) {
-    this.reportSalesCertificate = new ReportSalesCertificate (this.resultDepReport, this.resultProReport, this.resultDisReport, 
-                                            this.resultStateSalesReport, this.resultSalesModeReport,
-                                            this.utilityService.getValueDefault(this.filter.FPrimaIni),
-                                            this.utilityService.getValueDefault(this.filter.FPrimaFin), this.resultUsoReport,
-                                            this.utilityService.getFormatDate(this.filter.FDateIni),
-                                            this.utilityService.getFormatDate(this.filter.FDateFin),
-                                            this.utilityService.getValueDefault(this.filter.FPoliza),
-                                            this.resultChannelSalesReport,
-                                            this.resultChannelPointReport,
-                                            this.resultCertificateReport,
-                                            this.paginacion.CurrentPage, this.paginacion.ItemsPerPage, this.indpuntoVenta);
-    this.reportSalesCertificate.NPAGE = "0";
-    this.reportSalesCertificate.NRECORD_PAGE = "0";
+    this.reportSalesCertificate = new ReportSalesCertificate(this.resultDepReport, this.resultProReport, this.resultDisReport,
+      this.resultStateSalesReport, this.resultSalesModeReport,
+      this.utilityService.getValueDefault(this.filter.FPrimaIni),
+      this.utilityService.getValueDefault(this.filter.FPrimaFin), this.resultUsoReport,
+      this.utilityService.getFormatDate(this.filter.FDateIni),
+      this.utilityService.getFormatDate(this.filter.FDateFin),
+      this.utilityService.getValueDefault(this.filter.FPoliza),
+      this.resultChannelSalesReport,
+      this.resultChannelPointReport,
+      this.resultCertificateReport,
+      this.paginacion.CurrentPage, this.paginacion.ItemsPerPage, this.indpuntoVenta);
+    this.reportSalesCertificate.NPAGE = '0';
+    this.reportSalesCertificate.NRECORD_PAGE = '0';
 
     this.reportsalescertificateService.getPostReportSalesCertificate(this.reportSalesCertificate)
-    .subscribe(
-    data => {                
-              this.ListReportSalesCertificateExport = <any[]>data;
-                if (this.ListReportSalesCertificateExport.length > 0) {          
-                  this.excelService.exportReportCertificate(this.ListReportSalesCertificateExport, 'ReporteCertificados');
-                } 
-              },
-    err => {
-    console.log(err);
-    }
-    );  
+      .subscribe(
+        data => {
+          this.ListReportSalesCertificateExport = <any[]>data;
+          if (this.ListReportSalesCertificateExport.length > 0) {
+            this.excelService.exportReportCertificate(this.ListReportSalesCertificateExport, 'ReporteCertificados');
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
   }
 
 }

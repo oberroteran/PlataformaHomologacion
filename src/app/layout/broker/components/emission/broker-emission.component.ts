@@ -1,4 +1,4 @@
-import { ConfirmService } from './../../../../shared/components/confirm/confirm.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AppConfig } from './../../../../app.config';
 import { FormaDePago, Turno } from '../../models/delivery/delivery';
 import { ClaseModel } from './../../../client/shared/models/clase.model';
@@ -179,7 +179,7 @@ export class BrokerEmissionComponent implements OnInit {
     public utilityService: UtilityService,
     public cd: ChangeDetectorRef,
     private visaService: VisaService,
-    private confirmService: ConfirmService,
+    private spinner: NgxSpinnerService,
     private deliveryService: DeliveryService) {
   }
 
@@ -264,7 +264,6 @@ export class BrokerEmissionComponent implements OnInit {
     if (!isNullOrUndefined(this.certificadoSession)) {
       this.Certificado = this.certificadoSession;
       this.initFormularioPaso04();
-      // this.initFormularioPaso05();
     }
     if (this.Certificado.P_DSTARTDATE !== undefined && this.Certificado.P_DSTARTDATE !== null) {
       this.ValidaFecha(this.Certificado.P_DSTARTDATE);
@@ -308,7 +307,8 @@ export class BrokerEmissionComponent implements OnInit {
     if (this.placa.length < 6) {
       return;
     }
-
+    this.spinner.show();
+    this.clases = [];
     this.bValidar = true;
     this.bLoading = true;
     this.bValido = false;
@@ -332,6 +332,8 @@ export class BrokerEmissionComponent implements OnInit {
             this.auto = data;
           }
           this.auto.p_STYPE_REGIST = this.sTipoVehiculo;
+          this.auto.p_NIDCLASE = this.auto.p_NIDCLASE === null ? '0' : this.auto.p_NIDCLASE;
+          this.auto.p_NIDUSO = this.auto.p_NIDUSO === null ? '1' : this.auto.p_NIDUSO;
           this.auto.p_SREGIST = this.placa.toString().toUpperCase();
           if (!isNullOrUndefined(this.auto.p_SNUMSERIE)) {
             this.auto.p_SNUMSERIE = this.auto.p_SNUMSERIE.trim();
@@ -347,23 +349,14 @@ export class BrokerEmissionComponent implements OnInit {
           this.bValidar = false;
         }
 
-        /* this.codigo = data['codigo'];
-        this.mensaje = data['mensaje'];
-        this.bLoading = false;
-        this.bValidado = true;
-        this.auto.p_SREGIST = this.placa;
-        if (this.codigo === '1') {
-          this.bValido = true;
-          this.validaCampaignPlaca();
-          this.obtenerDatosAutoPorPlaca(this.placa);
-        } else {
-          this.bValidar = false;
-        }
-        this.getListTipoDocumento();
-        this.cd.detectChanges(); */
+        setTimeout(() => {
+          this.spinner.hide();
+        }, 500);
+
       },
       error => {
         console.log(error);
+        this.spinner.hide();
         this.bValidado = true;
         this.bValidar = false;
         this.bLoading = false;
@@ -477,19 +470,6 @@ export class BrokerEmissionComponent implements OnInit {
       if (this.auto.p_NVEHMODEL !== '') {
         this.vehiculoForm.controls.modelo.setValue(this.auto.p_SNAME_VEHMODEL);
         this.getClases();
-
-        /*  if (this.auto.p_NIDCLASE !== '' && Number(this.auto.p_NIDCLASE) !== 0) {
-           this.vehiculoForm.controls.clasecodigo.setValue(this.auto.p_NIDCLASE);
-
-           if (this.auto.p_NVEHMAINMODEL !== '') {
-             this.vehiculoForm.controls.modeloprincipal.setValue(this.auto.p_NVEHMAINMODEL.toString());
-           }
-
-           if (this.auto.p_SNAMECLASE !== '') {
-             this.vehiculoForm.controls.clasedescripcion.setValue(this.auto.p_SNAMECLASE);
-           }
-         } */
-
       }
     }
 
@@ -511,7 +491,7 @@ export class BrokerEmissionComponent implements OnInit {
     const filter = new Modelo();
     filter.nvehbrand = this.auto.p_NVEHBRAND;
     filter.sdescript = this.auto.p_SNAME_VEHMODEL;
-    const mclaseSession = this.auto.p_NIDCLASE === '' || isNullOrUndefined(this.auto.p_NIDCLASE) ? 0 : this.auto.p_NIDCLASE;
+    const mclaseSession = this.auto.p_NIDCLASE === '' || isNullOrUndefined(this.auto.p_NIDCLASE) ? '0' : this.auto.p_NIDCLASE;
     this.vehiculoService.getClases(filter)
       .subscribe(
         res => {
@@ -525,7 +505,7 @@ export class BrokerEmissionComponent implements OnInit {
             }
           } else {
             this.vehiculoForm.controls.clasecodigo.setValue('0');
-            if (mclaseSession !== '' && mclaseSession !== 0) {
+            if (mclaseSession !== '' && mclaseSession !== '0') {
               this.setClase(Number(mclaseSession));
             }
           }
@@ -573,8 +553,8 @@ export class BrokerEmissionComponent implements OnInit {
 
   getMarcas() {
     const filter = new Marca();
-    // this.auto.p_NIDCLASE = '0';
-    this.vehiculoForm.controls.clasecodigo.setValue('');
+    this.auto.p_NIDCLASE = '0';
+    this.vehiculoForm.controls.clasecodigo.setValue('0');
     this.vehiculoService.getMarcas(filter)
       .subscribe(
         res => {
@@ -822,12 +802,6 @@ export class BrokerEmissionComponent implements OnInit {
       .subscribe(
         res => {
           this.departamentos = <Province[]>res;
-          /* if (this.Cliente.p_NPROVINCE !== undefined) {
-            this.listarProvinciasPorDepartamento(this.Cliente.p_NPROVINCE, null, null);
-          } */
-          /*  if (this.Certificado.P_NPROVINCEDELIVERY !== undefined) {
-             this.listarProvinciasDelivery(this.Certificado.P_NPROVINCEDELIVERY, null, null);
-           } */
         },
         err => {
           console.log(err);
@@ -1309,7 +1283,7 @@ export class BrokerEmissionComponent implements OnInit {
       }
     }
     this.lstTarifarios = [];
-    this.Certificado.P_IDTARIFARIO = '';
+    this.Certificado.P_IDTARIFARIO = undefined;
     const filter = new PrimaFilter();
     filter.TarifaId = mTarifaId;
     filter.Canal = this.canal;

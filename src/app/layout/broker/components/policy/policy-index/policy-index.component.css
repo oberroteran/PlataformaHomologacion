@@ -1,10 +1,19 @@
-@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
 .container {
     float: left;
     width: 75%;
     padding: 10px 30px;
 }
-
+.loadingScreen {
+    opacity: 0.7;
+    transition: opacity .8s ease-in-out;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #000;
+    z-index: 10000000000;
+}
 .underline {
     border-bottom-width: 1px;
     border-bottom-style: solid;

@@ -62,8 +62,9 @@ export class CommissLotComponent implements OnInit {
   strPrecio: string;
   npage = 1;
   paginacion: any = {};
-  // rotate = true;
-  // maxSize = 5;
+  rotate = true;
+  maxSize = 5;
+  public currentPage = 0;
   public itemsPerPage = 5;
   public totalItems = 0;
   public tipoCanal = 0;
@@ -98,7 +99,7 @@ export class CommissLotComponent implements OnInit {
   commlotFilter = new CommissionLotFilter('', '', 0, 0, 0, '', '', 0, 0, 0, '');
   public result: any = {};
   public resultvalidate: any = {};
-  @ViewChild("myButton", { static: false }) myButton: ElementRef;
+  @ViewChild('myButton', { static: false }) myButton: ElementRef;
   node: string;
   // Envio de planilla
   commissionLotID: number;
@@ -106,10 +107,10 @@ export class CommissLotComponent implements OnInit {
   strFechaEliminar: string;
   nLote: string;
   canalHist: number;
-  flagAlerta: boolean = false;
+  flagAlerta = false;
   constructor(
     private commissionlotService: CommissionLotService,
-    //private service: StateService,
+    // private service: StateService,
     private router: Router,
     private datePipe: DatePipe,
     public utilityService: UtilityService,
@@ -288,14 +289,14 @@ export class CommissLotComponent implements OnInit {
       error => {
         console.log(error);
       }
-    )
+    );
   }
 
   validateEnviar() {
     this.flagAlerta = false;
-    if (this.nidStateApprob == 0 || this.nidStateApprob == undefined) {
+    if (this.nidStateApprob === 0 || this.nidStateApprob === undefined) {
       this.flagAlerta = true;
-      this.mensajes_validacion = ["!Debe seleccionar un estado!", ""];
+      this.mensajes_validacion = ['!Debe seleccionar un estado!', ''];
       this.bopacitysave = false;
       return false;
     }
@@ -315,17 +316,17 @@ export class CommissLotComponent implements OnInit {
       this.commissionlotService.updCommissionLotState(obj).subscribe(
         data => {
           this.resultvalidate = data;
-          if (this.resultvalidate.nidcommlot == 0) {
+          if (this.resultvalidate.nidcommlot === 0) {
             this.flagAlerta = true;
             this.mensajes_validacion = this.resultvalidate.sobservation.split('|');
             this.bopacitysave = false;
             this.spinner.hide();
             return false;
           }
-          this.InputsFilter.P_NSTATE = this.ListStateID; //alex gavidia
+          this.InputsFilter.P_NSTATE = this.ListStateID; // alex gavidia
           this.bopacitysave = false;
           this.childModalConfirmarEnvio.hide();
-          this.messageinfo = "Se envió el lote Nro: " + obj.NIDCOMMLOT + ", para evaluación.";
+          this.messageinfo = 'Se envió el lote Nro: ' + obj.NIDCOMMLOT + ', para evaluación.';
           this.childModal.show();
           this.onLoadCommissionLot();
           this.spinner.hide();
@@ -334,7 +335,7 @@ export class CommissLotComponent implements OnInit {
           console.log(error);
           this.bopacitysave = false;
         }
-      )
+      );
     }
   }
 
@@ -346,9 +347,9 @@ export class CommissLotComponent implements OnInit {
       if (element.selected === true) {
         countIdCommissionLot++;
         if (!(element.nidstate === 1 || element.nidstate === 3)) {
-          arrayDiferentesPendiente += parseInt(element.sidcomlot).toString() + ',';
+          arrayDiferentesPendiente += Number(element.sidcomlot).toString() + ',';
         } else {
-          this.arrayIdCommissionLot += parseInt(element.sidcomlot).toString() + ',';
+          this.arrayIdCommissionLot += Number(element.sidcomlot).toString() + ',';
         }
       }
     });
@@ -416,7 +417,7 @@ export class CommissLotComponent implements OnInit {
       data => {
         // console.log(data);
         this.lstStateCommission = <CommissionLotState[]>data;
-        //this.lstStateChannel = <CommissionLotState[]>data;
+        // this.lstStateChannel = <CommissionLotState[]>data;
         this.lstStateCommission.forEach(element => {
           this.ListStateID += element.nidstate + ',';
         });
@@ -431,7 +432,7 @@ export class CommissLotComponent implements OnInit {
 
   onGetLstStateApp(id, idstate) {
 
-    const commlotfilter = new CommissionLotState(0, '', this.tipoCanal, idstate)
+    const commlotfilter = new CommissionLotState(0, '', this.tipoCanal, idstate);
 
     this.commissionlotService.getCommissionLotStateApprob(commlotfilter).subscribe(
       data => {
@@ -460,11 +461,11 @@ export class CommissLotComponent implements OnInit {
       data => {
         // console.log(data);
         this.lstBranch = <TableType[]>data;
-        //this.lstStateChannel = <CommissionLotState[]>data;
+        // this.lstStateChannel = <CommissionLotState[]>data;
         /* this.lstBranch.forEach(element => {
            this.ListBranchID += element.NID + ',';
          });*/
-        //this.ListBranchID = this.ListBranchID.slice(0, -1);
+        // this.ListBranchID = this.ListBranchID.slice(0, -1);
         this.InputsFilter.P_NBRANCH = '0';
         this.onEventSearch();
       },
@@ -554,7 +555,7 @@ export class CommissLotComponent implements OnInit {
   }
 
   confirmEnviar() {
-    //this.router.navigate(['broker/commissionlot-add', 'send', this.commissionLotID, this.stateID]);
+    // this.router.navigate(['broker/commissionlot-add', 'send', this.commissionLotID, this.stateID]);
     this.onEventSearch();
     this.childModalConfirmarEnvio.hide();
   }
@@ -566,7 +567,7 @@ export class CommissLotComponent implements OnInit {
   onImprimir(id) {
     this.commissionlotService.generarLotePdf(id).subscribe(
       res => {
-        let obj = <DownloadDto>(res);
+        const obj = <DownloadDto>(res);
 
         if (obj.success === true) {
           const _iFrame = <HTMLIFrameElement>document.getElementById('ifrmPdf');
@@ -575,7 +576,7 @@ export class CommissLotComponent implements OnInit {
 
           setTimeout(() => { _iFrame.src = `${AppConfig.URL_API}/commissionlot/DownloadFileByTokenId/${obj.id}`; }, 250);
         } else {
-          //Mensaje de error
+          // Mensaje de error
         }
       },
       err => {

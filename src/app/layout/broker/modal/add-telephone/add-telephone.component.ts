@@ -41,6 +41,9 @@ export class AddTelephoneComponent implements OnInit {
     this.getPhoneTypeList();
     this.getCityCodeList();
 
+    this.InputsTelephone.P_SORIGEN = "SCTR";
+    this.InputsTelephone.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+
     if (this.itemTelefono != null) {
       this.txtAccion = "Editar Telefono";
       this.InputsTelephone.P_DESAREA = this.itemTelefono.P_DESAREA;
@@ -253,8 +256,8 @@ export class AddTelephoneComponent implements OnInit {
   }
 
   ValidarTelefono(itemTelefono, row) {
+    console.log(this.InputsTelephone)
     let mensaje = "";
-    console.log(this.maxlength);
     if (this.InputsTelephone.P_NPHONE_TYPE == 0) {
       this.VAL_PHONE[0] = "0"
       mensaje += "El tipo de télefono es requerido <br>";

@@ -1,10 +1,8 @@
-export class StateChannelType{
-    constructor(   
-        public  nidstate:number,
-        public  SDESCRIPTION:string,
-        public  NIDNCHANNELTYPE :number,
-        public  NIDSTATEANT :number
-    ) { }
-
-  
+export class StateChannelType {
+  constructor(
+    public nidstate: number,
+    public sdescription: string,
+    public nidnchanneltype: number,
+    public nidstateant: number
+  ) { }
 }

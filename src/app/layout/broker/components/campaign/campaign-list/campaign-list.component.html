@@ -156,10 +156,14 @@
                 <td class="data-table-tr-td">{{ result.sdescript }}</td>
                 <td class="data-table-tr-td">{{ result.schanneldes }}</td>
                 <td class="data-table-tr-td">
-                  {{ this.datePipe.transform(result.dstartdate, "dd/MM/yyyy") }}
+                  {{
+                    this.oDatePipe.transform(result.dstartdate, "dd/MM/yyyy")
+                  }}
                 </td>
                 <td class="data-table-tr-td">
-                  {{ this.datePipe.transform(result.dexpirdate, "dd/MM/yyyy") }}
+                  {{
+                    this.oDatePipe.transform(result.dexpirdate, "dd/MM/yyyy")
+                  }}
                 </td>
                 <td class="data-table-tr-td">{{ result.sstatedes }}</td>
                 <td class="data-table-tr-td">

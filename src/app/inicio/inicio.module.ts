@@ -1,3 +1,4 @@
+import { SessionStorageService } from './../shared/services/storage/storage-service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InicioComponent } from './inicio.component';
@@ -8,10 +9,13 @@ import { InicioRoutingModule } from './inicio-routing.module';
   imports: [
     CommonModule,
     InicioRoutingModule,
-    SharedComponentsModule
+    SharedComponentsModule,
   ],
   declarations: [
     InicioComponent
+  ],
+  providers: [
+    SessionStorageService
   ]
 })
 export class InicioModule { }

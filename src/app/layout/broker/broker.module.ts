@@ -1,3 +1,4 @@
+import { SessionStorageService } from './../../shared/services/storage/storage-service';
 import { BrokerEmissionComponent } from './components/emission/broker-emission.component';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -175,7 +176,6 @@ import { PrepayrollService } from './services/prepayroll/prepayroll.service';
 import { SidebarService } from '../../shared/services/sidebar/sidebar.service';
 import { CommissionLotService } from './services/commisslot/comissionlot.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { CampaignListComponent } from './components/campaign/campaign-list/campaign-list.component';
 import { CampaignAddComponent } from './components/campaign/campaign-add/campaign-add.component';
 import { CampaignService } from './services/campaign/campaign.service';
@@ -199,7 +199,6 @@ import { DeliveryService } from './services/delivery/delivery.service';
         ModalModules,
         RecaptchaModule.forRoot(),
         NgbModule,
-        NgxSpinnerModule,
         ngfModule, // Kuntur 20190812
         NgSelectModule // Kuntur 20190812
     ],
@@ -313,8 +312,8 @@ import { DeliveryService } from './services/delivery/delivery.service';
         ProcessViewerComponent, // Kuntur 20190812
     ],
     entryComponents: [
-        ResVaucherComponent, // Kuntur 20190812
-        PayrollResultadoVisaComponent, // Kuntur 20190812
+        ResVaucherComponent,
+        PayrollResultadoVisaComponent,
         FilePickerComponent, // Kuntur 20190812
         CreditQualificationRecordComponent, // Kuntur 20190812
         ContractorViewComponent, // Kuntur 20190812
@@ -395,7 +394,8 @@ import { DeliveryService } from './services/delivery/delivery.service';
         CommissionLotService,
         CampaignService,
         FileUploadService,
-        DeliveryService
+    DeliveryService,
+    SessionStorageService
     ]
 })
 export class BrokerModule { }

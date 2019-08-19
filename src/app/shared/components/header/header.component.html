@@ -21,7 +21,7 @@
         </a>
       </div>
 
-      <div class="menu-top">
+      <div class="menu-top oculto">
         <div
           class="collapse navbar-collapse my-collapse"
           [class.show]="show"
@@ -39,7 +39,6 @@
               class="nav-item nav-link"
               href="https://protectasecurity.pe/landing-productos-rentas/"
               target="_new"
-              (click)="registerTracking('PE_Protecta_Soat_Rentas')"
             >
               <span>Rentas</span>
             </a>
@@ -47,7 +46,6 @@
               class="nav-item nav-link"
               href="https://protectasecurity.pe/landing-productos-seguro-empresas/"
               target="_new"
-              (click)="registerTracking('PE_Protecta_Soat_Empresas')"
             >
               <span>Seguro empresas</span>
             </a>
@@ -55,7 +53,6 @@
               class="nav-item nav-link"
               href="https://protectasecurity.pe/landing-productos-microseguros/"
               target="_new"
-              (click)="registerTracking('PE_Protecta_Soat_Microseguros')"
             >
               <span>Microseguros</span>
             </a>
@@ -63,7 +60,6 @@
               class="nav-item nav-link"
               href="https://protectasecurity.pe/landing-productos-banca-seguros/"
               target="_new"
-              (click)="registerTracking('PE_Protecta_Soat_Banca')"
             >
               <span>Banca seguros</span>
             </a>
@@ -71,7 +67,7 @@
         </div>
       </div>
       <div
-        *ngIf="imagePath"
+        *ngIf="showLogo"
         class="navbar-nav-Canal"
         [ngClass]="{ 'navbar-brand-push': haveUser }"
       >

@@ -10,7 +10,7 @@
 <app-sidebar [visibleMobile]="false"></app-sidebar>
 <div class="container-main">
   <div class="form-group row">
-    <div class="col-lg-7">
+    <div class="col-md-7">
       <app-title-step
         actual="1"
         titulo="Ingresa tu placa"
@@ -72,16 +72,15 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-5">
+    <div class="col-md-5">
       <div class="tipo-vehiculo">
-        <div class="imagenes">
+        <div>
           <img
-            *ngIf="bTipoVehiculo && bPlacaOk"
             src="assets/icons/soat_big_car.svg"
             class="img-fluid"
             alt="auto"
           />
-          <img
+          <!--  <img
             *ngIf="bTipoVehiculo && !bPlacaOk"
             src="assets/icons/soat_bigcar_tooltip.svg"
             class="img-fluid"
@@ -92,7 +91,7 @@
             src="assets/icons/soat_bigmoto.svg"
             class="img-fluid"
             alt="moto"
-          />
+          /> -->
         </div>
         <div class="botones">
           <button

@@ -38,6 +38,9 @@ export class AddContactComponent implements OnInit {
       swal.fire("Información", "Debe ingresar Tipo documento y Nro de documento del contratante.", "warning");
     }
 
+    this.InputsContact.P_SORIGEN = "SCTR";
+    this.InputsContact.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+
     if (this.itemContacto != null) {
       this.txtAccion = "Editar Contacto";
       this.InputsContact.P_NROW = this.itemContacto.P_NROW;
@@ -192,12 +195,12 @@ export class AddContactComponent implements OnInit {
   }
 
   EventSave() {
-    this.InputsContact.P_SNOMBRES = this.InputsContact.P_SNOMBRES.toUpperCase()
-    this.InputsContact.P_SAPEPAT = this.InputsContact.P_SAPEPAT.toUpperCase()
-    this.InputsContact.P_SAPEMAT = this.InputsContact.P_SAPEMAT.toUpperCase()
-    this.InputsContact.P_SIDDOC = this.InputsContact.P_SIDDOC.toUpperCase()
-    this.InputsContact.P_SE_MAIL = this.InputsContact.P_SE_MAIL.toUpperCase()
-    
+    this.InputsContact.P_SNOMBRES = this.InputsContact.P_SNOMBRES == null ? "" : this.InputsContact.P_SNOMBRES.toUpperCase()
+    this.InputsContact.P_SAPEPAT = this.InputsContact.P_SAPEPAT == null ? "" : this.InputsContact.P_SAPEPAT.toUpperCase()
+    this.InputsContact.P_SAPEMAT = this.InputsContact.P_SAPEMAT == null ? "" : this.InputsContact.P_SAPEMAT.toUpperCase()
+    this.InputsContact.P_SIDDOC = this.InputsContact.P_SIDDOC == null ? "" : this.InputsContact.P_SIDDOC.toUpperCase()
+    this.InputsContact.P_SE_MAIL = this.InputsContact.P_SE_MAIL == null ? "" : this.InputsContact.P_SE_MAIL.toUpperCase()
+
     if (this.itemContacto == null) {
       let existe = 0;
       let item = this.InputsContact;

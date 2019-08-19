@@ -10,15 +10,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  @Input()
-  visibleMobile: boolean = false;
-
-  //private visibleBody1: boolean = false;
-  visibleBody1: boolean = false;
-  //private visibleBody2: boolean = false;
-  visibleBody2: boolean = false;
-  bDown1 : boolean =false;
-  bDown2 : boolean =false;
+  @Input() visibleMobile = false;
+  visibleBody1 = false;
+  visibleBody2 = false;
+  bDown1 = false;
+  bDown2 = false;
   constructor() { }
 
   ngOnInit() {
@@ -26,11 +22,11 @@ export class SidebarComponent implements OnInit {
 
   toggleVisibleBody1() {
     this.visibleBody1 = !this.visibleBody1;
-    this.bDown1= !this.bDown1;
+    this.bDown1 = !this.bDown1;
   }
 
   toggleVisibleBody2() {
     this.visibleBody2 = !this.visibleBody2;
-    this.bDown2= !this.bDown2;
+    this.bDown2 = !this.bDown2;
   }
 }
