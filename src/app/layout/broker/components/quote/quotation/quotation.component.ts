@@ -1393,7 +1393,7 @@ export class QuotationComponent implements OnInit {
             //Agregando los brokerId y middlemanId | Lista de comercializadores
             if (this.brokerList.length > 0) {
                 this.brokerList.forEach(broker => {
-                    if (broker.NTYPECHANNEL == 6 ||  broker.NTYPECHANNEL == 8) {
+                    if (broker.NTYPECHANNEL == 6 || broker.NTYPECHANNEL == 8) {
                         let brokerItem = new Channel();
                         brokerItem.brokerId = broker.NCORREDOR.toString(); // Produccion
                         //brokerItem.brokerId = broker.COD_CANAL.toString(); //Desarrollo
@@ -1908,7 +1908,7 @@ export class QuotationComponent implements OnInit {
             this.files.forEach(file => {
                 myFormData.append(file.name, file);
             });
-            
+
             self.isLoading = false;
             myFormData.append("objeto", JSON.stringify(dataQuotation));
             swal.fire({
@@ -1974,7 +1974,9 @@ export class QuotationComponent implements OnInit {
     getFileExtension(filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
     }
-
+    Limpiar() {
+        this.clearInsert()
+    }
     clearInsert() {
         this.stateBrokerSalud = true;
         this.stateBrokerPension = true;

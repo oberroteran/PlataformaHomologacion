@@ -347,7 +347,7 @@ export class PolicyIndexComponent implements OnInit {
 
     pageChanged(currentPage) {
         this.currentPage = currentPage;
-        this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) );
+        this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
 
     }
 
@@ -358,34 +358,56 @@ export class PolicyIndexComponent implements OnInit {
             if (this.policyList.length > 0) {
                 this.policyList.forEach(element => {
                     if (element.NRO_COTIZACION == this.policyList[this.selectedPolicy].NRO_COTIZACION) {
-                        switch (idTipo) {
-                            case 1: // Anular
-                                this.router.navigate(['/broker/policy/transaction/cancel'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 2: // Incluir
-                                this.router.navigate(['/broker/policy/transaction/include'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 3: // Exluir
-                                this.router.navigate(['/broker/policy/transaction/exclude'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 4: // Renovar
-                                this.router.navigate(['/broker/policy/transaction/renew'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 5: //Neteo
-                                this.router.navigate(['/broker/policy/transaction/netear'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 6: //Endoso
-                                this.router.navigate(['/broker/policy/transaction/endosar'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                        }
-                        // this.router.navigate(['/broker/add-contracting'], { queryParams: { policy: element.POLIZA, receiver: "quotation" } });
+                        this.policyService.valTransactionPolicy(element.NRO_COTIZACION).subscribe(
+                            res => {
+                                console.log(res)
+                                if (res.P_COD_ERR == "0") {
+                                    switch (idTipo) {
+                                        case 1: // Anular
+                                            this.router.navigate(['/broker/policy/transaction/cancel'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 2: // Incluir
+                                            this.router.navigate(['/broker/policy/transaction/include'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 3: // Exluir
+                                            this.router.navigate(['/broker/policy/transaction/exclude'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 4: // Renovar
+                                            this.router.navigate(['/broker/policy/transaction/renew'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 5: //Neteo
+                                            this.router.navigate(['/broker/policy/transaction/netear'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 6: //Endoso
+                                            this.router.navigate(['/broker/policy/transaction/endosar'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                    }
+                                } else {
+                                    swal.fire({
+                                        title: "Información",
+                                        text: res.P_MESSAGE,
+                                        type: "error",
+                                        confirmButtonText: 'OK',
+                                        allowOutsideClick: false,
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            return;
+                                        }
+                                    });
+                                }
+                            },
+                            err => {
+                                this.isLoading = false;
+                                console.log(err);
+                            }
+                        );
                     }
                 });
             }
 
-            if (idTipo == 1) {
-                console.log(selection)
-            }
+            // if (idTipo == 1) {
+            //     console.log(selection)
+            // }
 
         } else {
             swal.fire({

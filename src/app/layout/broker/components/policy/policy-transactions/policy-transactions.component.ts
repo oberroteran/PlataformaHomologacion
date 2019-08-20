@@ -22,6 +22,7 @@ import { ValErrorComponent } from '../../../modal/val-error/val-error.component'
 import { AccessFilter } from './../../access-filter'
 import { ModuleConfig } from './../../module.config'
 import { QuotationService } from '../../../services/quotation/quotation.service';
+import { PolicyService } from '../../../services/policy/policy.service';
 //Modal
 import { SearchBrokerComponent } from '../../../modal/search-broker/search-broker.component';
 
@@ -197,6 +198,7 @@ export class PolicyTransactionsComponent implements OnInit {
     private policyemit: PolicyemitService,
     private quotationService: QuotationService,
     private clientInformationService: ClientInformationService,
+    private policyService: PolicyService,
     private datePipe: DatePipe,
     private modalService: NgbModal) {
 
@@ -292,7 +294,31 @@ export class PolicyTransactionsComponent implements OnInit {
       });
 
     if (this.nrocotizacion != undefined) {
-      this.buscarCotizacion();
+      this.policyService.valTransactionPolicy(this.nrocotizacion).subscribe(
+        res => {
+          console.log(res)
+          if (res.P_COD_ERR == "0") {
+            this.buscarCotizacion();
+          } else {
+            Swal.fire({
+              title: "Información",
+              text: res.P_MESSAGE,
+              type: "error",
+              confirmButtonText: 'OK',
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.value) {
+                this.router.navigate(['/broker/policy-transactions']);
+                return;
+              }
+            });
+          }
+        },
+        err => {
+          this.loading = false;
+          console.log(err);
+        }
+      );
     }
     //console.log("polizaEmitComer", this.polizaEmitComer)
   }
