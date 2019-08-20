@@ -30,8 +30,15 @@ export class PolicyService {
         });
     }
 
-    valTransactionPolicy(nroCotizacion: any): Observable<any> {
+    public valTransactionPolicy(nroCotizacion: any): Observable<any> {
         let url = this.Url + "/PolicyManager/valTransactionPolicy?nroCotizacion=" + nroCotizacion;
         return this.http.get(url);
+    }
+
+    public GetVisualizadorProc(data: any): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this.Url + "/PolicyManager/GetVisualizadorProc", body, {
+            headers: this.headers
+        });
     }
 }

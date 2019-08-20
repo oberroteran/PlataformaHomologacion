@@ -32,13 +32,16 @@
                 </div>
                 <div class="col-sm-3">
                   <span>DESDE </span>
-                  <input type="text" class="form-control" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker
-                    [(bsValue)]="bsValueIni" value="{{ bsValueIni | date:'dd/MM/yyyy' }}" [disabled]="stateSearch">
+                  <input type="text" #dp="bsDatepicker" (ngModelChange)="ValInicio($event)" [bsConfig]="bsConfig"
+                    bsDatepicker [(bsValue)]="bsValueIni" [(ngModel)]="bsValueIni" [(maxDate)]="bsValueIniMax"
+                    value="{{ bsValueIni | date:'dd/MM/yyyy' }}" [disabled]="stateSearch" #desde readonly>
                 </div>
                 <div class="col-sm-3">
                   <span>HASTA</span>
-                  <input type="text" class="form-control" [bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker
-                    [(bsValue)]="bsValueFin" value="{{ bsValueFin | date:'dd/MM/yyyy' }}" [disabled]="stateSearch">
+                  <input type="text" [(ngModel)]="bsValueFin" [bsConfig]="bsConfig" #dp="bsDatepicker"
+                    (ngModelChange)="ValFin($event)" bsDatepicker [(bsValue)]="bsValueFin"
+                    value="{{ bsValueFin | date:'dd/MM/yyyy' }}" [(minDate)]="bsValueFinMin" [(maxDate)]="bsValueFinMax"
+                    [disabled]="stateSearch" #hasta readonly>
                 </div>
               </div>
               <div class="row">
@@ -189,8 +192,9 @@
                   <td>{{ item.FIN_VIGENCIA }}</td>
                   <td>{{ item.NRO_RENOVACIONES }}</td>
                   <td>
-                    <a (click)="openModal(row_no, item.NRO_COTIZACION)"><img alt="ver" src="assets/icons/preview_soat_box.png"
-                        title="Ver detalle" style="cursor: pointer;height: 24px;width: 24px"></a>
+                    <a (click)="openModal(row_no, item.NRO_COTIZACION)"><img alt="ver"
+                        src="assets/icons/preview_soat_box.png" title="Ver detalle"
+                        style="cursor: pointer;height: 24px;width: 24px"></a>
                   </td>
                   <!-- <td>
                         <img src="assets/icons/anular.png" title="Eliminar" alt="Eliminar" />
@@ -217,9 +221,9 @@
     </div>
   </div>
 
-    <!-- Pantalla de carga -->
-    <div [hidden]="isLoading==false" class="loadingScreen">
-      <div style="display:flex;height: 100%;width:100%">
-        <i style="margin:auto;font-size: 50px" class="fa fa-spinner fa-spin"></i>
-      </div>
+  <!-- Pantalla de carga -->
+  <div [hidden]="isLoading==false" class="loadingScreen">
+    <div style="display:flex;height: 100%;width:100%">
+      <i style="margin:auto;font-size: 50px" class="fa fa-spinner fa-spin"></i>
     </div>
+  </div>

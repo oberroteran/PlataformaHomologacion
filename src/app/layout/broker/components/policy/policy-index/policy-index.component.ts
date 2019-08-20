@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+// import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
@@ -25,13 +26,19 @@ import { ModuleConfig } from './../../module.config'
 })
 export class PolicyIndexComponent implements OnInit {
     //
+    @ViewChild('desde', null) desde: any;
+    @ViewChild('hasta', null) hasta: any;
     userType: number = 1; //1: admin, 2:emisor, 3:comercial, 4:tecnico, 5:cobranza
     isLoading: boolean = false;
+    // transac: any = [];
 
     //Datos para configurar los datepicker
     bsConfig: Partial<BsDatepickerConfig>;
     bsValueIni: Date = new Date();
     bsValueFin: Date = new Date();
+    bsValueIniMax: Date = new Date();
+    bsValueFinMin: Date = new Date();
+    bsValueFinMax: Date = new Date();
 
     //Objeto de busqueda
     InputsSearch: any = {};
@@ -73,7 +80,17 @@ export class PolicyIndexComponent implements OnInit {
         private router: Router,
         private datePipe: DatePipe,
         private modalService: NgbModal
-    ) { }
+    ) {
+
+        this.bsConfig = Object.assign(
+            {},
+            {
+                dateInputFormat: "DD/MM/YYYY",
+                locale: "es",
+                showWeekNumbers: false
+            }
+        );
+    }
 
     ngOnInit() {
         if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_transaction_query"]) == false) this.router.navigate(['/broker/home']);
@@ -87,7 +104,7 @@ export class PolicyIndexComponent implements OnInit {
         this.InputsSearch.P_NPRODUCT = "0";
         this.InputsSearch.P_NIDTRANSACCION = "0";
         this.InputsSearch.P_NPOLICY = "";
-        this.bsValueIni.setDate(this.bsValueIni.getDate() - 30);
+
         this.InputsSearch.P_NIDDOC_TYPE = "-1";
         this.InputsSearch.P_SIDDOC = "";
         this.InputsSearch.P_PERSON_TYPE = "1";
@@ -100,6 +117,15 @@ export class PolicyIndexComponent implements OnInit {
         this.getDocumentTypeList();
         this.getTransaccionList();
         this.getProductList();
+
+        setTimeout(() => {    //<<<---    using ()=> syntax
+            this.bsValueIni = new Date();
+            this.bsValueIni.setDate(this.bsValueIni.getDate() - 30);
+            this.bsValueFin = new Date();
+            this.bsValueIniMax = new Date();
+            this.bsValueFinMin = this.bsValueIni;
+            this.bsValueFinMax = new Date();
+        }, 1000);
     }
 
     getDocumentTypeList() {
@@ -254,7 +280,7 @@ export class PolicyIndexComponent implements OnInit {
         this.listToShow = [];
         this.currentPage = 1; //página actual
         this.maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
-        this.itemsPerPage = 6; // limite de items por página
+        this.itemsPerPage = 5; // limite de items por página
         this.totalItems = 0; //total de items encontrados
 
         let msg: string = "";
@@ -348,7 +374,6 @@ export class PolicyIndexComponent implements OnInit {
     pageChanged(currentPage) {
         this.currentPage = currentPage;
         this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
-
     }
 
     choosePolicyClk(selection: any, idTipo: number) {
@@ -423,6 +448,13 @@ export class PolicyIndexComponent implements OnInit {
                 }
             });
         }
+    }
+    ValInicio(event) {
+        this.bsValueFinMin = new Date(this.bsValueIni);
+
+    }
+    ValFin(event) {
+        this.bsValueIniMax = new Date(this.bsValueFin);
     }
 }
 
