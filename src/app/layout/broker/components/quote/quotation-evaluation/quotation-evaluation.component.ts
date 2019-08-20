@@ -130,6 +130,9 @@ export class QuotationEvaluationComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.createFormControl();
+        this.initializeForm();
+
         let quotationData = JSON.parse(sessionStorage.getItem("cs-quotation"));
         sessionStorage.removeItem('cs-quotation');
         if (quotationData == null || quotationData === undefined) this.router.navigate(['/broker/home']);
@@ -169,11 +172,6 @@ export class QuotationEvaluationComponent implements OnInit {
             this.canSeeRiskRate = AccessFilter.hasPermission("36");
 
             this.isLoading = true;
-
-            this.createFormControl();
-            this.initializeForm();
-
-            // this.getQuotationData();
             this.getIGVData();
             this.getStatusList();
 
@@ -650,28 +648,10 @@ export class QuotationEvaluationComponent implements OnInit {
      * Envia la petición de cambio de estado de la cotización e inserción de tasas autorizadas con las primas autorizadas
      */
     AddStatusChange() {
-        //Validamos los tasas autorizadas ingresadas
-        let areAllAuthorizedRatesValid = 0; // 0:válido | 1:no válido
-        // this.InputsQuotation.PensionDetailsList.forEach((element) => {
-        //   if (element.AuthorizedRate.toString().trim() != "" && element.AuthorizedRate != 0) { //no validar si son campos vacios o cero
-        //     let regexp = /^\d+(\.\d{1,2})?$/;
-        //     if (!regexp.test(element.AuthorizedRate.toString().trim())) {
-        //       areAllAuthorizedRatesValid = 1;
-        //       console.log(element.AuthorizedRate);
-        //     }
-        //   }
-        // });
-        // this.InputsQuotation.SaludDetailsList.forEach((element) => {
-        //   if (element.AuthorizedRate.toString().trim() != "" && element.AuthorizedRate != 0) { //no validar si son campos vacios o cero
-        //     let regexp = /^\d+(\.\d{1,2})?$/;
-        //     if (!regexp.test(element.AuthorizedRate.toString().trim())) {
-        //       areAllAuthorizedRatesValid = 1;
-        //       console.log(element.AuthorizedRate);
-        //     }
-        //   }
-        // });
 
-        if (this.mainFormGroup.valid == true && areAllAuthorizedRatesValid == 0) {
+        //let areAllAuthorizedRatesValid = 0; // 0:válido | 1:no válido
+        let areAuthorizedRatesValid = this.AreAuthorizedRatesValid();
+        if (this.mainFormGroup.valid == true && areAuthorizedRatesValid) {
 
             let self = this;
             this.isLoading = true;
@@ -756,7 +736,7 @@ export class QuotationEvaluationComponent implements OnInit {
             if (this.mainFormGroup.controls.status.hasError('required')) errorList.push("El estado es obligatorio.");
 
 
-            if (areAllAuthorizedRatesValid == 1) errorList.push("No todas las tasas autorizadas son válidas.");
+            if (areAuthorizedRatesValid == false) errorList.push("No todas las tasas autorizadas son válidas.");
             swal.fire("Información", this.listToString(errorList), "error");
         }
 
@@ -764,139 +744,146 @@ export class QuotationEvaluationComponent implements OnInit {
 
     /**Modificar cotización | recotizar */
     modifyQuotation() {
-        let self = this;
-        let quotation = new QuotationModification();
-        quotation.Number = this.quotationNumber;
-        quotation.Branch = "1";
-        quotation.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
+        if (this.AreProposedRatesValid()) {
+            let self = this;
+            let quotation = new QuotationModification();
+            quotation.Number = this.quotationNumber;
+            quotation.Branch = "1";
+            quotation.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
 
-        this.statusChangeRequest.QuotationNumber = this.quotationNumber;  //Número de cotización
-        this.statusChangeRequest.Status = "1"; //Nuevo estado
-        this.statusChangeRequest.Reason = null; //Motivo
-        this.statusChangeRequest.Comment = this.mainFormGroup.controls.comment.value; //Comentario
-        this.statusChangeRequest.User = JSON.parse(localStorage.getItem("currentUser"))["id"];  //Usuario
+            this.statusChangeRequest.QuotationNumber = this.quotationNumber;  //Número de cotización
+            this.statusChangeRequest.Status = "1"; //Nuevo estado
+            this.statusChangeRequest.Reason = null; //Motivo
+            this.statusChangeRequest.Comment = this.mainFormGroup.controls.comment.value; //Comentario
+            this.statusChangeRequest.User = JSON.parse(localStorage.getItem("currentUser"))["id"];  //Usuario
 
-        quotation.StatusChangeData = this.statusChangeRequest;
-        quotation.RiskList = [];
-        this.InputsQuotation.PensionDetailsList.forEach((element) => {
-            let item = new QuotationRisk();
-            item.RiskTypeId = element.RiskTypeId;
-            item.ProductTypeId = "120";
-            item.ProposedRate = element.ProposedRate;
-            item.WorkersCount = element.WorkersCount;
-            item.PayrollAmount = element.PayrollAmount;
-            item.CalculatedRate = element.Rate;
-            item.PremimunPerRisk = element.Premium;
-            item.MinimunPremium = self.InputsQuotation.PensionMinPremium;
-            item.ProposedMinimunPremium = self.InputsQuotation.PensionPropMinPremium;
-            item.EndorsmentPremium = element.EndorsmentPremium;
-            item.NetPremium = self.InputsQuotation.PensionNetAmount;
-            item.GrossPremium = self.InputsQuotation.PensionGrossAmount;
-            item.PremiumIGV = self.InputsQuotation.PensionCalculatedIGV;
-            item.RiskRate = element.RiskRate;
-            item.Discount = element.Discount;
-            item.Variation = element.Variation;
-            item.TariffFlag = "3";
+            quotation.StatusChangeData = this.statusChangeRequest;
+            quotation.RiskList = [];
+            this.InputsQuotation.PensionDetailsList.forEach((element) => {
+                let item = new QuotationRisk();
+                item.RiskTypeId = element.RiskTypeId;
+                item.ProductTypeId = "120";
+                item.ProposedRate = element.ProposedRate;
+                item.WorkersCount = element.WorkersCount;
+                item.PayrollAmount = element.PayrollAmount;
+                item.CalculatedRate = element.Rate;
+                item.PremimunPerRisk = element.Premium;
+                item.MinimunPremium = self.InputsQuotation.PensionMinPremium;
+                item.ProposedMinimunPremium = self.InputsQuotation.PensionPropMinPremium;
+                item.EndorsmentPremium = element.EndorsmentPremium;
+                item.NetPremium = self.InputsQuotation.PensionNetAmount;
+                item.GrossPremium = self.InputsQuotation.PensionGrossAmount;
+                item.PremiumIGV = self.InputsQuotation.PensionCalculatedIGV;
+                item.RiskRate = element.RiskRate;
+                item.Discount = element.Discount;
+                item.Variation = element.Variation;
+                item.TariffFlag = "3";
 
-            quotation.RiskList.push(item);
-        });
-        this.InputsQuotation.SaludDetailsList.forEach((element) => {
-            let item = new QuotationRisk();
-            item.RiskTypeId = element.RiskTypeId;
-            item.ProductTypeId = "121";
-            item.ProposedRate = element.ProposedRate;
-            item.WorkersCount = element.WorkersCount;
-            item.PayrollAmount = element.PayrollAmount;
-            item.CalculatedRate = element.Rate;
-            item.PremimunPerRisk = element.Premium;
-            item.MinimunPremium = self.InputsQuotation.SaludMinPremium;
-            item.ProposedMinimunPremium = self.InputsQuotation.SaludPropMinPremium;
-            item.EndorsmentPremium = element.EndorsmentPremium;
-            item.NetPremium = self.InputsQuotation.SaludNetAmount;
-            item.GrossPremium = self.InputsQuotation.SaludGrossAmount;
-            item.PremiumIGV = self.InputsQuotation.SaludCalculatedIGV;
-            item.RiskRate = element.RiskRate;
-            item.Discount = element.Discount;
-            item.Variation = element.Variation;
-            item.TariffFlag = "3";
+                quotation.RiskList.push(item);
+            });
+            this.InputsQuotation.SaludDetailsList.forEach((element) => {
+                let item = new QuotationRisk();
+                item.RiskTypeId = element.RiskTypeId;
+                item.ProductTypeId = "121";
+                item.ProposedRate = element.ProposedRate;
+                item.WorkersCount = element.WorkersCount;
+                item.PayrollAmount = element.PayrollAmount;
+                item.CalculatedRate = element.Rate;
+                item.PremimunPerRisk = element.Premium;
+                item.MinimunPremium = self.InputsQuotation.SaludMinPremium;
+                item.ProposedMinimunPremium = self.InputsQuotation.SaludPropMinPremium;
+                item.EndorsmentPremium = element.EndorsmentPremium;
+                item.NetPremium = self.InputsQuotation.SaludNetAmount;
+                item.GrossPremium = self.InputsQuotation.SaludGrossAmount;
+                item.PremiumIGV = self.InputsQuotation.SaludCalculatedIGV;
+                item.RiskRate = element.RiskRate;
+                item.Discount = element.Discount;
+                item.Variation = element.Variation;
+                item.TariffFlag = "3";
 
-            quotation.RiskList.push(item);
-        });
+                quotation.RiskList.push(item);
+            });
 
-        quotation.BrokerList = [];
-        let mainBroker = new QuotationBroker();
-        mainBroker.ChannelTypeId = this.InputsQuotation.BrokerChannelTypeId;
-        mainBroker.ChannelId = this.InputsQuotation.BrokerChannelId;
-        mainBroker.ClientId = this.InputsQuotation.BrokerClientId;
+            quotation.BrokerList = [];
+            let mainBroker = new QuotationBroker();
+            mainBroker.ChannelTypeId = this.InputsQuotation.BrokerChannelTypeId;
+            mainBroker.ChannelId = this.InputsQuotation.BrokerChannelId;
+            mainBroker.ClientId = this.InputsQuotation.BrokerClientId;
 
-        mainBroker.HealthProposedCommission = this.InputsQuotation.BrokerSaludPropBounty == "" ? 0 : this.InputsQuotation.BrokerSaludPropBounty;
-        mainBroker.HealthCommission = this.InputsQuotation.BrokerSaludBounty == "" ? 0 : this.InputsQuotation.BrokerSaludBounty;
-        mainBroker.PensionProposedCommission = this.InputsQuotation.BrokerPensionPropBounty == "" ? 0 : this.InputsQuotation.BrokerPensionPropBounty;
-        mainBroker.PensionCommission = this.InputsQuotation.BrokerPensionBounty == "" ? 0 : this.InputsQuotation.BrokerPensionBounty;
-        mainBroker.IsPrincipal = true;
-        mainBroker.SharedCommission = this.InputsQuotation.BrokerSharedCommission;
-        quotation.BrokerList.push(mainBroker);
+            mainBroker.HealthProposedCommission = this.InputsQuotation.BrokerSaludPropBounty == "" ? 0 : this.InputsQuotation.BrokerSaludPropBounty;
+            mainBroker.HealthCommission = this.InputsQuotation.BrokerSaludBounty == "" ? 0 : this.InputsQuotation.BrokerSaludBounty;
+            mainBroker.PensionProposedCommission = this.InputsQuotation.BrokerPensionPropBounty == "" ? 0 : this.InputsQuotation.BrokerPensionPropBounty;
+            mainBroker.PensionCommission = this.InputsQuotation.BrokerPensionBounty == "" ? 0 : this.InputsQuotation.BrokerPensionBounty;
+            mainBroker.IsPrincipal = true;
+            mainBroker.SharedCommission = this.InputsQuotation.BrokerSharedCommission;
+            quotation.BrokerList.push(mainBroker);
 
-        this.InputsQuotation.SecondaryBrokerList.forEach((element) => {
-            let item = new QuotationBroker();
-            item.ChannelTypeId = element.TIPO_CANAL;
-            item.ChannelId = element.CANAL;
-            item.ClientId = element.SCLIENT;
+            this.InputsQuotation.SecondaryBrokerList.forEach((element) => {
+                let item = new QuotationBroker();
+                item.ChannelTypeId = element.TIPO_CANAL;
+                item.ChannelId = element.CANAL;
+                item.ClientId = element.SCLIENT;
 
-            item.HealthProposedCommission = element.COMISION_SALUD_PRO == "" ? 0 : element.COMISION_SALUD_PRO;
-            item.HealthCommission = element.COMISION_SALUD == "" ? 0 : element.COMISION_SALUD;
-            item.PensionProposedCommission = element.COMISION_PENSION_PRO == "" ? 0 : element.COMISION_PENSION_PRO;
-            item.PensionCommission = element.COMISION_PENSION == "" ? 0 : element.COMISION_PENSION;
-            item.IsPrincipal = false;
-            item.SharedCommission = element.NSHARE;
-            quotation.BrokerList.push(item);
-        });
+                item.HealthProposedCommission = element.COMISION_SALUD_PRO == "" ? 0 : element.COMISION_SALUD_PRO;
+                item.HealthCommission = element.COMISION_SALUD == "" ? 0 : element.COMISION_SALUD;
+                item.PensionProposedCommission = element.COMISION_PENSION_PRO == "" ? 0 : element.COMISION_PENSION_PRO;
+                item.PensionCommission = element.COMISION_PENSION == "" ? 0 : element.COMISION_PENSION;
+                item.IsPrincipal = false;
+                item.SharedCommission = element.NSHARE;
+                quotation.BrokerList.push(item);
+            });
 
-        let formData = new FormData();
-        this.files.forEach(function (file) { //anexamos todos los archivos al formData
-            formData.append(file.name, file, file.name)
-        });
+            let formData = new FormData();
+            this.files.forEach(function (file) { //anexamos todos los archivos al formData
+                formData.append(file.name, file, file.name)
+            });
 
-        formData.append("quotationModification", JSON.stringify(quotation));
-        console.log(quotation);
-        this.quotationService.modifyQuotation(formData).subscribe(
-            res => {
-                if (res.P_COD_ERR == 0) {
-                    if (res.P_SAPROBADO == 'S') {
-                        self.isLoading = false;
-                        if (res.P_NCODE == 0) {
-                            swal.fire({
-                                title: "Información",
-                                text: "¿Desea emitir la cotización N° " + res.P_NID_COTIZACION + " de forma directa?",
-                                type: "question",
-                                showCancelButton: true,
-                                confirmButtonText: 'Sí',
-                                allowOutsideClick: false,
-                                cancelButtonText: 'No'
-                            })
-                                .then((result) => {
-                                    if (result.value) {
-                                        self.isLoading = false;
-                                        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: res.P_NID_COTIZACION } });
-                                    }
-                                });
+            formData.append("quotationModification", JSON.stringify(quotation));
+            console.log(quotation);
+            this.quotationService.modifyQuotation(formData).subscribe(
+                res => {
+                    if (res.P_COD_ERR == 0) {
+                        if (res.P_SAPROBADO == 'S') {
+                            self.isLoading = false;
+                            if (res.P_NCODE == 0) {
+                                swal.fire({
+                                    title: "Información",
+                                    text: "¿Desea emitir la cotización N° " + res.P_NID_COTIZACION + " de forma directa?",
+                                    type: "question",
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Sí',
+                                    allowOutsideClick: false,
+                                    cancelButtonText: 'No'
+                                })
+                                    .then((result) => {
+                                        if (result.value) {
+                                            self.isLoading = false;
+                                            this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: res.P_NID_COTIZACION } });
+                                        }
+                                    });
+                            } else {
+                                self.isLoading = false;
+                                swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación.", "success");
+                                this.router.navigate(['/broker/request-status']);
+                            }
                         } else {
                             self.isLoading = false;
-                            swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación.", "success");
+                            swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+                            this.router.navigate(['/broker/request-status']);
                         }
                     } else {
                         self.isLoading = false;
-                        swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+                        swal.fire("Información", res.P_MESSAGE, "error");
                     }
-                } else {
-                    self.isLoading = false;
-                    swal.fire("Información", res.P_MESSAGE, "error");
+                },
+                error => {
+                    swal.fire("Información", this.genericServerErrorMessage, "error");
                 }
-            },
-            error => {
-                swal.fire("Información", this.genericServerErrorMessage, "error");
-            }
-        );
+            );
+        } else {
+            swal.fire("Información", "No todas las tasas propuestas son válidas.", "error")
+        }
+
     }
 
     /**Decide que operación hacer de acuerdo al modo de esta vista */
@@ -1019,5 +1006,53 @@ export class QuotationEvaluationComponent implements OnInit {
                 return item.COMISION_PENSION_PRO = item.OriginalPensionPropCommission;
             });
         }
+    }
+
+    /**Valida las tasas propuestas */
+    AreProposedRatesValid(): boolean {
+        let areValid = true;
+        if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
+            this.InputsQuotation.PensionDetailsList.map(element => {
+                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
+                element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
+                if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
+            });
+            console.log(this.InputsQuotation.PensionDetailsList);
+        }
+
+        if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
+            this.InputsQuotation.SaludDetailsList.map(element => {
+                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
+                element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
+                if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
+            });
+            console.log(this.InputsQuotation.SaludDetailsList);
+        }
+
+        return areValid;
+    }
+    /**Valida las tasas autorizadas */
+    AreAuthorizedRatesValid(): boolean {
+        let areValid = true;
+        if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
+            this.InputsQuotation.PensionDetailsList.map(element => {
+                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
+                element.AuthorizedRate = element.AuthorizedRate != null && isNaN(element.AuthorizedRate) == false && element.AuthorizedRate != "" ? element.AuthorizedRate : 0;
+                if (element.Premium > 0 && element.AuthorizedRate == 0) areValid = false;
+                return element;
+            });
+        }
+        console.log(this.InputsQuotation.PensionDetailsList);
+        if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
+            this.InputsQuotation.SaludDetailsList.map(element => {
+                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
+                element.AuthorizedRate = element.AuthorizedRate != null && isNaN(element.AuthorizedRate) == false && element.AuthorizedRate != "" ? element.AuthorizedRate : 0;
+                if (element.Premium > 0 && element.AuthorizedRate == 0) areValid = false;
+                return element;
+            });
+
+        }
+        console.log(this.InputsQuotation.SaludDetailsList);
+        return areValid;
     }
 }
