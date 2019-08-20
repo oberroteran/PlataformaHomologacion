@@ -121,7 +121,7 @@ export class PolicyFormComponent implements OnInit {
 	mode: String; //emitir, incluir, renovar : emit, include, renew
 	title: string; //titulo del formulario
 	pensionID: string = "120";
-	saludID: string = "121";
+	saludID: string = "130";
 
 	/**Puede facturar a mes vencido? */
 	canBillMonthly: boolean;

@@ -683,7 +683,7 @@ export class AgencyFormComponent implements OnInit {
                 saludAgencyData.AgencyDate = this.mainFormGroup.controls.saludAgencyDate.value;
                 saludAgencyData.ChannelTypeId = this.channelTypeId;
                 saludAgencyData.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                saludAgencyData.ProductId = "121";
+                saludAgencyData.ProductId = "130";
 
                 if (this.mainFormGroup.controls.sctrSaludFilePath.value != null && this.mainFormGroup.controls.sctrSaludFilePath.value != "") {
                     saludAgencyData.FileName = "agency-salud-" + saludAgencyData.BrokerId + "-" + saludAgencyData.ContractorId + "-" + saludAgencyData.AgencyDate.getDate() + "-" + String(saludAgencyData.AgencyDate.getMonth() + 1) + "-" + saludAgencyData.AgencyDate.getFullYear()
@@ -727,7 +727,7 @@ export class AgencyFormComponent implements OnInit {
                 saludAgencyData.AgencyDate = this.mainFormGroup.controls.saludAgencyDate.value;
                 saludAgencyData.ChannelTypeId = this.channelTypeId;
                 saludAgencyData.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                saludAgencyData.ProductId = "121";
+                saludAgencyData.ProductId = "130";
 
                 if (this.mainFormGroup.controls.sctrSaludFilePath.value != null && this.mainFormGroup.controls.sctrSaludFilePath.value != "") {
                     saludAgencyData.FileName = "agency-salud-" + saludAgencyData.BrokerId + "-" + saludAgencyData.ContractorId + "-" + saludAgencyData.AgencyDate.getDate() + "-" + String(saludAgencyData.AgencyDate.getMonth() + 1) + "-" + saludAgencyData.AgencyDate.getFullYear()

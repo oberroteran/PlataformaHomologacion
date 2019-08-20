@@ -116,7 +116,7 @@ export class QuotationComponent implements OnInit {
     brokerList: any = [];
     tasasList: any = [];
     pensionID = "120";
-    saludID = "121";
+    saludID = "130";
     workerMin = 15;
     workerMax = 70;
     municipalityTariff = 0;

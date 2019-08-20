@@ -159,7 +159,7 @@ export class PolicyTransactionsComponent implements OnInit {
   objEdit: any = [];
   numberWH: number;
   pensionID = "120";
-  saludID = "121";
+  saludID = "130";
   workerMin = 15;
   workerMax = 70;
   municipalityTariff = 0;

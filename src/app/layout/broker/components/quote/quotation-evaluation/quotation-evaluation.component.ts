@@ -251,7 +251,7 @@ export class QuotationEvaluationComponent implements OnInit {
 
         let health: any = {};
         health.P_NBRANCH = 1;
-        health.P_NPRODUCT = "121";
+        health.P_NPRODUCT = "130";
         health.P_TIPO_REC = "A";
 
         let pension: any = {};
@@ -355,7 +355,7 @@ export class QuotationEvaluationComponent implements OnInit {
             //Cálculo de nueva prima total bruta de Pensión
             this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
         }
-        if (productId == "121") { //Si el producto es Salud
+        if (productId == "130") { //Si el producto es Salud
             let saludNewNetAmount = 0.00; //prima prima total neta de Salud, según la tasa autorizada
             this.InputsQuotation.SaludDetailsList.forEach((element, key) => {
                 if (element.RiskTypeId == riskTypeId) {
@@ -399,7 +399,7 @@ export class QuotationEvaluationComponent implements OnInit {
             //Cálculo de nueva prima total bruta de Pensión
             this.InputsQuotation.PensionGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNetAmount));
         }
-        if (productId == "121") { //Si el producto es Salud
+        if (productId == "130") { //Si el producto es Salud
             let saludTotalNetAmount = 0.00; //prima prima total neta de Salud, según la tasa autorizada
             this.InputsQuotation.SaludDetailsList.forEach((element, key) => {
                 if (element.RiskTypeId == riskTypeId) {
@@ -553,7 +553,7 @@ export class QuotationEvaluationComponent implements OnInit {
                                 item.WorkersCount = element.NUM_TRABAJADORES;
                                 item.PayrollAmount = element.MONTO_PLANILLA;
                             }
-                            if (element.ID_PRODUCTO == "121") { //Si es un elemento de pensión
+                            if (element.ID_PRODUCTO == "130") { //Si es un elemento de pensión
                                 let item: any = {};
                                 item.RiskRate = element.TASA_RIESGO;
                                 item.RiskTypeId = element.TIP_RIESGO; //Id tipo de riesgo
@@ -784,7 +784,7 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludDetailsList.forEach((element) => {
                 let item = new QuotationRisk();
                 item.RiskTypeId = element.RiskTypeId;
-                item.ProductTypeId = "121";
+                item.ProductTypeId = "130";
                 item.ProposedRate = element.ProposedRate;
                 item.WorkersCount = element.WorkersCount;
                 item.PayrollAmount = element.PayrollAmount;
