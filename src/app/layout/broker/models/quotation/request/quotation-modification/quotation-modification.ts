@@ -1,5 +1,6 @@
 import { QuotationBroker } from './quotation-broker';
 import { QuotationRisk } from './quotation-risk';
+import { QuotationStatusChange } from '../quotation-status-change'
 
 /**Datos de recotización */
 export class QuotationModification {
@@ -9,8 +10,8 @@ export class QuotationModification {
     public Branch: string;
     /**Usuario */
     public User: string;
-    /**Comentario de recotización */
-    public StatusChangeComment: string;
+    /**Cambio de estado */
+    public StatusChangeData: QuotationStatusChange;
     /**Lista de riesgos y detalles */
     public RiskList: QuotationRisk[];
     /**Lista de brokers */

@@ -321,12 +321,6 @@ export class RequestStatusComponent implements OnInit {
         this.clientInformationService.getDocumentTypeList().subscribe(
             res => {
                 this.documentTypeList = res;
-
-                // if (this.isExternalUser) {
-                //     this.mainFormGroup.controls.brokerSearchMode.patchValue("1");
-                //     this.mainFormGroup.controls.brokerDocumentType.patchValue(JSON.parse(localStorage.getItem("currentUser"))["tdocument"].toString());
-                //     this.mainFormGroup.controls.brokerDocumentNumber.patchValue(JSON.parse(localStorage.getItem("currentUser"))["dni"].toString());
-                // }
             },
             err => {
                 console.log(err);
@@ -642,6 +636,7 @@ export class RequestStatusComponent implements OnInit {
     }
 
     openDetails(item: any) {
-        this.router.navigate(['/broker/quotation-evaluation'], { queryParams: { quotationNumber: item.QuotationNumber, mode: item.Mode } });
+        sessionStorage.setItem('cs-quotation', JSON.stringify(item));
+        this.router.navigate(['/broker/quotation-evaluation']);
     }
 }

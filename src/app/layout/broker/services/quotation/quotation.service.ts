@@ -33,8 +33,10 @@ export class QuotationService {
         });
     }
     public changeStatus(formData: FormData): Observable<any> {
-        //const body = JSON.stringify(data);
         return this.http.post(this.Url + "/QuotationManager/ChangeStatus", formData);
+    }
+    public modifyQuotation(formData: FormData): Observable<any> {
+        return this.http.post(this.Url + "/QuotationManager/ModifyQuotation", formData);
     }
 
     public searchBroker(data: any): Observable<any> {

@@ -88,11 +88,13 @@
             </div>
           </div>
           <div class="row  mb-3">
-            <div class="col-sm-3">
+            <div *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
+              class="col-sm-3">
               <span>COMISIÓN SALUD</span>
               <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.BrokerSaludBounty" />
             </div>
-            <div class="col-sm-3">
+            <div *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
+              class="col-sm-3">
               <span><input *ngIf="mode=='recotizar'" type="checkbox" style="top: 3px;" class="checkbox"
                   [disabled]="mode!='recotizar'" [checked]="false" [(ngModel)]="enabledHealthMainPropCommission"
                   (ngModelChange)="switchHealthPropCommissionValue()">
@@ -101,12 +103,13 @@
               <input type="text" placeholder="0" [disabled]="mode!='recotizar' || !enabledHealthMainPropCommission"
                 [(ngModel)]="InputsQuotation.BrokerSaludPropBounty" />
             </div>
-            <div class="col-sm-3">
+            <div *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
+              class="col-sm-3">
               <span>COMISIÓN PENSIÓN</span>
               <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.BrokerPensionBounty" />
             </div>
-            <div class="col-sm-3">
-
+            <div *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
+              class="col-sm-3">
               <span><input *ngIf="mode=='recotizar'" type="checkbox" style="top: 3px;" class="checkbox"
                   [disabled]="mode!='recotizar'" [checked]="false" [(ngModel)]="enabledPensionMainPropCommission"
                   (ngModelChange)="switchPensionPropCommissionValue()">
@@ -125,16 +128,22 @@
                     <th class="col-sm text-center"><label>Tipo Documento</label></th>
                     <th class="col-sm text-center"><label>Nro Documento</label></th>
                     <th class="col-sm text-center"><label>Nombres y Apellidos </label></th>
-                    <th class="col-sm text-center"><label>Comisión Salud</label></th>
-                    <th class="col-sm text-center ctasa">
+                    <th *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
+                      class="col-sm text-center"><label>Comisión Salud</label></th>
+                    <th *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
+                      class="col-sm text-center ctasa">
                       <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
                           [checked]="false" class="checkbox" [(ngModel)]="enabledHealthSecondaryPropCommission"
                           (ngModelChange)="switchHealthSecondaryPropCommissionValue()">
                         <span class="schk">
                           Propuesta</span></label>
                     </th>
-                    <th class="col-sm text-center"><label>Comisión Pensión</label></th>
-                    <th class="col-sm text-center ctasa">
+                    <th
+                      *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
+                      class="col-sm text-center"><label>Comisión Pensión</label></th>
+                    <th
+                      *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
+                      class="col-sm text-center ctasa">
                       <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
                           [checked]="false" class="checkbox" [(ngModel)]="enabledPensionSecondaryPropCommission"
                           (ngModelChange)="switchPensionSecondaryPropCommissionValue()">
@@ -148,12 +157,18 @@
                     <td class="col-sm text-center"><span>{{ item.DES_DOC_COMER }}</span></td>
                     <td class="col-sm text-center"><span>{{ item.DOC_COMER }}</span></td>
                     <td class="col-sm text-center"><span>{{ item.COMERCIALIZADOR }}</span></td>
-                    <td class="col-sm text-center"><span>{{item.COMISION_SALUD}}</span></td>
-                    <td class="col-sm"><input type="text" class="text-center"
+                    <td *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
+                      class="col-sm text-center"><span>{{item.COMISION_SALUD}}</span></td>
+                    <td *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
+                      class="col-sm"><input type="text" class="text-center"
                         [disabled]="mode!='recotizar' || !enabledHealthSecondaryPropCommission"
                         value="{{item.COMISION_SALUD_PRO}}" />
-                    <td class="col-sm text-center"><span>{{item.COMISION_PENSION}}</span></td>
-                    <td class="col-sm"><input type="text" class="text-center"
+                    <td
+                      *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
+                      class="col-sm text-center"><span>{{item.COMISION_PENSION}}</span></td>
+                    <td
+                      *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
+                      class="col-sm"><input type="text" class="text-center"
                         [disabled]="mode!='recotizar' || !enabledPensionSecondaryPropCommission"
                         value="{{item.COMISION_PENSION_PRO}}" />
                     </td>
@@ -198,10 +213,18 @@
             </div>
             <div class="col-sm-3">
               <span>&nbsp;</span>
-              <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+              <!-- <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
                   [(ngModel)]="InputsQuotation.P_DELIMITER" class="checkbox" disabled
                   [checked]="InputsQuotation.EconomicActivityDelimiter=='1'"><span class="schk"
-                  style="margin-top: 20px;">Delimitación</span></label>
+                  style="margin-top: 20px;">Delimitación</span></label> -->
+
+              <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+                  [(ngModel)]="InputsQuotation.HasDelimiter" class="checkbox" disabled><span class="schk"
+                  style="margin-top: 5px; font-size: 13px;">Delimitación</span></label>
+              <label style="width: 100%;margin-bottom: 0;"><input disabled type="checkbox"
+                  [(ngModel)]="InputsQuotation.IsMining" class="checkbox"><span class="schk"
+                  style="margin-top: 5px;; font-size: 13px;">¿Se realiza en
+                  mina?</span></label>
             </div>
             <div class="col-sm-3">
               <span>DEPARTAMENTO (*)</span>
@@ -246,7 +269,7 @@
                     50</span></label>
               </div>
             </div> -->
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-sm-3">
                 <label><input type="checkbox" id="" class="checkbox"
                     [checked]="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length> 0"
@@ -259,7 +282,7 @@
                     disabled><span class="schk"><b>SCTR
                       PENSIÓN</b></span></label>
               </div>
-            </div>
+            </div> -->
             <div class="row">
               <div class="col-sm-6">
                 <table class="table table-borderless riesgo">
@@ -354,7 +377,6 @@
                             <td class="col-sm"><input type="text" class="text-center" FloatDirective [checked]="false"
                                 [disabled]="!enabledHealthProposedRate"
                                 [(ngModel)]="InputsQuotation.SaludDetailsList[row].ProposedRate"
-                                (ngModelChange)="calculatePremiums($event,item.RiskTypeId,'121')"
                                 (mouseup)="$event.target.select()" />
                             </td>
                             <td class="col-sm text-center"><span>{{item.Premium}}</span></td>
@@ -480,7 +502,6 @@
                             <td class="col-sm"><input type="text" class="text-center" FloatDirective
                                 [disabled]="!enabledPensionProposedRate"
                                 [(ngModel)]="InputsQuotation.PensionDetailsList[row].ProposedRate"
-                                (ngModelChange)="calculatePremiums($event,item.RiskTypeId,'120')"
                                 (mouseup)="$event.target.select()" />
                             </td>
                             <td class="col-sm text-center"><span>{{item.Premium}}</span></td>
