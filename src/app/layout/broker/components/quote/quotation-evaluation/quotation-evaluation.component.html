@@ -346,9 +346,8 @@
                             <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>Tasa Riesgo</label></th>
                             <th class="col-sm text-center"><label>Tasa Neta Calculada</label></th>
                             <th class="col-sm text-center ctasa">
-                              <label><input *ngIf="mode=='recotizar'" [disabled]="!canProposeRate || mode!='recotizar'"
-                                  type="checkbox" [checked]="false" class="checkbox"
-                                  [(ngModel)]="enabledHealthProposedRate"
+                              <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
+                                  [checked]="false" class="checkbox" [(ngModel)]="enabledHealthProposedRate"
                                   (ngModelChange)="swtichHealthProposedRateValues()">
                                 <span class="schk">
                                   Propuesta</span></label>
@@ -471,9 +470,8 @@
                             <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>Tasa Riesgo</label></th>
                             <th class="col-sm text-center "><label>Tasa Neta Calculada</label></th>
                             <th class="col-sm text-center ctasa">
-                              <label><input *ngIf="mode=='recotizar'" [disabled]="!canProposeRate || mode!='recotizar'"
-                                  type="checkbox" [checked]="false" class="checkbox"
-                                  [(ngModel)]="enabledPensionProposedRate"
+                              <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
+                                  [checked]="false" class="checkbox" [(ngModel)]="enabledPensionProposedRate"
                                   (ngModelChange)="swtichPensionProposedRateValues()">
                                 <span class="schk">
                                   Propuesta</span></label>
