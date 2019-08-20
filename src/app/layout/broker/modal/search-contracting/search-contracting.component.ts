@@ -26,7 +26,7 @@ export class SearchContractingComponent implements OnInit {
 
   ngOnInit() {
     this.totalItems = this.EListClient.length;
-    this.listToShow = this.EListClient.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+    this.listToShow = this.EListClient.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
   }
 
   chooseContractor(selection: any) {
@@ -45,7 +45,7 @@ export class SearchContractingComponent implements OnInit {
   }
   pageChanged(currentPage) {
     this.currentPage = currentPage;
-    this.listToShow = this.EListClient.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+    this.listToShow = this.EListClient.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
 
   }
 

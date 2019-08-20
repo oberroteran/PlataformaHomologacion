@@ -10,6 +10,7 @@ export const environment = {
     backendapi: 'http://190.216.170.173/RestPRO/api',
     // backendapi: 'http://localhost:2085/api',
     kunturapi: 'http://190.216.170.173/WSPlataformaPRO/Api',
+    // kunturapi: 'http://localhost:30897/Api',
     gestorapi: 'https://soatservicios.protectasecurity.pe/WSGestorCliente/Api',
     domainurl: 'https://soatdigital.protectasecurity.pe',
 };

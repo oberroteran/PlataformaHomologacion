@@ -1,7 +1,6 @@
 <div class="modal-header">
   <h4 class="modal-title" id="modal-basic-title">{{txtAccion}}</h4>
   <input type="button" class="close" aria-label="Close" (click)="reference.dismiss('Cross click')" value="&times;" />
-
 </div>
 <div class="modal-body">
   <div class="container-fluid">
@@ -13,12 +12,6 @@
           [(ngModel)]="InputsStreet.P_SRECTYPE" [clearable]="true" placeholder="Seleccionar" [ngClass]="{'error-validate': VAL_STREET[0] != ''}" (click)="Clear(0)"
           dropdownPosition="bottom" notFoundText="No hay resultados">
         </ng-select>
-
-        <!-- <select (change)="onSelectDirectionType($event)" [(ngModel)]="InputsStreet.P_SRECTYPE">
-          <option value="0" selected>Seleccionar</option>
-          <option *ngFor="let directionType of directionTypeList" value="{{directionType.SRECTYPE}}">
-            {{directionType.SDESCRIPT}}</option>
-        </select> -->
       </div>
     </div>
     <div class="row">
@@ -28,11 +21,6 @@
           [(ngModel)]="InputsStreet.P_STI_DIRE" [clearable]="true" [ngClass]="{'error-validate': VAL_STREET[1] != ''}" (click)="Clear(1)"
           placeholder="Seleccionar" dropdownPosition="bottom" notFoundText="No hay resultados">
         </ng-select>
-
-        <!-- <select (change)="onSelectRoadType($event)" [(ngModel)]="InputsStreet.P_STI_DIRE">
-          <option value="0" selected>Seleccionar</option>
-          <option *ngFor="let roadType of roadTypeList" value="{{roadType.STI_DIRE}}">{{roadType.SDESCRIPT}}</option>
-        </select> -->
       </div>
       <div class="col-sm-6">
         <span>DIRECCIÓN</span>
@@ -75,11 +63,6 @@
           [(ngModel)]="InputsStreet.P_STI_CJHT" [clearable]="true" placeholder="Seleccionar"  [ngClass]="{'error-validate': VAL_STREET[9] != ''}" (click)="Clear(9)"
           dropdownPosition="bottom" notFoundText="No hay resultados">
         </ng-select>
-
-        <!-- <select (change)="onSelectCJHTType($event)" [(ngModel)]="InputsStreet.P_STI_CJHT">
-          <option value="0" selected>Seleccionar</option>
-          <option *ngFor="let cjhtType of cjhtTypeList" value="{{cjhtType.STI_CJHT}}">{{cjhtType.SDESCRIPT}}</option>
-        </select> -->
       </div>
       <div class="col-sm-6">
         <span>NOMBRE CONJ. HABIT.</span>
@@ -93,13 +76,6 @@
           [(ngModel)]="InputsStreet.P_STI_BLOCKCHALET" [clearable]="true" placeholder="Seleccionar" [ngClass]="{'error-validate': VAL_STREET[11] != ''}" (click)="Clear(11)"
           dropdownPosition="bottom" notFoundText="No hay resultados">
         </ng-select>
-
-
-        <!-- <select (change)="onSelectBlockType($event)" [(ngModel)]="InputsStreet.P_STI_BLOCKCHALET">
-          <option value="0" selected>Seleccionar</option>
-          <option *ngFor="let blockType of blockTypeList" value="{{blockType.STI_BLOCKCHALET}}">{{blockType.SDESCRIPT}}
-          </option>
-        </select> -->
       </div>
       <div class="col-sm-3">
         <span>NÚMERO/LETRA</span>
@@ -117,9 +93,6 @@
           [(ngModel)]="InputsStreet.P_NCOUNTRY" [clearable]="false"  [ngClass]="{'error-validate': VAL_STREET[14] != ''}" (click)="Clear(14)"
           placeholder="Seleccionar" dropdownPosition="bottom" notFoundText="No hay resultados">
         </ng-select>
-        <!-- <select (change)="onSelectCountry($event.target.value)" [(ngModel)]="InputsStreet.P_NCOUNTRY">
-          <option *ngFor="let country of countryList" value="{{country.NCOUNTRY}}">{{country.SDESCRIPT}}</option>
-        </select> -->
       </div>
       <div *ngIf="blockPais" class="col-sm-6">
         <span>DEPARTAMENTO (*)</span>
@@ -127,11 +100,6 @@
           [(ngModel)]="InputsStreet.P_NPROVINCE" [clearable]="true" placeholder="Seleccionar" dropdownPosition="bottom"  [ngClass]="{'error-validate': VAL_STREET[15] != ''}" (click)="Clear(15)"
           notFoundText="No hay resultados">
         </ng-select>
-        <!-- <select (change)="onSelectDepartment($event)" [(ngModel)]="InputsStreet.P_NPROVINCE">
-          <option value="0" selected>Seleccionar</option>
-          <option *ngFor="let department of departmentList" value="{{department.Id}}">{{department.Name}}
-          </option>
-        </select> -->
       </div>
       <div *ngIf="blockPais" class="col-sm-6">
         <span>PROVINCIA (*)</span>
@@ -139,11 +107,6 @@
           [(ngModel)]="InputsStreet.P_NLOCAL" [clearable]="true" placeholder="Seleccionar"  [ngClass]="{'error-validate': VAL_STREET[16] != ''}" (click)="Clear(16)"
           dropdownPosition="bottom" notFoundText="No hay resultados">
         </ng-select>
-        <!-- <select (change)="onSelectProvince($event)" [(ngModel)]="InputsStreet.P_NLOCAL">
-          <option value="0" selected>Seleccionar</option>
-          <option *ngFor="let province of provinceList" value="{{province.Id}}">{{province.Name}}
-          </option>
-        </select> -->
       </div>
       <div *ngIf="blockPais" class="col-sm-6">
         <span>DISTRITO (*)</span>
@@ -151,11 +114,6 @@
           [(ngModel)]="InputsStreet.P_NMUNICIPALITY" [clearable]="true"  [ngClass]="{'error-validate': VAL_STREET[17] != ''}" (click)="Clear(17)"
           placeholder="Seleccionar" dropdownPosition="bottom" notFoundText="No hay resultados">
         </ng-select>
-        <!-- <select (change)="onSelectDistrict($event)" [(ngModel)]="InputsStreet.P_NMUNICIPALITY">
-          <option value="0" selected>Seleccionar</option>
-          <option *ngFor="let district of districtList" value="{{district.Id}}">{{district.Name}}
-          </option>
-        </select> -->
       </div>
     </div>
     <div class="row" *ngIf="itemDireccion != null">
@@ -168,5 +126,4 @@
 </div>
 <div class="modal-footer">
   <button class="full-color" (click)="EventSave($event)"><span>{{txtAccion}}</span></button>
-  <!-- <button class="full-color" click)="reference.close()"><span>Agregar Dirección</span></button> -->
 </div>

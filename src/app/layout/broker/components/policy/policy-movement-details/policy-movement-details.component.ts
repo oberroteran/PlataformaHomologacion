@@ -21,11 +21,15 @@ export class PolicyMovementDetailsComponent implements OnInit {
   flagAnular: boolean = false;
 
   listToShow: any[] = [];
-  public currentPage = 1; //página actual
-  public rotate = true; //
-  public maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
-  public itemsPerPage = 5; // limite de items por página
-  public totalItems = 0; //total de items encontrados
+  currentPage = 1; //página actual
+  rotate = true; //
+  maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
+  itemsPerPage = 5; // limite de items por página
+  totalItems = 0; //total de items encontrados
+
+  adjuntosList: any = [];
+  generadosList: any = [];
+
 
   constructor(
     private policyService: PolicyService,
@@ -57,7 +61,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
         console.log(res)
         this.policyMovementList = res.C_TABLE;
         let num = 0;
-
         this.totalItems = this.policyMovementList.length;
         this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
 
@@ -82,7 +85,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
 
   pageChanged(currentPage) {
     this.currentPage = currentPage;
-    this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+    this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
   }
 
   anularMov(nroMov: any) {
@@ -154,10 +157,15 @@ export class PolicyMovementDetailsComponent implements OnInit {
       });
   }
   // openModal(mov: number, policy: string) {
-  openModal() {
+  openModal(item: any) {
     let modalRef: NgbModalRef;
     modalRef = this.modalService.open(PolicyDocumentsComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
     modalRef.componentInstance.reference = modalRef;
+    modalRef.componentInstance.adjuntosList = item.RUTAS;
+    modalRef.componentInstance.generadosList = item.RUTAS_GEN;
+    modalRef.componentInstance.comentario = item.COMENTARIO;
+    modalRef.componentInstance.motAnulacion = item.MOT_ANULACION;
+
     //modalRef.componentInstance.itemTransaccionList = this.policyList[mov];
     //modalRef.componentInstance.policy = policy;
   }

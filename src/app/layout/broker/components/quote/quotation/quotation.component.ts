@@ -474,12 +474,11 @@ export class QuotationComponent implements OnInit {
 
         this.clientInformationService.getClientInformation(data).subscribe(
             res => {
-                // console.log(res);
+                console.log(res);
                 if (res.P_NCODE == 0) {
                     if (res.EListClient.length == 0) {
                         this.stateQuotation = true;
                         this.economicActivityList = null;
-
                         if (this.InputsQuotation.P_SIDDOC != "") {
                             this.clearInputsQuotation();
                             if (AccessFilter.hasPermission("34") == true) {
@@ -510,7 +509,7 @@ export class QuotationComponent implements OnInit {
 
 
                     } else {
-                        if (res.EListClient[0].P_SCLIENT == "") {
+                        if (res.EListClient[0].P_SCLIENT == null) {
                             this.stateQuotation = true;
                             //this.router.navigate(['/broker/add-contracting'], { queryParams: { typeDocument: this.InputsQuotation.P_NIDDOC_TYPE, document: this.InputsQuotation.P_SIDDOC, receiver: "quotation" } });
                             if (AccessFilter.hasPermission("34") == true) {
@@ -1394,7 +1393,7 @@ export class QuotationComponent implements OnInit {
             //Agregando los brokerId y middlemanId | Lista de comercializadores
             if (this.brokerList.length > 0) {
                 this.brokerList.forEach(broker => {
-                    if (broker.NTYPECHANNEL == 6) {
+                    if (broker.NTYPECHANNEL == 6 || broker.NTYPECHANNEL == 8) {
                         let brokerItem = new Channel();
                         brokerItem.brokerId = broker.NCORREDOR.toString(); // Produccion
                         //brokerItem.brokerId = broker.COD_CANAL.toString(); //Desarrollo
@@ -1411,7 +1410,7 @@ export class QuotationComponent implements OnInit {
             }
 
             //Agregando los brokerId y middlemanId | Comercializador principal
-            if (JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"] == 6) {
+            if (JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"] == 6 || JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"] == 8) {
                 let brokerItem = new Channel();
                 brokerItem.brokerId = JSON.parse(localStorage.getItem("currentUser"))["ncorredor"].toString();
                 data.channel.push(brokerItem);
@@ -1424,17 +1423,8 @@ export class QuotationComponent implements OnInit {
             console.log(data);
             this.clientInformationService.getTariff(data).subscribe(
                 res => {
-                    // console.log(res);
-                    //let res1 = JSON.parse('{"fields":[{"id":"3K9CSj6cZv4CWXmZD2Dbou","tariff":"tarifario de canal 2019","field":"PENSIÓN","fieldEquivalenceCore":"120","areaGroup":"Nacional","activityGroup":"ACTIVIDAD INMOBILIARIA","enterprise":[{"size":"(<) Menor a 50","minimumPremium":100,"minimumPremiumEndoso":90,"netRate":[{"id":"tc0JxCB9RcF0Edrr8YHmj","description":"Bajo","rate":0.00348},{"id":"5y8DsLtP3j4pSNpoDXrwU5","description":"Alto","rate":0.005966},{"id":"1gY9qisZjEQ7hFLbLbjnHz","description":"Flat","rate":0.005651}],"riskRate":[{"id":"tc0JxCB9RcF0Edrr8YHmj","description":"Bajo","rate":0.009241},{"id":"5y8DsLtP3j4pSNpoDXrwU5","description":"Alto","rate":0.009241},{"id":"1gY9qisZjEQ7hFLbLbjnHz","description":"Flat","rate":0.009241}]}],"channels":[{"roleType":"BROKER","roleDescription":"JAST CORREDORES DE SEGUROS SAC","roleId":"2016000044"},{"roleType":"CUSTOMER","roleDescription":"AREVALO SOLANO NANCY","roleId":"02000000084757"}],"channelDistributions":[{"roleId":"2016000044","distribution":"100"}],"discount":"2.1","activityVariation":5,"commission":"20"}]}')
-                    //if (res1.fields !== null) {
-                    console.log(res)
                     if (res.fields !== null) {
-                        // console.log(res);
-                        // let res1 = "";
-                        // res1 = JSON.parse('{"fields":[{"id":"3K9CSj6cZv4CWXmZD2Dbou","tariff":"tarifario de canal 2019","field":"PENSIÓN","areaGroup":"Nacional","activityGroup":"ACTIVIDAD INMOBILIARIA","enterprise":[{"size":"(<) Menor a 50","minimumPremium":100,"minimumPremiumEndoso":90,"netRate":[{"id":"tc0JxCB9RcF0Edrr8YHmj","description":"Bajo","premium":0.92416666},{"id":"5y8DsLtP3j4pSNpoDXrwU5","description":"Alto","premium":0.72416666}]}],"channels":[{"roleType":"BROKER","roleDescription":"J.E. CORREDORES DE SEGUROS S.A.C.","roleId":"2015000007"},{"roleType":"BROKER","roleDescription":"JAST CORREDORES DE SEGUROS SAC","roleId":"2016000044"},{"roleType":"CUSTOMER","roleDescription":"AREVALO SOLANO NANCY","roleId":"02000002856983"}],"channelDistributions":[{"roleId":"2015000007","distribution":"30"},{"roleId":"2016000044","distribution":"70"}],"discount":"2.1","activityVariation":5,"commission":"21"},{"id":"59lwVR5svZ6Atw5jixbJGq","tariff":"tarifario de canal 2019","field":"SALUD","areaGroup":"Nacional","activityGroup":"ACTIVIDAD INMOBILIARIA","enterprise":[{"size":"(<) Menor a 50","minimumPremium":100,"minimumPremiumEndoso":90,"netRate":[{"id":"tc0JxCB9RcF0Edrr8YHmj","description":"Bajo","premium":0.82416666},{"id":"5y8DsLtP3j4pSNpoDXrwU5","description":"Alto","premium":0.92416666}]}],"channels":[{"roleType":"BROKER","roleDescription":"J.E. CORREDORES DE SEGUROS S.A.C.","roleId":"2015000007"},{"roleType":"BROKER","roleDescription":"JAST CORREDORES DE SEGUROS SAC","roleId":"2016000044"},{"roleType":"CUSTOMER","roleDescription":"AREVALO SOLANO NANCY","roleId":"02000002856983"}],"channelDistributions":[{"roleId":"2015000007","distribution":"30"},{"roleId":"2016000044","distribution":"70"}],"discount":"1.1","activityVariation":5,"commission":"11"}]}');
-                        // this.resList = res1;
                         this.resList = res;
-                        //console.log(this.resList)
                         let self = this;
                         this.COM_SAL_PRO = false
                         this.COM_PEN_PRO = false
@@ -1449,15 +1439,10 @@ export class QuotationComponent implements OnInit {
                         this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO = "";
                         this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = "";
 
-                        //let countSalud = 0;
-                        //let countPension = 0;
-                        //console.log(this.resList);
                         this.resList.fields.forEach(item => {
                             switch (item.fieldEquivalenceCore) {
                                 case this.pensionID: // Pension
                                     if (item.enterprise[0].netRate != undefined) {
-                                        //this.stateCotizadorPension = false;
-                                        //this.InputsQuotation.P_SCTR_PENSION = true;
                                         this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO = "";
                                         item.enterprise[0].netRate.map(function (dato) {
                                             dato.rate = self.formateaValor(parseFloat(dato.rate) * 100);
@@ -1466,19 +1451,9 @@ export class QuotationComponent implements OnInit {
                                             dato.planProp = 0;
                                             dato.totalWorkes = 0;
                                         });
-
-                                        /*if (this.listaTasasPensionPreview == "") {
-                                          this.listaTasasPension = item.enterprise[0].netRate;
-                                          countPension = item.enterprise[0].netRate.length;
-                                        }*/
-                                    } //else {
-                                    //this.stateCotizadorPension = true;
-                                    //this.InputsQuotation.P_SCTR_PENSION = false;
-                                    //}
+                                    }
 
                                     if (item.enterprise[0].riskRate != undefined) {
-                                        //this.stateCotizadorPension = false;
-                                        //this.InputsQuotation.P_SCTR_PENSION = true;
                                         item.enterprise[0].riskRate.forEach(net => {
                                             item.enterprise[0].netRate.map(function (dato) {
                                                 if (net.id == dato.id) {
@@ -1499,8 +1474,6 @@ export class QuotationComponent implements OnInit {
                                     break;
                                 case this.saludID:  // Salud
                                     if (item.enterprise[0].netRate != undefined) {
-                                        //this.stateCotizadorSalud = false;
-                                        //this.InputsQuotation.P_SCTR_SALUD = true;
                                         this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO = "";
                                         item.enterprise[0].netRate.map(function (dato) {
                                             dato.rate = self.formateaValor(parseFloat(dato.rate) * 100);
@@ -1509,14 +1482,7 @@ export class QuotationComponent implements OnInit {
                                             dato.planProp = 0;
                                             dato.totalWorkes = 0;
                                         });
-                                        /*if (this.listaTasasSaludPreview == "") {
-                                          this.listaTasasSalud = item.enterprise[0].netRate;
-                                          countSalud = item.enterprise[0].netRate.length;
-                                        }*/
-                                    } /*else {
-                    this.stateCotizadorSalud = true;
-                    this.InputsQuotation.P_SCTR_SALUD = false;
-                  }*/
+                                    }
 
                                     if (item.enterprise[0].riskRate != undefined) {
                                         item.enterprise[0].riskRate.forEach(net => {
@@ -1539,9 +1505,6 @@ export class QuotationComponent implements OnInit {
                                     break;
                             }
                         });
-
-                        // console.log(this.listaTasasSalud.length)
-                        // console.log(this.listaTasasPension.length)
                         if (this.listaTasasSalud.length > 0 || this.listaTasasPension.length > 0) {
                             switch (this.InputsQuotation.P_NPRODUCT) {
                                 case "-1": // Seleccione
@@ -1649,35 +1612,16 @@ export class QuotationComponent implements OnInit {
                                         });
                                         netoPension = netoPension + parseFloat(dato.premiumMonth)
                                     }
-
-                                    /*if (self.listaTasasPensionPreview != "") {
-                                      self.listaTasasPensionPreview.forEach(item => {
-                                        // dato.premiumMonth = item.prem;
-                                        if (item.id == dato.id) {
-                                          dato.totalWorkes = item.totalWorkes;
-                                          dato.planilla = item.planilla;
-                                          dato.planProp = item.planProp;
-                                          dato.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(dato.rate)));
-                                        }
-                                      });
-                                      netoPension = netoPension + parseFloat(dato.premiumMonth)
-                                    }*/
                                 });
 
                                 if (self.listaTasasPension != "") {
-                                    // console.log(item.enterprise[0].netRate);
                                     this.listaTasasPension = item.enterprise[0].netRate;
                                     this.InputsQuotation.P_PRIMA_MIN_PENSION = item.enterprise[0].minimumPremium == null ? "0" : item.enterprise[0].minimumPremium;
                                     this.InputsQuotation.P_PRIMA_END_PENSION = item.enterprise[0].minimumPremiumEndoso == null ? "0" : item.enterprise[0].minimumPremiumEndoso;
                                 }
-                                /*if (self.listaTasasPensionPreview != "") {
-                                  this.listaTasasPensionPreview = item.enterprise[0].netRate;
-                                  this.InputsQuotation.P_PRIMA_MIN_PENSION = "";
-                                }*/
 
                                 this.totalNetoPension = this.formateaValor(netoPension);
                                 this.igvPension = this.formateaValor((this.totalNetoPension * this.igvPensionWS) - this.totalNetoPension); // IGV + CE
-                                // this.igvPension = this.formateaValor((this.totalNetoPension * 1.18) - this.totalNetoPension); // Solo IGV
                                 let totalPreviewPension = parseFloat(this.totalNetoPension.toString()) + parseFloat(this.igvPension.toString());
                                 this.brutaTotalPension = this.formateaValor(totalPreviewPension)
 
@@ -1793,26 +1737,6 @@ export class QuotationComponent implements OnInit {
             msg += "Debe seleccionar una sede válida <br>"
         }
 
-        // if (this.InputsQuotation.P_NECONOMIC == null) {
-        //   // this.VAL_QUOTATION[3] = "3";
-        //   msg += "Debe seleccionar una Actividad Económica <br>"
-        // }
-
-        // if (this.InputsQuotation.P_NPROVINCE == null) {
-        //   // this.VAL_QUOTATION[4] = "4";
-        //   msg += "Debe seleccionar un Departamento <br>"
-        // }
-
-        // if (this.InputsQuotation.P_NLOCAL == null) {
-        //   // this.VAL_QUOTATION[5] = "5";
-        //   msg += "Debe seleccionar una Provincia <br>"
-        // }
-
-        // if (this.InputsQuotation.P_NMUNICIPALITY == null) {
-        //   // this.VAL_QUOTATION[6] = "6";
-        //   msg += "Debe seleccionar un distrito <br>"
-        // }
-
         if (this.tasasList.length == 0) {
             this.VAL_QUOTATION[7] = "7";
             msg += "Para generar una cotización debe tener un producto <br>"
@@ -1860,12 +1784,6 @@ export class QuotationComponent implements OnInit {
         if (this.stateWorker == true) {
             msg += "La cantidad de trabajadores no es la correcta <br />";
         }
-
-        // if(this.InputsQuotation.P_CANT_WORKER == "1"){
-        //   if(this.totalTrabajadoresSalud > 50){
-        //     msg += "";
-        //   }
-        // }
 
         let sumSize = 0;
         this.files.forEach(file => {
@@ -1986,14 +1904,11 @@ export class QuotationComponent implements OnInit {
                 });
             }
 
-            // console.log(JSON.stringify(dataQuotation));
-            // self.isLoading = false;
-            // return;
             let myFormData: FormData = new FormData()
             this.files.forEach(file => {
                 myFormData.append(file.name, file);
             });
-            //const body = JSON.stringify(dataQuotation);
+
             self.isLoading = false;
             myFormData.append("objeto", JSON.stringify(dataQuotation));
             swal.fire({
@@ -2016,14 +1931,6 @@ export class QuotationComponent implements OnInit {
                                     this.clearInsert()
                                     quotationNumber = res.P_NID_COTIZACION;
                                     if (res.P_SAPROBADO == 'S') {
-                                        let itemUpdate: any = {};
-                                        // itemUpdate.P_NID_COTIZACION = quotationNumber;
-                                        // itemUpdate.P_ESTADO = 2;
-                                        // itemUpdate.P_NUSERCODE = this.userId;
-
-                                        // this.quotationService.approveQuotation(itemUpdate).subscribe(
-                                        //   res => {
-                                        //console.log(res);
                                         self.isLoading = false;
                                         if (res.P_NCODE == 0) {
                                             swal.fire({
@@ -2045,13 +1952,6 @@ export class QuotationComponent implements OnInit {
                                             self.isLoading = false;
                                             swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación.", "success");
                                         }
-
-                                        // },
-                                        // err => {
-                                        //   self.isLoading = false;
-                                        //   swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación.", "success");
-                                        //   //console.log(err);
-                                        // });
                                     } else {
                                         self.isLoading = false;
                                         swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
@@ -2063,7 +1963,6 @@ export class QuotationComponent implements OnInit {
                             },
                             err => {
                                 self.isLoading = false;
-                                //console.log(err);
                                 swal.fire("Información", "Hubo un error con el servidor", "error");
                             }
                         );
@@ -2075,7 +1974,9 @@ export class QuotationComponent implements OnInit {
     getFileExtension(filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
     }
-
+    Limpiar() {
+        this.clearInsert()
+    }
     clearInsert() {
         this.stateBrokerSalud = true;
         this.stateBrokerPension = true;
@@ -2088,8 +1989,6 @@ export class QuotationComponent implements OnInit {
         this.stateTasaPension = true;
         this.stateBrokerTasaSalud = true;
         this.stateBrokerTasaPension = true;
-        //this.stateCotizadorPension = true;
-        //this.stateCotizadorSalud = true;
         this.blockDoc = true;
         this.blockSearch = true;
         this.stateSearch = false;

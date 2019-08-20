@@ -135,7 +135,7 @@
                       <tr class="{{telefono.P_CLASS}}">
                         <td scope="row">{{telefono.P_NROW}}</td>
                         <td class="text-center">{{telefono.P_DESTIPOTLF}}</td>
-                        <td class="text-center">{{telefono.P_SPHONE}} <label *ngIf="telefono.P_NEXTENS1 != ''">/</label> {{telefono.P_NEXTENS1}}</td>
+                        <td class="text-center">{{telefono.P_SPHONE}} <label *ngIf="telefono.P_NEXTENS1 != '' && telefono.P_NEXTENS1 != null">/</label> {{telefono.P_NEXTENS1}}</td>
                         <td class="text-center">
                           <img *ngIf="telefono.P_CLASS == ''" src="assets/icons/editar.png"
                             (click)="EditarTelefono(telefono.P_NROW)" title="Editar" alt="Editar" /> &nbsp;

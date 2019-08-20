@@ -43,7 +43,7 @@
     line-height: 24px;
 }
 
-.filter input[type="text"] {
+input[type="text"] {
     /* outline: auto; */
     border: none;
     border-radius: 2px;
@@ -60,6 +60,9 @@
     padding-left: 12px;
 }
 
+input[type='text'], input[type='password'], textarea, label, .ng-placeholder, select, textarea {
+    text-transform: uppercase;
+}
 .pminima {
     width: 90% !important;
     float: right;

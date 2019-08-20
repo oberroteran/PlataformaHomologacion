@@ -64,7 +64,7 @@ export class PolicyIndexComponent implements OnInit {
     public currentPage = 1; //página actual
     public rotate = true; //
     public maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
-    public itemsPerPage = 6; // limite de items por página
+    public itemsPerPage = 5; // limite de items por página
     public totalItems = 0; //total de items encontrados
 
     constructor(
@@ -321,7 +321,7 @@ export class PolicyIndexComponent implements OnInit {
                     this.isLoading = false;
                     this.policyList = res.C_TABLE;
                     this.totalItems = this.policyList.length;
-                    this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+                    this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
                     if (this.policyList.length == 0) {
                         swal.fire({
                             title: "Información",
@@ -347,7 +347,7 @@ export class PolicyIndexComponent implements OnInit {
 
     pageChanged(currentPage) {
         this.currentPage = currentPage;
-        this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+        this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
 
     }
 
@@ -358,34 +358,56 @@ export class PolicyIndexComponent implements OnInit {
             if (this.policyList.length > 0) {
                 this.policyList.forEach(element => {
                     if (element.NRO_COTIZACION == this.policyList[this.selectedPolicy].NRO_COTIZACION) {
-                        switch (idTipo) {
-                            case 1: // Anular
-                                this.router.navigate(['/broker/policy/transaction/cancel'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 2: // Incluir
-                                this.router.navigate(['/broker/policy/transaction/include'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 3: // Exluir
-                                this.router.navigate(['/broker/policy/transaction/exclude'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 4: // Renovar
-                                this.router.navigate(['/broker/policy/transaction/renew'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 5: //Neteo
-                                this.router.navigate(['/broker/policy/transaction/netear'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                            case 6: //Endoso
-                                this.router.navigate(['/broker/policy/transaction/endosar'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
-                                break;
-                        }
-                        // this.router.navigate(['/broker/add-contracting'], { queryParams: { policy: element.POLIZA, receiver: "quotation" } });
+                        this.policyService.valTransactionPolicy(element.NRO_COTIZACION).subscribe(
+                            res => {
+                                console.log(res)
+                                if (res.P_COD_ERR == "0") {
+                                    switch (idTipo) {
+                                        case 1: // Anular
+                                            this.router.navigate(['/broker/policy/transaction/cancel'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 2: // Incluir
+                                            this.router.navigate(['/broker/policy/transaction/include'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 3: // Exluir
+                                            this.router.navigate(['/broker/policy/transaction/exclude'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 4: // Renovar
+                                            this.router.navigate(['/broker/policy/transaction/renew'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 5: //Neteo
+                                            this.router.navigate(['/broker/policy/transaction/netear'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                        case 6: //Endoso
+                                            this.router.navigate(['/broker/policy/transaction/endosar'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            break;
+                                    }
+                                } else {
+                                    swal.fire({
+                                        title: "Información",
+                                        text: res.P_MESSAGE,
+                                        type: "error",
+                                        confirmButtonText: 'OK',
+                                        allowOutsideClick: false,
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            return;
+                                        }
+                                    });
+                                }
+                            },
+                            err => {
+                                this.isLoading = false;
+                                console.log(err);
+                            }
+                        );
                     }
                 });
             }
 
-            if (idTipo == 1) {
-                console.log(selection)
-            }
+            // if (idTipo == 1) {
+            //     console.log(selection)
+            // }
 
         } else {
             swal.fire({

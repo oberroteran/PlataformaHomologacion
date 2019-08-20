@@ -374,7 +374,7 @@ export class StateReportComponent implements OnInit {
                             }, (reason) => {
                                 //nothing
                             });
-                        } else {
+                        } else if (res.EListClient[0].P_SCLIENT != null) {
 
                             let data = new ContractorForTable();
                             data.Id = res.EListClient[0].P_SCLIENT;
@@ -421,6 +421,10 @@ export class StateReportComponent implements OnInit {
                                 }
                             );
 
+                        } else {
+                            this.totalItems = 0;
+                            this.isLoading = false;
+                            Swal.fire("Información", this.notfoundMessage, "warning");
                         }
 
                     } else {

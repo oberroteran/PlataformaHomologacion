@@ -29,4 +29,9 @@ export class PolicyService {
             headers: this.headers
         });
     }
+
+    valTransactionPolicy(nroCotizacion: any): Observable<any> {
+        let url = this.Url + "/PolicyManager/valTransactionPolicy?nroCotizacion=" + nroCotizacion;
+        return this.http.get(url);
+    }
 }

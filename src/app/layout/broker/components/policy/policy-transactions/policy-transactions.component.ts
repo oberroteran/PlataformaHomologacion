@@ -22,6 +22,7 @@ import { ValErrorComponent } from '../../../modal/val-error/val-error.component'
 import { AccessFilter } from './../../access-filter'
 import { ModuleConfig } from './../../module.config'
 import { QuotationService } from '../../../services/quotation/quotation.service';
+import { PolicyService } from '../../../services/policy/policy.service';
 //Modal
 import { SearchBrokerComponent } from '../../../modal/search-broker/search-broker.component';
 
@@ -197,6 +198,7 @@ export class PolicyTransactionsComponent implements OnInit {
     private policyemit: PolicyemitService,
     private quotationService: QuotationService,
     private clientInformationService: ClientInformationService,
+    private policyService: PolicyService,
     private datePipe: DatePipe,
     private modalService: NgbModal) {
 
@@ -266,7 +268,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.title = "Anular Póliza";
       this.typeMovement = "7";
       this.questionText = "¿Deseas hacer la anulación de la póliza?"
-      this.responseText = "Se ha realizado la anulación con constancia N° "
+      this.responseText = "Se ha realizado la anulación correctamente "
     } else if (this.mode == "exclude") { // excluir
       this.title = "Excluir en Póliza";
       this.typeMovement = "3";
@@ -292,7 +294,31 @@ export class PolicyTransactionsComponent implements OnInit {
       });
 
     if (this.nrocotizacion != undefined) {
-      this.buscarCotizacion();
+      this.policyService.valTransactionPolicy(this.nrocotizacion).subscribe(
+        res => {
+          console.log(res)
+          if (res.P_COD_ERR == "0") {
+            this.buscarCotizacion();
+          } else {
+            Swal.fire({
+              title: "Información",
+              text: res.P_MESSAGE,
+              type: "error",
+              confirmButtonText: 'OK',
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.value) {
+                this.router.navigate(['/broker/policy-transactions']);
+                return;
+              }
+            });
+          }
+        },
+        err => {
+          this.loading = false;
+          console.log(err);
+        }
+      );
     }
     //console.log("polizaEmitComer", this.polizaEmitComer)
   }
@@ -857,7 +883,7 @@ export class PolicyTransactionsComponent implements OnInit {
       //Agregando los brokerId y middlemanId | Lista de comercializadores
       if (this.polizaEmitComer.length > 0) {
         this.polizaEmitComer.forEach(broker => {
-          if (broker.TIPO_CANAL == "6") {
+          if (broker.TIPO_CANAL == "6" || broker.TIPO_CANAL == "8") {
             let brokerItem: any = {};
             brokerItem.brokerId = broker.CANAL;
             data.channel.push(brokerItem);
@@ -870,7 +896,7 @@ export class PolicyTransactionsComponent implements OnInit {
       }
 
       //Agregando los brokerId y middlemanId | Comercializador principal
-      if (this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "6") {
+      if (this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "6" || this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "8") {
         let brokerItem: any = {};
         brokerItem.brokerId = this.polizaEmitComerDTOPrincipal.CANAL;
         data.channel.push(brokerItem);
@@ -1352,18 +1378,6 @@ export class PolicyTransactionsComponent implements OnInit {
                       this.polizaEmit.workers = "2";
                     }
 
-                    //this.factorIgv = parseFloat(res[0].FACTOR_IGV);
-
-                    // this.igvPension = this.formateaValor((this.primatotalSCTR * this.igvPensionWS) - this.primatotalSCTR);
-                    // this.totalSTRC = this.formateaValor(parseFloat(this.primatotalSCTR.toString()) + parseFloat(this.igvPension.toString()));
-
-                    // this.igvSalud = this.formateaValor((this.primatotalSalud * this.igvSaludWS) - this.primatotalSalud)
-                    // this.totalSalud = this.formateaValor(parseFloat(this.primatotalSalud.toString()) + parseFloat(this.igvSalud.toString()));
-
-                    //this.igvPension = this.formateaValor((this.primatotalSCTR * this.factorIgv) / 100);
-                    //this.igvSalud = this.formateaValor((this.primatotalSalud * this.factorIgv) / 100);
-                    //this.totalSalud = this.formateaValor(parseFloat(this.primatotalSalud.toString()) + parseFloat(this.igvSalud.toString()));
-                    //this.totalSTRC = this.formateaValor(parseFloat(this.primatotalSCTR.toString()) + parseFloat(this.igvPension.toString()));
                   } else {
                     this.primatotalSCTR = 0;
                     this.primatotalSalud = 0;
@@ -1520,7 +1534,7 @@ export class PolicyTransactionsComponent implements OnInit {
 
   ObtenerTipoRenovacion() {
     let requestTypeRen: any = {}
-		requestTypeRen.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]
+    requestTypeRen.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]
     this.policyemit.getTipoRenovacion(requestTypeRen)
       .subscribe((res: any) => {
         this.tipoRenovacion = res;
@@ -1826,17 +1840,31 @@ export class PolicyTransactionsComponent implements OnInit {
         console.log(res)
         this.loading = false;
         if (res.P_COD_ERR == 0) {
-          Swal.fire({
-            title: "Información",
-            text: this.responseText + res.P_NCONSTANCIA,
-            type: "success",
-            confirmButtonText: 'OK',
-            allowOutsideClick: false,
-          }).then((result) => {
-            if (result.value) {
-              this.router.navigate(['/broker/policy-transactions']);
-            }
-          });
+          if (this.mode == "cancel") {
+            Swal.fire({
+              title: "Información",
+              text: this.responseText,
+              type: "success",
+              confirmButtonText: 'OK',
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.value) {
+                this.router.navigate(['/broker/policy-transactions']);
+              }
+            });
+          } else {
+            Swal.fire({
+              title: "Información",
+              text: this.responseText + res.P_NCONSTANCIA,
+              type: "success",
+              confirmButtonText: 'OK',
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.value) {
+                this.router.navigate(['/broker/policy-transactions']);
+              }
+            });
+          }
         } else {
           Swal.fire({
             title: "Información",

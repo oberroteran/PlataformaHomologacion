@@ -433,7 +433,7 @@ export class ContractorLocationIndexComponent implements OnInit {
                             }, (reason) => {
                                 //nothing
                             });
-                        } else {
+                        } else if (res.EListClient[0].P_SCLIENT != null) {
                             this.currentClient.Id = res.EListClient[0].P_SCLIENT;
                             this.currentClient.DocumentNumber = res.EListClient[0].P_SIDDOC;
 
@@ -513,6 +513,27 @@ export class ContractorLocationIndexComponent implements OnInit {
                                     this.isLoadingScreenNotVisible = true;
                                 }
                             );
+                        } else {
+                            this.isLoadingScreenNotVisible = true;
+                            if (this.mainFormGroup.controls.searchMode.value == "1") {
+                                Swal.fire({
+                                    title: 'Información',
+                                    text: 'El contratante que estás buscando no está registrado ¿Deseas agregarlo?',
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Aceptar',
+                                    cancelButtonText: 'Cancelar'
+                                }).then((result) => {
+                                    if (result.value) {
+                                        this.router.navigate(['/broker/add-contracting'], { queryParams: { typeDocument: this.mainFormGroup.controls.documentType.value, document: this.mainFormGroup.controls.documentNumber.value, receiver: "contractor-location" } });
+                                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                        //nothing
+                                    }
+                                });
+                            } else {
+                                Swal.fire("Información", "No se encontraron registros.", "error");
+                            }
+
                         }
 
                     } else {

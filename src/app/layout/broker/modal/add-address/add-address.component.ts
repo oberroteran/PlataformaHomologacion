@@ -81,7 +81,7 @@ export class AddAddressComponent implements OnInit {
     if (this.itemDireccion != null) {
       console.log(this.itemDireccion);
       this.txtAccion = "Editar Dirección";
-      this.InputsStreet.P_NROW = this.itemDireccion.P_NROW;
+      this.InputsStreet.P_NROW =  parseInt(this.itemDireccion.P_NROW);
       this.InputsStreet.P_SDESDIREBUSQ = this.itemDireccion.P_SDESDIREBUSQ;
       this.InputsStreet.P_SBLOCKCHALET = this.itemDireccion.P_SBLOCKCHALET;
       this.InputsStreet.P_DESDEPARTAMENTO = this.itemDireccion.P_DESDEPARTAMENTO;
@@ -95,20 +95,20 @@ export class AddAddressComponent implements OnInit {
       this.InputsStreet.P_SNUM_INTERIOR = this.itemDireccion.P_SNUM_INTERIOR;
       this.InputsStreet.P_SLOTE = this.itemDireccion.P_SLOTE;
       this.InputsStreet.P_SMANZANA = this.itemDireccion.P_SMANZANA;
-      this.InputsStreet.P_NCOUNTRY = this.itemDireccion.P_NCOUNTRY;
+      this.InputsStreet.P_NCOUNTRY =  parseInt(this.itemDireccion.P_NCOUNTRY);
       this.onSelectCountryEdit(this.itemDireccion);
-      this.InputsStreet.P_NPROVINCE = this.itemDireccion.P_NPROVINCE;
+      this.InputsStreet.P_NPROVINCE =  parseInt(this.itemDireccion.P_NPROVINCE);
       this.getProvinceList();
-      this.InputsStreet.P_NLOCAL = this.itemDireccion.P_NLOCAL;
+      this.InputsStreet.P_NLOCAL =  parseInt(this.itemDireccion.P_NLOCAL);
       this.getDistrictList();
-      this.InputsStreet.P_NMUNICIPALITY = this.itemDireccion.P_NMUNICIPALITY;
+      this.InputsStreet.P_NMUNICIPALITY =  parseInt(this.itemDireccion.P_NMUNICIPALITY);
       this.InputsStreet.P_SNUM_DIRECCION = this.itemDireccion.P_SNUM_DIRECCION;
-      this.InputsStreet.P_STI_BLOCKCHALET = this.itemDireccion.P_STI_BLOCKCHALET;
-      this.InputsStreet.P_STI_DIRE = this.itemDireccion.P_STI_DIRE;
-      this.InputsStreet.P_STI_INTERIOR = this.itemDireccion.P_STI_INTERIOR;
-      this.InputsStreet.P_STI_CJHT = this.itemDireccion.P_STI_CJHT;
+      this.InputsStreet.P_STI_BLOCKCHALET =  this.itemDireccion.P_STI_BLOCKCHALET == ""  ? null : this.itemDireccion.P_STI_BLOCKCHALET;
+      this.InputsStreet.P_STI_DIRE = this.itemDireccion.P_STI_DIRE == "" ? null : this.itemDireccion.P_STI_DIRE;
+      this.InputsStreet.P_STI_INTERIOR = this.itemDireccion.P_STI_INTERIOR == "" ? null : this.itemDireccion.P_STI_INTERIOR;
+      this.InputsStreet.P_STI_CJHT = this.itemDireccion.P_STI_CJHT == "" ? null : this.itemDireccion.P_STI_CJHT;
       this.InputsStreet.P_SNOM_DIRECCION = this.itemDireccion.P_SNOM_DIRECCION;
-      this.InputsStreet.P_SRECTYPE = this.itemDireccion.P_SRECTYPE;
+      this.InputsStreet.P_SRECTYPE =  parseInt(this.itemDireccion.P_SRECTYPE);
       this.InputsStreet.P_SREFERENCE = this.itemDireccion.P_SREFERENCE;
       this.InputsStreet.P_SNOM_CJHT = this.itemDireccion.P_SNOM_CJHT;
       this.InputsStreet.P_SNOMUSUARIO = this.itemDireccion.P_SNOMUSUARIO;
@@ -308,25 +308,12 @@ export class AddAddressComponent implements OnInit {
 
   onSelectCountryEdit(item) {
     if (item.P_NCOUNTRY == "604") {
-      this.InputsStreet.P_NCOUNTRY = item.P_NCOUNTRY;
+      this.InputsStreet.P_NCOUNTRY =  parseInt(item.P_NCOUNTRY);
       this.blockPais = true;
     } else {
-      this.InputsStreet.P_NCOUNTRY = item.P_NCOUNTRY;
+      this.InputsStreet.P_NCOUNTRY =  parseInt(item.P_NCOUNTRY);
       this.blockPais = false;
     }
-
-
-    /*this.InputsStreet.P_NPROVINCE = null;
-    this.InputsStreet.P_DESDEPARTAMENTO = "";
-    this.sDepartamento = "";
-    this.InputsStreet.P_NLOCAL = null;
-    this.InputsStreet.P_DESPROVINCIA = "";
-    this.sProvincia = "";
-    this.InputsStreet.P_NMUNICIPALITY = null;
-    this.InputsStreet.P_DESDISTRITO = "";
-    this.sDistrito = "";
-    this.getProvinceList();
-    this.getDistrictList();*/
   }
 
   onSelectDepartment(event) {
@@ -500,7 +487,7 @@ export class AddAddressComponent implements OnInit {
 
   EventSave(event) {
 
-    this.InputsStreet.P_SNOM_DIRECCION = this.InputsStreet.P_SNOMBRES == null ? "" : this.InputsStreet.P_SNOMBRES.toUpperCase()
+    this.InputsStreet.P_SNOM_DIRECCION = this.InputsStreet.P_SNOM_DIRECCION == null ? "" : this.InputsStreet.P_SNOM_DIRECCION.toUpperCase()
     this.InputsStreet.P_SNUM_DIRECCION = this.InputsStreet.P_SNUM_DIRECCION == null ? "" : this.InputsStreet.P_SNUM_DIRECCION.toUpperCase()
     this.InputsStreet.P_SNUM_INTERIOR = this.InputsStreet.P_SNUM_INTERIOR == null ? "" : this.InputsStreet.P_SNUM_INTERIOR.toUpperCase()
     this.InputsStreet.P_SMANZANA = this.InputsStreet.P_SMANZANA == null ? "" : this.InputsStreet.P_SMANZANA.toUpperCase()

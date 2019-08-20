@@ -1,26 +1,38 @@
 <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Documentos y Archivos adjuntos</h4>
     <button type="button" class="close" aria-label="Close" (click)="reference.dismiss()">
-    <span aria-hidden="true">&times;</span>
-  </button>
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
 <div class="modal-body">
     <!--  -->
+    <div class="col-sm-12 mt-3" *ngIf="motAnulacion != ''">
+        <span>Motivo de Anulación</span>
+        <input type="text" [(ngModel)]="motAnulacion" disabled />
+    </div>
     <div class="col-sm-12 mt-3">
         <div class="card">
+
             <div class="col-sm-12 mt-3">
                 <h5>Documentos de la póliza</h5>
                 <table class="table">
                     <thead>
-                        <tr class="grid-title">
+                        <tr>
                             <td class="col">Documento</td>
                             <td class="col">Descargar</td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf="generadosList!=null && generadosList.length>0">
+                        <tr *ngFor="let item of generadosList">
+                            <td><span>{{ item | fileName }}</span></td>
+                            <td><span class="text-center"><a (click)="downloadFile(item)"><img
+                                            src="assets/icons/download2.png" title="Descargar" style="cursor:pointer;"
+                                            alt="Descargar" /></a></span></td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="generadosList==null || generadosList.length==0">
                         <tr>
-                            <td><span>Documento 1</span></td>
-                            <td><span><img alt="Descargar" src="assets/icons/download2.png" style="cursor: pointer; display:block; margin:auto;" title="Descargar"></span></td>
+                            <td colspan="2" class="col-sm text-center"><span>No se encontraron archivos</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -33,27 +45,31 @@
                 <h5>Archivos adjuntos</h5>
                 <table class="table">
                     <thead>
-                        <tr class="grid-title">
-                            <td class="col">Archivo</td>
-                            <td class="col">Tipo</td>
-                            <td class="col">Tamaño</td>
+                        <tr>
+                            <td class="col">Documento</td>
                             <td class="col">Descargar</td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf="adjuntosList!=null && adjuntosList.length>0">
+                        <tr *ngFor="let item of adjuntosList">
+                            <td><span>{{ item | fileName }}</span></td>
+                            <td><span class="text-center"><a (click)="downloadFile(item)"><img
+                                            src="assets/icons/download2.png" title="Descargar" style="cursor:pointer;"
+                                            alt="Descargar" /></a></span></td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="adjuntosList==null || adjuntosList.length==0">
                         <tr>
-                            <td><span>Documento 1</span></td>
-                            <td><span>Documento 1</span></td>
-                            <td><span>Documento 1</span></td>
-                            <td><span><img alt="Ver Documentos" src="assets/icons/download2.png" style="cursor: pointer; display:block; margin:auto;" title="Ver Documentos"></span></td>
+                            <td colspan="2" class="col-sm text-center"><span>No se encontraron archivos</span></td>
                         </tr>
                     </tbody>
                 </table>
-                <!--  -->
+
                 <div class="card">
                     <div class="col-sm-12 mt-3 mb-3">
                         <h5>Comentarios</h5>
-                        <textarea cols="40" rows="5" style="width:100%" [disabled]="true"></textarea>
+                        <textarea cols="40" [(ngModel)]="comentario" rows="5" style="width:100%"
+                            [disabled]="true"></textarea>
                     </div>
                 </div>
                 <br>
