@@ -81,7 +81,7 @@
             <td>{{ item.RECIBO }}</td>
             <td>{{ item.USUARIO }}</td>
             <td><img alt="Ver Documentos" src="assets/icons/preview_soat_box.png" title="Ver Documentos"
-                (click)="openModal()" style="cursor: pointer;height: 24px;width: 24px"></td>
+                (click)="openModal(item)" style="cursor: pointer;height: 24px;width: 24px"></td>
             <td *ngIf="!flagAnular">
               <img *ngIf="item.MOV_ANULADO == 0" src="assets/icons/anular.png" (click)="anularMov(item.NRO)"
                 title="Anular" alt="Anular" style="cursor: pointer;" />

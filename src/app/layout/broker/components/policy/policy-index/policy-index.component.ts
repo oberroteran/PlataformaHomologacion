@@ -347,7 +347,7 @@ export class PolicyIndexComponent implements OnInit {
 
     pageChanged(currentPage) {
         this.currentPage = currentPage;
-        this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) - 1);
+        this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage) );
 
     }
 

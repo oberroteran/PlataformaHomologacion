@@ -25,6 +25,12 @@ button,
     font-family: "Bliss Pro";
 }
 
+@media (min-width: 992px){
+	.modalCustom .modal-lg, .modalCustom .modal-xl {
+		max-width: 960px;
+	}
+}
+
 .container-main {
     width: 70%;
     min-height: 750px;
