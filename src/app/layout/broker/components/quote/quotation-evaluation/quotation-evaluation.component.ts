@@ -283,7 +283,9 @@ export class QuotationEvaluationComponent implements OnInit {
     getStatusList() {
         this.quotationService.getStatusList().subscribe(
             res => {
-                this.statusList = res;
+                res.forEach(element => {
+                    if (element.Id == "1" || element.Id == "2" || element.Id == "3") this.statusList.push(element);
+                });
             },
             error => {
 
