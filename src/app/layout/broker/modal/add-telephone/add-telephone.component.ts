@@ -129,6 +129,7 @@ export class AddTelephoneComponent implements OnInit {
         } else {
           this.maxlength = 6;
         }
+        this.clearDocument();
         break;
       case "2":
         this.blockCelular = true;
@@ -145,6 +146,7 @@ export class AddTelephoneComponent implements OnInit {
         this.InputsTelephone.P_NPHONE_TYPE = event.target.value;
         this.InputsTelephone.P_NEXTENS1 = null;
         this.maxlength = 7;
+        this.clearDocument();
         break;
     }
   }
@@ -213,24 +215,16 @@ export class AddTelephoneComponent implements OnInit {
 
   EventSave() {
 
+    this.InputsTelephone.P_NAREA_CODE = this.InputsTelephone.P_NAREA_CODE == "0" ? null : this.InputsTelephone.P_NAREA_CODE
+    this.InputsTelephone.P_NEXTENS1 = this.InputsTelephone.P_NEXTENS1 == null ? "" : this.InputsTelephone.P_NEXTENS1
 
     if (this.itemTelefono == null) {
       let existe = 0;
-
-      this.InputsTelephone.P_NAREA_CODE =  this.InputsTelephone.P_NAREA_CODE == "0" ? null :  this.InputsTelephone.P_NAREA_CODE
-      this.InputsTelephone.P_NEXTENS1 = this.InputsTelephone.P_NEXTENS1 == "" ? null :  this.InputsTelephone.P_NAREA_CODE
-      
       let item = this.InputsTelephone;
       this.listaTelefonos.map(function (dato) {
-        // console.log(dato)
         if (dato.P_NPHONE_TYPE == item.P_NPHONE_TYPE && dato.P_SPHONE == item.P_SPHONE &&
           dato.P_NAREA_CODE == item.P_NAREA_CODE && dato.P_NEXTENS1 == item.P_NEXTENS1) {
           existe = 1;
-        } else {
-          console.log("tipo:" + dato.P_NPHONE_TYPE + "=" + item.P_NPHONE_TYPE)
-          console.log("tipo:" + dato.P_SPHONE + "=" + item.P_SPHONE)
-          console.log("tipo:" + dato.P_NAREA_CODE + "=" + item.P_NAREA_CODE)
-          console.log("tipo:" + dato.P_NEXTENS1 + "=" + item.P_NEXTENS1)
         }
       });
 

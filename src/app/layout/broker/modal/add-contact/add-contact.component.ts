@@ -205,9 +205,9 @@ export class AddContactComponent implements OnInit {
       let existe = 0;
       let item = this.InputsContact;
       this.listaContactos.map(function (dato) {
-        if (dato.P_NIDDOC_TYPE === item.P_NIDDOC_TYPE && dato.P_SIDDOC === item.P_SIDDOC &&
-          dato.P_SNOMBRES === item.P_SNOMBRES && dato.P_SAPEPAT === item.P_SAPEPAT &&
-          dato.P_SAPEMAT === item.P_SAPEMAT && dato.P_NTIPCONT === item.P_NTIPCONT) {
+        if (dato.P_NIDDOC_TYPE == item.P_NIDDOC_TYPE && dato.P_SIDDOC == item.P_SIDDOC &&
+          dato.P_SNOMBRES == item.P_SNOMBRES && dato.P_SAPEPAT == item.P_SAPEPAT &&
+          dato.P_SAPEMAT == item.P_SAPEMAT && dato.P_NTIPCONT == item.P_NTIPCONT) {
           existe = 1;
         }
       });
@@ -224,9 +224,9 @@ export class AddContactComponent implements OnInit {
       let existe = 0;
       let item = this.InputsContact;
       this.listaContactos.map(function (dato) {
-        if (dato.P_NIDDOC_TYPE === item.P_NIDDOC_TYPE && dato.P_SIDDOC === item.P_SIDDOC &&
-          dato.P_SNOMBRES === item.P_SNOMBRES && dato.P_SAPEPAT === item.P_SAPEPAT &&
-          dato.P_SAPEMAT === item.P_SAPEMAT && dato.P_NTIPCONT === item.P_NTIPCONT &&
+        if (dato.P_NIDDOC_TYPE == item.P_NIDDOC_TYPE && dato.P_SIDDOC == item.P_SIDDOC &&
+          dato.P_SNOMBRES == item.P_SNOMBRES && dato.P_SAPEPAT == item.P_SAPEPAT &&
+          dato.P_SAPEMAT == item.P_SAPEMAT && dato.P_NTIPCONT == item.P_NTIPCONT &&
           dato.P_NROW !== num) {
           existe = 1;
         }

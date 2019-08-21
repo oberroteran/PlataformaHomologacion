@@ -75,7 +75,9 @@
 	width: 90% !important;
 	float: right;
 }
-
+table, h5, button{
+	text-transform: uppercase;
+}
 .chk input[type="checkbox"] {
 	position: absolute;
 	top: 66%;

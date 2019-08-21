@@ -139,240 +139,195 @@ export class AddContractingComponent implements OnInit {
 
             this.clientInformationService.getClientInformation(data).subscribe(
                 res => {
-                    console.log(res.EListClient)
                     if (res.EListClient != null) {
+                        console.log("adasd")
                         if (res.EListClient.length > 0) {
-                            this.datosClient = res.EListClient[0];
-                            this.InputsContracting.P_TipOper = "INS";
-                            this.InputsContracting.P_SFIRSTNAME = res.EListClient[0].P_SFIRSTNAME;
-                            this.InputsContracting.P_SLASTNAME = res.EListClient[0].P_SLASTNAME;
-                            this.InputsContracting.P_SLASTNAME2 = res.EListClient[0].P_SLASTNAME2;
-                            this.InputsContracting.P_SLEGALNAME = res.EListClient[0].P_SLEGALNAME;
-                            this.InputsContracting.P_SSEXCLIEN = res.EListClient[0].P_SSEXCLIEN != "" ? res.EListClient[0].P_SSEXCLIEN : "3";
-                            let dd = res.EListClient[0].P_DBIRTHDAT.substr(0, 2);
-                            let mm = res.EListClient[0].P_DBIRTHDAT.substr(3, 2);
-                            let yy = res.EListClient[0].P_DBIRTHDAT.substr(6, 4);
-                            this.bsValueFNac = new Date(mm + "/" + dd + "/" + yy);
-                            this.InputsContracting.P_DBIRTHDAT = res.EListClient[0].P_DBIRTHDAT;
-                            this.InputsContracting.P_NSPECIALITY = res.EListClient[0].P_NSPECIALITY != "" ? res.EListClient[0].P_NSPECIALITY : "99";
-                            this.InputsContracting.P_NCIVILSTA = res.EListClient[0].P_NCIVILSTA != "" ? res.EListClient[0].P_NCIVILSTA : "6";
-                            this.InputsContracting.P_SBLOCKADE = "2";
-                            this.InputsContracting.P_NTITLE = res.EListClient[0].P_NTITLE != "" ? res.EListClient[0].P_NSPECIALITY : "99";
-                            this.InputsContracting.P_NHEIGHT = null;
-                            this.InputsContracting.P_ORIGEN_DATA = "GESTORCLIENTE";
-                            this.InputsContracting.P_RESTRICCION = null;
-                            //this.InputsContracting.P_NAREA: '', // falta validar
-                            this.InputsContracting.P_NNATIONALITY = "604";
-                            this.InputsContracting.P_SDIGIT = null;
-                            this.InputsContracting.P_SBLOCKLAFT = "2"; //1 o 2 Lavado de activos 
-                            this.InputsContracting.P_SISCLIENT_IND = "2"; //1 o 2 Cliente protecta
-                            this.InputsContracting.P_SISRENIEC_IND = "2";
-                            this.InputsContracting.P_SPOLIZA_ELECT_IND = "2"; //1 o 2 poliza electronica
-                            this.InputsContracting.P_TI_DOC_SUSTENT = null;
-                            this.InputsContracting.P_NU_DOC_SUSTENT = null;
-                            this.InputsContracting.P_COD_UBIG_DEP_NAC = null;
-                            this.InputsContracting.P_COD_UBIG_PROV_NAC = null;
-                            this.InputsContracting.P_COD_UBIG_DIST_NAC = null;
-                            this.InputsContracting.P_DEPARTAMENTO_NACIMIENTO = null;
-                            this.InputsContracting.P_PROVINCIA_NACIMIENTO = null;
-                            this.InputsContracting.P_DISTRITO_NACIMIENTO = null;
-                            this.InputsContracting.P_NOMBRE_PADRE = null;
-                            this.InputsContracting.P_NOMBRE_MADRE = null;
-                            this.InputsContracting.P_FECHA_INSC = null;
-                            this.InputsContracting.P_FECHA_EXPEDICION = null;
-                            this.InputsContracting.P_CONSTANCIA_VOTACION = null;
-                            this.InputsContracting.P_APELLIDO_CASADA = null;
-                            this.InputsContracting.P_SDIG_VERIFICACION = null;
-                            this.InputsContracting.P_SPROTEG_DATOS_IND = "2"; //1 o 2 proteccion de datos
-                            this.InputsContracting.P_COD_CUSPP = res.EListClient[0].P_COD_CUSPP;
-                            this.InputsContracting.P_SGRADO_INSTRUCCION = null;
-                            this.InputsContracting.P_FOTO_RENIEC = null;
-                            this.InputsContracting.P_FIRMA_RENIEC = null;
-                            this.InputsContracting.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                            this.InputsContracting.P_CodAplicacion = "SCTR";
-                            this.listaDirecciones = res.EListClient[0].EListAddresClient;
-                            this.InputsContracting.EListAddresClient = this.listaDirecciones;
-                            let numdir = 1;
-                            this.listaDirecciones.forEach(item => {
-                                item.P_NROW = numdir++;
-                                item.P_CLASS = "";
-                                item.P_DESDEPARTAMENTO = item.P_DESDEPARTAMENTO == null ? item.P_SDES_DEP_DOM : item.P_DESDEPARTAMENTO;
-                                item.P_DESDISTRITO = item.P_DESDISTRITO == null ? item.P_SDES_DIS_DOM : item.P_DESDISTRITO;
-                                item.P_DESPROVINCIA = item.P_DESPROVINCIA == null ? item.P_SDES_PRO_DOM : item.P_DESPROVINCIA;
-                            });
-                            this.listaTelefonos = res.EListClient[0].EListPhoneClient;
-                            this.InputsContracting.EListPhoneClient = this.listaTelefonos;
-                            let numtel = 1;
-                            this.listaTelefonos.forEach(item => {
-                                item.P_NROW = numtel++;
-                                item.P_CLASS = "";
-                            });
-                            this.listaCorreos = res.EListClient[0].EListEmailClient;
-                            this.InputsContracting.EListEmailClient = this.listaCorreos;
-                            let numcor = 1;
-                            this.listaCorreos.forEach(item => {
-                                item.P_NROW = numcor++;
-                                item.P_CLASS = "";
-                            });
-                            this.listaContactos = res.EListClient[0].EListContactClient;
-                            this.InputsContracting.EListContactClient = this.listaContactos;
-                            let numcon = 1;
-                            this.listaContactos.forEach(item => {
-                                item.P_NROW = numcon++;
-                                item.P_CLASS = "";
-                            });
-                            this.listaCiiu = res.EListClient[0].EListCIIUClient;
-                            this.InputsContracting.EListCIIUClient = this.listaCiiu;
-                            let numciiu = 1;
-                            this.listaCiiu.forEach(item => {
-                                item.P_NROW = numciiu++;
-                                item.P_CLASS = "";
-                            });
-                            this.InputsContracting.EListSedesClient = this.listaSedes;
-                            this.typeContact.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
-                            this.typeContact.P_SIDDOC = this.InputsContracting.P_SIDDOC;
-                        }
-                        else {
-                            this.InputsContracting.P_TipOper = "INS";
-                            this.InputsContracting.P_SFIRSTNAME = "";
-                            this.InputsContracting.P_SLASTNAME = "";
-                            this.InputsContracting.P_SLASTNAME2 = "";
-                            this.InputsContracting.P_SLEGALNAME = "";
-                            this.InputsContracting.P_SSEXCLIEN = "3";
-                            this.InputsContracting.P_DBIRTHDAT = "";
-                            this.InputsContracting.P_NSPECIALITY = "99";
-                            this.InputsContracting.P_NCIVILSTA = "6";
-                            this.InputsContracting.P_SBLOCKADE = "2";
-                            this.InputsContracting.P_NTITLE = "99";
-                            this.InputsContracting.P_NHEIGHT = null;
-                            this.InputsContracting.P_ORIGEN_DATA = "GESTORCLIENTE";
-                            this.InputsContracting.P_RESTRICCION = null;
-                            //this.InputsContracting.P_NAREA: '', // falta validar
-                            this.InputsContracting.P_NNATIONALITY = "604";
-                            this.InputsContracting.P_SDIGIT = null;
-                            this.InputsContracting.P_SBLOCKLAFT = "2"; //1 o 2 Lavado de activos 
-                            this.InputsContracting.P_SISCLIENT_IND = "2"; //1 o 2 Cliente protecta
-                            this.InputsContracting.P_SISRENIEC_IND = "2";
-                            this.InputsContracting.P_SPOLIZA_ELECT_IND = "2"; //1 o 2 poliza electronica
-                            this.InputsContracting.P_TI_DOC_SUSTENT = null;
-                            this.InputsContracting.P_NU_DOC_SUSTENT = null;
-                            this.InputsContracting.P_COD_UBIG_DEP_NAC = null;
-                            this.InputsContracting.P_COD_UBIG_PROV_NAC = null;
-                            this.InputsContracting.P_COD_UBIG_DIST_NAC = null;
-                            this.InputsContracting.P_DEPARTAMENTO_NACIMIENTO = null;
-                            this.InputsContracting.P_PROVINCIA_NACIMIENTO = null;
-                            this.InputsContracting.P_DISTRITO_NACIMIENTO = null;
-                            this.InputsContracting.P_NOMBRE_PADRE = null;
-                            this.InputsContracting.P_NOMBRE_MADRE = null;
-                            this.InputsContracting.P_FECHA_INSC = null;
-                            this.InputsContracting.P_FECHA_EXPEDICION = null;
-                            this.InputsContracting.P_CONSTANCIA_VOTACION = null;
-                            this.InputsContracting.P_APELLIDO_CASADA = null;
-                            this.InputsContracting.P_SDIG_VERIFICACION = null;
-                            this.InputsContracting.P_SPROTEG_DATOS_IND = "2"; //1 o 2 proteccion de datos
-                            this.InputsContracting.P_COD_CUSPP = "";
-                            this.InputsContracting.P_SGRADO_INSTRUCCION = null;
-                            this.InputsContracting.P_FOTO_RENIEC = null;
-                            this.InputsContracting.P_FIRMA_RENIEC = null;
-                            this.InputsContracting.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                            this.InputsContracting.P_CodAplicacion = "SCTR";
-                            this.InputsContracting.EListAddresClient = this.listaDirecciones;
-                            this.InputsContracting.EListPhoneClient = this.listaTelefonos;
-                            this.InputsContracting.EListEmailClient = this.listaCorreos;
-                            this.InputsContracting.EListContactClient = this.listaContactos;
-                            this.InputsContracting.EListSedesClient = this.listaSedes;
-                            this.InputsContracting.EListCIIUClient = this.listaCiiu;
-                            this.typeContact.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
-                            this.typeContact.P_SIDDOC = this.InputsContracting.P_SIDDOC;
+                            if (res.EListClient[0].P_SCLIENT == null) {
+                                this.datosClient = res.EListClient[0];
+                                this.InputsContracting.P_TipOper = "INS";
+                                this.InputsContracting.P_SFIRSTNAME = res.EListClient[0].P_SFIRSTNAME;
+                                this.InputsContracting.P_SLASTNAME = res.EListClient[0].P_SLASTNAME;
+                                this.InputsContracting.P_SLASTNAME2 = res.EListClient[0].P_SLASTNAME2;
+                                this.InputsContracting.P_SLEGALNAME = res.EListClient[0].P_SLEGALNAME;
+                                this.InputsContracting.P_SSEXCLIEN = res.EListClient[0].P_SSEXCLIEN != "" ? res.EListClient[0].P_SSEXCLIEN : "3";
+                                let dd = res.EListClient[0].P_DBIRTHDAT.substr(0, 2);
+                                let mm = res.EListClient[0].P_DBIRTHDAT.substr(3, 2);
+                                let yy = res.EListClient[0].P_DBIRTHDAT.substr(6, 4);
+                                this.bsValueFNac = new Date(mm + "/" + dd + "/" + yy);
+                                this.InputsContracting.P_DBIRTHDAT = res.EListClient[0].P_DBIRTHDAT;
+                                this.InputsContracting.P_NSPECIALITY = res.EListClient[0].P_NSPECIALITY != "" ? res.EListClient[0].P_NSPECIALITY : "99";
+                                this.InputsContracting.P_NCIVILSTA = res.EListClient[0].P_NCIVILSTA != "" ? res.EListClient[0].P_NCIVILSTA : "6";
+                                this.InputsContracting.P_SBLOCKADE = "2";
+                                this.InputsContracting.P_NTITLE = res.EListClient[0].P_NTITLE != "" ? res.EListClient[0].P_NSPECIALITY : "99";
+                                this.InputsContracting.P_NHEIGHT = null;
+                                this.InputsContracting.P_ORIGEN_DATA = "GESTORCLIENTE";
+                                this.InputsContracting.P_RESTRICCION = null;
+                                //this.InputsContracting.P_NAREA: '', // falta validar
+                                this.InputsContracting.P_NNATIONALITY = "604";
+                                this.InputsContracting.P_SDIGIT = null;
+                                this.InputsContracting.P_SBLOCKLAFT = "2"; //1 o 2 Lavado de activos 
+                                this.InputsContracting.P_SISCLIENT_IND = "2"; //1 o 2 Cliente protecta
+                                this.InputsContracting.P_SISRENIEC_IND = "2";
+                                this.InputsContracting.P_SPOLIZA_ELECT_IND = "2"; //1 o 2 poliza electronica
+                                this.InputsContracting.P_TI_DOC_SUSTENT = null;
+                                this.InputsContracting.P_NU_DOC_SUSTENT = null;
+                                this.InputsContracting.P_COD_UBIG_DEP_NAC = null;
+                                this.InputsContracting.P_COD_UBIG_PROV_NAC = null;
+                                this.InputsContracting.P_COD_UBIG_DIST_NAC = null;
+                                this.InputsContracting.P_DEPARTAMENTO_NACIMIENTO = null;
+                                this.InputsContracting.P_PROVINCIA_NACIMIENTO = null;
+                                this.InputsContracting.P_DISTRITO_NACIMIENTO = null;
+                                this.InputsContracting.P_NOMBRE_PADRE = null;
+                                this.InputsContracting.P_NOMBRE_MADRE = null;
+                                this.InputsContracting.P_FECHA_INSC = null;
+                                this.InputsContracting.P_FECHA_EXPEDICION = null;
+                                this.InputsContracting.P_CONSTANCIA_VOTACION = null;
+                                this.InputsContracting.P_APELLIDO_CASADA = null;
+                                this.InputsContracting.P_SDIG_VERIFICACION = null;
+                                this.InputsContracting.P_SPROTEG_DATOS_IND = "2"; //1 o 2 proteccion de datos
+                                this.InputsContracting.P_COD_CUSPP = res.EListClient[0].P_COD_CUSPP;
+                                this.InputsContracting.P_SGRADO_INSTRUCCION = null;
+                                this.InputsContracting.P_FOTO_RENIEC = null;
+                                this.InputsContracting.P_FIRMA_RENIEC = null;
+                                this.InputsContracting.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+                                this.InputsContracting.P_CodAplicacion = "SCTR";
+                                this.listaDirecciones = res.EListClient[0].EListAddresClient;
+                                this.InputsContracting.EListAddresClient = this.listaDirecciones;
+                                let numdir = 1;
+                                this.listaDirecciones.forEach(item => {
+                                    item.P_NROW = numdir++;
+                                    item.P_CLASS = "";
+                                    item.P_DESDEPARTAMENTO = item.P_DESDEPARTAMENTO == null ? item.P_SDES_DEP_DOM : item.P_DESDEPARTAMENTO;
+                                    item.P_DESDISTRITO = item.P_DESDISTRITO == null ? item.P_SDES_DIS_DOM : item.P_DESDISTRITO;
+                                    item.P_DESPROVINCIA = item.P_DESPROVINCIA == null ? item.P_SDES_PRO_DOM : item.P_DESPROVINCIA;
+                                });
+                                this.listaTelefonos = res.EListClient[0].EListPhoneClient;
+                                this.InputsContracting.EListPhoneClient = this.listaTelefonos;
+                                let numtel = 1;
+                                this.listaTelefonos.forEach(item => {
+                                    item.P_NROW = numtel++;
+                                    item.P_CLASS = "";
+                                });
+                                this.listaCorreos = res.EListClient[0].EListEmailClient;
+                                this.InputsContracting.EListEmailClient = this.listaCorreos;
+                                let numcor = 1;
+                                this.listaCorreos.forEach(item => {
+                                    item.P_NROW = numcor++;
+                                    item.P_CLASS = "";
+                                });
+                                this.listaContactos = res.EListClient[0].EListContactClient;
+                                this.InputsContracting.EListContactClient = this.listaContactos;
+                                let numcon = 1;
+                                this.listaContactos.forEach(item => {
+                                    item.P_NROW = numcon++;
+                                    item.P_CLASS = "";
+                                });
+                                this.listaCiiu = res.EListClient[0].EListCIIUClient;
+                                this.InputsContracting.EListCIIUClient = this.listaCiiu;
+                                let numciiu = 1;
+                                this.listaCiiu.forEach(item => {
+                                    item.P_NROW = numciiu++;
+                                    item.P_CLASS = "";
+                                });
+                                this.InputsContracting.EListSedesClient = this.listaSedes;
+                                this.typeContact.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
+                                this.typeContact.P_SIDDOC = this.InputsContracting.P_SIDDOC;
+                            }
+                            else {
+                                swal.fire({
+                                    title: "Información",
+                                    text: "El dni ingresado ya se encuentra en nuestra base de datos.",
+                                    type: "question",
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Aceptar',
+                                    allowOutsideClick: false,
+                                    cancelButtonText: 'Cancelar'
+                                })
+                                    .then((result) => {
+                                        if (result.value) {
+                                            switch (this.receiverApp) {
+                                                case "quotation":
+                                                    this.router.navigate(['/broker/quotation'], { queryParams: { typeDocument: this.InputsContracting.P_NIDDOC_TYPE, document: this.InputsContracting.P_SIDDOC } });
+                                                    break;
+                                                case "agency":
+                                                    this.router.navigate(['/broker/agency-form'], { queryParams: { DocumentType: this.InputsContracting.P_NIDDOC_TYPE, DocumentNumber: this.InputsContracting.P_SIDDOC, ContractorId: res.P_SCOD_CLIENT, Sender: "add-contractor" } });
+                                                    break;
+                                                case "contractor-location":
+                                                    this.router.navigate(['/broker/contractor-location'], { queryParams: { DocumentType: this.InputsContracting.P_NIDDOC_TYPE, DocumentNumber: this.InputsContracting.P_SIDDOC, Sender: "add-contractor" } });
+                                                    break;
+                                            }
+                                        }
+                                    });
+                            }
+                        } else {
+                            this.initInfo();
                         }
                     }
                     else {
-                        this.InputsContracting.P_TipOper = "INS";
-                        this.InputsContracting.P_SFIRSTNAME = "";
-                        this.InputsContracting.P_SLASTNAME = "";
-                        this.InputsContracting.P_SLASTNAME2 = "";
-                        this.InputsContracting.P_SLEGALNAME = "";
-                        this.InputsContracting.P_SSEXCLIEN = "3";
-                        this.InputsContracting.P_DBIRTHDAT = "";
-                        this.InputsContracting.P_NSPECIALITY = "99";
-                        this.InputsContracting.P_NCIVILSTA = "6";
-                        this.InputsContracting.P_SBLOCKADE = "2";
-                        this.InputsContracting.P_NTITLE = "99";
-                        this.InputsContracting.P_NHEIGHT = null;
-                        this.InputsContracting.P_ORIGEN_DATA = "GESTORCLIENTE";
-                        this.InputsContracting.P_RESTRICCION = null;
-                        //this.InputsContracting.P_NAREA: '', // falta validar
-                        this.InputsContracting.P_NNATIONALITY = "604";
-                        this.InputsContracting.P_SDIGIT = null;
-                        this.InputsContracting.P_SBLOCKLAFT = "2"; //1 o 2 Lavado de activos 
-                        this.InputsContracting.P_SISCLIENT_IND = "2"; //1 o 2 Cliente protecta
-                        this.InputsContracting.P_SISRENIEC_IND = "2";
-                        this.InputsContracting.P_SPOLIZA_ELECT_IND = "2"; //1 o 2 poliza electronica
-                        this.InputsContracting.P_TI_DOC_SUSTENT = null;
-                        this.InputsContracting.P_NU_DOC_SUSTENT = null;
-                        this.InputsContracting.P_COD_UBIG_DEP_NAC = null;
-                        this.InputsContracting.P_COD_UBIG_PROV_NAC = null;
-                        this.InputsContracting.P_COD_UBIG_DIST_NAC = null;
-                        this.InputsContracting.P_DEPARTAMENTO_NACIMIENTO = null;
-                        this.InputsContracting.P_PROVINCIA_NACIMIENTO = null;
-                        this.InputsContracting.P_DISTRITO_NACIMIENTO = null;
-                        this.InputsContracting.P_NOMBRE_PADRE = null;
-                        this.InputsContracting.P_NOMBRE_MADRE = null;
-                        this.InputsContracting.P_FECHA_INSC = null;
-                        this.InputsContracting.P_FECHA_EXPEDICION = null;
-                        this.InputsContracting.P_CONSTANCIA_VOTACION = null;
-                        this.InputsContracting.P_APELLIDO_CASADA = null;
-                        this.InputsContracting.P_SDIG_VERIFICACION = null;
-                        this.InputsContracting.P_SPROTEG_DATOS_IND = "2"; //1 o 2 proteccion de datos
-                        this.InputsContracting.P_COD_CUSPP = "";
-                        this.InputsContracting.P_SGRADO_INSTRUCCION = null;
-                        this.InputsContracting.P_FOTO_RENIEC = null;
-                        this.InputsContracting.P_FIRMA_RENIEC = null;
-                        this.InputsContracting.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                        this.InputsContracting.P_CodAplicacion = "SCTR";
-                        this.InputsContracting.EListAddresClient = this.listaDirecciones;
-                        this.InputsContracting.EListPhoneClient = this.listaTelefonos;
-                        this.InputsContracting.EListEmailClient = this.listaCorreos;
-                        this.InputsContracting.EListContactClient = this.listaContactos;
-                        this.InputsContracting.EListSedesClient = this.listaSedes;
-                        this.InputsContracting.EListCIIUClient = this.listaCiiu;
-                        this.typeContact.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
-                        this.typeContact.P_SIDDOC = this.InputsContracting.P_SIDDOC;
+                        this.initInfo();
                     }
                 }
             );
-
 
             this.onSelectTypeDocument(this.InputsContracting.P_NIDDOC_TYPE);
             this.changeSDOC(this.InputsContracting.P_SIDDOC);
         } else {
             this.router.navigate(['/broker/quotation']);
         }
-
     }
 
-    // BuscarContratante() {
-    //   //this.clearInputsQuotation();
-    //   let data = new ClientDataToSearch();
-    //   data.P_CodAplicacion = "GESTORCLIENTE";
-    //   data.P_TipOper = "CON";
-    //   data.P_NUSERCODE = "126";
-    //   data.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
-    //   data.P_SIDDOC = this.InputsContracting.P_SIDDOC;
-    //   data.P_SFIRSTNAME = "";
-    //   data.P_SLASTNAME = "";
-    //   data.P_SLASTNAME2 = "";
-    //   data.P_SLEGALNAME = "";
-
-    //   this.clientInformationService.getClientInformation(data).subscribe(
-    //     res => {
-    //       if (res.EListClient.length != 0) {
-    //         datosClient = data.EListClient[0];
-
-    //       }
-    //     }
-    //   );
-    // }
+    initInfo() {
+        this.InputsContracting.P_TipOper = "INS";
+        this.InputsContracting.P_SFIRSTNAME = "";
+        this.InputsContracting.P_SLASTNAME = "";
+        this.InputsContracting.P_SLASTNAME2 = "";
+        this.InputsContracting.P_SLEGALNAME = "";
+        this.InputsContracting.P_SSEXCLIEN = "3";
+        this.InputsContracting.P_DBIRTHDAT = "";
+        this.InputsContracting.P_NSPECIALITY = "99";
+        this.InputsContracting.P_NCIVILSTA = "6";
+        this.InputsContracting.P_SBLOCKADE = "2";
+        this.InputsContracting.P_NTITLE = "99";
+        this.InputsContracting.P_NHEIGHT = null;
+        this.InputsContracting.P_ORIGEN_DATA = "GESTORCLIENTE";
+        this.InputsContracting.P_RESTRICCION = null;
+        this.InputsContracting.P_NNATIONALITY = 604;
+        this.InputsContracting.P_SDIGIT = null;
+        this.InputsContracting.P_SBLOCKLAFT = "2"; //1 o 2 Lavado de activos 
+        this.InputsContracting.P_SISCLIENT_IND = "2"; //1 o 2 Cliente protecta
+        this.InputsContracting.P_SISRENIEC_IND = "2";
+        this.InputsContracting.P_SPOLIZA_ELECT_IND = "2"; //1 o 2 poliza electronica
+        this.InputsContracting.P_TI_DOC_SUSTENT = null;
+        this.InputsContracting.P_NU_DOC_SUSTENT = null;
+        this.InputsContracting.P_COD_UBIG_DEP_NAC = null;
+        this.InputsContracting.P_COD_UBIG_PROV_NAC = null;
+        this.InputsContracting.P_COD_UBIG_DIST_NAC = null;
+        this.InputsContracting.P_DEPARTAMENTO_NACIMIENTO = null;
+        this.InputsContracting.P_PROVINCIA_NACIMIENTO = null;
+        this.InputsContracting.P_DISTRITO_NACIMIENTO = null;
+        this.InputsContracting.P_NOMBRE_PADRE = null;
+        this.InputsContracting.P_NOMBRE_MADRE = null;
+        this.InputsContracting.P_FECHA_INSC = null;
+        this.InputsContracting.P_FECHA_EXPEDICION = null;
+        this.InputsContracting.P_CONSTANCIA_VOTACION = null;
+        this.InputsContracting.P_APELLIDO_CASADA = null;
+        this.InputsContracting.P_SDIG_VERIFICACION = null;
+        this.InputsContracting.P_SPROTEG_DATOS_IND = "2"; //1 o 2 proteccion de datos
+        this.InputsContracting.P_COD_CUSPP = "";
+        this.InputsContracting.P_SGRADO_INSTRUCCION = null;
+        this.InputsContracting.P_FOTO_RENIEC = null;
+        this.InputsContracting.P_FIRMA_RENIEC = null;
+        this.InputsContracting.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+        this.InputsContracting.P_CodAplicacion = "SCTR";
+        this.InputsContracting.EListAddresClient = this.listaDirecciones;
+        this.InputsContracting.EListPhoneClient = this.listaTelefonos;
+        this.InputsContracting.EListEmailClient = this.listaCorreos;
+        this.InputsContracting.EListContactClient = this.listaContactos;
+        this.InputsContracting.EListSedesClient = this.listaSedes;
+        this.InputsContracting.EListCIIUClient = this.listaCiiu;
+        this.typeContact.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
+        this.typeContact.P_SIDDOC = this.InputsContracting.P_SIDDOC;
+    }
     Clear(idx) {
         this.VAL_CLIENT[idx] = "";
     }
