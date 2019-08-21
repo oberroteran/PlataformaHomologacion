@@ -214,43 +214,6 @@ export class ContractorStateComponent implements OnInit {
     }
 
     /**
-     * Evaluación crediticia
-     */
-    async evaluate() {
-        let list = {};
-        list["1"] = "Bueno";
-        list["2"] = "Regular";
-        list["3"] = "Malo";
-
-        const { value: fruit } = await Swal.fire({
-            title: 'Selecciona una califcación',
-            input: 'select',
-            // inputOptions: {
-            //   'good': 'Bueno',
-            //   'soso': 'Regular',
-            //   'bad': 'Malo'
-            // },
-            inputOptions: list,
-            inputPlaceholder: 'Seleccionar',
-            showCancelButton: true,
-            inputValidator: (value) => {
-                return new Promise((resolve) => {
-                    resolve()
-                    // if (value === 'oranges') {
-                    //   resolve()
-                    // } else {
-                    //   resolve('You need to select oranges :)')
-                    // }
-                })
-            }
-        })
-
-        if (fruit) {
-            Swal.fire('You selected: ' + fruit)
-        }
-    }
-
-    /**
      * Habilitar crédito
      */
     //'El cliente posee ' + this.contractor.LatePaymentDays + ' días de morosidad ¿Desea habilitar sus movimientos?'
