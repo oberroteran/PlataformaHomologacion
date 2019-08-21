@@ -211,7 +211,7 @@ export class ContractorLocationIndexComponent implements OnInit {
                 this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(11), Validators.minLength(11), GlobalValidators.rucNumberValidator]);
                 this.mainFormGroup.controls.documentNumber.updateValueAndValidity();
             } else if (this.mainFormGroup.controls.documentType.value == "4" || this.mainFormGroup.controls.documentType.value == "6") { //ce o pasaporte
-                this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.documentNumber.updateValueAndValidity();
             } else { //otros tipos de documento
                 this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(15)]);

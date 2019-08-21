@@ -25,7 +25,7 @@ export class CreditQualificationRecordComponent implements OnInit {
     @Input() public reference: any; //Referencia al modal creado desde el padre de este componente 'contractor-location-index' para ser cerrado desde aquí
     @Input() public contractor: ContractorForTable; //Id de cliente
 
-    qualificationTypeList: any[]; //Lista de tipos de calificación
+    qualificationTypeList = {}; //Lista de tipos de calificación
 
     isLoading: Boolean = false;
     // datepicker
@@ -42,7 +42,6 @@ export class CreditQualificationRecordComponent implements OnInit {
     filter = new CreditEvaluationSearch(); //Objeto con datos de búsqueda que se llena en la primera búsqueda y que quedará en memoria para los cambios de página, el atributo PageNumber (Nro de página) está enlazado con el elemento de paginado del HTML y se actualiza automaticamente
 
     mainFormGroup: FormGroup;
-    //qualificationTypeList: any[] = []; //Lista de tipos calificación
     isValidatedInClickButton: boolean = false;  //Flag que indica si el formulario ha sido validado por la acción BUSCAR. Este flag nos sirve para hacer la validación al momento de accionar la búsqueda.
 
     genericErrorMessage = ModuleConfig.GenericErrorMessage; //Mensaje de error genérico
@@ -73,7 +72,7 @@ export class CreditQualificationRecordComponent implements OnInit {
     ngOnInit() {
         this.canEvaluateCredit = AccessFilter.hasPermission("33");
 
-        this.getQualificationTypeList();
+        this.getQualificationList();
 
         this.createForm();
         this.initializeForm();
@@ -81,16 +80,7 @@ export class CreditQualificationRecordComponent implements OnInit {
 
         this.firstSearch(true);
     }
-    getQualificationList() {
-        this.stateReportService.getQualificationTypeList().subscribe(
-            res => {
 
-            },
-            error => {
-
-            }
-        )
-    }
     /**
       * 
       */
@@ -100,16 +90,19 @@ export class CreditQualificationRecordComponent implements OnInit {
     /**
      * Obtiene la lista de tipos de califiación
      */
-    // getQualificationList() {
-    //   this.stateReportService.getQualificationTypeList().subscribe(
-    //     res => {
-    //       this.qualificationTypeList = res.GenericResponse;
-    //     },
-    //     error => {
-    //       Swal.fire("Información", this.genericErrorMessage, "error");
-    //     }
-    //   )
-    // }
+    getQualificationList() {
+        this.stateReportService.getQualificationTypeList().subscribe(
+            res => {
+                res.forEach(element => {
+                    this.qualificationTypeList[element.Id] = element.Name;
+                });
+                console.log(this.qualificationTypeList);
+            },
+            error => {
+                Swal.fire("Información", this.genericErrorMessage, "error");
+            }
+        )
+    }
     createForm() {
         this.mainFormGroup = this.formBuilder.group({
             startDate: [new Date("01/01/2019"), [Validators.required]],
@@ -121,20 +114,10 @@ export class CreditQualificationRecordComponent implements OnInit {
         this.mainFormGroup.setValidators([GlobalValidators.dateSort]);
     }
     async evaluate() {
-        let list = {};
-        list["1"] = "Bueno";
-        list["2"] = "Regular";
-        list["3"] = "Malo";
-
         const { value: fruit } = await Swal.fire({
             title: 'Seleccione una calificación',
             input: 'select',
-            // inputOptions: {
-            //   'good': 'Bueno',
-            //   'soso': 'Regular',
-            //   'bad': 'Malo'
-            // },
-            inputOptions: list,
+            inputOptions: this.qualificationTypeList,
             inputPlaceholder: 'Seleccionar',
             showCancelButton: true,
             inputValidator: (value) => {
@@ -147,7 +130,7 @@ export class CreditQualificationRecordComponent implements OnInit {
                         res => {
                             if (res.StatusCode == 0) {
                                 this.contractor.LastCreditEvaluationId = value;
-                                this.contractor.LastCreditEvaluationName = list[value];
+                                this.contractor.LastCreditEvaluationName = this.qualificationTypeList[value];
                                 Swal.fire({
                                     title: 'Información',
                                     text: "El cliente fue evaluado exitosamente.",
@@ -170,25 +153,16 @@ export class CreditQualificationRecordComponent implements OnInit {
                             Swal.fire("Información", this.genericErrorMessage, "error");
                         }
                     )
-                    // resolve()
-                    // if (value === 'oranges') {
-                    //   resolve()
-                    // } else {
-                    //   resolve('You need to select oranges :)')
-                    // }
                 })
             }
         })
-
-        // if (fruit) {
-        //   Swal.fire('You selected: ' + fruit)
-        // }
     }
 
     /**
      * Realiza la primera búsqueda accionada por el botón buscar o la tecla ENTER
      */
     firstSearch(isFirstSearch: boolean) {
+        this.isValidatedInClickButton = true;
         this.isLoading = true;
         if (this.mainFormGroup.valid && this.contractor.Id != null && this.contractor.Id.toString().trim() != null) {
             this.filter.PageNumber = 1;
@@ -199,15 +173,18 @@ export class CreditQualificationRecordComponent implements OnInit {
             this.search(isFirstSearch);
         } else {
             let errorList = [];
-            if (this.mainFormGroup.hasError('datesNotSortedCorrectly')) errorList.push("Las fechas del filtro no están ordenadas correctamente.");
 
-            if (!this.mainFormGroup.controls.startDate.valid) {
-                if (this.mainFormGroup.controls.startDate.hasError('required')) errorList.push("La fecha inicial es requerida.");
-                else errorList.push("La fecha inicial no es válida.");
-            }
-            if (!this.mainFormGroup.controls.endDate.valid) {
-                if (this.mainFormGroup.controls.endDate.hasError('required')) errorList.push("La fecha final es requerida.");
-                else errorList.push("La fecha final no es válida.");
+            if (this.mainFormGroup.controls.startDate.valid && this.mainFormGroup.controls.endDate.valid) {
+                if (this.mainFormGroup.hasError("datesNotSortedCorrectly")) errorList.push(ModuleConfig.InvalidStartDateOrderMessage);
+            } else {
+                if (this.mainFormGroup.controls.startDate.valid == false) {
+                    if (this.mainFormGroup.controls.startDate.hasError('required')) errorList.push("La fecha de inicio es requerida.");
+                    else errorList.push(ModuleConfig.InvalidStartDateMessage);
+                }
+                if (this.mainFormGroup.controls.endDate.valid == false) {
+                    if (this.mainFormGroup.controls.endDate.hasError('required')) errorList.push("La fecha de fin es requerida.");
+                    else errorList.push(ModuleConfig.InvalidEndDateMessage);
+                }
             }
 
             if (this.contractor.Id == null || this.contractor.Id.trim() == "") errorList.push("El Id del cliente no es válido.");
@@ -235,20 +212,6 @@ export class CreditQualificationRecordComponent implements OnInit {
                 this.totalItems = 0;
                 this.isLoading = false;
                 if (isFirstSearch == false) Swal.fire("Información", this.genericErrorMessage, "error");
-            }
-        );
-    }
-
-    /**
-     * Obtiene la lista de tipos de calificación
-     */
-    private getQualificationTypeList() {
-        this.stateReportService.getQualificationTypeList().subscribe(
-            res => {
-                this.qualificationTypeList = res.GenericResponse;
-            },
-            error => {
-                Swal.fire("Información", this.genericErrorMessage, "error");
             }
         );
     }

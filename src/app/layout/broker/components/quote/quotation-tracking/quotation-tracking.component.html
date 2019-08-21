@@ -37,7 +37,7 @@
             <tbody *ngFor="let item of foundResults;let rownum=index">
               <tr>
                 <td>{{rownum+1}}</td>
-                <td>{{item.EventDate | date: 'dd/MM/yyyy' }}</td>
+                <td>{{item.EventDate | date: 'dd/MM/yyyy, h:mm a' }}</td>
                 <td>{{item.Status}}</td>
                 <td>{{item.User}}</td>
               </tr>

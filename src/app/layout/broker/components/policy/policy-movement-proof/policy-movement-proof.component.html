@@ -21,6 +21,7 @@
                   <span>TIPO PRODUCTO</span>
                   <select formControlName="product">
                     <option value="">Todos</option>
+                    <!-- <option value="0">Conjunta</option> -->
                     <option *ngFor="let item of productTypeList" value="{{item.Id}}">{{item.Name}}</option>
                   </select>
                 </div>
@@ -34,8 +35,9 @@
                 <div class="col-sm-3">
                   <span>NRO CONSTANCIA</span>
                   <input formControlName="proofNumber" type="text" maxlength="10" OnlyNumberDirective
-                    (paste)="onPaste($event)" (keyup)="proofNumberChanged($event)" (keyup.enter)="firstSearch()"
-                    (focus)="cleanValidation()" placeholder="Número de Cotización" />
+                    (paste)="onPaste($event)" (keyup)="proofNumberChanged($event)"
+                    (keypress)="proofNumberPressed($event)" (keyup.enter)="firstSearch()" (focus)="cleanValidation()"
+                    placeholder="Número de Cotización" />
                 </div>
 
               </div>
@@ -53,10 +55,9 @@
                       class="mensaje-error-control">La fecha inicial es requerida.</span>
                     <span
                       *ngSwitchCase="!mainFormGroup.controls.startDate.valid && !mainFormGroup.get('startDate').hasError('required')"
-                      class="mensaje-error-control">La fecha
-                      inicial no es válida.</span>
+                      class="mensaje-error-control">{{invalidStartDateMessage}}</span>
                     <span *ngSwitchCase="mainFormGroup.hasError('datesNotSortedCorrectly')"
-                      class="mensaje-error-control">La fecha inicial está después de la fecha final</span>
+                      class="mensaje-error-control">{{invalidStartDateOrderMessage}}</span>
                   </ng-container>
                 </div>
                 <div class="col-sm-3">
@@ -72,10 +73,9 @@
                       class="mensaje-error-control">La fecha final es requerida.</span>
                     <span
                       *ngSwitchCase="!mainFormGroup.controls.endDate.valid && !mainFormGroup.get('endDate').hasError('required')"
-                      class="mensaje-error-control">La fecha
-                      final no es válida.</span>
+                      class="mensaje-error-control">{{invalidEndDateMessage}}</span>
                     <span *ngSwitchCase="mainFormGroup.hasError('datesNotSortedCorrectly')"
-                      class="mensaje-error-control">La fecha final está después de la fecha inicial.</span>
+                      class="mensaje-error-control">{{invalidEndDateOrderMessage}}</span>
                   </ng-container>
                 </div>
               </div>
@@ -188,6 +188,7 @@
                     <td class="grid-title-item">Producto</td>
                     <td class="grid-title-item">Nro. Póliza</td>
                     <td class="grid-title-item">Movimiento</td>
+                    <td class="grid-title-item">Fecha de Transac.</td>
                     <td class="grid-title-item">Inicio Vigencia</td>
                     <td class="grid-title-item">Fin Vigencia</td>
 
@@ -217,6 +218,7 @@
                     <td>{{ item.Product}}</td>
                     <td>{{ item.PolicyNumber }}</td>
                     <td>{{ item.Movement }}</td>
+                    <td>{{ item.TransactionDate | date:'dd/MM/yyyy, h:mm a' }}</td>
                     <td>{{ item.StartDate | date:'dd/MM/yyyy' }}</td>
                     <td>{{ item.EndDate  | date:'dd/MM/yyyy' }}</td>
 

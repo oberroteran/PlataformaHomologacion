@@ -226,7 +226,7 @@ export class AgencyIndexComponent implements OnInit {
                 this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(11), Validators.minLength(11), GlobalValidators.rucNumberValidator]);
                 this.mainFormGroup.controls.documentNumber.updateValueAndValidity();
             } else if (this.mainFormGroup.controls.documentType.value == "4" || this.mainFormGroup.controls.documentType.value == "6") { //ce y passaporte
-                this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.documentNumber.updateValueAndValidity();
             } else { //otros tipos de documento
                 this.mainFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(15)]);
@@ -250,10 +250,6 @@ export class AgencyIndexComponent implements OnInit {
                 this.mainFormGroup.controls['legalName'].setValidators([Validators.required, Validators.minLength(4), Validators.maxLength(60), Validators.pattern(GlobalValidators.getLegalNamePattern())]);
                 this.mainFormGroup.controls.legalName.updateValueAndValidity();
             }
-            // this.mainFormGroup.controls.startDate.setValidators(null);
-            // this.mainFormGroup.controls.endDate.setValidators(null);
-            // this.mainFormGroup.setValidators(null);
-            // this.mainFormGroup.updateValueAndValidity();
         }
     }
 
@@ -337,7 +333,7 @@ export class AgencyIndexComponent implements OnInit {
             }
 
             if (this.mainFormGroup.controls.startDate.valid && this.mainFormGroup.controls.endDate.valid) {
-                if (this.mainFormGroup.controls.startDate.value > this.mainFormGroup.controls.endDate.value) errorList.push(ModuleConfig.InvalidStartDateOrderMessage);
+                if (this.mainFormGroup.hasError("datesNotSortedCorrectly")) errorList.push(ModuleConfig.InvalidStartDateOrderMessage);
             } else {
                 if (this.mainFormGroup.controls.startDate.valid == false) {
                     if (this.mainFormGroup.controls.startDate.hasError('required')) errorList.push("La fecha de inicio es requerida.");
