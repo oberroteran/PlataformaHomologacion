@@ -93,7 +93,6 @@ export class AgencyFormComponent implements OnInit {
                 showWeekNumbers: false
             }
         );
-        //this.brokerId = this.activatedRoute.snapshot.paramMap.get('brokerid');
     }
 
     ngOnInit() {
@@ -119,21 +118,6 @@ export class AgencyFormComponent implements OnInit {
                     this.foundResults = res.GenericResponse;
                 }
                 this.isLoading = false;
-                // let needSaludSctr = true;
-                // let needPensionSctr = true;
-                // for (var i = 0; i < res.GenericResponse.length; i++) {
-                //   if (res.GenericResponse[i].ProductId == '121' && needSaludSctr == true) {
-                //     this.lastBrokerList.push(res.GenericResponse[i]);
-                //     needSaludSctr = false;
-
-                //   }
-                //   if (res.GenericResponse[i].ProductId == '120' && needPensionSctr == true) {
-                //     this.lastBrokerList.push(res.GenericResponse[i]);
-                //     needPensionSctr = false;
-
-                //   }
-                // }
-                //this.lastBrokerList = res.GenericResponse;
             },
             err => {
                 this.isLoading = false;
@@ -228,7 +212,7 @@ export class AgencyFormComponent implements OnInit {
                 this.contractorFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(11), Validators.minLength(11), GlobalValidators.rucNumberValidator]);
                 this.contractorFormGroup.controls.documentNumber.updateValueAndValidity();
             } else if (this.contractorFormGroup.controls.documentType.value == "4" || this.contractorFormGroup.controls.documentType.value == "6") { //ce o pasaporte
-                this.contractorFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.contractorFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.contractorFormGroup.controls.documentNumber.updateValueAndValidity();
             } else { //otros tipos de documento
                 this.contractorFormGroup.controls.documentNumber.setValidators([Validators.required, Validators.maxLength(15)]);
@@ -250,11 +234,8 @@ export class AgencyFormComponent implements OnInit {
     }
     private createForm() {
         this.mainFormGroup = this.mainFormBuilder.group({
-            //documentNumber: ["", [Validators.required]],
             saludAgencyDate: [""],
             pensionAgencyDate: [""],
-            //isSctrSaludSelected:[false],
-            //isSctrPensionSelected:[false],
             sctrSaludFilePath: [{ value: "", disabled: true }],
             sctrPensionFilePath: [{ value: "", disabled: true }]
         });
@@ -292,7 +273,6 @@ export class AgencyFormComponent implements OnInit {
             this.mainFormGroup.controls.pensionAgencyDate.updateValueAndValidity();
         }
 
-        //this.mainFormGroup.controls.sctrPensionFilePath.updateValueAndValidity();
     }
     getDocumentTypeList() {
 
@@ -511,8 +491,6 @@ export class AgencyFormComponent implements OnInit {
             this.sctrSaludFile = file;
         }
         console.log(event.target.files);
-        // console.log(this.mainFormGroup.controls.sctrSaludFilePath.value);
-        // console.log(this.sctrSaludFile);
     }
     sctrPensionFileChanged(event) {
         if (event.target.files.length > 0) {
@@ -520,8 +498,6 @@ export class AgencyFormComponent implements OnInit {
             this.sctrPensionFile = file;
         }
         console.log(event.target.files);
-        // console.log(this.mainFormGroup.controls.sctrPensionFilePath.value);
-        // console.log(this.sctrPensionFile);
     }
 
     private prepareFile(_file: File): any {

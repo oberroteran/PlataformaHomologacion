@@ -713,7 +713,7 @@
                       <td>{{item.Reason}}</td>
                       <td>{{item.User}}</td>
                       <td>{{item.Profile}}</td>
-                      <td>{{item.EventDate | date:'dd/MM/yyyy'}}</td>
+                      <td>{{item.EventDate | date:'dd/MM/yyyy, h:mm a'}}</td>
                       <td>{{item.Comment}}</td>
                       <ng-container
                         *ngIf="item.FilePathList!=null && item.FilePathList.length>0; then showButton else hideButton">

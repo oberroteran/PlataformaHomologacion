@@ -129,11 +129,6 @@ export class CreditQualificationRecordComponent implements OnInit {
         const { value: fruit } = await Swal.fire({
             title: 'Seleccione una calificación',
             input: 'select',
-            // inputOptions: {
-            //   'good': 'Bueno',
-            //   'soso': 'Regular',
-            //   'bad': 'Malo'
-            // },
             inputOptions: list,
             inputPlaceholder: 'Seleccionar',
             showCancelButton: true,
@@ -170,25 +165,16 @@ export class CreditQualificationRecordComponent implements OnInit {
                             Swal.fire("Información", this.genericErrorMessage, "error");
                         }
                     )
-                    // resolve()
-                    // if (value === 'oranges') {
-                    //   resolve()
-                    // } else {
-                    //   resolve('You need to select oranges :)')
-                    // }
                 })
             }
         })
-
-        // if (fruit) {
-        //   Swal.fire('You selected: ' + fruit)
-        // }
     }
 
     /**
      * Realiza la primera búsqueda accionada por el botón buscar o la tecla ENTER
      */
     firstSearch(isFirstSearch: boolean) {
+        this.isValidatedInClickButton = true;
         this.isLoading = true;
         if (this.mainFormGroup.valid && this.contractor.Id != null && this.contractor.Id.toString().trim() != null) {
             this.filter.PageNumber = 1;
@@ -199,15 +185,18 @@ export class CreditQualificationRecordComponent implements OnInit {
             this.search(isFirstSearch);
         } else {
             let errorList = [];
-            if (this.mainFormGroup.hasError('datesNotSortedCorrectly')) errorList.push("Las fechas del filtro no están ordenadas correctamente.");
 
-            if (!this.mainFormGroup.controls.startDate.valid) {
-                if (this.mainFormGroup.controls.startDate.hasError('required')) errorList.push("La fecha inicial es requerida.");
-                else errorList.push("La fecha inicial no es válida.");
-            }
-            if (!this.mainFormGroup.controls.endDate.valid) {
-                if (this.mainFormGroup.controls.endDate.hasError('required')) errorList.push("La fecha final es requerida.");
-                else errorList.push("La fecha final no es válida.");
+            if (this.mainFormGroup.controls.startDate.valid && this.mainFormGroup.controls.endDate.valid) {
+                if (this.mainFormGroup.hasError("datesNotSortedCorrectly")) errorList.push(ModuleConfig.InvalidStartDateOrderMessage);
+            } else {
+                if (this.mainFormGroup.controls.startDate.valid == false) {
+                    if (this.mainFormGroup.controls.startDate.hasError('required')) errorList.push("La fecha de inicio es requerida.");
+                    else errorList.push(ModuleConfig.InvalidStartDateMessage);
+                }
+                if (this.mainFormGroup.controls.endDate.valid == false) {
+                    if (this.mainFormGroup.controls.endDate.hasError('required')) errorList.push("La fecha de fin es requerida.");
+                    else errorList.push(ModuleConfig.InvalidEndDateMessage);
+                }
             }
 
             if (this.contractor.Id == null || this.contractor.Id.trim() == "") errorList.push("El Id del cliente no es válido.");

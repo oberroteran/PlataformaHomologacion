@@ -48,6 +48,11 @@ export class PolicyMovementProofComponent implements OnInit {
     genericErrorMessage = "Ha ocurrido un error inesperado. Por favor contáctese con soporte."; //Mensaje de error genérico
     notfoundMessage: string = "No se encontraron registros";
 
+    invalidStartDateMessage = ModuleConfig.InvalidStartDateMessage;
+    invalidEndDateMessage = ModuleConfig.InvalidEndDateMessage;
+    invalidStartDateOrderMessage = ModuleConfig.InvalidStartDateOrderMessage;
+    invalidEndDateOrderMessage = ModuleConfig.InvalidEndDateOrderMessage;
+
     constructor(
         private mainFormBuilder: FormBuilder,
         private policyService: PolicyemitService,
@@ -244,19 +249,19 @@ export class PolicyMovementProofComponent implements OnInit {
             }
             case "2": { //dni 
                 this.documentNumberLength = 8;
-                this.mainFormGroup.controls.documentNumber.setValidators([Validators.minLength(8), Validators.maxLength(8), GlobalValidators.onlyNumberValidator]);
+                this.mainFormGroup.controls.documentNumber.setValidators([Validators.minLength(8), Validators.maxLength(8), GlobalValidators.onlyNumberValidator, Validators.pattern(GlobalValidators.getDniPattern()), GlobalValidators.notAllCharactersAreEqualValidator]);
                 this.mainFormGroup.controls.documentNumber.updateValueAndValidity();
                 break;
             }
             case "4": { //ce
                 this.documentNumberLength = 12;
-                this.mainFormGroup.controls.documentNumber.setValidators([Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.documentNumber.setValidators([Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.documentNumber.updateValueAndValidity();
                 break;
             }
             case "6": { //pasaporte
                 this.documentNumberLength = 12;
-                this.mainFormGroup.controls.documentNumber.setValidators([Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.documentNumber.setValidators([Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.documentNumber.updateValueAndValidity();
                 break;
             }
@@ -313,20 +318,23 @@ export class PolicyMovementProofComponent implements OnInit {
      */
     identifyAndShowErrors() {
         let error = [];
-        if (this.mainFormGroup.hasError("datesNotSortedCorrectly")) error.push("Las fechas no tienen un orden correcto.");
         if (this.mainFormGroup.controls.proofNumber.valid == false) error.push("El número de constancia no es válido.");
         if (this.mainFormGroup.controls.documentNumber.valid == false) error.push("El número de documento no es válido.");
         if (this.mainFormGroup.controls.firstName.valid == false) error.push("El nombre no es válido.");
         if (this.mainFormGroup.controls.paternalLastName.valid == false) error.push("El apellido paterno no es válido.");
         if (this.mainFormGroup.controls.maternalLastName.valid == false) error.push("El apellido materno no es válido.");
 
-        if (this.mainFormGroup.controls.startDate.valid == false) {
-            if (this.mainFormGroup.controls.startDate.hasError('required')) error.push("La fecha inicial es requerida.");
-            else error.push("La fecha inicial no es válida.");
-        }
-        if (this.mainFormGroup.controls.endDate.valid == false) {
-            if (this.mainFormGroup.controls.endDate.hasError('required')) error.push("La fecha final es requerida.");
-            else error.push("La fecha final no es válida.");
+        if (this.mainFormGroup.controls.startDate.valid && this.mainFormGroup.controls.endDate.valid) {
+            if (this.mainFormGroup.hasError("datesNotSortedCorrectly")) error.push(ModuleConfig.InvalidStartDateOrderMessage);
+        } else {
+            if (this.mainFormGroup.controls.startDate.valid == false) {
+                if (this.mainFormGroup.controls.startDate.hasError('required')) error.push("La fecha de inicio es requerida.");
+                else error.push(ModuleConfig.InvalidStartDateMessage);
+            }
+            if (this.mainFormGroup.controls.endDate.valid == false) {
+                if (this.mainFormGroup.controls.endDate.hasError('required')) error.push("La fecha de fin es requerida.");
+                else error.push(ModuleConfig.InvalidEndDateMessage);
+            }
         }
 
 
@@ -373,46 +381,46 @@ export class PolicyMovementProofComponent implements OnInit {
         return output;
     }
 
+    proofNumberPressed(event: any) {
+        if (!/[0-9]/.test(event.key) && event.key != 'Backspace' && event.key != 'Delete') {
+            event.preventDefault();
+        }
+    }
     /**
      * Bloquea los otros campos cuando el campo de número de póliza no está vacío; en caso contrario, los desbloquea
      */
     proofNumberChanged(event: any) {
-        if (!/[0-9]/.test(event.key) && event.key != 'Backspace' && event.key != 'Delete') {
-            event.preventDefault();
+        if (this.mainFormGroup.controls.proofNumber.value != null && this.mainFormGroup.controls.proofNumber.value != "") {
+            this.mainFormGroup.controls.product.disable();
+            this.mainFormGroup.controls.movement.disable();
+            this.mainFormGroup.controls.startDate.disable();
+            this.mainFormGroup.controls.endDate.disable();
+
+            this.mainFormGroup.controls.searchMode.disable();
+            this.mainFormGroup.controls.documentType.disable();
+            this.mainFormGroup.controls.documentNumber.disable();
+
+            this.mainFormGroup.controls.paternalLastName.disable();
+            this.mainFormGroup.controls.maternalLastName.disable();
+            this.mainFormGroup.controls.firstName.disable();
+            this.mainFormGroup.setValidators(null);
+
         } else {
-            if (this.mainFormGroup.controls.proofNumber.value != null && this.mainFormGroup.controls.proofNumber.value != "") {
-                this.mainFormGroup.controls.product.disable();
-                this.mainFormGroup.controls.movement.disable();
-                this.mainFormGroup.controls.startDate.disable();
-                this.mainFormGroup.controls.endDate.disable();
+            this.mainFormGroup.controls.product.enable();
+            this.mainFormGroup.controls.movement.enable();
+            this.mainFormGroup.controls.startDate.enable();
+            this.mainFormGroup.controls.endDate.enable();
 
-                this.mainFormGroup.controls.searchMode.disable();
-                this.mainFormGroup.controls.documentType.disable();
-                this.mainFormGroup.controls.documentNumber.disable();
+            this.mainFormGroup.controls.searchMode.enable();
+            this.mainFormGroup.controls.documentType.enable();
+            this.mainFormGroup.controls.documentNumber.enable();
 
-                this.mainFormGroup.controls.paternalLastName.disable();
-                this.mainFormGroup.controls.maternalLastName.disable();
-                this.mainFormGroup.controls.firstName.disable();
-                this.mainFormGroup.setValidators(null);
-
-            } else {
-                this.mainFormGroup.controls.product.enable();
-                this.mainFormGroup.controls.movement.enable();
-                this.mainFormGroup.controls.startDate.enable();
-                this.mainFormGroup.controls.endDate.enable();
-
-                this.mainFormGroup.controls.searchMode.enable();
-                this.mainFormGroup.controls.documentType.enable();
-                this.mainFormGroup.controls.documentNumber.enable();
-
-                this.mainFormGroup.controls.paternalLastName.enable();
-                this.mainFormGroup.controls.maternalLastName.enable();
-                this.mainFormGroup.controls.firstName.enable();
-                this.mainFormGroup.setValidators([GlobalValidators.dateSort]);
-            }
-            this.mainFormGroup.updateValueAndValidity();
+            this.mainFormGroup.controls.paternalLastName.enable();
+            this.mainFormGroup.controls.maternalLastName.enable();
+            this.mainFormGroup.controls.firstName.enable();
+            this.mainFormGroup.setValidators([GlobalValidators.dateSort]);
         }
-
+        this.mainFormGroup.updateValueAndValidity();
     }
     onPaste(event: ClipboardEvent) {
         //let clipboardData = event.clipboardData || window.clipboardData;

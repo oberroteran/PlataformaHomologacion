@@ -230,19 +230,19 @@ export class RequestStatusComponent implements OnInit {
             }
             case "2": { //dni 
                 this.contractorDocumentMaxLength = 8;
-                this.mainFormGroup.controls.contractorDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(8), GlobalValidators.onlyNumberValidator]);
+                this.mainFormGroup.controls.contractorDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(8), GlobalValidators.onlyNumberValidator, Validators.pattern(GlobalValidators.getDniPattern()), GlobalValidators.notAllCharactersAreEqualValidator]);
                 this.mainFormGroup.controls.contractorDocumentNumber.updateValueAndValidity();
                 break;
             }
             case "4": { //ce
                 this.contractorDocumentMaxLength = 12;
-                this.mainFormGroup.controls.contractorDocumentNumber.setValidators([Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.contractorDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.contractorDocumentNumber.updateValueAndValidity();
                 break;
             }
             case "6": { //pasaporte
                 this.contractorDocumentMaxLength = 12;
-                this.mainFormGroup.controls.contractorDocumentNumber.setValidators([Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.contractorDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.contractorDocumentNumber.updateValueAndValidity();
                 break;
             }
@@ -290,19 +290,19 @@ export class RequestStatusComponent implements OnInit {
             }
             case "2": { //dni 
                 this.brokerDocumentMaxLength = 8;
-                this.mainFormGroup.controls.brokerDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(8), GlobalValidators.onlyNumberValidator]);
+                this.mainFormGroup.controls.brokerDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(8), GlobalValidators.onlyNumberValidator, Validators.pattern(GlobalValidators.getDniPattern()), GlobalValidators.notAllCharactersAreEqualValidator]);
                 this.mainFormGroup.controls.brokerDocumentNumber.updateValueAndValidity();
                 break;
             }
             case "4": { //ce
                 this.brokerDocumentMaxLength = 12;
-                this.mainFormGroup.controls.brokerDocumentNumber.setValidators([Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.brokerDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.brokerDocumentNumber.updateValueAndValidity();
                 break;
             }
             case "6": { //pasaporte
                 this.brokerDocumentMaxLength = 12;
-                this.mainFormGroup.controls.brokerDocumentNumber.setValidators([Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
+                this.mainFormGroup.controls.brokerDocumentNumber.setValidators([Validators.minLength(8), Validators.maxLength(12), Validators.pattern(GlobalValidators.getCePattern())]);
                 this.mainFormGroup.controls.brokerDocumentNumber.updateValueAndValidity();
                 break;
             }
@@ -426,7 +426,6 @@ export class RequestStatusComponent implements OnInit {
      */
     identifyAndShowErrors() {
         let error = [];
-        if (this.mainFormGroup.hasError("datesNotSortedCorrectly")) error.push(this.invalidStartDateOrderMessage);
         if (this.mainFormGroup.controls.product.valid == false) error.push("El producto no es válido.");
         if (this.mainFormGroup.controls.status.valid == false) error.push("El estado no es válido.");
         if (this.mainFormGroup.controls.quotationNumber.valid == false) error.push("El número de cotización no es válido.");
@@ -441,15 +440,18 @@ export class RequestStatusComponent implements OnInit {
         if (this.mainFormGroup.controls.brokerPaternalLastName.valid == false) error.push("El apellido del broker paterno no es válido.");
         if (this.mainFormGroup.controls.brokerMaternalLastName.valid == false) error.push("El apellido del broker materno no es válido.");
 
-        if (this.mainFormGroup.controls.startDate.valid == false) {
-            if (this.mainFormGroup.controls.startDate.hasError('required')) error.push("La fecha inicial es requerida.");
-            else error.push(this.invalidStartDateOrderMessage);
+        if (this.mainFormGroup.controls.startDate.valid && this.mainFormGroup.controls.endDate.valid) {
+            if (this.mainFormGroup.hasError("datesNotSortedCorrectly")) error.push(ModuleConfig.InvalidStartDateOrderMessage);
+        } else {
+            if (this.mainFormGroup.controls.startDate.valid == false) {
+                if (this.mainFormGroup.controls.startDate.hasError('required')) error.push("La fecha de inicio es requerida.");
+                else error.push(ModuleConfig.InvalidStartDateMessage);
+            }
+            if (this.mainFormGroup.controls.endDate.valid == false) {
+                if (this.mainFormGroup.controls.endDate.hasError('required')) error.push("La fecha de fin es requerida.");
+                else error.push(ModuleConfig.InvalidEndDateMessage);
+            }
         }
-        if (this.mainFormGroup.controls.endDate.valid == false) {
-            if (this.mainFormGroup.controls.endDate.hasError('required')) error.push("La fecha final es requerida.");
-            else error.push(this.invalidEndDateOrderMessage);
-        }
-
 
         Swal.fire("Información", this.listToString(error), "error");
     }
@@ -539,66 +541,67 @@ export class RequestStatusComponent implements OnInit {
         return output;
     }
 
+    quotationNumberPressed(event: any) {
+        if (!/[0-9]/.test(event.key) && event.key != 'Backspace' && event.key != 'Delete') {
+            event.preventDefault();
+        }
+    }
     /**
      * Bloquea los otros campos cuando el campo de número de cotización no está vacío; en caso contrario, los desbloquea
      */
     quotationNumberChanged(event: any) {
-        if (!/[0-9]/.test(event.key) && event.key != 'Backspace' && event.key != 'Delete') {
-            event.preventDefault();
+        if (this.mainFormGroup.controls.quotationNumber.value != null && this.mainFormGroup.controls.quotationNumber.value != "") {
+            this.mainFormGroup.controls.product.disable();
+            this.mainFormGroup.controls.status.disable();
+            this.mainFormGroup.controls.startDate.disable();
+            this.mainFormGroup.controls.endDate.disable();
+
+            this.mainFormGroup.controls.contractorSearchMode.disable();
+            this.mainFormGroup.controls.contractorPersonType.disable();
+            this.mainFormGroup.controls.contractorDocumentType.disable();
+            this.mainFormGroup.controls.contractorDocumentNumber.disable();
+            this.mainFormGroup.controls.contractorPaternalLastName.disable();
+            this.mainFormGroup.controls.contractorMaternalLastName.disable();
+            this.mainFormGroup.controls.contractorFirstName.disable();
+            this.mainFormGroup.controls.contractorLegalName.disable();
+
+            this.mainFormGroup.controls.brokerSearchMode.disable();
+            this.mainFormGroup.controls.brokerPersonType.disable();
+            this.mainFormGroup.controls.brokerDocumentType.disable();
+            this.mainFormGroup.controls.brokerDocumentNumber.disable();
+            this.mainFormGroup.controls.brokerPaternalLastName.disable();
+            this.mainFormGroup.controls.brokerMaternalLastName.disable();
+            this.mainFormGroup.controls.brokerFirstName.disable();
+            this.mainFormGroup.controls.brokerLegalName.disable();
+
+            this.mainFormGroup.setValidators(null);
+
         } else {
-            if (this.mainFormGroup.controls.quotationNumber.value != null && this.mainFormGroup.controls.quotationNumber.value != "") {
-                this.mainFormGroup.controls.product.disable();
-                this.mainFormGroup.controls.status.disable();
-                this.mainFormGroup.controls.startDate.disable();
-                this.mainFormGroup.controls.endDate.disable();
+            this.mainFormGroup.controls.product.enable();
+            this.mainFormGroup.controls.status.enable();
+            this.mainFormGroup.controls.startDate.enable();
+            this.mainFormGroup.controls.endDate.enable();
 
-                this.mainFormGroup.controls.contractorSearchMode.disable();
-                this.mainFormGroup.controls.contractorPersonType.disable();
-                this.mainFormGroup.controls.contractorDocumentType.disable();
-                this.mainFormGroup.controls.contractorDocumentNumber.disable();
-                this.mainFormGroup.controls.contractorPaternalLastName.disable();
-                this.mainFormGroup.controls.contractorMaternalLastName.disable();
-                this.mainFormGroup.controls.contractorFirstName.disable();
-                this.mainFormGroup.controls.contractorLegalName.disable();
+            this.mainFormGroup.controls.contractorSearchMode.enable();
+            this.mainFormGroup.controls.contractorPersonType.enable();
+            this.mainFormGroup.controls.contractorDocumentType.enable();
+            this.mainFormGroup.controls.contractorDocumentNumber.enable();
+            this.mainFormGroup.controls.contractorPaternalLastName.enable();
+            this.mainFormGroup.controls.contractorMaternalLastName.enable();
+            this.mainFormGroup.controls.contractorFirstName.enable();
+            this.mainFormGroup.controls.contractorLegalName.enable();
 
-                this.mainFormGroup.controls.brokerSearchMode.disable();
-                this.mainFormGroup.controls.brokerPersonType.disable();
-                this.mainFormGroup.controls.brokerDocumentType.disable();
-                this.mainFormGroup.controls.brokerDocumentNumber.disable();
-                this.mainFormGroup.controls.brokerPaternalLastName.disable();
-                this.mainFormGroup.controls.brokerMaternalLastName.disable();
-                this.mainFormGroup.controls.brokerFirstName.disable();
-                this.mainFormGroup.controls.brokerLegalName.disable();
-
-                this.mainFormGroup.setValidators(null);
-
-            } else {
-                this.mainFormGroup.controls.product.enable();
-                this.mainFormGroup.controls.status.enable();
-                this.mainFormGroup.controls.startDate.enable();
-                this.mainFormGroup.controls.endDate.enable();
-
-                this.mainFormGroup.controls.contractorSearchMode.enable();
-                this.mainFormGroup.controls.contractorPersonType.enable();
-                this.mainFormGroup.controls.contractorDocumentType.enable();
-                this.mainFormGroup.controls.contractorDocumentNumber.enable();
-                this.mainFormGroup.controls.contractorPaternalLastName.enable();
-                this.mainFormGroup.controls.contractorMaternalLastName.enable();
-                this.mainFormGroup.controls.contractorFirstName.enable();
-                this.mainFormGroup.controls.contractorLegalName.enable();
-
-                this.mainFormGroup.controls.brokerSearchMode.enable();
-                this.mainFormGroup.controls.brokerPersonType.enable();
-                this.mainFormGroup.controls.brokerDocumentType.enable();
-                this.mainFormGroup.controls.brokerDocumentNumber.enable();
-                this.mainFormGroup.controls.brokerPaternalLastName.enable();
-                this.mainFormGroup.controls.brokerMaternalLastName.enable();
-                this.mainFormGroup.controls.brokerFirstName.enable();
-                this.mainFormGroup.controls.brokerLegalName.enable();
-                this.mainFormGroup.setValidators([GlobalValidators.dateSort]);
-            }
-            this.mainFormGroup.updateValueAndValidity();
+            this.mainFormGroup.controls.brokerSearchMode.enable();
+            this.mainFormGroup.controls.brokerPersonType.enable();
+            this.mainFormGroup.controls.brokerDocumentType.enable();
+            this.mainFormGroup.controls.brokerDocumentNumber.enable();
+            this.mainFormGroup.controls.brokerPaternalLastName.enable();
+            this.mainFormGroup.controls.brokerMaternalLastName.enable();
+            this.mainFormGroup.controls.brokerFirstName.enable();
+            this.mainFormGroup.controls.brokerLegalName.enable();
+            this.mainFormGroup.setValidators([GlobalValidators.dateSort]);
         }
+        this.mainFormGroup.updateValueAndValidity();
     }
     onPaste(event: ClipboardEvent) {
         //let clipboardData = event.clipboardData || window.clipboardData;
