@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
                                         localStorage.setItem(
                                             'pensionID',
                                             JSON.stringify({
-                                                id: item.COD_PRODUCT,
+                                                id: item.COD_PRODUCT.toString(),
                                             })
                                         );
                                     }
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
                                         localStorage.setItem(
                                             'saludID',
                                             JSON.stringify({
-                                                id: item.COD_PRODUCT,
+                                                id: item.COD_PRODUCT.toString(),
                                             })
                                         );
                                     }

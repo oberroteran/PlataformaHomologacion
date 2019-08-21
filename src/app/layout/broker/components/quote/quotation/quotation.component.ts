@@ -1373,13 +1373,11 @@ export class QuotationComponent implements OnInit {
         this.stateBrokerPension = true;
         this.stateWorker = false;
         this.messageWorker = "";
-        //console.log(this.municipalityTariff);
         if (this.InputsQuotation.P_NTECHNICAL != null && this.InputsQuotation.P_NMUNICIPALITY != null && this.InputsQuotation.P_NPRODUCT != "-1") {
             let data = new Tariff();
-            //PRIMER JUEGO CON EL CLIENTE COMO COMODÍN
             data.activity = this.InputsQuotation.P_NTECHNICAL; // Actividad Economica
             data.workers = this.InputsQuotation.P_WORKER;
-            data.zipCode = this.municipalityTariff.toString(); //this.InputsQuotation.P_NMUNICIPALITY; // Ubicación
+            data.zipCode = this.municipalityTariff.toString(); // Ubigeo Equivalente
             data.queryDate = ""; // Fecha
             data.channel = []; //
 
@@ -1396,14 +1394,11 @@ export class QuotationComponent implements OnInit {
                     if (broker.NTYPECHANNEL == 6 || broker.NTYPECHANNEL == 8) {
                         let brokerItem = new Channel();
                         brokerItem.brokerId = broker.NCORREDOR.toString(); // Produccion
-                        //brokerItem.brokerId = broker.COD_CANAL.toString(); //Desarrollo
                         data.channel.push(brokerItem);
                     } else {
                         let middlemanItem = new Channel();
                         //Desarrollo
                         middlemanItem.middlemanId = broker.COD_CANAL.toString();
-                        //Produccion
-                        //middlemanItem.middlemanId = broker.NCORREDOR.toString();
                         data.channel.push(middlemanItem);
                     }
                 });
