@@ -188,6 +188,7 @@
                     <td class="grid-title-item">Producto</td>
                     <td class="grid-title-item">Nro. Póliza</td>
                     <td class="grid-title-item">Movimiento</td>
+                    <td class="grid-title-item">Fecha de Transac.</td>
                     <td class="grid-title-item">Inicio Vigencia</td>
                     <td class="grid-title-item">Fin Vigencia</td>
 
@@ -217,6 +218,7 @@
                     <td>{{ item.Product}}</td>
                     <td>{{ item.PolicyNumber }}</td>
                     <td>{{ item.Movement }}</td>
+                    <td>{{ item.TransactionDate | date:'dd/MM/yyyy, h:mm a' }}</td>
                     <td>{{ item.StartDate | date:'dd/MM/yyyy' }}</td>
                     <td>{{ item.EndDate  | date:'dd/MM/yyyy' }}</td>
 
