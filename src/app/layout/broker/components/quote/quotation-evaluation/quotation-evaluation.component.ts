@@ -117,6 +117,11 @@ export class QuotationEvaluationComponent implements OnInit {
     /**IGV para Pensión */
     pensionIGV: number;
 
+    /**Id de producto Salud */
+    healthProductId: string;
+    /**Id de producto Pensión */
+    pensionProductId: string;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -167,7 +172,6 @@ export class QuotationEvaluationComponent implements OnInit {
                 }
             }
 
-            if (AccessFilter.hasPermission("12") == false) this.router.navigate(['/broker/home']);
             this.canProposeRate = AccessFilter.hasPermission("13");
             this.canSeeRiskRate = AccessFilter.hasPermission("36");
 
