@@ -137,6 +137,8 @@ export class QuotationEvaluationComponent implements OnInit {
     ngOnInit() {
         this.createFormControl();
         this.initializeForm();
+        this.healthProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
+        this.pensionProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
 
         let quotationData = JSON.parse(sessionStorage.getItem("cs-quotation"));
         sessionStorage.removeItem('cs-quotation');
@@ -328,8 +330,8 @@ export class QuotationEvaluationComponent implements OnInit {
      * @param rate tasa
      */
     calculatePremium(payrollAmount: number, rate: number) {
-        return parseFloat(payrollAmount.toString()) * parseFloat(rate.toString());
-        // return parseFloat(payrollAmount.toString()) * parseFloat(rate.toString()) / 100;
+        // return parseFloat(payrollAmount.toString()) * parseFloat(rate.toString());
+        return parseFloat(payrollAmount.toString()) * parseFloat(rate.toString()) / 100;
     }
 
     /**
@@ -340,7 +342,7 @@ export class QuotationEvaluationComponent implements OnInit {
      * @param productId Id de producto
      */
     calculateNewPremiums(authorizedRate: any, riskTypeId: string, productId: string) {
-        if (authorizedRate.toString().trim() == "") authorizedRate = 0; //Si el input está limpio, lo convertimos a 0
+        if (isNaN(authorizedRate) || authorizedRate.toString().trim() == "") authorizedRate = 0; //Si el input está limpio, lo convertimos a 0
 
         let newPremium = this.FormatValue(this.calculatePremium(this.getPayrollAmount(riskTypeId), authorizedRate)); //cálculo de prima nueva con la tasa autorizada
         if (productId == JSON.parse(localStorage.getItem("pensionID"))["id"]) { //Si el producto es pensión
@@ -377,14 +379,14 @@ export class QuotationEvaluationComponent implements OnInit {
 
     }
     /**
-     * Calcula la prima según la tasa autorizada ingresada
+     * Calcula la prima según la tasa propuesta ingresada
      * Calcula la prima total neta, IGV a la prima neta y la prima total bruta.
-     * @param rate valor de ngModel de tasa autorizada
+     * @param rate valor de ngModel de tasa propuesta
      * @param riskTypeId - Id de tipo de riesgo
      * @param productId Id de producto
      */
     calculatePremiums(rate: any, riskTypeId: string, productId: string) {
-        if (rate.toString().trim() == "") rate = 0; //Si el input está limpio, lo convertimos a 0
+        if (isNaN(rate) || rate.toString().trim() == "") rate = 0; //Si el input está limpio, lo convertimos a 0
 
         let newPremium = this.FormatValue(this.calculatePremium(this.getPayrollAmount(riskTypeId), rate)); //cálculo de prima nueva con la tasa autorizada
         if (productId == JSON.parse(localStorage.getItem("pensionID"))["id"]) { //Si el producto es pensión
