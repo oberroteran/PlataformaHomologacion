@@ -167,7 +167,7 @@ export class QuotationEvaluationComponent implements OnInit {
                 }
             }
 
-            if (AccessFilter.hasPermission("12") == false) this.router.navigate(['/broker/home']);
+            // if (AccessFilter.hasPermission("12") == false) this.router.navigate(['/broker/home']);
             this.canProposeRate = AccessFilter.hasPermission("13");
             this.canSeeRiskRate = AccessFilter.hasPermission("36");
 
@@ -701,7 +701,7 @@ export class QuotationEvaluationComponent implements OnInit {
                         if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
                     });
                     let item = new AuthorizedRate();
-                    item.ProductId = '121';
+                    item.ProductId = '130';
                     item.RiskTypeId = element.RiskTypeId;
                     item.AuthorizedRate = element.AuthorizedRate;
                     item.AuthorizedPremium = element.NewPremium;
