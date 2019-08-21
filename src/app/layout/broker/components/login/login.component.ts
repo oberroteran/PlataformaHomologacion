@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConfig } from '../../../../app.config';
 import { AuthenticationService } from '../../services/authentication.service';
+import { ClientInformationService } from '../../services/shared/client-information.service';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { environment } from '../../../../../environments/environment';
 import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
@@ -29,8 +30,9 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
+        private productService: ClientInformationService,
         private formBuilder: FormBuilder,
-    private appConfig: AppConfig) { }
+        private appConfig: AppConfig) { }
 
     ngOnInit() {
         this.initComponent();
@@ -66,6 +68,29 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 result => {
                     if (result === true) {
+                        this.productService.getProductList().subscribe(
+                            res => {
+                                console.log(res)
+                                res.forEach(item => {
+                                    if (item.TIP_PRODUCT == "SCTR_PEN") {
+                                        localStorage.setItem(
+                                            'pensionID',
+                                            JSON.stringify({
+                                                id: item.COD_PRODUCT,
+                                            })
+                                        );
+                                    }
+                                    if (item.TIP_PRODUCT == "SCTR_SAL") {
+                                        localStorage.setItem(
+                                            'saludID',
+                                            JSON.stringify({
+                                                id: item.COD_PRODUCT,
+                                            })
+                                        );
+                                    }
+                                });                    
+                            }
+                        );
                         this.sidebarService.close();
                         this.menuTotal = JSON.parse(localStorage.getItem("currentUser"))["menu"];
                         this.menuTotal.forEach(element => {
@@ -77,18 +102,14 @@ export class LoginComponent implements OnInit {
                             }
                         });
                         if (this.productSoat > 0 && this.productSctr > 0) {
-                            console.log("1")
                             this.router.navigate(["broker/home"]);
                         }
                         if (this.productSoat > 0 && this.productSctr == 0) {
-                            console.log("2")
                             this.router.navigate(["broker/salepanel"]);
                         }
                         if (this.productSoat == 0 && this.productSctr > 0) {
-                            console.log("3")
                             this.router.navigate(["broker/panel"]);
                         }
-                        // this.router.navigate(['broker/salepanel']);
                     } else {
                         this.error = 'Usuario o clave incorrectos.';
                         this.loading = false;

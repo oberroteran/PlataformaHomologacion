@@ -119,21 +119,6 @@ export class AgencyFormComponent implements OnInit {
                     this.foundResults = res.GenericResponse;
                 }
                 this.isLoading = false;
-                // let needSaludSctr = true;
-                // let needPensionSctr = true;
-                // for (var i = 0; i < res.GenericResponse.length; i++) {
-                //   if (res.GenericResponse[i].ProductId == '121' && needSaludSctr == true) {
-                //     this.lastBrokerList.push(res.GenericResponse[i]);
-                //     needSaludSctr = false;
-
-                //   }
-                //   if (res.GenericResponse[i].ProductId == '120' && needPensionSctr == true) {
-                //     this.lastBrokerList.push(res.GenericResponse[i]);
-                //     needPensionSctr = false;
-
-                //   }
-                // }
-                //this.lastBrokerList = res.GenericResponse;
             },
             err => {
                 this.isLoading = false;
@@ -563,7 +548,7 @@ export class AgencyFormComponent implements OnInit {
         pensionAgencyData.AgencyDate = this.mainFormGroup.controls.pensionAgencyDate.value;
         pensionAgencyData.ChannelTypeId = this.channelTypeId;
         pensionAgencyData.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
-        pensionAgencyData.ProductId = "120";
+        pensionAgencyData.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
 
         let date = new Date();
         date.setDate(pensionAgencyData.AgencyDate.getDate());
@@ -683,7 +668,7 @@ export class AgencyFormComponent implements OnInit {
                 saludAgencyData.AgencyDate = this.mainFormGroup.controls.saludAgencyDate.value;
                 saludAgencyData.ChannelTypeId = this.channelTypeId;
                 saludAgencyData.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                saludAgencyData.ProductId = "130";
+                saludAgencyData.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
 
                 if (this.mainFormGroup.controls.sctrSaludFilePath.value != null && this.mainFormGroup.controls.sctrSaludFilePath.value != "") {
                     saludAgencyData.FileName = "agency-salud-" + saludAgencyData.BrokerId + "-" + saludAgencyData.ContractorId + "-" + saludAgencyData.AgencyDate.getDate() + "-" + String(saludAgencyData.AgencyDate.getMonth() + 1) + "-" + saludAgencyData.AgencyDate.getFullYear()
@@ -727,7 +712,7 @@ export class AgencyFormComponent implements OnInit {
                 saludAgencyData.AgencyDate = this.mainFormGroup.controls.saludAgencyDate.value;
                 saludAgencyData.ChannelTypeId = this.channelTypeId;
                 saludAgencyData.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                saludAgencyData.ProductId = "130";
+                saludAgencyData.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
 
                 if (this.mainFormGroup.controls.sctrSaludFilePath.value != null && this.mainFormGroup.controls.sctrSaludFilePath.value != "") {
                     saludAgencyData.FileName = "agency-salud-" + saludAgencyData.BrokerId + "-" + saludAgencyData.ContractorId + "-" + saludAgencyData.AgencyDate.getDate() + "-" + String(saludAgencyData.AgencyDate.getMonth() + 1) + "-" + saludAgencyData.AgencyDate.getFullYear()
@@ -788,7 +773,7 @@ export class AgencyFormComponent implements OnInit {
                 pensionAgencyData.AgencyDate = this.mainFormGroup.controls.pensionAgencyDate.value;
                 pensionAgencyData.ChannelTypeId = this.channelTypeId;
                 pensionAgencyData.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
-                pensionAgencyData.ProductId = "120";
+                pensionAgencyData.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
                 let date = new Date();
                 date.setDate(pensionAgencyData.AgencyDate.getDate());
                 date.setFullYear(pensionAgencyData.AgencyDate.getFullYear());

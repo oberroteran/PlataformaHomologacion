@@ -115,8 +115,8 @@ export class QuotationComponent implements OnInit {
     EListClient: any = [];
     brokerList: any = [];
     tasasList: any = [];
-    pensionID = "120";
-    saludID = "130";
+    pensionID = JSON.parse(localStorage.getItem("pensionID"))["id"];
+    saludID = JSON.parse(localStorage.getItem("saludID"))["id"];
     workerMin = 15;
     workerMax = 70;
     municipalityTariff = 0;
