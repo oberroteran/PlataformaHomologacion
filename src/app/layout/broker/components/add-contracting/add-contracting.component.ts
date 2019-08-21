@@ -196,6 +196,9 @@ export class AddContractingComponent implements OnInit {
                             this.listaDirecciones.forEach(item => {
                                 item.P_NROW = numdir++;
                                 item.P_CLASS = "";
+                                item.P_DESDEPARTAMENTO = item.P_DESDEPARTAMENTO == null ? item.P_SDES_DEP_DOM : item.P_DESDEPARTAMENTO;
+                                item.P_DESDISTRITO = item.P_DESDISTRITO == null ? item.P_SDES_DIS_DOM : item.P_DESDISTRITO;
+                                item.P_DESPROVINCIA = item.P_DESPROVINCIA == null ? item.P_SDES_PRO_DOM : item.P_DESPROVINCIA;
                             });
                             this.listaTelefonos = res.EListClient[0].EListPhoneClient;
                             this.InputsContracting.EListPhoneClient = this.listaTelefonos;

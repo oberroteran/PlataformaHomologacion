@@ -81,7 +81,7 @@ export class AddAddressComponent implements OnInit {
     if (this.itemDireccion != null) {
       console.log(this.itemDireccion);
       this.txtAccion = "Editar Dirección";
-      this.InputsStreet.P_NROW =  parseInt(this.itemDireccion.P_NROW);
+      this.InputsStreet.P_NROW = parseInt(this.itemDireccion.P_NROW);
       this.InputsStreet.P_SDESDIREBUSQ = this.itemDireccion.P_SDESDIREBUSQ;
       this.InputsStreet.P_SBLOCKCHALET = this.itemDireccion.P_SBLOCKCHALET;
       this.InputsStreet.P_DESDEPARTAMENTO = this.itemDireccion.P_DESDEPARTAMENTO;
@@ -95,20 +95,20 @@ export class AddAddressComponent implements OnInit {
       this.InputsStreet.P_SNUM_INTERIOR = this.itemDireccion.P_SNUM_INTERIOR;
       this.InputsStreet.P_SLOTE = this.itemDireccion.P_SLOTE;
       this.InputsStreet.P_SMANZANA = this.itemDireccion.P_SMANZANA;
-      this.InputsStreet.P_NCOUNTRY =  parseInt(this.itemDireccion.P_NCOUNTRY);
+      this.InputsStreet.P_NCOUNTRY = parseInt(this.itemDireccion.P_NCOUNTRY);
       this.onSelectCountryEdit(this.itemDireccion);
-      this.InputsStreet.P_NPROVINCE =  parseInt(this.itemDireccion.P_NPROVINCE);
+      this.InputsStreet.P_NPROVINCE = parseInt(this.itemDireccion.P_NPROVINCE);
       this.getProvinceList();
-      this.InputsStreet.P_NLOCAL =  parseInt(this.itemDireccion.P_NLOCAL);
+      this.InputsStreet.P_NLOCAL = parseInt(this.itemDireccion.P_NLOCAL);
       this.getDistrictList();
-      this.InputsStreet.P_NMUNICIPALITY =  parseInt(this.itemDireccion.P_NMUNICIPALITY);
+      this.InputsStreet.P_NMUNICIPALITY = parseInt(this.itemDireccion.P_NMUNICIPALITY);
       this.InputsStreet.P_SNUM_DIRECCION = this.itemDireccion.P_SNUM_DIRECCION;
-      this.InputsStreet.P_STI_BLOCKCHALET =  this.itemDireccion.P_STI_BLOCKCHALET == ""  ? null : this.itemDireccion.P_STI_BLOCKCHALET;
+      this.InputsStreet.P_STI_BLOCKCHALET = this.itemDireccion.P_STI_BLOCKCHALET == "" ? null : this.itemDireccion.P_STI_BLOCKCHALET;
       this.InputsStreet.P_STI_DIRE = this.itemDireccion.P_STI_DIRE == "" ? null : this.itemDireccion.P_STI_DIRE;
       this.InputsStreet.P_STI_INTERIOR = this.itemDireccion.P_STI_INTERIOR == "" ? null : this.itemDireccion.P_STI_INTERIOR;
       this.InputsStreet.P_STI_CJHT = this.itemDireccion.P_STI_CJHT == "" ? null : this.itemDireccion.P_STI_CJHT;
       this.InputsStreet.P_SNOM_DIRECCION = this.itemDireccion.P_SNOM_DIRECCION;
-      this.InputsStreet.P_SRECTYPE =  parseInt(this.itemDireccion.P_SRECTYPE);
+      this.InputsStreet.P_SRECTYPE = parseInt(this.itemDireccion.P_SRECTYPE);
       this.InputsStreet.P_SREFERENCE = this.itemDireccion.P_SREFERENCE;
       this.InputsStreet.P_SNOM_CJHT = this.itemDireccion.P_SNOM_CJHT;
       this.InputsStreet.P_SNOMUSUARIO = this.itemDireccion.P_SNOMUSUARIO;
@@ -308,10 +308,10 @@ export class AddAddressComponent implements OnInit {
 
   onSelectCountryEdit(item) {
     if (item.P_NCOUNTRY == "604") {
-      this.InputsStreet.P_NCOUNTRY =  parseInt(item.P_NCOUNTRY);
+      this.InputsStreet.P_NCOUNTRY = parseInt(item.P_NCOUNTRY);
       this.blockPais = true;
     } else {
-      this.InputsStreet.P_NCOUNTRY =  parseInt(item.P_NCOUNTRY);
+      this.InputsStreet.P_NCOUNTRY = parseInt(item.P_NCOUNTRY);
       this.blockPais = false;
     }
   }
@@ -381,12 +381,6 @@ export class AddAddressComponent implements OnInit {
     this.clientInformationService.getDirectionTypeList().subscribe(
       res => {
         this.directionTypeList = res;
-        // this.directionTypeList = [];
-        // res.forEach(item => {
-        //   if (item.SRECTYPE == 2) {
-        //     this.directionTypeList.push(item);
-        //   }
-        // });
       },
       err => {
         console.log(err);
@@ -507,7 +501,7 @@ export class AddAddressComponent implements OnInit {
     this.sLote = this.InputsStreet.P_SLOTE !== "" ? "LT " + this.InputsStreet.P_SLOTE + " " : "";
     this.sReferencia = this.InputsStreet.P_SREFERENCE !== "" ? this.InputsStreet.P_SREFERENCE + " " : "";
     this.InputsStreet.P_SDESDIREBUSQ = this.prefVia + this.sDireccion + this.sNumero + this.prefBloque + this.sBloque + this.prefDepar + this.sDepar + this.prefCJHT + this.sCJHT + this.sEtapa + this.sManzana + this.sLote + this.sReferencia + this.sDepartamento + this.sProvincia + this.sDistrito;
-    
+
     if (this.itemDireccion == null) {
       let existe = 0;
       let item = this.InputsStreet;

@@ -216,11 +216,21 @@ export class AddTelephoneComponent implements OnInit {
 
     if (this.itemTelefono == null) {
       let existe = 0;
+
+      this.InputsTelephone.P_NAREA_CODE =  this.InputsTelephone.P_NAREA_CODE == "0" ? null :  this.InputsTelephone.P_NAREA_CODE
+      this.InputsTelephone.P_NEXTENS1 = this.InputsTelephone.P_NEXTENS1 == "" ? null :  this.InputsTelephone.P_NAREA_CODE
+      
       let item = this.InputsTelephone;
       this.listaTelefonos.map(function (dato) {
+        // console.log(dato)
         if (dato.P_NPHONE_TYPE == item.P_NPHONE_TYPE && dato.P_SPHONE == item.P_SPHONE &&
           dato.P_NAREA_CODE == item.P_NAREA_CODE && dato.P_NEXTENS1 == item.P_NEXTENS1) {
           existe = 1;
+        } else {
+          console.log("tipo:" + dato.P_NPHONE_TYPE + "=" + item.P_NPHONE_TYPE)
+          console.log("tipo:" + dato.P_SPHONE + "=" + item.P_SPHONE)
+          console.log("tipo:" + dato.P_NAREA_CODE + "=" + item.P_NAREA_CODE)
+          console.log("tipo:" + dato.P_NEXTENS1 + "=" + item.P_NEXTENS1)
         }
       });
 
@@ -256,7 +266,7 @@ export class AddTelephoneComponent implements OnInit {
   }
 
   ValidarTelefono(itemTelefono, row) {
-    console.log(this.InputsTelephone)
+    // console.log(this.InputsTelephone)
     let mensaje = "";
     if (this.InputsTelephone.P_NPHONE_TYPE == 0) {
       this.VAL_PHONE[0] = "0"

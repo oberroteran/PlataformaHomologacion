@@ -120,8 +120,8 @@ export class PolicyFormComponent implements OnInit {
 	processID = "";
 	mode: String; //emitir, incluir, renovar : emit, include, renew
 	title: string; //titulo del formulario
-	pensionID: string = "120";
-	saludID: string = "121";
+	pensionID: string = JSON.parse(localStorage.getItem("pensionID"))["id"];
+	saludID: string = "130";
 
 	/**Puede facturar a mes vencido? */
 	canBillMonthly: boolean;

@@ -1,38 +1,47 @@
-/*BEGIN Reports
-*{
-  margin: 0;
-  padding: 0;
-  font-family: Arial;
-  font-size: 11px;
-}*/
-
 .container {
     float: left;
     width: 75%;
     padding: 10px 30px;
+}
+.loadingScreen {
+    opacity: 0.7;
+    transition: opacity .8s ease-in-out;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #000;
+    z-index: 10000000000;
+}
+.underline {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(0, 0, 0, .125);
 }
 
 ::placeholder {
     color: rgb(146, 138, 163);
 }
 
+
 .filter {
     width: 100%;
     margin: 10px auto;
-    border-bottom: 1px solid rgb(84, 61, 129);
+    /* border-bottom: 1px solid rgb(84, 61, 129); */
     padding: 10px 0 15px;
 }
 
-.filter-row {
+.filter .filter-row {
     width: 100%;
     display: flex;
 }
 
-.filter-row .filter-row-cell {
+.filter .filter-row .filter-row-cell {
     padding: 8px 5px;
 }
 
-.filter-row .filter-row-cell span {
+.filter .filter-row .filter-row-cell span {
     width: 100%;
     color: #2b0d61;
     display: block;
@@ -42,23 +51,17 @@
     line-height: 24px;
 }
 
-.t-search {
-    margin-left: 10px;
-    position: relative;
-    top: 2px;
-}
-
 input[type="text"] {
-    border-radius: 2px !important;
-    padding: 0px 10px 0 12px!important;
-    margin-top: 5px !important;
-    font-size: 14px !important;
-    width: 100%;
-    border: 1px solid #aa9ec0;
-    color: #aa9ec0;
-    height: 45px !important;
-    font-weight: 300 !important;
-    text-transform: uppercase;
+	border-radius: 2px !important;
+	padding: 0px 10px 0 12px!important;
+	margin-top: 5px !important;
+	font-size: 14px !important;
+	width: 100%;
+	border: 1px solid #aa9ec0;
+	color: #aa9ec0;
+	height: 45px !important;
+	font-weight: 300 !important;
+	text-transform: uppercase;
 }
 
 .pminima {
@@ -74,8 +77,8 @@ input[type="text"] {
 .schk {
     display: inline-block;
     position: relative;
-    top: -4px;
-    padding: 0 5px;
+    top: -2px;
+    padding: 0 10px;
 }
 
 .checkbox {
@@ -146,19 +149,17 @@ input[type="text"] {
     height: 45px;
     font-weight: 300;
     padding-left: 12px;
+    text-transform: uppercase;
 }
 
 select {
     width: 100%;
-    border: none;
     display: block;
     padding: 8px 5px;
-    border: 1px solid rgb(146, 138, 163);
     border-radius: 2px;
     margin-top: 5px;
     color: rgb(146, 138, 163);
-    /* outline: auto; */
-    /* margin-left: 3px; */
+    text-transform: uppercase;
     font-family: "Bliss Pro";
     font-size: 14px;
     height: 45px;
@@ -166,13 +167,6 @@ select {
     font-weight: 300;
     color: #aa9ec0;
     border: 1px solid #aa9ec0;
-    text-transform: uppercase;
-}
-
-.ng-select div,
-.ng-select input,
-.ng-select span {
-    text-transform: uppercase !important;
 }
 
 select:disabled {
@@ -183,26 +177,21 @@ select:disabled {
     margin: 3px 0;
 }
 
-span,
-textarea {
+span, textarea {
     margin-top: 0.7em;
     display: block;
 }
 
 .card {
-    /* margin-top: 0.7em; */
-}
-
-.msg-error {
-    font-size: 14px;
-    color: red;
+    margin-top: 0.7em;
 }
 
 .grid {
-    width: 95%;
+    width: 100%;
     margin: 20px auto;
     font-size: 14px;
     font-weight: 300;
+    /* border: 1px solid rgb(146, 138, 163); */
 }
 
 .grid table {
@@ -332,15 +321,13 @@ button span {
     margin: 0 10px;
 }
 
-.full-color img,
-button img {
+.full-color img, button img {
     display: table-cell;
     margin-top: auto;
     margin-bottom: auto;
 }
 
-.riesgo td,
-.riesgo th {
+.riesgo td, .riesgo th {
     padding: .2rem !important;
 }
 
@@ -361,7 +348,6 @@ button img {
     height: 45px;
     outline: none;
 }
-
 
 /*
 .header-content .header-item .full-color span{
@@ -390,7 +376,7 @@ button {
     justify-content: center;
     border: 1px solid rgb(129, 118, 157);
     border-radius: 2px;
-    margin: 0 5px;
+    margin: 0px;
     background: #fff;
     padding: 8px 5px;
     min-width: 200px;
@@ -412,146 +398,108 @@ button span {
     color: rgb(83, 66, 121);
 }
 
-span {
-    font-size: 14px;
+.modal-header button {
+    padding: 1rem 1rem;
+    margin: -1rem -1rem -1rem auto;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+    font-family: "Bliss Pro";
+    text-transform: none;
+    overflow: visible;
+    border-radius: 0;
 }
 
-.loadingScreen {
-    opacity: 0.7;
-    transition: opacity .8s ease-in-out;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background: #000;
-    z-index: 10000000000;
+/*SOBRESCRITURA DE BOOTSTRAP CSS*/
+
+.btn-secondary:hover {
+    cursor: pointer;
+    color: #81769d;
+    background-color: white;
 }
 
-.tblbroker label {
-    font-size: 14px;
-    font-weight: normal;
-    text-transform: uppercase;
+.btn-secondary {
+    border-color: #81769d;
+    color: white;
+    background-color: #81769d;
 }
 
-.tblbroker thead {
-    border-bottom: 1px solid #ddd;
+td .dropdown {
+    width: 24px;
+    height: 24px;
 }
 
-.tblbroker tbody tr {
-    margin-top: 10px;
+td .dropdown>a {
+    width: 58px;
+    height: 58px;
+    border-radius: .25rem;
 }
 
-.tblTasas label {
-    font-size: 14px;
-    font-weight: normal;
-    /* text-transform: uppercase; */
+td .dropdown .dropdown-toggle {
+    white-space: nowrap;
+    width: 24px;
+    height: 24px;
+    background: #a99dbf;
+    margin: 0;
+    text-align: center;
 }
 
-.tblTasas thead {
-    border-bottom: 1px solid #ddd;
-}
-
-.tblTasas tbody tr {
-    margin-top: 10px;
-}
-
-
-/*/*/
-
-.btn-danger:not(:disabled):not(.disabled).active,
-.btn-danger:not(:disabled):not(.disabled):active,
-.show>.btn-danger.dropdown-toggle {
+td .dropdown-toggle span {
     color: #fff;
-    background-color: #bd2130;
-    border-color: #b21f2d;
-    padding: 5px;
-    min-width: 155px;
-    height: 35px;
-    outline: none;
-}
-
-
-/**/
-
-
-/**/
-
-.collapse {
-    padding: 1.25rem;
-    border: 1px solid rgba(0, 0, 0, 0.125) !important;
-    margin-top: -1px;
-}
-
-input[type='text'],
-input[type='password'],
-textarea,
-label,
-.ng-placeholder,
-select,
-textarea {
-    text-transform: uppercase;
-}
-
-textarea {
-    width: 100%;
-    border: 1px solid rgb(221, 221, 221);
-    border-radius: 5px;
-    padding: 10px 15px;
     font-size: 14px;
-    margin-top: 9.79688px;
-    margin-bottom: 0px;
-    min-height: 100px;
-    max-height: 100px;
+    padding-top: 5px;
 }
 
-.riesgo {
+.tableButton span {
+    font-size: 24px;
+    color: #a99dbf
+}
+
+.dropdown-toggle::after {
+    position: absolute;
+    top: 12px;
+    right: -12px;
+}
+
+.tableButton span:hover {
+    cursor: pointer;
+}
+
+td span {
+    font-size: 24px;
+    margin-top: 0
+}
+
+td span:hover {
+    cursor: pointer
+}
+
+td div {
+    cursor: pointer;
+}
+
+td .tableButton {
+    width: 24px;
+    height: 24px;
+    background: #a99dbf;
+    margin: 0;
+    text-align: center;
+}
+
+td .tableButton span {
+    color: #fff;
     font-size: 14px;
-    text-transform: uppercase;
+    padding-top: 5px;
 }
 
-.my-drop-zone {
-    border: dotted 3px lightgray;
-}
-
-
-/* Default class applied to drop zones on over */
-
-.invalid-drag {
-    border: dotted 3px red;
-}
-
-.valid-drag {
-    border: dotted 3px green;
-}
-
-html,
-body {
-    height: 100%;
-}
-
-.previewIcon {
-    width: 100px;
-    height: 100px;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.inline-block {
-    display: inline-block;
-    margin: .2em;
-}
-
-.hidden {
-    display: none;
-}
-
-@media print {
-    .hidden {
-        display: table;
-    }
-}
-
-.checkbox:disabled {
-    background: #e6e6e6;
+.filter span {
+    font-size: 14px
 }

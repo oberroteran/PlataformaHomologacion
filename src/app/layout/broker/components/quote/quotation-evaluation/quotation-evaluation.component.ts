@@ -255,12 +255,12 @@ export class QuotationEvaluationComponent implements OnInit {
 
         let health: any = {};
         health.P_NBRANCH = 1;
-        health.P_NPRODUCT = "121";
+        health.P_NPRODUCT = JSON.parse(localStorage.getItem("saludID"))["id"];
         health.P_TIPO_REC = "A";
 
         let pension: any = {};
         pension.P_NBRANCH = 1;
-        pension.P_NPRODUCT = "120";
+        pension.P_NPRODUCT = JSON.parse(localStorage.getItem("pensionID"))["id"];
         pension.P_TIPO_REC = "A";
 
         forkJoin(
@@ -343,7 +343,7 @@ export class QuotationEvaluationComponent implements OnInit {
         if (authorizedRate.toString().trim() == "") authorizedRate = 0; //Si el input está limpio, lo convertimos a 0
 
         let newPremium = this.FormatValue(this.calculatePremium(this.getPayrollAmount(riskTypeId), authorizedRate)); //cálculo de prima nueva con la tasa autorizada
-        if (productId == "120") { //Si el producto es pensión
+        if (productId == JSON.parse(localStorage.getItem("pensionID"))["id"]) { //Si el producto es pensión
             let pensionNewNetAmount = 0.00; //nueva prima total neta de Pensión, con la tasa autorizada
             this.InputsQuotation.PensionDetailsList.forEach((element, key) => {
                 if (element.RiskTypeId == riskTypeId) {
@@ -359,7 +359,7 @@ export class QuotationEvaluationComponent implements OnInit {
             //Cálculo de nueva prima total bruta de Pensión
             this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
         }
-        if (productId == "121") { //Si el producto es Salud
+        if (productId == JSON.parse(localStorage.getItem("saludID"))["id"]) { //Si el producto es Salud
             let saludNewNetAmount = 0.00; //prima prima total neta de Salud, según la tasa autorizada
             this.InputsQuotation.SaludDetailsList.forEach((element, key) => {
                 if (element.RiskTypeId == riskTypeId) {
@@ -387,7 +387,7 @@ export class QuotationEvaluationComponent implements OnInit {
         if (rate.toString().trim() == "") rate = 0; //Si el input está limpio, lo convertimos a 0
 
         let newPremium = this.FormatValue(this.calculatePremium(this.getPayrollAmount(riskTypeId), rate)); //cálculo de prima nueva con la tasa autorizada
-        if (productId == "120") { //Si el producto es pensión
+        if (productId == JSON.parse(localStorage.getItem("pensionID"))["id"]) { //Si el producto es pensión
             let pensionTotalNetAmount = 0.00; //nueva prima total neta de Pensión, con la tasa autorizada
             this.InputsQuotation.PensionDetailsList.forEach((element, key) => {
                 if (element.RiskTypeId == riskTypeId) {
@@ -403,7 +403,7 @@ export class QuotationEvaluationComponent implements OnInit {
             //Cálculo de nueva prima total bruta de Pensión
             this.InputsQuotation.PensionGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNetAmount));
         }
-        if (productId == "121") { //Si el producto es Salud
+        if (productId == JSON.parse(localStorage.getItem("saludID"))["id"]) { //Si el producto es Salud
             let saludTotalNetAmount = 0.00; //prima prima total neta de Salud, según la tasa autorizada
             this.InputsQuotation.SaludDetailsList.forEach((element, key) => {
                 if (element.RiskTypeId == riskTypeId) {
@@ -531,7 +531,7 @@ export class QuotationEvaluationComponent implements OnInit {
                         this.InputsQuotation.PensionNewCalculatedIGV = 0.00;  //Nuevo Igv de prima total neta de Pensión, correspondiente a las primas nuevas generadas por tasas autorizadas
 
                         res[2].forEach(element => {
-                            if (element.ID_PRODUCTO == "120") { //Si es un elemento de pensión
+                            if (element.ID_PRODUCTO == JSON.parse(localStorage.getItem("pensionID"))["id"]) { //Si es un elemento de pensión
                                 let item: any = {};
                                 item.RiskRate = element.TASA_RIESGO;
                                 item.RiskTypeId = element.TIP_RIESGO; //Id tipo de riesgo
@@ -557,7 +557,7 @@ export class QuotationEvaluationComponent implements OnInit {
                                 item.WorkersCount = element.NUM_TRABAJADORES;
                                 item.PayrollAmount = element.MONTO_PLANILLA;
                             }
-                            if (element.ID_PRODUCTO == "121") { //Si es un elemento de pensión
+                            if (element.ID_PRODUCTO == JSON.parse(localStorage.getItem("saludID"))["id"]) { //Si es un elemento de pensión
                                 let item: any = {};
                                 item.RiskRate = element.TASA_RIESGO;
                                 item.RiskTypeId = element.TIP_RIESGO; //Id tipo de riesgo
@@ -685,7 +685,7 @@ export class QuotationEvaluationComponent implements OnInit {
                         if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
                     });
                     let item = new AuthorizedRate();
-                    item.ProductId = '120';
+                    item.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
                     item.RiskTypeId = element.RiskTypeId;
                     item.AuthorizedRate = element.AuthorizedRate;
                     item.AuthorizedPremium = element.NewPremium;
@@ -705,7 +705,7 @@ export class QuotationEvaluationComponent implements OnInit {
                         if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
                     });
                     let item = new AuthorizedRate();
-                    item.ProductId = '121';
+                    item.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
                     item.RiskTypeId = element.RiskTypeId;
                     item.AuthorizedRate = element.AuthorizedRate;
                     item.AuthorizedPremium = element.NewPremium;
@@ -766,7 +766,7 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.PensionDetailsList.forEach((element) => {
                 let item = new QuotationRisk();
                 item.RiskTypeId = element.RiskTypeId;
-                item.ProductTypeId = "120";
+                item.ProductTypeId = JSON.parse(localStorage.getItem("pensionID"))["id"];
                 item.ProposedRate = element.ProposedRate;
                 item.WorkersCount = element.WorkersCount;
                 item.PayrollAmount = element.PayrollAmount;
@@ -788,7 +788,7 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludDetailsList.forEach((element) => {
                 let item = new QuotationRisk();
                 item.RiskTypeId = element.RiskTypeId;
-                item.ProductTypeId = "121";
+                item.ProductTypeId = JSON.parse(localStorage.getItem("saludID"))["id"];
                 item.ProposedRate = element.ProposedRate;
                 item.WorkersCount = element.WorkersCount;
                 item.PayrollAmount = element.PayrollAmount;

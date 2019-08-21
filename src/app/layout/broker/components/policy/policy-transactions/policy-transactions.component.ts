@@ -158,8 +158,8 @@ export class PolicyTransactionsComponent implements OnInit {
   //infoPolicy: any = {}
   objEdit: any = [];
   numberWH: number;
-  pensionID = "120";
-  saludID = "121";
+  pensionID = JSON.parse(localStorage.getItem("pensionID"))["id"];
+  saludID = JSON.parse(localStorage.getItem("saludID"))["id"];
   workerMin = 15;
   workerMax = 70;
   municipalityTariff = 0;

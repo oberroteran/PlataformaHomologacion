@@ -382,7 +382,7 @@
                             <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
                                 [disabled]="!saludAuthorizedRate" FloatDirective
                                 [(ngModel)]="InputsQuotation.SaludDetailsList[row].AuthorizedRate"
-                                (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,'121')"
+                                (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,'130')"
                                 (mouseup)="$event.target.select()" />
                             </td>
                             <td *ngIf="mode!='recotizar'" class="col-sm text-center"><span>{{item.NewPremium}}</span>

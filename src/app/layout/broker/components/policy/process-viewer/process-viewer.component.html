@@ -1,4 +1,4 @@
-<!-- <div class="form-group row">
+<div class="form-group row">
     <div class="col-lg-3">
         <navmenusctr></navmenusctr>
     </div>
@@ -17,22 +17,21 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <span>FECHA DE PROCESO</span>
-                                <input type="text" formControlName="startDate" placeholder="dd/mm/yyyy" #dp="bsDatepicker" (keyup.enter)="firstSearch()" [bsConfig]="bsConfig" bsDatepicker DateDirective (focus)="cleanValidation()" [(bsValue)]="bsValueIni" [ngClass]="{'error-validate': isValidatedInClickButton && (!mainFormGroup.controls.startDate.valid || mainFormGroup.hasError('datesNotSortedCorrectly'))}"
-                                />
+                                <input type="text" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker
+                                    [(bsValue)]="bsValueIni" value="{{ bsValueIni | date:'dd/MM/yyyy' }}" 
+                                    [(maxDate)]="bsValueFinMax" readonly>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <label style="width: 100%;margin-top:45px;"><input type="checkbox"
-                                      class="checkbox"></label>
-                                </div>
-                                <span style="margin-top: 45px">TODOS LOS PROCESOS</span>
-                            </div>
-                        </div>
-                        <div class="row pull-right">
+                            <!-- <div class="col-sm-3">
+                                <span>&nbsp;</span>
+                                <label style="width: 100%; margin-bottom: 0; margin-top: 18px;"><input type="checkbox"
+                                        class="checkbox"><span class="schk"
+                                        style="margin-top: 5px;; font-size: 13px;">TODOS LOS PROCESOS</span></label>
+                            </div> -->
                             <div class="col-sm-3">
-                                <button>
-                          <span>Visualizar</span>
-                        </button>
+                                <span>&nbsp;</span>
+                                <button class="full-color" (click)="visualizadorProcess()" style="margin-top: 5px;">
+                                    <span>Visualizar</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -43,19 +42,20 @@
                     <table class="table">
                         <thead>
                             <tr class="grid-title">
-                                <td class="grid-title-item">Cod. proceso</td>
-                                <td class="grid-title-item">Skey</td>
-                                <td class="grid-title-item">Planilla</td>
-                                <td class="grid-title-item">Usuario</td>
-                                <td class="grid-title-item">Póliza</td>
-                                <td class="grid-title-item">Canal</td>
-                                <td class="grid-title-item">Falta procesar</td>
-                                <td class="grid-title-item">Fecha efecto</td>
-                                <td class="grid-title-item">Inicio</td>
-                                <td class="grid-title-item">Fin</td>
-                                <td class="grid-title-item">Estado</td>
+                                <td class="grid-title-item">COD. PROCESO</td>
+                                <td class="grid-title-item">SKEY</td>
+                                <td class="grid-title-item">TIPO PROCESO</td>
+                                <td class="grid-title-item">PRODUCTO</td>
+                                <td class="grid-title-item">PÓLIZA</td>
+                                <td class="grid-title-item">CONTRATANTE</td>
+                                <td class="grid-title-item">INICIO</td>
+                                <td class="grid-title-item">FIN</td>
+                                <td class="grid-title-item">USUARIO</td>
+                                <td class="grid-title-item">ESTADO</td>
                             </tr>
                         </thead>
+                        <ng-container *ngIf="processList!=null && processList.length>0; then showGrid else hideGrid">
+                        </ng-container>
                     </table>
                     <ng-template #hideGrid>
                         <tbody>
@@ -64,16 +64,45 @@
                             </tr>
                         </tbody>
                     </ng-template>
+                    <ng-template #showGrid>
+                        <tbody>
+                            <tr *ngFor="let item of listToShow; let row_no = index">
+                                <td>{{ item.NUM_COTIZACION }}</td>
+                                <td>{{ item.SKEY }}</td>
+                                <td>{{ item.TIPO_MOVIMIENTO }}</td>
+                                <td>{{ item.DES_PRODUCT }}</td>
+                                <td>{{ item.NUM_POLIZA }}</td>
+                                <td>{{ item.DES_CONTR }}</td>
+                                <td>{{ item.FECHA_HORA_ENVIO }}</td>
+                                <td>{{ item.FECHA_HORA_FIN }}</td>
+                                <td>{{ item.DES_USUARIO }}</td>
+                                <td>{{ item.DES_ESTADO }}</td>
+                                <!-- <td>
+                                      <img src="assets/icons/anular.png" title="Eliminar" alt="Eliminar" />
+                                    </td> -->
+                            </tr>
+                        </tbody>
+                    </ng-template>
                 </div>
             </div>
-            <div *ngIf="foundResults!=null && foundResults.length>0" class="row" style="display:flex">
-                <div class="col-sm-12">
-                    <ngb-pagination [(page)]="filter.PageNumber" [pageSize]="filter.LimitPerpage" [collectionSize]="totalItems" (pageChange)="pageChanged(filter.PageNumber)">
-                        <ng-template ngbPaginationPrevious>Anterior</ng-template>
-                        <ng-template ngbPaginationNext>Siguiente</ng-template>
-                    </ngb-pagination>
+            <ng-container *ngIf="processList!=null && processList.length>0; then showPagination"></ng-container>
+            <ng-template #showPagination>
+                <div class="row mt-4">
+                    <div class="col-sm-12">
+                        <ngb-pagination [(page)]="currentPage" [pageSize]="itemsPerPage" [collectionSize]="totalItems"
+                            [maxSize]="maxSize" (pageChange)="pageChanged(currentPage)">
+                            <ng-template ngbPaginationPrevious>ANTERIOR</ng-template>
+                            <ng-template ngbPaginationNext>SIGUIENTE</ng-template>
+                        </ngb-pagination>
+                    </div>
                 </div>
-            </div>
+            </ng-template>
         </div>
     </div>
-</div> -->
+</div>
+<!-- Pantalla de carga -->
+<div [hidden]="isLoading==false" class="loadingScreen">
+    <div style="display:flex;height: 100%;width:100%">
+        <i style="margin:auto;font-size: 50px" class="fa fa-spinner fa-spin"></i>
+    </div>
+</div>

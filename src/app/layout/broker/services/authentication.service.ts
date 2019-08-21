@@ -42,7 +42,7 @@ export class AuthenticationService {
         const id = response.body && response.body['id'];
         const firstName = response.body && response.body['firstName'];
         const lastName = response.body && response.body['lastName'];
-                const lastName2 = response.body && response.body["slastnamE2"]; // Kuntur 20180812
+        const lastName2 = response.body && response.body["slastnamE2"]; // Kuntur 20180812
         const email = response.body && response.body['email'];
         const canal = response.body && response.body['canal'];
         const puntoVenta = response.body && response.body['puntoVenta'];
@@ -51,14 +51,14 @@ export class AuthenticationService {
         const desPuntoVenta = response.body && response.body['despuntoventa'];
         const tipoCanal = response.body && response.body['tipocanal'];
         const ncorredor = response.body && response.body["ncorredor"]; //
-                const nintermed = response.body && response.body["nintermed"]; //
-                const tdocument = response.body && response.body["stiP_DOC"]; //
-                const dni = response.body && response.body["sdni"]; // 
-                const sclient = response.body && response.body["sclient"]; //
+        const nintermed = response.body && response.body["nintermed"]; //
+        const tdocument = response.body && response.body["stiP_DOC"]; //
+        const dni = response.body && response.body["sdni"]; // 
+        const sclient = response.body && response.body["sclient"]; //
         const menu = response.body && response.body['menu'];
         const brokerId = response.body && response.body['brokerId'];
         const intermediaId = response.body && response.body['intermediaId'];
-                const permissionList = response.body && response.body["permissionList"]; //
+        const permissionList = response.body && response.body["permissionList"]; //
 
         if (token) {
           this.token = token;
@@ -74,7 +74,7 @@ export class AuthenticationService {
               token: token,
               firstName: firstName,
               lastName: lastName,
-                            lastName2: lastName2,
+              lastName2: lastName2,
               email: email,
               canal: canal,
               puntoVenta: puntoVenta,
@@ -82,15 +82,15 @@ export class AuthenticationService {
               desCanal: desCanal,
               desPuntoVenta: desPuntoVenta,
               tipoCanal: tipoCanal,
-                            ncorredor: ncorredor,
-                            nintermed: nintermed,
-                            tdocument: tdocument,
-                            dni: dni,
-                            sclient: sclient,
+              ncorredor: ncorredor,
+              nintermed: nintermed,
+              tdocument: tdocument,
+              dni: dni,
+              sclient: sclient,
               menu: menu,
               brokerId: brokerId,
               intermediaId: intermediaId,
-                            permissionList: permissionList
+              permissionList: permissionList
             })
           );
           return true;
@@ -138,8 +138,8 @@ export class AuthenticationService {
     this.desPuntoVenta = null;
     this.tipoCanal = null;
     this.sessionStorageService.clearStorage();
-	//localStorage.removeItem("currentUser");
-        //localStorage.removeItem("productUser");
-	//localStorage.removeItem("systemUser");
+    //localStorage.removeItem("currentUser");
+    //localStorage.removeItem("productUser");
+    //localStorage.removeItem("systemUser");
   }
 }

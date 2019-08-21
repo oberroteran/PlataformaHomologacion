@@ -234,7 +234,7 @@
 									[bsConfig]="bsConfig" bsDatepicker [(bsValue)]="polizaEmitCab.bsValueIni"
 									[(ngModel)]="polizaEmitCab.bsValueIni" name="bsValueIni"
 									[(minDate)]="polizaEmitCab.bsValueIniMin" [(maxDate)]="polizaEmitCab.bsValueFinMax"
-									value="{{ polizaEmitCab.bsValueIni | date:'dd/MM/yyyy' }}" readonly
+									value="{{ polizaEmitCab.bsValueIni | date:'dd/MM/yyyy' }}"
 									[disabled]="disabledFecha" readonly #desde>
 
 								<!-- <input type="text" [ngClass]="{'error-validate': !flagFechaMenorMayor}"
