@@ -26,7 +26,8 @@
 								<span>NRO. COTIZACIÓN </span>
 								<input [ngClass]="{'error-validate': errorNroCot}" [(ngModel)]="nrocotizacion"
 									name="nrocotizacion" (keydown.enter)="buscarCotizacion($event.preventDefault())"
-									(click)="clearVal()" type="text" placeholder="Nro. Cotización" (keypress)="valText($event, 1)">
+									(click)="clearVal()" type="text" placeholder="Nro. Cotización"
+									(keypress)="valText($event, 1)">
 
 							</div>
 							<div class="col-sm-3 ">
@@ -216,8 +217,8 @@
 							<div class="col-sm-3">
 								<span>DESDE</span>
 								<input type="text" [ngClass]="{'error-validate': !flagFechaMenorMayor}"
-									#dp="bsDatepicker" (ngModelChange)="validarTipoRenovacion($event)" [bsConfig]="bsConfig"
-									bsDatepicker [(bsValue)]="polizaEmitCab.bsValueIni"
+									#dp="bsDatepicker" (ngModelChange)="validarTipoRenovacion($event)"
+									[bsConfig]="bsConfig" bsDatepicker [(bsValue)]="polizaEmitCab.bsValueIni"
 									[(ngModel)]="polizaEmitCab.bsValueIni" name="bsValueIni"
 									[(minDate)]="polizaEmitCab.bsValueIniMin" [(maxDate)]="polizaEmitCab.bsValueFinMax"
 									value="{{ polizaEmitCab.bsValueIni.toString()  | date:'dd/MM/yyyy' }}" readonly
@@ -249,16 +250,18 @@
 							</div>
 							<div class="col-sm-3">
 								<span style="margin: 0;">&nbsp;</span>
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-										[disabled]="facVencido" [(ngModel)]="polizaEmit.facturacionVencido"
-										(ngModelChange)="onFacturacion()" name="FAC_VENCIDO" class="checkbox"><span
-										class="schk" style="margin-top: 15px; font-size: 13px;">FACTURACIÓN A MES
+								<label *ngIf="canBillMonthly" style="width: 100%;margin-bottom: 0;"><input
+										type="checkbox" [disabled]="facVencido"
+										[(ngModel)]="polizaEmit.facturacionVencido" (ngModelChange)="onFacturacion()"
+										name="FAC_VENCIDO" class="checkbox"><span class="schk"
+										style="margin-top: 15px; font-size: 13px;">FACTURACIÓN A MES
 										VENCIDO</span></label>
 
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-										[disabled]="facAnticipada" [(ngModel)]="polizaEmit.facturacionAnticipada"
-										(ngModelChange)="onFacturacion()" name="FAC_ANTICIPADA" class="checkbox"><span
-										class="schk" style="margin-top: 5px; font-size: 13px;">FACTURACIÓN
+								<label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input
+										type="checkbox" [disabled]="facAnticipada"
+										[(ngModel)]="polizaEmit.facturacionAnticipada" (ngModelChange)="onFacturacion()"
+										name="FAC_ANTICIPADA" class="checkbox"><span class="schk"
+										style="margin-top: 5px; font-size: 13px;">FACTURACIÓN
 										ANTICIPADA</span></label>
 							</div>
 							<div class="col-sm-3">
@@ -551,7 +554,7 @@
 							<div class="col-sm-12">
 								<span>COMENTARIO</span>
 								<textarea cols="40" rows="5" style="width:100%" [(ngModel)]="polizaEmit.comentario"
-									name="comentario"  (keypress)="valText($event, 4)"></textarea>
+									name="comentario" (keypress)="valText($event, 4)"></textarea>
 							</div>
 						</div>
 						<div>
@@ -604,7 +607,8 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div style="display: flex;float:right">
-							<button type="button" routerLink="/broker/policy-transactions"><span>CANCELAR</span></button>
+							<button type="button"
+								routerLink="/broker/policy-transactions"><span>CANCELAR</span></button>
 							<button type="submit" class="full-color"><span>PROCESAR</span></button>
 						</div>
 					</div>

@@ -9,8 +9,6 @@ export class ModuleConfig {
     public static InvalidStartDateOrderMessage: string = "La fecha inicio no puede ser mayor a la fecha fin.";
     public static InvalidEndDateOrderMessage: string = "La fecha fin no puede ser menor a la fecha inicio.";
 
-    // public static StartDate: Date = new Date(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-
     public static EndDate: Date = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     public static priorDate: Date = new Date(new Date().setDate(ModuleConfig.EndDate.getDate() - 30));
     public static StartDate: Date = new Date(ModuleConfig.priorDate.getFullYear(), ModuleConfig.priorDate.getMonth(), ModuleConfig.priorDate.getDate());;
@@ -22,10 +20,12 @@ export class ModuleConfig {
         quotation_request: "10",
         policy_emission: "14",
         policy_renovation: "19",
+        policy_renovation_with_modification: "20",
         policy_endorsement: "21",
         policy_inclusion: "22",
         policy_exclusion: "23",
         policy_neteo: "24",
+        policy_cancel: "26",
         policy_transaction_query: "35",
         transaction_report: "29",
         insured_report: "30",

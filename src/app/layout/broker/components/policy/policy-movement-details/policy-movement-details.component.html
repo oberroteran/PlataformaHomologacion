@@ -54,7 +54,9 @@
                 <td class="grid-title-item">Recibos</td>
                 <td class="grid-title-item">Usuario</td>
                 <td class="grid-title-item">Documentos</td>
-                <td class="grid-title-item" *ngIf="!flagAnular">Anular</td>
+                <ng-container *ngIf="canCancelMovements">
+                  <td class="grid-title-item" *ngIf="!flagAnular">Anular</td>
+                </ng-container>
               </tr>
             </thead>
             <tbody>
@@ -82,11 +84,14 @@
             <td>{{ item.USUARIO }}</td>
             <td><img alt="Ver Documentos" src="assets/icons/preview_soat_box.png" title="Ver Documentos"
                 (click)="openModal(item)" style="cursor: pointer;height: 24px;width: 24px"></td>
-            <td *ngIf="!flagAnular">
-              <img *ngIf="item.MOV_ANULADO == 0" src="assets/icons/anular.png" (click)="anularMov(item.NRO)"
-                title="Anular" alt="Anular" style="cursor: pointer;" />
-              <label *ngIf="item.MOV_ANULADO != 0"><b>--</b></label>
-            </td>
+            <ng-container *ngIf="canCancelMovements">
+              <td *ngIf="!flagAnular">
+                <img *ngIf="item.MOV_ANULADO == 0" src="assets/icons/anular.png" (click)="anularMov(item.NRO)"
+                  title="Anular" alt="Anular" style="cursor: pointer;" />
+                <label *ngIf="item.MOV_ANULADO != 0"><b>--</b></label>
+              </td>
+            </ng-container>
+
           </tr>
         </ng-template>
         <ng-container *ngIf="policyMovementList!=null && policyMovementList.length>0; then showPagination">
