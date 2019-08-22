@@ -1,4 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -7,17 +6,16 @@ import { DatePipe } from "@angular/common";
 
 //Importación de servicios
 import { ClientInformationService } from '../../../services/shared/client-information.service';
+import { PolicyemitService } from '../../../services/policy/policyemit.service';
 
 //componentes para ser usados como MODAL
 import { PolicyMovementDetailsComponent } from '../policy-movement-details/policy-movement-details.component'
 import { PolicyFormComponent } from '../policy-form/policy-form.component'
 import { PolicyService } from '../../../services/policy/policy.service';
-
-//Alertas
-import swal from 'sweetalert2';
 //Compartido
 import { AccessFilter } from './../../access-filter'
 import { ModuleConfig } from './../../module.config'
+import Swal from 'sweetalert2'
 
 @Component({
     selector: 'app-policy-index',
@@ -30,7 +28,6 @@ export class PolicyIndexComponent implements OnInit {
     @ViewChild('hasta', null) hasta: any;
     userType: number = 1; //1: admin, 2:emisor, 3:comercial, 4:tecnico, 5:cobranza
     isLoading: boolean = false;
-    // transac: any = [];
 
     //Datos para configurar los datepicker
     bsConfig: Partial<BsDatepickerConfig>;
@@ -68,15 +65,16 @@ export class PolicyIndexComponent implements OnInit {
     /**Puede anular? */
     canNullify: boolean;
 
-    public currentPage = 1; //página actual
-    public rotate = true; //
-    public maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
-    public itemsPerPage = 5; // limite de items por página
-    public totalItems = 0; //total de items encontrados
+    currentPage = 1; //página actual
+    rotate = true; //
+    maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
+    itemsPerPage = 5; // limite de items por página
+    totalItems = 0; //total de items encontrados
 
     constructor(
         private clientInformationService: ClientInformationService,
         private policyService: PolicyService,
+        private policyemit: PolicyemitService,
         private router: Router,
         private datePipe: DatePipe,
         private modalService: NgbModal
@@ -91,6 +89,11 @@ export class PolicyIndexComponent implements OnInit {
             }
         );
     }
+
+    // ngAfterViewChecked() {
+    //     // console.log("! changement de la date du composant !");        
+    //     this.cdRef.detectChanges();
+    // }
 
     ngOnInit() {
         if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_transaction_query"]) == false) this.router.navigate(['/broker/home']);
@@ -118,14 +121,13 @@ export class PolicyIndexComponent implements OnInit {
         this.getTransaccionList();
         this.getProductList();
 
-        setTimeout(() => {    //<<<---    using ()=> syntax
-            this.bsValueIni = new Date();
-            this.bsValueIni.setDate(this.bsValueIni.getDate() - 30);
-            this.bsValueFin = new Date();
-            this.bsValueIniMax = new Date();
-            this.bsValueFinMin = this.bsValueIni;
-            this.bsValueFinMax = new Date();
-        }, 1000);
+        this.bsValueIni = new Date();
+        this.bsValueIni.setDate(this.bsValueIni.getDate() - 30);
+        this.bsValueFin = new Date();
+        this.bsValueIniMax = new Date();
+        this.bsValueFinMin = this.bsValueIni;
+        this.bsValueFinMax = new Date();
+        
     }
 
     getDocumentTypeList() {
@@ -165,7 +167,6 @@ export class PolicyIndexComponent implements OnInit {
     openModal(row: number, cotizacionID: string) {
         let modalRef: NgbModalRef;
         if (cotizacionID != "") {
-            // console.log(row)
             modalRef = this.modalService.open(PolicyMovementDetailsComponent, { size: 'lg', windowClass: "modalCustom", backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
             modalRef.componentInstance.reference = modalRef;
             modalRef.componentInstance.itemTransaccionList = this.policyList;
@@ -285,14 +286,12 @@ export class PolicyIndexComponent implements OnInit {
 
         let msg: string = "";
         if (this.InputsSearch.P_NIDDOC_TYPE != "-1") {
-            console.log(this.InputsSearch.P_SIDDOC)
             if (this.InputsSearch.P_SIDDOC == "") {
                 msg = "Debe llenar el número de documento"
             }
         }
 
         if (this.InputsSearch.P_SIDDOC != "") {
-            console.log(this.InputsSearch.P_SIDDOC)
             if (this.InputsSearch.P_NIDDOC_TYPE == "-1") {
                 msg = "Debe llenar el tipo de documento"
             }
@@ -311,7 +310,7 @@ export class PolicyIndexComponent implements OnInit {
         }
 
         if (msg != "") {
-            swal.fire("Información", msg, "error");
+            Swal.fire("Información", msg, "error");
         } else {
 
             this.isLoading = true;
@@ -340,16 +339,14 @@ export class PolicyIndexComponent implements OnInit {
             data.P_APE_PAT_CONT = this.InputsSearch.P_SLASTNAME;
             data.P_APE_MAT_CONT = this.InputsSearch.P_SLASTNAME2;
             data.P_NOMBRES_CONT = this.InputsSearch.P_SFIRSTNAME;
-            // console.log(data)
             this.policyService.getPolicyTransList(data).subscribe(
                 res => {
-                    // console.log(res.C_TABLE)
                     this.isLoading = false;
                     this.policyList = res.C_TABLE;
                     this.totalItems = this.policyList.length;
                     this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
                     if (this.policyList.length == 0) {
-                        swal.fire({
+                        Swal.fire({
                             title: "Información",
                             text: "No se encuentran póliza(s) con los datos ingresados",
                             type: "error",
@@ -357,11 +354,10 @@ export class PolicyIndexComponent implements OnInit {
                             allowOutsideClick: false,
                         }).then((result) => {
                             if (result.value) {
-                                //this.router.navigate(['/broker/policy-transactions']);
+                                return;
                             }
                         });
                     }
-                    // console.log(this.policyList);
                 },
                 err => {
                     this.isLoading = false;
@@ -374,41 +370,42 @@ export class PolicyIndexComponent implements OnInit {
     pageChanged(currentPage) {
         this.currentPage = currentPage;
         this.listToShow = this.policyList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
+        this.selectedPolicy = "";
     }
 
-    choosePolicyClk(selection: any, idTipo: number) {
-        if (selection != undefined) {
-            //let existe: any = 0;
-
+    choosePolicyClk(evt, selection: any, idTipo: number) {
+        if (selection != undefined && selection != "") {
             if (this.policyList.length > 0) {
-                this.policyList.forEach(element => {
-                    if (element.NRO_COTIZACION == this.policyList[this.selectedPolicy].NRO_COTIZACION) {
-                        this.policyService.valTransactionPolicy(element.NRO_COTIZACION).subscribe(
+                this.policyList.forEach(item => {
+                    if (item.NRO_COTIZACION == selection) {
+                        this.policyService.valTransactionPolicy(item.NRO_COTIZACION).subscribe(
                             res => {
-                                console.log(res)
                                 if (res.P_COD_ERR == "0") {
                                     switch (idTipo) {
                                         case 1: // Anular
-                                            this.router.navigate(['/broker/policy/transaction/cancel'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            this.router.navigate(['/broker/policy/transaction/cancel'], { queryParams: { nroCotizacion: item.NRO_COTIZACION } });
                                             break;
                                         case 2: // Incluir
-                                            this.router.navigate(['/broker/policy/transaction/include'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            this.router.navigate(['/broker/policy/transaction/include'], { queryParams: { nroCotizacion: item.NRO_COTIZACION } });
                                             break;
                                         case 3: // Exluir
-                                            this.router.navigate(['/broker/policy/transaction/exclude'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            this.router.navigate(['/broker/policy/transaction/exclude'], { queryParams: { nroCotizacion: item.NRO_COTIZACION } });
                                             break;
                                         case 4: // Renovar
-                                            this.router.navigate(['/broker/policy/transaction/renew'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            this.router.navigate(['/broker/policy/transaction/renew'], { queryParams: { nroCotizacion: item.NRO_COTIZACION } });
                                             break;
                                         case 5: //Neteo
-                                            this.router.navigate(['/broker/policy/transaction/netear'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            this.router.navigate(['/broker/policy/transaction/netear'], { queryParams: { nroCotizacion: item.NRO_COTIZACION } });
                                             break;
                                         case 6: //Endoso
-                                            this.router.navigate(['/broker/policy/transaction/endosar'], { queryParams: { nroCotizacion: element.NRO_COTIZACION } });
+                                            this.router.navigate(['/broker/policy/transaction/endosar'], { queryParams: { nroCotizacion: item.NRO_COTIZACION } });
+                                            break;
+                                        case 9: //Facturacion
+                                            this.facturarPoliza(item);
                                             break;
                                     }
                                 } else {
-                                    swal.fire({
+                                    Swal.fire({
                                         title: "Información",
                                         text: res.P_MESSAGE,
                                         type: "error",
@@ -423,19 +420,13 @@ export class PolicyIndexComponent implements OnInit {
                             },
                             err => {
                                 this.isLoading = false;
-                                console.log(err);
                             }
                         );
                     }
                 });
             }
-
-            // if (idTipo == 1) {
-            //     console.log(selection)
-            // }
-
         } else {
-            swal.fire({
+            Swal.fire({
                 title: "Información",
                 text: "Para continuar deberá elegir una póliza",
                 type: "error",
@@ -444,11 +435,72 @@ export class PolicyIndexComponent implements OnInit {
             }).then((result) => {
                 if (result.value) {
                     return;
-                    //this.router.navigate(['/broker/policy-transactions']);
                 }
             });
         }
+        evt.preventDefault();
     }
+
+    facturarPoliza(itemFact: any) {
+        // console.log(nroMov)
+        let myFormData: FormData = new FormData()
+        let renovacion: any = {};
+        renovacion.P_NID_COTIZACION = itemFact.NRO_COTIZACION // nro cotizacion
+        renovacion.P_DEFFECDATE = null; //Fecha Inicio
+        renovacion.P_DEXPIRDAT = null; // Fecha Fin
+        renovacion.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"] // Fecha hasta
+        renovacion.P_NTYPE_TRANSAC = 9; // tipo de movimiento
+        renovacion.P_NID_PROC = "" // codigo de proceso (Validar trama)
+        renovacion.P_FACT_MES_VENCIDO = null // Facturacion Vencida
+        renovacion.P_SFLAG_FAC_ANT = null // Facturacion Anticipada
+        renovacion.P_SCOLTIMRE = null // Tipo de renovacion
+        renovacion.P_NPAYFREQ = null // Frecuencia Pago
+        renovacion.P_NMOV_ANUL = null // Movimiento de anulacion
+        renovacion.P_NNULLCODE = 0 // Motivo anulacion
+        renovacion.P_SCOMMENT = "" // Frecuencia Pago
+
+        myFormData.append("objeto", JSON.stringify(renovacion));
+
+        Swal.fire({
+            title: "Información",
+            text: "¿Deseas facturar la(s) póliza(s) " + itemFact.POLIZA + "?",
+            type: "question",
+            showCancelButton: true,
+            confirmButtonText: 'Sí',
+            allowOutsideClick: false,
+            cancelButtonText: 'Cancelar'
+        })
+            .then((result) => {
+                if (result.value) {
+                    this.policyemit.transactionPolicy(myFormData).subscribe(
+                        res => {
+                            if (res.P_COD_ERR == 0) {
+                                Swal.fire({
+                                    title: "Información",
+                                    text: "Se ha realizado la facturación correctamente",
+                                    type: "success",
+                                    confirmButtonText: 'OK',
+                                    allowOutsideClick: false,
+                                })
+                            } else {
+                                Swal.fire({
+                                    title: "Información",
+                                    text: res.P_MESSAGE,
+                                    type: "error",
+                                    confirmButtonText: 'OK',
+                                    allowOutsideClick: false,
+                                })
+                            }
+                        },
+                        err => {
+                            // this.loading = false;
+                            console.log(err);
+                        }
+                    );
+                }
+            });
+    }
+
     ValInicio(event) {
         this.bsValueFinMin = new Date(this.bsValueIni);
 

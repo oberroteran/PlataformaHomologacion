@@ -39,7 +39,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // console.log(this.itemTransaccionList)
     this.itemTransaccionList.forEach(item => {
       if (item.NRO_COTIZACION == this.cotizacionID) {
         this.InputsPolicy.P_PRODUCTO = item.NOMBRE_PRODUCT;
@@ -53,7 +52,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
     this.getPolicyMovement(this.cotizacionID);
   }
   getPolicyMovement(cotizacionID: any) {
-    // console.log(cotizacionID)
     let data: any = {};
     data.P_NID_COTIZACION = cotizacionID;
     this.policyService.getPolicyMovementsTransList(data).subscribe(
@@ -119,12 +117,8 @@ export class PolicyMovementDetailsComponent implements OnInit {
     })
       .then((result) => {
         if (result.value) {
-          // this.loading = true;
           this.policyemit.transactionPolicy(myFormData).subscribe(
             res => {
-              console.log(res);
-              //this.erroresList = res.C_TABLE;
-              // this.loading = false;
               if (res.P_COD_ERR == 0) {
                 this.getPolicyMovement(this.cotizacionID);
                 Swal.fire({
@@ -156,7 +150,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
         }
       });
   }
-  // openModal(mov: number, policy: string) {
+  
   openModal(item: any) {
     let modalRef: NgbModalRef;
     modalRef = this.modalService.open(PolicyDocumentsComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
@@ -165,9 +159,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
     modalRef.componentInstance.generadosList = item.RUTAS_GEN;
     modalRef.componentInstance.comentario = item.COMENTARIO;
     modalRef.componentInstance.motAnulacion = item.MOT_ANULACION;
-
-    //modalRef.componentInstance.itemTransaccionList = this.policyList[mov];
-    //modalRef.componentInstance.policy = policy;
   }
 
 }

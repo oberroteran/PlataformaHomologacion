@@ -14,6 +14,7 @@ export class SearchBrokerComponent implements OnInit {
   @Input() public formModalReference: any; //Referencia al modal creado desde el padre de este componente para ser cerrado desde aquí
   @Input() public EListClient: any;
   @Input() public listaBroker: any;
+  @Input() public brokerMain: any;
 
   // type_search: string = "1";
   blockSearch: any = true;
@@ -35,12 +36,13 @@ export class SearchBrokerComponent implements OnInit {
   documentTypeList: any = [];
   listBroker: any = [];
 
-  public selectedBroker: string;
-  public currentPage = 1; //página actual
-  public rotate = true; //
-  public maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
-  public itemsPerPage = 10; // limite de items por página
-  public totalItems = 0; //total de items encontrados
+  selectedBroker: string;
+  currentPage = 1; //página actual
+  rotate = true; //
+  maxSize = 5; // cantidad de paginas que se mostrarán en el paginado
+  itemsPerPage = 5; // limite de items por página
+  totalItems = 0; //total de items encontrados
+  listToShow: any[] = [];
 
   constructor(
     private quotationService: QuotationService,
@@ -157,17 +159,22 @@ export class SearchBrokerComponent implements OnInit {
   chooseBroker(selection: any) {
     if (selection != undefined) {
       let existe: any = 0;
+
+      // BrokerList
       if (this.listaBroker.length > 0) {
-        this.listaBroker.forEach(element => {
-          if (element.SCLIENT == selection.SCLIENT) {
+        this.listaBroker.forEach(item => {
+          if (item.SCLIENT == selection.SCLIENT) {
             existe = 1;
           }
         });
       }
-      if (existe == 0) {
-        console.log(selection);
-        this.formModalReference.close(selection);
+      // BrokerMain
+      if (this.brokerMain == selection.NNUMDOC) {
+        existe = 1;
+      }
 
+      if (existe == 0) {
+        this.formModalReference.close(selection);
       }
       else {
         swal.fire("Información", "El broker ya se encuentra agregado a la cotización", "error");
@@ -178,18 +185,26 @@ export class SearchBrokerComponent implements OnInit {
   }
 
   chooseBrokerClk(selection: any) {
-    if (selection != undefined) {
+    if (selection != undefined && selection != "") {
       let existe: any = 0;
       if (this.listaBroker.length > 0) {
         this.listaBroker.forEach(element => {
-          if (element.SCLIENT == this.listBroker[this.selectedBroker].SCLIENT) {
+          if (element.NNUMDOC == selection) {
             existe = 1;
           }
         });
       }
+      // BrokerMain
+      if (this.brokerMain == selection) {
+        existe = 1;
+      }
       if (existe == 0) {
-        console.log(this.listBroker[this.selectedBroker]);
-        this.formModalReference.close(this.listBroker[this.selectedBroker]);
+        //console.log(this.listBroker[this.selectedBroker]);
+        this.listBroker.forEach(item => {
+          if (item.NNUMDOC == selection) {
+            this.formModalReference.close(item);
+          }
+        });
       }
       else {
         swal.fire("Información", "El broker ya se encuentra agregado a la cotización", "error");
@@ -278,6 +293,8 @@ export class SearchBrokerComponent implements OnInit {
           // console.log(res)
           if (res.length > 0) {
             this.listBroker = res;
+            this.totalItems = this.listBroker.length;
+            this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
           } else {
             swal.fire("Información", "No hay informacion con los datos ingresados", "error");
           }
@@ -288,6 +305,12 @@ export class SearchBrokerComponent implements OnInit {
         }
       );
     }
+  }
+
+  pageChanged(currentPage) {
+    this.currentPage = currentPage;
+    this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
+    // this.selectedPolicy = "";
   }
 
   documentNumberKeyPress(event: any) {

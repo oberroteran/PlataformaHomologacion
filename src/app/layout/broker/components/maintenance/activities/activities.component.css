@@ -120,7 +120,6 @@
 }
 
 .filter input[type="date"] {
-    /* outline: auto; */
     border: none;
     border-radius: 2px;
     padding: 6px 5px;
@@ -128,7 +127,6 @@
     border: 1px solid rgb(146, 138, 163);
     color: rgb(146, 138, 163);
     width: 100%;
-    /* margin-left: 5px; */
     font-size: 14px;
     border: 1px solid #aa9ec0;
     color: #aa9ec0;
@@ -146,8 +144,6 @@ select {
     border-radius: 2px;
     margin-top: 5px;
     color: rgb(146, 138, 163);
-    /* outline: auto; */
-    /* margin-left: 3px; */
     font-family: "Bliss Pro";
     font-size: 14px;
     height: 45px;
@@ -259,7 +255,6 @@ span, textarea {
     padding: 8px 5px;
     min-width: 170px;
     height: 45px;
-    /* outline: none; */
 }
 
 .header-content .header-item button:hover {
@@ -335,11 +330,6 @@ button span {
     height: 45px;
     outline: none;
 }
-
-/*
-.header-content .header-item .full-color span{
-  color: #fff;
-}*/
 
 .input-date {
     height: 45px;

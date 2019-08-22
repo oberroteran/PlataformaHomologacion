@@ -23,7 +23,7 @@
 					<div id="contratante" class="collapse show pt-1">
 						<div class="row">
 							<input [(ngModel)]="nrocotizacion" name="nrocotizacion" type="hidden" placeholder=""
-							(keypress)="valText($event, 1)">
+								(keypress)="valText($event, 1)">
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<span>NRO. PÓLIZA SCTR SALUD</span>
 								<input type="text" [(ngModel)]="NroSalud" name="NroSalud" placeholder="0" disabled>
@@ -189,7 +189,6 @@
 											[(ngModel)]="comer.COMISION_SALUD_PRO"
 											(ngModelChange)="changeSaludPropuesta($event, comer.DOC_COMER)"
 											FloatDirective />
-										<!-- <td class="col-sm text-center"><span>{{comer.COMISION_SALUD_PRO}}</span></td> -->
 									<td class="col-sm text-center" *ngIf="pensionList.length > 0">
 										<span>{{comer.COMISION_PENSION}}</span></td>
 									<td class="col-sm" *ngIf="pensionList.length > 0"><input type="text"
@@ -198,10 +197,10 @@
 											[(ngModel)]="comer.COMISION_PENSION_PRO"
 											(ngModelChange)="changePensionPropuesta($event, comer.DOC_COMER)"
 											FloatDirective />
-									<td *ngIf="!editFlag"><span style="padding: 0 12px;"><img src="assets/icons/anular.png"
-												(click)="deleteBroker(row)" title="Eliminar" alt="Eliminar" /></span>
+									<td *ngIf="!editFlag"><span style="padding: 0 12px;"><img
+												src="assets/icons/anular.png" (click)="deleteBroker(row)"
+												title="Eliminar" alt="Eliminar" /></span>
 									</td>
-									<!-- <td class="col-sm text-center"><span>{{comer.COMISION_PENSION_PRO}}</span></td> -->
 								</tr>
 							</tbody>
 						</table>
@@ -236,16 +235,6 @@
 									[(minDate)]="polizaEmitCab.bsValueIniMin" [(maxDate)]="polizaEmitCab.bsValueFinMax"
 									value="{{ polizaEmitCab.bsValueIni | date:'dd/MM/yyyy' }}"
 									[disabled]="disabledFecha" readonly #desde>
-
-								<!-- <input type="text" [ngClass]="{'error-validate': !flagFechaMenorMayor}"
-									#dp="bsDatepicker" (change)="validarTipoRenovacion($event)" [bsConfig]="bsConfig"
-									bsDatepicker [(bsValue)]="polizaEmitCab.bsValueIni"
-									[(ngModel)]="polizaEmitCab.bsValueIni" name="bsValueIni"
-									[(minDate)]="polizaEmitCab.bsValueIniMin" [(maxDate)]="polizaEmitCab.bsValueFinMax"
-									(bsValueChange)="validarTipoRenovacion($event)" (focus)="activaciones()"
-									value="{{ polizaEmitCab.bsValueIni.toString()  | date:'dd/MM/yyyy' }}"
-									[disabled]="disabledFecha" readonly #desde> -->
-								<!-- <p *ngIf="!flagFechaMenorMayor" style="color: red">*Inserte una fecha valida</p> -->
 							</div>
 							<div class="col-sm-3">
 								<span>HASTA</span>
@@ -255,16 +244,6 @@
 									name="bsValueFin" [(minDate)]="polizaEmitCab.bsValueFinMin"
 									value="{{ polizaEmitCab.bsValueFin  | date:'dd/MM/yyyy' }}" #hasta
 									[disabled]="disabledFechaFin" readonly>
-
-								<!-- <input type="text" [ngClass]="{'error-validate': !flagFechaMenorMayorFin}"
-									[bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker
-									[(bsValue)]="polizaEmitCab.bsValueFin" [(ngModel)]="polizaEmitCab.bsValueFin"
-									name="bsValueFin" [(minDate)]="polizaEmitCab.bsValueIniMin"
-									(bsValueChange)="validarFechaFin($event)" (change)="validarFechaFin($event)"
-									(focus)="activacionesFin()" #hasta
-									value="{{ polizaEmitCab.bsValueFin.toString()  | date:'dd/MM/yyyy' }}"
-									[disabled]="disabledFechaFin" readonly> -->
-								<!-- <p *ngIf="!flagFechaMenorMayorFin" style="color: red">*Inserte una fecha valida</p> -->
 							</div>
 
 						</div>
@@ -469,19 +448,10 @@
 													style="top: 3px;" class="checkbox" (change)="primaPropuesta(3)"
 													[disabled]="editFlag">
 												PRIMA MÍNIMA PROPUESTA</span></label>
-										<!-- <span><input type="checkbox" style="top: 3px;" class="checkbox"
-												(change)="primaPropuesta(3)" [disabled]="editFlag">
-											PRIMA MÍNIMA PROPUESTA</span> -->
 										<input type="text" placeholder="0" [disabled]="statePrimaSalud"
 											name="MIN_SALUD_PR" [(ngModel)]="polizaEmitCab.MIN_SALUD_PR"
 											FloatDirective />
 									</div>
-
-									<!-- <div class="col-sm-6">
-										<span>PRIMA MÍNIMA PROPUESTA</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD_PR" name="MIN_SALUD_PR"
-											placeholder="0" disabled>
-									</div> -->
 								</div>
 								<div class="card mt-3">
 									<div class="card-body">
@@ -572,11 +542,6 @@
 											[disabled]="statePrimaPension" name="MIN_PENSION_PR"
 											[(ngModel)]="polizaEmitCab.MIN_PENSION_PR" FloatDirective />
 									</div>
-									<!-- <div class="col-sm-6">
-										<span>PRIMA MÍNIMA PROPUESTA</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION_PR"
-											name="MIN_PENSION_PR" placeholder="Prima Mínima Propuesta Pension" disabled>
-									</div> -->
 								</div>
 								<div class="card mt-3">
 									<div class="card-body">
@@ -660,12 +625,6 @@
 									placeholder="Seleccionar" dropdownPosition="bottom" name="annulment"
 									notFoundText="No hay resultados">
 								</ng-select>
-								<!-- <ng-select [items]="annulmentList"
-									bindLabel="DES_ANULACION" [ngClass]="{'error-validate': VAL_QUOTATION[12] != ''}"
-									bindValue="COD_ANULACION" [(ngModel)]="InputsQuotation.P_NTECHNICAL" class="border-ng"
-									[clearable]="true" [disabled]="!stateQuotation" placeholder="Seleccionar"
-									dropdownPosition="bottom" notFoundText="No hay resultados">
-								</ng-select> -->
 							</div>
 						</div>
 						<div class="row">
@@ -725,7 +684,8 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div style="display: flex; float:right">
-							<button type="button" routerLink="/broker/policy-transactions"><span>CANCELAR</span></button>
+							<button type="button"
+								routerLink="/broker/policy-transactions"><span>CANCELAR</span></button>
 							<button type="submit" class="full-color"><span>PROCESAR</span></button>
 						</div>
 					</div>

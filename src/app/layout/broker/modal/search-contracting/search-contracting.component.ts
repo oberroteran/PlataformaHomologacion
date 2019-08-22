@@ -16,8 +16,8 @@ export class SearchContractingComponent implements OnInit {
   public selectedContractor: string;
   public currentPage = 1; //página actual
   public rotate = true; //
-  public maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
-  public itemsPerPage = 10; // limite de items por página
+  public maxSize = 5; // cantidad de paginas que se mostrarán en el paginado
+  public itemsPerPage = 5; // limite de items por página
   public totalItems = 0; //total de items encontrados
 
   // dtTrigger: Subject = new Subject();
@@ -30,23 +30,27 @@ export class SearchContractingComponent implements OnInit {
   }
 
   chooseContractor(selection: any) {
-    if (selection === undefined) {
-      Swal.fire("Información","Ha ocurrido un error inesperado.","error");
+    if (selection == undefined) {
+      Swal.fire("Información", "Ha ocurrido un error inesperado.", "error");
     } else {
       this.formModalReference.close(selection);
     }
   }
   chooseContractorByRadioButton() {
-    if (this.selectedContractor === undefined) {
-      Swal.fire("Información","No ha seleccionado ningún contratante.","error");
+    if (this.selectedContractor != undefined && this.selectedContractor != "") {
+      this.EListClient.forEach(item => {
+        if (item.P_SIDDOC == this.selectedContractor) {
+          this.formModalReference.close(item);
+        }
+      });
     } else {
-      this.formModalReference.close(this.EListClient[this.selectedContractor]);
+      Swal.fire("Información", "No ha seleccionado ningún contratante.", "error");
     }
   }
   pageChanged(currentPage) {
     this.currentPage = currentPage;
     this.listToShow = this.EListClient.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
-
+    this.selectedContractor = "";
   }
 
 }

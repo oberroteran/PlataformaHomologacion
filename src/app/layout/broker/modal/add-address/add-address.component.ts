@@ -47,6 +47,7 @@ export class AddAddressComponent implements OnInit {
   public prefBloque = "";
   public prefDepar = "";
   public prefCJHT = "";
+
   public sDireccion = "";
   public sNumero = "";
   public sBloque = "";
@@ -478,8 +479,53 @@ export class AddAddressComponent implements OnInit {
     );
   }
 
+  completeInfo() {
+    // Tipo de via
+    if (this.prefVia == "") {
+      this.roadTypeList.forEach(item => {
+        console.log(this.InputsStreet.P_STI_DIRE)
+        if (item.STI_DIRE == this.InputsStreet.P_STI_DIRE) {
+          this.prefVia = item.SDESCRIPT + " ";
+          this.InputsStreet.prefVia = item.SDESCRIPT + " ";
+        }
+      });
+    }
+
+    // PREF. DEPART.
+    if (this.prefDepar == "") {
+      this.interiorTypeList.forEach(item => {
+        if (item.STI_INTERIOR == this.InputsStreet.P_STI_INTERIOR) {
+          this.prefDepar = item.SDESCRIPT + " ";
+          this.InputsStreet.prefDepar = item.SDESCRIPT + " ";
+        }
+      });
+    }
+
+    // CONJ. HABIT.
+    if (this.prefCJHT == "") {
+      this.cjhtTypeList.forEach(item => {
+        if (item.STI_CJHT == this.InputsStreet.P_STI_CJHT) {
+          this.prefCJHT = item.SDESCRIPT + " ";
+          this.InputsStreet.prefCJHT = item.SDESCRIPT + " ";
+        }
+      });
+    }
+
+    // BLOQUE/CHALET
+    if (this.prefBloque == "") {
+      this.blockTypeList.forEach(item => {
+        if (item.STI_BLOCKCHALET == this.InputsStreet.P_STI_BLOCKCHALET) {
+          this.prefBloque = item.SDESCRIPT + " ";
+          this.InputsStreet.prefBloque = item.SDESCRIPT + " ";
+        }
+      });
+    }
+  }
 
   EventSave(event) {
+
+    console.log(this.prefBloque)
+    this.completeInfo();
 
     this.InputsStreet.P_SNOM_DIRECCION = this.InputsStreet.P_SNOM_DIRECCION == null ? "" : this.InputsStreet.P_SNOM_DIRECCION.toUpperCase()
     this.InputsStreet.P_SNUM_DIRECCION = this.InputsStreet.P_SNUM_DIRECCION == null ? "" : this.InputsStreet.P_SNUM_DIRECCION.toUpperCase()

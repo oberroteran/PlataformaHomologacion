@@ -24,7 +24,6 @@
                 <span>TIPO DOCUMENTO</span>
                 <select (change)="onSelectTypeDocument($event.target.value)"
                   [(ngModel)]="InputsContracting.P_NIDDOC_TYPE" disabled>
-                  <!-- <option value="0" selected>Seleccionar</option> -->
                   <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
                     {{documenttype.Name}}</option>
                 </select>
@@ -60,7 +59,6 @@
                 <span>NACIONALIDAD (*)</span>
                 <select (change)="onSelectNacionality($event.target.value)"
                   [(ngModel)]="InputsContracting.P_NNATIONALITY">
-                  <!-- <option value="InputsContracting.P_NNATIONALITY" selected>Seleccionar</option> -->
                   <option *ngFor="let nacionality of nacionalityList" value="{{nacionality.NNATIONALITY}}">
                     {{nacionality.SDESCRIPT}}</option>
                 </select>
@@ -83,26 +81,6 @@
                     {{civilStatus.SDESCRIPT}}</option>
                 </select>
               </div>
-              <!-- <div *ngIf="blockDoc" class="col-sm-4">
-                <span>PROFESIÓN (*)</span>
-                <select (change)="onSelectProfession($event.target.value)" [(ngModel)]="InputsContracting.P_NTITLE">
-                  <option *ngFor="let profession of professionList" value="{{profession.NTITLE}}">{{profession.SDESCRIPT}}
-                  </option>
-                </select>
-              </div>
-              <div class="col-sm-4">
-                <span>ACTIVIDAD ECONÓMICA (*)</span>
-                <select (change)="onSelectEconomicActivity($event.target.value)">
-                  <option value="0" selected>Seleccionar</option>
-                  <option *ngFor="let economicActivity of economicActivityList" value="{{economicActivity.Id}}">
-                    {{economicActivity.Name}}</option>
-                </select>
-              </div> -->
-              <!-- <div *ngIf="blockCuspp" class="col-sm-4">
-                <span>CUSPP</span>
-                <input type="text" placeholder="Cussp" [(ngModel)]="InputsContracting.P_COD_CUSPP" maxlength="12"
-                  LegalNameDirective />
-              </div> -->
             </div>
           </div>
         </div>        
@@ -396,8 +374,6 @@
                         <td class="text-center">
                           <img *ngIf="sede.P_CLASS == ''" src="assets/icons/editar.png"
                             (click)="EditarSede(sede.P_NROW)" title="Editar" alt="Editar" /> &nbsp;
-                          <!-- <img *ngIf="sede.P_CLASS == ''" src="assets/icons/anular.png"
-                              (click)="EliminarSede(sede.P_NROW)" title="Eliminar" alt="Eliminar" /> -->
                           <input *ngIf="sede.P_CLASS != ''" (click)="RevertirSede(sede.P_NROW)" type="button"
                             value="Revertir" class="btn-revertir" />
                         </td>

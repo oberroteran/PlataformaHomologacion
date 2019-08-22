@@ -361,8 +361,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <span>MONEDA</span>
-                                <select (change)="onSelectMoneda($event.target.value)"
-                                        [(ngModel)]="InputsQuotation.P_NCURRENCY"
+                                <select [(ngModel)]="InputsQuotation.P_NCURRENCY"
                                         [disabled]="stateQuotation">
                                     <option *ngFor="let currency of currencyList"
                                             value="{{currency.NCODIGINT}}">
@@ -850,9 +849,6 @@
                                                                  (click)="files.splice(i,1)"
                                                                  title="Eliminar"
                                                                  alt="Eliminar" /></span>
-                                                        <!-- <button type="button" class="btn btn-danger active btn-sm "
-                                          (click)="files.splice(i,1)">
-                                          Eliminar </button>-->
                                                     </td>
                                                 </tr>
                                             </tbody>

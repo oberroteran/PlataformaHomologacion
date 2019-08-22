@@ -70,25 +70,17 @@ export class LoginComponent implements OnInit {
                     if (result === true) {
                         this.productService.getProductList().subscribe(
                             res => {
-                                console.log(res)
+                                localStorage.setItem('pensionID', JSON.stringify({ id: "0", }));
+                                localStorage.setItem('saludID', JSON.stringify({ id: "0", }));
+
                                 res.forEach(item => {
                                     if (item.TIP_PRODUCT == "SCTR_PEN") {
-                                        localStorage.setItem(
-                                            'pensionID',
-                                            JSON.stringify({
-                                                id: item.COD_PRODUCT.toString(),
-                                            })
-                                        );
+                                        localStorage.setItem('pensionID', JSON.stringify({ id: item.COD_PRODUCT.toString() }));
                                     }
                                     if (item.TIP_PRODUCT == "SCTR_SAL") {
-                                        localStorage.setItem(
-                                            'saludID',
-                                            JSON.stringify({
-                                                id: item.COD_PRODUCT.toString(),
-                                            })
-                                        );
+                                        localStorage.setItem('saludID', JSON.stringify({ id: item.COD_PRODUCT.toString() }));
                                     }
-                                });                    
+                                });
                             }
                         );
                         this.sidebarService.close();

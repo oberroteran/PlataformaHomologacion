@@ -122,24 +122,27 @@
           <div *ngIf="userType!==4" class="row">
             <div class="col-sm-12" *ngIf="policyList.length > 0">
               <div class="btn-group btn-group-toggle" style="float:right" data-toggle="buttons">
-                <label *ngIf="canRenovate" class="btn btn-secondary" (click)="choosePolicyClk(selectedPolicy, 4)">
+                <label *ngIf="canRenovate" class="btn btn-secondary" (click)="choosePolicyClk($event, selectedPolicy, 4)">
                   <input type="radio" name="options"> Renovar
                 </label>
-                <label *ngIf="canEndorse" class="btn btn-secondary" (click)="choosePolicyClk(selectedPolicy, 6)">
+                <label *ngIf="canEndorse" class="btn btn-secondary" (click)="choosePolicyClk($event, selectedPolicy, 6)">
                   <input type="radio" name="options"> Endoso
                 </label>
-                <label *ngIf="canInclude" class="btn btn-secondary" (click)="choosePolicyClk(selectedPolicy, 2)">
+                <label *ngIf="canInclude" class="btn btn-secondary" (click)="choosePolicyClk($event, selectedPolicy, 2)">
                   <input type="radio" name="options"> Incluir
                 </label>
-                <label *ngIf="canExclude" class="btn btn-secondary" (click)="choosePolicyClk(selectedPolicy, 3)">
+                <label *ngIf="canExclude" class="btn btn-secondary" (click)="choosePolicyClk($event, selectedPolicy, 3)">
                   <input type="radio" name="options"> Excluir
                 </label>
-                <label *ngIf="canNetear" class="btn btn-secondary" (click)="choosePolicyClk(selectedPolicy, 5)">
+                <label *ngIf="canNetear" class="btn btn-secondary" (click)="choosePolicyClk($event, selectedPolicy, 5)">
                   <input type="radio" name="options"> Neteo
                 </label>
-                <label *ngIf="canNullify" class="btn btn-secondary" (click)="choosePolicyClk(selectedPolicy, 1)">
+                <label *ngIf="canNullify" class="btn btn-secondary" (click)="choosePolicyClk($event, selectedPolicy, 1)">
                   <input type="radio" name="options"> Anular
                 </label>
+                <label class="btn btn-secondary" (click)="choosePolicyClk($event, selectedPolicy, 9)">
+                    <input type="radio" name="options"> Facturar
+                  </label>
               </div>
             </div>
 
@@ -161,7 +164,6 @@
                     <td class="grid-title-item">Fin Vigencia</td>
                     <td class="grid-title-item">Nro. Renovaciones</td>
                     <td class="grid-title-item">Movimientos</td>
-                    <!-- <td class="grid-title-item">Anular Carga</td> -->
                   </tr>
                 </thead>
                 <ng-container *ngIf="policyList!=null && policyList.length>0; then showGrid else hideGrid">
@@ -180,7 +182,7 @@
             <ng-template #showGrid>
               <tbody>
                 <tr *ngFor="let item of listToShow; let row_no = index">
-                  <td *ngIf="userType!==4"><input type="radio" value={{row_no}} name="policy"
+                  <td *ngIf="userType!==4"><input type="radio" value={{item.NRO_COTIZACION}} name="policy"
                       [(ngModel)]="selectedPolicy"></td>
                   <td>{{ item.NOMBRE_PRODUCT }}</td>
                   <td>{{ item.POLIZA }}</td>
@@ -196,9 +198,6 @@
                         src="assets/icons/preview_soat_box.png" title="Ver detalle"
                         style="cursor: pointer;height: 24px;width: 24px"></a>
                   </td>
-                  <!-- <td>
-                        <img src="assets/icons/anular.png" title="Eliminar" alt="Eliminar" />
-                      </td> -->
                 </tr>
               </tbody>
             </ng-template>

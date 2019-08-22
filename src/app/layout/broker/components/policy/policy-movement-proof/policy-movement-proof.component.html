@@ -21,7 +21,6 @@
                   <span>TIPO PRODUCTO</span>
                   <select formControlName="product">
                     <option value="">Todos</option>
-                    <!-- <option value="0">Conjunta</option> -->
                     <option *ngFor="let item of productTypeList" value="{{item.Id}}">{{item.Name}}</option>
                   </select>
                 </div>
@@ -250,6 +249,7 @@
       </div>
     </div>
   </div>
+  
   <!-- Pantalla de carga -->
   <div [hidden]="isLoading==false" class="loadingScreen">
     <div style="display:flex;height: 100%;width:100%">

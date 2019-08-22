@@ -68,10 +68,6 @@ export class PolicyemitService {
         let url = this._baseUrl + "/PolicyManager/GetMovementTypeList";
         return this.http.get(url);
     }
-	/*savePolicyEmit(paquete: FormData) {
-		let url = this._baseUrl + "/Api/ContractorLocationManager/SavedPolicyEmit"
-		return this.http.post(url, paquete);
-	}*/
     getInsuredPolicyList(data: InsuredPolicySearch): Observable<any> {
         const body = JSON.stringify(data);
         let url = this._baseUrl + "/PolicyManager/GetInsuredPolicyList";
