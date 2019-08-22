@@ -727,7 +727,7 @@ export class QuotationEvaluationComponent implements OnInit {
                         this.router.navigate(['/broker/request-status']);
                     } else if (res.StatusCode == 1) { //Error de validación
                         swal.fire("Información", this.listToString(res.ErrorMessageList), "error");
-                    } else if (res.StatusCode == 3) {  //Error no controlado en el servicio
+                    } else {  //Error no controlado en el servicio
                         swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
                     }
                     this.isLoading = false;
