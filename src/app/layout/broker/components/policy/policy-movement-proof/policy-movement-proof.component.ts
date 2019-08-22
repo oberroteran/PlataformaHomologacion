@@ -64,7 +64,6 @@ export class PolicyMovementProofComponent implements OnInit {
             {
                 dateInputFormat: "DD/MM/YYYY",
                 locale: "es",
-                // containerClass: 'theme-dark-blue',
                 showWeekNumbers: false
             }
         );
@@ -423,7 +422,6 @@ export class PolicyMovementProofComponent implements OnInit {
         this.mainFormGroup.updateValueAndValidity();
     }
     onPaste(event: ClipboardEvent) {
-        //let clipboardData = event.clipboardData || window.clipboardData;
         let clipboardData = event.clipboardData;
         let pastedText = clipboardData.getData('text');
         if (!isNumeric(pastedText)) {

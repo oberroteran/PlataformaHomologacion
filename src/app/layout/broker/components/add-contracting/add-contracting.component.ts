@@ -89,8 +89,6 @@ export class AddContractingComponent implements OnInit {
         this.getNationalityList();
         this.getGenderList();
         this.getCivilStatusList();
-        //this.getProfessionList();
-        //this.getEconomicActivityList();
 
         this.VAL_CLIENT[0] = ""; // Nombre
         this.VAL_CLIENT[1] = ""; // Razon Social
@@ -99,10 +97,6 @@ export class AddContractingComponent implements OnInit {
         this.VAL_CLIENT[4] = ""; // Fecha de nacimiento / creacion
         this.VAL_CLIENT[5] = ""; // Sedes
         this.VAL_CLIENT[6] = ""; // Ciiu
-        // this.VAL_CLIENT[7] = ""; // Min Producto
-        // this.VAL_CLIENT[8] = ""; // Trabajadore
-        // this.VAL_CLIENT[9] = ""; // Planilla
-        // this.VAL_CLIENT[10] = ""; // Sum Archivos
 
         this.bsValueFNac = new Date("01/01/1950")
         //Objeto a grabar
@@ -162,7 +156,6 @@ export class AddContractingComponent implements OnInit {
                                 this.InputsContracting.P_NHEIGHT = null;
                                 this.InputsContracting.P_ORIGEN_DATA = "GESTORCLIENTE";
                                 this.InputsContracting.P_RESTRICCION = null;
-                                //this.InputsContracting.P_NAREA: '', // falta validar
                                 this.InputsContracting.P_NNATIONALITY = "604";
                                 this.InputsContracting.P_SDIGIT = null;
                                 this.InputsContracting.P_SBLOCKLAFT = "2"; //1 o 2 Lavado de activos 
@@ -758,18 +751,6 @@ export class AddContractingComponent implements OnInit {
         );
     }
 
-    /*getEconomicActivityList() {
-  
-      this.clientInformationService.getEconomicActivityList().subscribe(
-        res => {
-          this.economicActivityList = res;
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }*/
-
     onSelectTypeDocument(typeDocumentID) {
         this.blockDoc = true;
         switch (typeDocumentID) {
@@ -778,35 +759,30 @@ export class AddContractingComponent implements OnInit {
                 this.InputsContracting.P_NIDDOC_TYPE = null;
                 this.typeDocument = 0;
                 this.maxlength = 8;
-                //this.clearDocument();
                 break;
             case "1":
                 this.blockCuspp = false;
                 this.InputsContracting.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 11;
-                //this.clearDocument();
                 break;
             case "2":
                 this.blockCuspp = true;
                 this.InputsContracting.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 8;
-                //this.clearDocument();
                 break;
             case "4":
                 this.blockCuspp = true;
                 this.InputsContracting.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 12;
-                //this.clearDocument();
                 break;
             default:
                 this.blockCuspp = true;
                 this.InputsContracting.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 15;
-                //this.clearDocument();
                 break;
         }
     }
@@ -828,18 +804,6 @@ export class AddContractingComponent implements OnInit {
             }
         }
     }
-
-    // clearDocument() {
-    //   this.InputsContracting.P_SIDDOC = "";
-    //   this.InputsContracting.P_SFIRSTNAME = "";
-    //   this.InputsContracting.P_SLEGALNAME = "";
-    //   this.InputsContracting.P_SLASTNAME = "";
-    //   this.InputsContracting.P_SLASTNAME2 = "";
-    //   this.InputsContracting.P_COD_CUSPP = "";
-    //   this.InputsContracting.P_SSEXCLIEN = null;
-    //   this.InputsContracting.P_NCIVILSTA = null;
-    // }
-
     onSelectNacionality(nacionalityID) {
         this.InputsContracting.P_NNATIONALITY = nacionalityID;
     }
@@ -852,22 +816,6 @@ export class AddContractingComponent implements OnInit {
     onSelectCivilStatus(civilStatusID) {
         this.InputsContracting.P_NCIVILSTA = civilStatusID;
     }
-
-    // onSelectProfession(professionID) {
-    //   if (professionID === "0") {
-    //     this.InputsContracting.P_NSPECIALITY = null;
-    //   } else {
-    //     this.InputsContracting.P_NSPECIALITY = professionID;
-    //   }
-    // }
-
-    // onSelectEconomicActivity(economicActivityID) {
-    //   if (economicActivityID === "0") {
-    //     this.InputsContracting.P_SGRADO_INSTRUCCION = null;
-    //   } else {
-    //     this.InputsContracting.P_SGRADO_INSTRUCCION = economicActivityID;
-    //   }
-    // }
 
     openModal(modalName: String) {
         let modalRef: NgbModalRef;
@@ -964,7 +912,6 @@ export class AddContractingComponent implements OnInit {
                     this.VAL_CLIENT[3] = "3";
                     mensaje += "El apellido materno del contratante es requerido <br />"
                 }
-                //console.log(this.InputsContracting.P_DBIRTHDAT);
                 if (this.InputsContracting.P_DBIRTHDAT == null) {
                     this.VAL_CLIENT[4] = "4";
                     mensaje += "La fecha de nacimiento del contratante es requerido <br />"
@@ -994,7 +941,6 @@ export class AddContractingComponent implements OnInit {
                 this.VAL_CLIENT[3] = "3";
                 mensaje += "El apellido materno del contratante es requerido <br />"
             }
-            //console.log(this.InputsContracting.P_DBIRTHDAT);
             if (this.InputsContracting.P_DBIRTHDAT == null) {
                 this.VAL_CLIENT[4] = "4";
                 mensaje += "La fecha de nacimiento del contratante es requerido <br />"
@@ -1005,8 +951,7 @@ export class AddContractingComponent implements OnInit {
             this.VAL_CLIENT[5] = "5";
             mensaje += "La sede del contratante es requerido <br />"
         }
-        // console.log(this.InputsContracting)
-        // return;
+
         if (mensaje == "") {
             swal.fire({
                 title: "Información",
@@ -1038,7 +983,6 @@ export class AddContractingComponent implements OnInit {
                                                 }
                                             },
                                             err => {
-                                                // swal.fire('Información', err, 'error');
                                                 console.log(err);
                                             }
                                         );
@@ -1046,7 +990,6 @@ export class AddContractingComponent implements OnInit {
 
                                     swal.fire("Información", "Se ha realizado el registro correctamente", "success")
                                         .then((value) => {
-                                            //this.router.navigate(['/broker/' + this.receiverApp], { queryParams: { typeDocument: this.InputsContracting.P_NIDDOC_TYPE, document: this.InputsContracting.P_SIDDOC } });
                                             switch (this.receiverApp) {
                                                 case "quotation":
                                                     this.router.navigate(['/broker/quotation'], { queryParams: { typeDocument: this.InputsContracting.P_NIDDOC_TYPE, document: this.InputsContracting.P_SIDDOC } });
@@ -1069,7 +1012,6 @@ export class AddContractingComponent implements OnInit {
                             },
                             err => {
                                 console.log(err);
-                                //swal({ title: "Información", text: err.statusText, icon: "warning" });
                                 swal.fire("Información", err.statusText, "warning");
                             }
                         );
@@ -1082,8 +1024,6 @@ export class AddContractingComponent implements OnInit {
     }
 
     Back() {
-        //this.router.navigate(['/broker/' + this.receiverApp]);
-
         switch (this.receiverApp) {
             case "quotation":
                 this.router.navigate(['/broker/quotation']);
@@ -1102,9 +1042,7 @@ export class AddContractingComponent implements OnInit {
         this.contractorLocationIndexService.updateContractorLocationContact(_contact).subscribe(
             res => {
                 if (res.P_NCODE == 0) {
-                    // console.log(res.P_SMESSAGE);
                 } else if (res.P_NCODE == 1) {
-                    //console.log(res.P_SMESSAGE);
                 }
             },
             err => {
@@ -1114,7 +1052,6 @@ export class AddContractingComponent implements OnInit {
     }
 
     valText(event: any, type) {
-        // console.log(type)
         let pattern;
         switch (type) {
             case 1: { // Numericos 

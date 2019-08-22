@@ -105,8 +105,8 @@
           <ng-template #showGrid>
             <tbody>
               <tr class="selectable" (dblclick)="chooseBroker(item)"
-                *ngFor="let item of listBroker; let row_no = index">
-                <td><input value={{row_no}} type="radio" name="brokerList" [(ngModel)]="selectedBroker"></td>
+                *ngFor="let item of listToShow; let row_no = index">
+                <td><input value={{item.NNUMDOC}} type="radio" name="brokerList" [(ngModel)]="selectedBroker"></td>
                 <td>{{ item.NTIPDOC | typeDocument }}</td>
                 <td>{{ item.NNUMDOC}}</td>
                 <td>{{ item.RAZON_SOCIAL }}</td>

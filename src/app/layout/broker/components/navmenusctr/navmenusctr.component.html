@@ -1,6 +1,5 @@
 <div class='main-nav collapse'
      [class.show]="showSidebar">
-    <!-- {{this.showSidebar}} -->
     <div class='navbar navbar-inverse no-left'
          id="sidebarContainer">
         <div class="nav-user">
@@ -64,33 +63,6 @@
                             </div>
                         </div>
                     </li>
-                    <!-- <li *ngIf="item['children'].length > 0"
-                        class="nav-item {{item.shtml}} dropdown"
-                        routerLinkActive="active">
-                        <a class="nav-link dropdown-toggle"
-                           href="#"
-                           id="nav{{idx}}"
-                           role="button"
-                           data-toggle="dropdown"
-                           aria-haspopup="true"
-                           aria-expanded="false">
-                            <div class="li-space"></div>
-                            <div class="li-img"></div>
-                            <div class="li-span">
-                                <div><span>{{item.sname}}</span></div>
-                            </div>
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <div class="dropdown-menu"
-                             style="display: block">
-                            <ng-container *ngFor="let subitem of item['children']">
-                                <a *ngIf="subitem.sname != 'SCTR'"
-                                   class="dropdown-item"
-                                   [routerLink]="['/' + subitem.stag]"
-                                   routerLinkActive="subactive">{{subitem.sname}}</a>
-                            </ng-container>
-                        </div>
-                    </li> -->
                 </ng-container>
             </ul>
             <div class="close-window">

@@ -147,14 +147,11 @@ export class PolicyFormComponent implements OnInit {
 
 	ngOnInit() {
 		if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_emission"]) == false) this.router.navigate(['/broker/home']);
-		// this.canBillMonthly = AccessFilter.hasPermission("16"); // Ver como colocarlo
-		// this.canBillInAdvance = AccessFilter.hasPermission("17"); // Ver como colocarlo
 		this.polizaEmit.facturacionVencido = false;
 		this.polizaEmit.facturacionAnticipada = false;
 		this.polizaEmit.comentario = "";
 		//prueba mina
 		this.polizaEmitCab.MINA = false;
-
 		this.ObtenerTipoRenovacion();
 
 		this.polizaEmitCab.bsValueIni = new Date();
@@ -177,16 +174,13 @@ export class PolicyFormComponent implements OnInit {
 		this.polizaEmitCab.frecuenciaPago = '';
 
 		this.route.queryParams
-			//.filter(params => params.tipoDocumento)
 			.subscribe(params => {
-				//console.log(params); // {order: "popular"}
 				this.nrocotizacion = params.quotationNumber;
 			});
 
 		if (this.nrocotizacion != undefined) {
 			this.buscarCotizacion(event);
 		}
-		//console.log("polizaEmitComer", this.polizaEmitComer)
 	}
 
 	onFacturacion() {
@@ -198,7 +192,6 @@ export class PolicyFormComponent implements OnInit {
 			this.facVencido = false;
 			this.facAnticipada = false;
 		}
-		//console.log(this.polizaEmit.facturacionAnticipada)
 	}
 
 	getDate() {
@@ -237,7 +230,6 @@ export class PolicyFormComponent implements OnInit {
 
 
 	validarExcel() {
-		//console.log(this.excelSubir);
 		if (this.cotizacionID != "") {
 			if (this.excelSubir != undefined) {
 				this.errorExcel = false;
@@ -256,13 +248,10 @@ export class PolicyFormComponent implements OnInit {
 				myFormData.append("type_mov", "1");
 				myFormData.append("retarif", "1");
 				myFormData.append("date", dayIni + "/" + monthIni + "/" + yearIni);
-				//console.log(this.excelSubir)
-				// console.log(this.cotizacionID)
 				this.policyemit.valGestorList(myFormData).subscribe(
 					res => {
 						this.erroresList = res.C_TABLE;
 						this.loading = false;
-						console.log(res);
 						if (this.erroresList != null) {
 							if (this.erroresList.length > 0) {
 								this.processID = "";
@@ -271,7 +260,6 @@ export class PolicyFormComponent implements OnInit {
 								modalRef.componentInstance.erroresList = this.erroresList;
 							} else {
 								this.processID = res.P_NID_PROC;
-								//console.log(this.processID);
 								Swal.fire("Información", "Se validó correctamente la trama", "success");
 							}
 						} else {
@@ -317,7 +305,6 @@ export class PolicyFormComponent implements OnInit {
 		if (this.nrocotizacion != undefined && this.nrocotizacion != 0) {
 			this.policyemit.getPolicyEmitCab(this.nrocotizacion, typeMovement)
 				.subscribe((res: any) => {
-					console.log(res);
 					let self = this;
 					this.cotizacionID = this.nrocotizacion;
 					if (res.GenericResponse !== null) {
@@ -343,7 +330,6 @@ export class PolicyFormComponent implements OnInit {
 
 							this.policyemit.getPolicyEmitComer(this.nrocotizacion)
 								.subscribe((res: any) => {
-									// console.log(res);
 									this.tableComer = true
 									this.polizaEmitComer = [];
 									if (res.length > 0 && res !== null) {
@@ -375,7 +361,6 @@ export class PolicyFormComponent implements OnInit {
 											if (item.ID_PRODUCTO == this.pensionID) {
 												item.PRIMA = self.formateaValor(item.PRIMA)
 												this.pensionList.push(item);
-												//let primaTotal = parseFloat(this.primatotalSCTR.toString()) + parseFloat(item.PRIMA)
 												this.primatotalSCTR = self.formateaValor(item.NSUM_PREMIUMN);
 												this.igvPension = self.formateaValor(item.NSUM_IGV);
 												this.totalSTRC = self.formateaValor(item.NSUM_PREMIUM);
@@ -383,9 +368,6 @@ export class PolicyFormComponent implements OnInit {
 											if (item.ID_PRODUCTO == this.saludID) {
 												item.PRIMA = self.formateaValor(item.PRIMA)
 												this.saludList.push(item);
-												// let primaTotal = parseFloat(this.primatotalSalud.toString()) + parseFloat(item.PRIMA)
-												// this.primatotalSalud = this.formateaValor(parseFloat(primaTotal.toString()))
-
 												this.primatotalSalud = self.formateaValor(item.NSUM_PREMIUMN);
 												this.igvSalud = self.formateaValor(item.NSUM_IGV);
 												this.totalSalud = self.formateaValor(item.NSUM_PREMIUM);
@@ -399,11 +381,6 @@ export class PolicyFormComponent implements OnInit {
 										} else {
 											this.tasasList = [];
 										}
-										// this.igvPension = this.formateaValor((this.primatotalSCTR * 1.03 * 1.18) - this.primatotalSCTR);
-										// this.totalSTRC = this.formateaValor(parseFloat(this.primatotalSCTR.toString()) + parseFloat(this.igvPension.toString()));
-
-										// this.igvSalud = this.formateaValor((this.primatotalSalud * 1.18) - this.primatotalSalud)
-										// this.totalSalud = this.formateaValor(parseFloat(this.primatotalSalud.toString()) + parseFloat(this.igvSalud.toString()));
 									} else {
 										this.primatotalSCTR = 0;
 										this.primatotalSalud = 0;
@@ -472,13 +449,11 @@ export class PolicyFormComponent implements OnInit {
 		this.policyemit.getTipoRenovacion(requestTypeRen)
 			.subscribe((res: any) => {
 				this.tipoRenovacion = res;
-				//console.log("tipo", this.polizaEmitCab.tipoRenovacion)
 				if (this.polizaEmitCab.tipoRenovacion !== "") {
 					this.policyemit.getFrecuenciaPago(this.polizaEmitCab.tipoRenovacion)
 						.subscribe((res: any) => {
 							this.polizaEmitCab.frecuenciaPago = "";
 							this.frecuenciaPago = res;
-							//console.log(this.frecuenciaPago);
 						})
 				}
 			})
@@ -510,16 +485,7 @@ export class PolicyFormComponent implements OnInit {
 		}
 
 	}
-
-	/*eventoCotizacion() {
-		this.flagNroCotizacion = false
-
-		if (isNaN(this.nrocotizacion)) {
-			this.flagNroCotizacion = true
-			this.flagBusqueda = false;
-		}
-
-	}*/
+	
 	cambioFecha() {
 		this.errorFrecPago = false;
 	}
@@ -591,7 +557,7 @@ export class PolicyFormComponent implements OnInit {
 				this.savedPolicyEmit.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]; //Usuario
 				this.savedPolicyList.push(this.savedPolicyEmit);
 			}
-			//console.log(this.savedPolicyEmit.P_SFLAG_FAC_ANT);
+			
 			if (this.pensionList.length > 0) {
 				this.savedPolicyEmit = {};
 				this.savedPolicyEmit.P_NID_COTIZACION = this.cotizacionID; //Cotizacion
@@ -649,7 +615,6 @@ export class PolicyFormComponent implements OnInit {
 											confirmButtonText: 'OK',
 											allowOutsideClick: false,
 										})
-										// Swal.fire("Información", "Se ha generado correctamente la poliza de Pensión N° " + policyPension + " y la póliza de Salud N° " + policySalud, "success");
 									}
 									else {
 										if (policyPension > 0) {
@@ -660,7 +625,6 @@ export class PolicyFormComponent implements OnInit {
 												confirmButtonText: 'OK',
 												allowOutsideClick: false,
 											})
-											//Swal.fire("Información", , "success");
 										}
 										if (policySalud > 0) {
 											Swal.fire({
@@ -670,7 +634,6 @@ export class PolicyFormComponent implements OnInit {
 												confirmButtonText: 'OK',
 												allowOutsideClick: false,
 											})
-											// Swal.fire("Información", "Se ha generado correctamente la poliza de Salud N° " + policySalud, "success");
 										}
 									}
 								} else {
@@ -725,7 +688,6 @@ export class PolicyFormComponent implements OnInit {
 			this.archivosJson.push({
 				error: 'Los archivos en total no deben de tener mas de 10 mb'
 			})
-
 			return;
 		}
 
@@ -861,7 +823,6 @@ export class PolicyFormComponent implements OnInit {
 	}
 
 	valText(event: any, type) {
-		// console.log(type)
 		let pattern;
 		switch (type) {
 			case 1: { // Numericos 
