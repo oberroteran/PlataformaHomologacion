@@ -21,16 +21,6 @@ export class ContractorLocationIndexService {
     //private Url= "http://localhost:30897";
     constructor(private http: HttpClient) { }
 
-    public getContractorListByDocNumber(_docNumber: string, _limitPerPage: number, _pageNumber: number): Observable<ResponseVM> {
-        let data = { contractorDocNumber: _docNumber, limitPerPage: _limitPerPage.toString(), pageNumber: _pageNumber.toString() };
-        return this.http.get<ResponseVM>(this.Url + "/ContractorLocationManager/GetContractorListByDocNumber", { params: data });
-    }
-
-    // public getContractorList(_searchMode:string, documentType:string,_docNumber:string,personType:string, _limitPerPage: number,_pageNumber:number):Observable<ResponseVM>{
-    //   let data = {contractorDocNumber: _docNumber,limitPerPage:_limitPerPage.toString(),pageNumber:_pageNumber.toString()};
-    //   return this.http.get<ResponseVM>(this.Url+"/Api/ContractorLocationManager/GetContractorListByDocNumber",{params:data});
-    // }
-
     public getSuggestedLocationType(_contractorId: string, _userCode: number): Observable<ResponseVM> {
         let data = { contractorId: _contractorId, userCode: _userCode.toString() };
         return this.http.get<ResponseVM>(this.Url + "/ContractorLocationManager/GetSuggestedLocationType", { params: data });
@@ -39,16 +29,6 @@ export class ContractorLocationIndexService {
         let data = { contractorId: _contractorId, locationIdToIgnore: _locationIdToIgnore.toString(), userCode: _userCode.toString() };
         return this.http.get<ResponseVM>(this.Url + "/ContractorLocationManager/HasActivePrincipalLocation", { params: data });
     }
-
-    public getContractorListByLegalName(_legalName: string, _limitPerPage: number, _pageNumber: number): Observable<ResponseVM> {
-        let data = { legalName: _legalName, limitPerPage: _limitPerPage.toString(), pageNumber: _pageNumber.toString() };
-        return this.http.get<ResponseVM>(this.Url + "/ContractorLocationManager/GetContractorListByLegalName", { params: data });
-    }
-    public getContractorListByPersonName(_firstName: string, _paternalLastName: string, _maternalLastName: string, _limitPerPage: number, _pageNumber: number): Observable<ResponseVM> {
-        let data = { firstName: _firstName, paternalLastName: _paternalLastName, maternalLastName: _maternalLastName, limitPerPage: _limitPerPage.toString(), pageNumber: _pageNumber.toString() };
-        return this.http.get<ResponseVM>(this.Url + "/ContractorLocationManager/GetContractorListByPersonName", { params: data });
-    }
-
 
     public getContractorLocationList(_contractorId: string, _limitPerPage: number, _pageNumber: number): Observable<ResponseVM> {
         let data = { contractorId: _contractorId, limitPerPage: _limitPerPage.toString(), pageNumber: _pageNumber.toString() };
