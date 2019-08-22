@@ -1021,7 +1021,7 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.PensionDetailsList.map(element => {
                 element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
                 element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
-                if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
+                //if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
             });
             console.log(this.InputsQuotation.PensionDetailsList);
         }
@@ -1030,7 +1030,7 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludDetailsList.map(element => {
                 element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
                 element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
-                if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
+                //if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
             });
             console.log(this.InputsQuotation.SaludDetailsList);
         }
