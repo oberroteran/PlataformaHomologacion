@@ -259,30 +259,6 @@
         </div>
         <div id="calculadora" class="collapse show p-0">
           <div class="card-body pt-1 pb-1">
-            <!-- <div class="row">
-              <div class="col-sm-12">
-                <label><span>BÚSQUEDA:</span></label>
-                <label><span><input type="radio" [(ngModel)]="estimatedWorkerQuantity" name="searchWorker" value="49"
-                      (change)="workerQuantityChanged()" class="t-search" /> MENOR O IGUAL 50</span> </label> <label>
-                  <span><input type="radio" [(ngModel)]="InputsQuotation.P_CANT_WORKER" name="searchWorker" value="51"
-                      (change)="workerQuantityChanged()" class="t-search" /> MAYOR A
-                    50</span></label>
-              </div>
-            </div> -->
-            <!-- <div class="row">
-              <div class="col-sm-3">
-                <label><input type="checkbox" id="" class="checkbox"
-                    [checked]="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length> 0"
-                    disabled><span class="schk"><b>SCTR
-                      SALUD</b></span></label>
-              </div>
-              <div class="col-sm-3">
-                <label><input type="checkbox" id="" class="checkbox"
-                    [checked]="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length>0"
-                    disabled><span class="schk"><b>SCTR
-                      PENSIÓN</b></span></label>
-              </div>
-            </div> -->
             <div class="row">
               <div class="col-sm-6">
                 <table class="table table-borderless riesgo">
@@ -314,13 +290,6 @@
                     <span>PRIMA MÍNIMA SALUD</span>
                     <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.SaludMinPremium" />
                   </div>
-                  <!-- <div class="col-sm-6">
-                    <span><input type="checkbox" id="" style="top: 3px;" class="checkbox"
-                        [checked]="InputsQuotation.SaludPropMinPremium!=null && InputsQuotation.SaludPropMinPremium!=0 && InputsQuotation.SaludPropMinPremium!=''"
-                        [disabled]="mode!='recotizar'"> PRIMA MÍNIMA PROPUESTA</span>
-                    <input type="text" placeholder="0" [disabled]="mode!='recotizar'"
-                      [(ngModel)]="InputsQuotation.SaludPropMinPremium" />
-                  </div> -->
                   <div class="col-sm-6">
                     <span><input *ngIf="mode=='recotizar'" type="checkbox" id="" style="top: 3px;" class="checkbox"
                         [(ngModel)]="enabledHealthMinPropPremium" [checked]="false"
@@ -372,7 +341,6 @@
                             <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>{{item.RiskRate}}</label>
                             </th>
                             <td class="col-sm text-center"><span>{{item.Rate}}</span></td>
-                            <!-- <td class="col-sm text-center"><span>{{item.ProposedRate}}</span> -->
                             <td class="col-sm"><input type="text" class="text-center" FloatDirective [checked]="false"
                                 [disabled]="!enabledHealthProposedRate"
                                 [(ngModel)]="InputsQuotation.SaludDetailsList[row].ProposedRate"
@@ -390,7 +358,6 @@
                           </tr>
                           <ng-container
                             *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length!=0">
-                            <!-- <hr style="margin-bottom: 0;"> -->
                             <tr class="d-flex">
                               <td class="col-sm text-center"></td>
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
@@ -446,13 +413,6 @@
                       [disabled]="mode!='recotizar' || !enabledPensionMinPropPremium"
                       [(ngModel)]="InputsQuotation.PensionPropMinPremium" />
                   </div>
-                  <!-- <div class="col-sm-6">
-                    <span><input type="checkbox" style="top: 3px;" class="checkbox" checked
-                        (change)="enabledHealthMinPropPremium= !enabledHealthMinPropPremium"
-                        [disabled]="mode!='recotizar'"> PRIMA MÍNIMA PROPUESTA</span>
-                    <input type="text" placeholder="0" [disabled]="mode!='recotizar' || !enabledHealthMinPropPremium"
-                      [(ngModel)]="InputsQuotation.SaludPropMinPremium" />
-                  </div> -->
                 </div>
                 <div class="card mt-3"
                   *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length>0">
