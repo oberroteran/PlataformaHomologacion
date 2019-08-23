@@ -187,8 +187,8 @@
                   <td class="grid-title-item">Descripción Sede</td>
                   <td class="grid-title-item">Ubigeo</td>
                   <td class="grid-title-item">Actividad Económica</td>
-                  <td class="grid-title-item">Estado</td>
-                  <td class="grid-title-item">Opciones</td>
+                  <td class="grid-title-item text-center">Estado</td>
+                  <td class="grid-title-item text-center">Opciones</td>
                 </tr>
               </thead>
 
@@ -198,7 +198,7 @@
               <tbody>
                 <tr>
                   <!-- <td colspan="8">{{msgErrorLista}}</td> -->
-                  <td colspan="9">No se encontraron registros</td>
+                  <td colspan="9" class="text-center">No se encontraron registros</td>
                 </tr>
               </tbody>
             </ng-template>
@@ -229,14 +229,14 @@
                     <td>No tiene sedes</td>
                     <td>No tiene sedes</td>
                     <td>No tiene sedes</td>
-                    <td>No tiene sedes</td>
+                    <td class="text-center">No tiene sedes</td>
                   </ng-template>
                   <ng-template #LocationFound>
                     <td>{{ item.LocationType }}</td>
                     <td>{{ item.LocationDescription }}</td>
                     <td>{{ item.LocationDepartment }} - {{ item.LocationProvince }} - {{ item.LocationDistrict }}</td>
                     <td>{{ item.LocationEconomicActivity }}</td>
-                    <td>{{ item.LocationStatus }}</td>
+                    <td class="text-center">{{ item.LocationStatus }}</td>
                   </ng-template>
 
                   <!-- <td>{{ item.ContractorLocationType }}</td>
@@ -244,7 +244,7 @@
                   <td>{{ item.ContractorLocationEmail }}</td>
                   <td>{{ item.ContractorLocationPhone }}</td> -->
 
-                  <td>
+                  <td class="text-center">
                     <a (click)='openContractorModal(item)'><img alt="Editar" src="assets/icons/preview_soat_box.png"
                         title="Editar" style="cursor: pointer;height: 24px"></a>
                   </td>

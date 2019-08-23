@@ -11,7 +11,7 @@
       <table class="table">
         <thead>
           <tr class="grid-title">
-            <td class="grid-title-item">#</td>
+            <td class="grid-title-item text-center">#</td>
             <td class="grid-title-item">TIPO DOCUMENTO</td>
             <td class="grid-title-item">NRO DOCUMENTO</td>
             <td class="grid-title-item">RAZÓN SOCIAL/NOMBRES Y APELLIDOS</td>
@@ -30,7 +30,7 @@
         <tbody>
           <tr class="selectable" (dblclick)="chooseContractor(item)"
             *ngFor="let item of listToShow; let row_no = index">
-            <td><input value={{item.P_SIDDOC}} type="radio" name="contractorList" [(ngModel)]="selectedContractor"></td>
+            <td class="text-center"><input value={{item.P_SIDDOC}} type="radio" name="contractorList" [(ngModel)]="selectedContractor"></td>
             <td>{{ item.P_NIDDOC_TYPE | typeDocument}}</td>
             <td>{{ item.P_SIDDOC }}</td>
             <td>{{ item | nameContractor }}</td>

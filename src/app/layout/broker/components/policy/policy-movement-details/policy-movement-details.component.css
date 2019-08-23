@@ -198,14 +198,12 @@ span, textarea {
 
 .grid table tr td {
     padding: 15px 15px;
-    text-align: center;
     color: rgb(146, 138, 163);
 }
 
 .grid table .grid-title td {
     font-family: "Bliss Pro";
     padding: 25px 15px;
-    text-align: center;
     font-size: 14px;
     font-weight: bold;
     color: rgba(42, 18, 99, 0.78);

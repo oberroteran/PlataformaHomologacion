@@ -183,7 +183,7 @@
               <table class="table">
                 <thead>
                   <tr class="grid-title">
-                    <td class="grid-title-item">Nro. Constancia</td>
+                    <td class="grid-title-item text-center">Nro. Constancia</td>
                     <td class="grid-title-item">Producto</td>
                     <td class="grid-title-item">Nro. Póliza</td>
                     <td class="grid-title-item">Movimiento</td>
@@ -213,7 +213,7 @@
               <ng-template #showGrid>
                 <tbody *ngFor="let item of foundResults">
                   <tr>
-                    <td>{{ item.ProofNumber}}</td>
+                    <td class="text-center">{{ item.ProofNumber}}</td>
                     <td>{{ item.Product}}</td>
                     <td>{{ item.PolicyNumber }}</td>
                     <td>{{ item.Movement }}</td>

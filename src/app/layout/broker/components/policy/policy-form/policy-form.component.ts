@@ -702,7 +702,7 @@ export class PolicyFormComponent implements OnInit {
 		let fechad = new Date(fechaDes);
 		let fechah = new Date(fechaHas);
 
-		if (this.polizaEmitCab.tipoRenovacion == "6") {
+		if (this.polizaEmitCab.tipoRenovacion == "6") { //Especial
 			fechad.setDate(fechad.getDate() + 1);
 			this.polizaEmitCab.bsValueFinMin = new Date(fechad);
 			if (fechad.getTime() > fechah.getTime()) {
@@ -710,7 +710,7 @@ export class PolicyFormComponent implements OnInit {
 			}
 			this.disabledFecha = false;
 		}
-		if (this.polizaEmitCab.tipoRenovacion == "7") {
+		if (this.polizaEmitCab.tipoRenovacion == "7") { //Especial Estado
 			fechad.setDate(fechad.getDate() + 1);
 			this.polizaEmitCab.bsValueFinMin = new Date(fechad);
 			if (fechad.getTime() > fechah.getTime()) {
@@ -718,34 +718,33 @@ export class PolicyFormComponent implements OnInit {
 			}
 			this.disabledFecha = false;
 		}
-		if (this.polizaEmitCab.tipoRenovacion === "5") {
+		if (this.polizaEmitCab.tipoRenovacion === "5") { //Mensual
 			fechad.setMonth(fechad.getMonth() + 1);
 			fechad.setDate(fechad.getDate() - 1);
 			this.polizaEmitCab.bsValueFin = new Date(fechad);
 			this.flagFechaMenorMayorFin = true;
 		}
-		if (this.polizaEmitCab.tipoRenovacion === "4") {
+		if (this.polizaEmitCab.tipoRenovacion === "4") { //Bimestral
 
 			fechad.setMonth(fechad.getMonth() + 2);
 			fechad.setDate(fechad.getDate() - 1);
 			this.polizaEmitCab.bsValueFin = new Date(fechad);
 			this.flagFechaMenorMayorFin = true;
 		}
-		if (this.polizaEmitCab.tipoRenovacion === "3") {
-
-			fechad.setMonth(fechad.getMonth() + 2);
+		if (this.polizaEmitCab.tipoRenovacion === "3") { //Trimestral
+			fechad.setMonth(fechad.getMonth() + 3);
 			fechad.setDate(fechad.getDate() - 1);
 			this.polizaEmitCab.bsValueFin = new Date(fechad);
 			this.flagFechaMenorMayorFin = true;
 		}
-		if (this.polizaEmitCab.tipoRenovacion === "2") {
+		if (this.polizaEmitCab.tipoRenovacion === "2") { //Semestral
 			fechad.setMonth(fechad.getMonth() + 6);
 			fechad.setDate(fechad.getDate() - 1);
 			this.polizaEmitCab.bsValueFin = new Date(fechad);
 			this.flagFechaMenorMayorFin = true;
 		}
 
-		if (this.polizaEmitCab.tipoRenovacion === "1") {
+		if (this.polizaEmitCab.tipoRenovacion === "1") { //Anual
 			fechad.setFullYear(fechad.getFullYear() + 1)
 			fechad.setDate(fechad.getDate() - 1);
 			this.polizaEmitCab.bsValueFin = new Date(fechad);

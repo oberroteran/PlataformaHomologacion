@@ -382,7 +382,7 @@
 						</h5>
 					</div>
 					<div id="cotizador" class="collapse show pt-1">
-						<div class="row" *ngIf="!editFlag">
+						<div class="row" *ngIf="!endosoFlag">
 							<div class="col-sm-12">
 								<label><span>TRABAJADORES:</span></label>
 								<label><span><input type="radio" [(ngModel)]="polizaEmit.workers" name="searchWorker"
@@ -415,13 +415,13 @@
 											</td>
 											<td class="col-sm text-center">
 												<input type="text" placeholder="0" [(ngModel)]="item.NUM_TRABAJADORES"
-													name="NRO_TRAB-{{i}}" [disabled]="editFlag"
+													name="NRO_TRAB-{{i}}" [disabled]="endosoFlag"
 													(ngModelChange)="changeTrabajadores($event, item.TIP_RIESGO)"
 													(keypress)="valText($event, 1)" />
 											</td>
 											<td class="col-sm text-center">
 												<input type="text" placeholder="0" [(ngModel)]="item.MONTO_PLANILLA"
-													name="MON_PLAN-{{i}}" [disabled]="editFlag"
+													name="MON_PLAN-{{i}}" [disabled]="endosoFlag"
 													(ngModelChange)="changePlanilla($event, item.TIP_RIESGO)"
 													FloatDirective />
 											</td>
@@ -440,7 +440,7 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA SALUD</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD" name="MIN_SALUD"
+										<input type="text" [(ngModel)]="polizaEmitCab.PRIMA_SALUD_END" name="MIN_SALUD"
 											placeholder="0" disabled>
 									</div>
 									<div class="col-sm-6">
@@ -499,14 +499,14 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{totalNetoSaludSave | miles}}</span></td>
+															<span>{{primatotalSalud | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>IGV</span></td>
 														<td class="col-sm text-center">
-															<span>{{igvSaludSave | miles}}</span>
+															<span>{{igvSalud | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
@@ -515,7 +515,7 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{brutaTotalSaludSave | miles}}</span></td>
+															<span>{{totalSalud | miles}}</span></td>
 													</tr>
 												</tbody>
 											</table>
@@ -530,7 +530,7 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA PENSIÓN</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION" name="MIN_PENSION"
+										<input type="text" [(ngModel)]="polizaEmitCab.PRIMA_PEN_END" name="MIN_PENSION"
 											placeholder="Prima Mínima" disabled>
 									</div>
 									<div class="col-sm-6">
@@ -590,14 +590,14 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{totalNetoPensionSave | miles}}</span></td>
+															<span>{{primatotalSCTR | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>IGV + DE</span></td>
 														<td class="col-sm text-center">
-															<span>{{igvPensionSave | miles}}</span>
+															<span>{{igvPension | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
@@ -606,7 +606,7 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{brutaTotalPensionSave | miles}}</span></td>
+															<span>{{totalSTRC | miles}}</span></td>
 												</tbody>
 											</table>
 											<div class="col-sm-12">

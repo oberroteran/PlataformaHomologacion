@@ -21,12 +21,6 @@
                                     [(bsValue)]="bsValueIni" value="{{ bsValueIni | date:'dd/MM/yyyy' }}" 
                                     [(maxDate)]="bsValueFinMax" readonly>
                             </div>
-                            <!-- <div class="col-sm-3">
-                                <span>&nbsp;</span>
-                                <label style="width: 100%; margin-bottom: 0; margin-top: 18px;"><input type="checkbox"
-                                        class="checkbox"><span class="schk"
-                                        style="margin-top: 5px;; font-size: 13px;">TODOS LOS PROCESOS</span></label>
-                            </div> -->
                             <div class="col-sm-3">
                                 <span>&nbsp;</span>
                                 <button class="full-color" (click)="visualizadorProcess()" style="margin-top: 5px;">
@@ -42,14 +36,14 @@
                     <table class="table">
                         <thead>
                             <tr class="grid-title">
-                                <td class="grid-title-item">COD. PROCESO</td>
-                                <td class="grid-title-item">SKEY</td>
+                                <td class="grid-title-item text-center">COD. PROCESO</td>
+                                <td class="grid-title-item text-center">SKEY</td>
                                 <td class="grid-title-item">TIPO PROCESO</td>
                                 <td class="grid-title-item">PRODUCTO</td>
                                 <td class="grid-title-item">PÓLIZA</td>
                                 <td class="grid-title-item">CONTRATANTE</td>
-                                <td class="grid-title-item">INICIO</td>
-                                <td class="grid-title-item">FIN</td>
+                                <td class="grid-title-item text-center">INICIO</td>
+                                <td class="grid-title-item text-center">FIN</td>
                                 <td class="grid-title-item">USUARIO</td>
                                 <td class="grid-title-item">ESTADO</td>
                             </tr>
@@ -67,14 +61,14 @@
                     <ng-template #showGrid>
                         <tbody>
                             <tr *ngFor="let item of listToShow; let row_no = index">
-                                <td>{{ item.NUM_COTIZACION }}</td>
-                                <td>{{ item.SKEY }}</td>
+                                <td class="text-center">{{ item.NUM_COTIZACION }}</td>
+                                <td class="text-center">{{ item.SKEY }}</td>
                                 <td>{{ item.TIPO_MOVIMIENTO }}</td>
                                 <td>{{ item.DES_PRODUCT }}</td>
                                 <td>{{ item.NUM_POLIZA }}</td>
                                 <td>{{ item.DES_CONTR }}</td>
-                                <td>{{ item.FECHA_HORA_ENVIO }}</td>
-                                <td>{{ item.FECHA_HORA_FIN }}</td>
+                                <td class="text-center">{{ item.FECHA_HORA_ENVIO }}</td>
+                                <td class="text-center">{{ item.FECHA_HORA_FIN }}</td>
                                 <td>{{ item.DES_USUARIO }}</td>
                                 <td>{{ item.DES_ESTADO }}</td>
                                 <!-- <td>
