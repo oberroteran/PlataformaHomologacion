@@ -4,9 +4,9 @@ export class GlobalValidators {
 	private static dniPattern = "(^(?!.*([1][2][3][4][5][6][7][8])).*)(^[0-9]{8,8}$)";
 	private static cePattern = "^[a-zA-Z0-9]*$";
 	// private static legalNamePattern = "^[a-zA-Z\-\,\:\(\)\&\$\#\. ]*$";
-	private static legalNamePattern = "^[a-zA-Z0-9\-\,\:\(\)\&\$\#\. ]*$";
+	private static legalNamePattern = "^[a-zA-Z0-9\-\,\:\(\)\&\$\#\.ÑñÁÉÍÓÚáéíóúÄËÏÖÜäëïöü\' ]*$";
 	// private static latinTextPattern = "^[a-zA-Z\u00C0-\u024F\' ]*$";
-	private static latinTextPattern = "^[A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü\' ]*$";
+	private static latinTextPattern = "^[A-Za-zÑñÁÉÍÓÚáéíóúÄËÏÖÜäëïöü\' ]*$";
 
 	static getLatinTextPattern(): string | RegExp {
 		return this.latinTextPattern;
@@ -123,7 +123,7 @@ export class GlobalValidators {
 		if (control.value != null && control.value.toString().trim() != "") {
 			let consonantCount = 0;
 			for (let i = 0; i < control.value.toString().trim().length; i++) {
-				if (/[qwrtypsdfghjklñzxcvbnm]/.test(control.value.toString().trim().toLowerCase().charAt(i))) consonantCount++;
+				if (/[qwrtypsdfghjklñzxcvbnmñ]/.test(control.value.toString().trim().toLowerCase().charAt(i))) consonantCount++;
 				else consonantCount = 0;
 
 				if (consonantCount > 6) return { 'moreThanFiveConsonants': true };

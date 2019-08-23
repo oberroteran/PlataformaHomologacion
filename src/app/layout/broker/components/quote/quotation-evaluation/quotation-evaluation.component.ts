@@ -727,7 +727,7 @@ export class QuotationEvaluationComponent implements OnInit {
                         this.router.navigate(['/broker/request-status']);
                     } else if (res.StatusCode == 1) { //Error de validación
                         swal.fire("Información", this.listToString(res.ErrorMessageList), "error");
-                    } else if (res.StatusCode == 3) {  //Error no controlado en el servicio
+                    } else {  //Error no controlado en el servicio
                         swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
                     }
                     this.isLoading = false;
@@ -1021,7 +1021,7 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.PensionDetailsList.map(element => {
                 element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
                 element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
-                if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
+                //if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
             });
             console.log(this.InputsQuotation.PensionDetailsList);
         }
@@ -1030,7 +1030,7 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludDetailsList.map(element => {
                 element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
                 element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
-                if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
+                //if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
             });
             console.log(this.InputsQuotation.SaludDetailsList);
         }

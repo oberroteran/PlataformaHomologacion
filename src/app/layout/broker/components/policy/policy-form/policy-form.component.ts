@@ -147,6 +147,8 @@ export class PolicyFormComponent implements OnInit {
 
 	ngOnInit() {
 		if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_emission"]) == false) this.router.navigate(['/broker/home']);
+		this.canBillMonthly = AccessFilter.hasPermission("16");
+		this.canBillInAdvance = AccessFilter.hasPermission("17");
 		this.polizaEmit.facturacionVencido = false;
 		this.polizaEmit.facturacionAnticipada = false;
 		this.polizaEmit.comentario = "";
@@ -485,7 +487,7 @@ export class PolicyFormComponent implements OnInit {
 		}
 
 	}
-	
+
 	cambioFecha() {
 		this.errorFrecPago = false;
 	}
@@ -557,7 +559,7 @@ export class PolicyFormComponent implements OnInit {
 				this.savedPolicyEmit.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]; //Usuario
 				this.savedPolicyList.push(this.savedPolicyEmit);
 			}
-			
+
 			if (this.pensionList.length > 0) {
 				this.savedPolicyEmit = {};
 				this.savedPolicyEmit.P_NID_COTIZACION = this.cotizacionID; //Cotizacion

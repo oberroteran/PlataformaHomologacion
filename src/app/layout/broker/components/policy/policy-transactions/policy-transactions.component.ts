@@ -212,7 +212,7 @@ export class PolicyTransactionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_emission"]) == false) this.router.navigate(['/broker/home']);
+
     this.polizaEmit.facturacionVencido = false;
     this.polizaEmit.facturacionAnticipada = false;
     this.polizaEmit.workers = "";
@@ -249,31 +249,37 @@ export class PolicyTransactionsComponent implements OnInit {
       this.typeMovement = "2";
       this.questionText = "¿Deseas hacer la inclusión de asegurados?"
       this.responseText = "Se ha realizado la inclusión con constancia N° "
+      if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_inclusion"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "renew") { // renovar
       this.title = "Renovar Póliza";
       this.typeMovement = "4";
       this.questionText = "¿Deseas hacer la renovación de la póliza?"
       this.responseText = "Se ha realizado la renovación con constancia N° "
+      if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_inclusion"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "cancel") { // anular
       this.title = "Anular Póliza";
       this.typeMovement = "7";
       this.questionText = "¿Deseas hacer la anulación de la póliza?"
       this.responseText = "Se ha realizado la anulación correctamente "
+      if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_cancel"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "exclude") { // excluir
       this.title = "Excluir en Póliza";
       this.typeMovement = "3";
       this.questionText = "¿Deseas hacer la exclusión de asegurados?"
       this.responseText = "Se ha realizado la exclusión con constancia N° "
+      if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_exclusion"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "endosar") { // endosar
       this.title = "Endosar Póliza";
       this.typeMovement = "8";
       this.questionText = "¿Deseas hacer el endoso de la póliza?"
       this.responseText = "Se ha realizado el endoso con constancia N° "
+      if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_endorsement"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "netear") { // netear
       this.title = "Neteo de Póliza";
       this.typeMovement = "5";
       this.questionText = "¿Deseas hacer el neteo de la póliza?"
       this.responseText = "Se ha realizado el neteo con constancia N° "
+      if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_neteo"]) == false) this.router.navigate(['/broker/home']);
     }
 
     this.route.queryParams
@@ -1333,7 +1339,7 @@ export class PolicyTransactionsComponent implements OnInit {
 
                 })
 
-              if (this.mode == "renew") {
+              if (this.mode == "renew" && AccessFilter.hasPermission("20")) {
                 Swal.fire({
                   title: "Renovación",
                   text: "¿Desea generar renovación con modificación de datos?",

@@ -15,7 +15,6 @@ import { CommonMethods } from './../../../common-methods';
     selector: 'app-contractor-view',
     templateUrl: './contractor-view.component.html',
     styleUrls: ['./contractor-view.component.css']
-    //styleUrls: ['../contractor-location-index/contractor-location-index.css']
 })
 export class ContractorViewComponent implements OnInit {
 
@@ -59,7 +58,6 @@ export class ContractorViewComponent implements OnInit {
                 this.hasChanges = true;
             }
         }, (reason) => {
-            //this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
 
     }
@@ -98,7 +96,6 @@ export class ContractorViewComponent implements OnInit {
 
     }
     getContractorLocationList(contractorId: string) {
-        //this.parentScope.isLoadingScreenNotVisible=false;
         this.currentPage = 1;
         this.locationsWereFound = false;
         this.contractorLocationList = [];
@@ -109,11 +106,9 @@ export class ContractorViewComponent implements OnInit {
                     this.locationsWereFound = true;
                     this.contractorLocationList = res.GENERICLIST;
                 }
-                //this.parentScope.isLoadingScreenNotVisible=true;
             },
             err => {
                 console.log(err);
-                //this.parentScope.isLoadingScreenNotVisible=true;
             }
 
         );

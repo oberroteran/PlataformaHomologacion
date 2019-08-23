@@ -6,13 +6,11 @@ import { NgControl } from '@angular/forms';
 })
 export class LegalNameDirective {
 
-  regexStr = '^[a-zA-Z0-9-,:()&$#. ]*$';
-  //regexStr = '^[a-zA-Z ]*$';
-    //@Input() isAlphaNumeric: boolean;
+  // regexStr = '^[a-zA-Z0-9-,:()&$#. ]*$';
+  regexStr = '^[a-zA-Z0-9-,:()&$#.ÑñÁÉÍÓÚáéíóúÄËÏÖÜäëïöü\' ]*$';
 
-    @HostListener('keypress', ['$event']) onKeyPress(event) {
-        //console.log('reached');
-        return new RegExp(this.regexStr).test(event.key);
-    }
+  @HostListener('keypress', ['$event']) onKeyPress(event) {
+    return new RegExp(this.regexStr).test(event.key);
+  }
 
 }

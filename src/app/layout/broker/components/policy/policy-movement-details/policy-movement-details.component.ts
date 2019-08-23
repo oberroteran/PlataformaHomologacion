@@ -5,6 +5,8 @@ import { PolicyDocumentsComponent } from '../policy-documents/policy-documents.c
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { PolicyemitService } from '../../../services/policy/policyemit.service';
 import Swal from 'sweetalert2'
+//Compartido
+import { AccessFilter } from './../../access-filter'
 
 @Component({
   selector: 'app-policy-movement-details',
@@ -30,6 +32,8 @@ export class PolicyMovementDetailsComponent implements OnInit {
   adjuntosList: any = [];
   generadosList: any = [];
 
+  /**Puede anular movimientos? */
+  canCancelMovements: boolean;
 
   constructor(
     private policyService: PolicyService,
@@ -62,6 +66,8 @@ export class PolicyMovementDetailsComponent implements OnInit {
         this.totalItems = this.policyMovementList.length;
         this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
 
+        this.canCancelMovements = AccessFilter.hasPermission("20");
+        
         this.policyMovementList.forEach(item => {
           if (item.COD_TRANSAC == 7) {
             this.flagAnular = true;
@@ -150,7 +156,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
         }
       });
   }
-  
+
   openModal(item: any) {
     let modalRef: NgbModalRef;
     modalRef = this.modalService.open(PolicyDocumentsComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });

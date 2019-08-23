@@ -36,7 +36,7 @@
                   <input formControlName="proofNumber" type="text" maxlength="10" OnlyNumberDirective
                     (paste)="onPaste($event)" (keyup)="proofNumberChanged($event)"
                     (keypress)="proofNumberPressed($event)" (keyup.enter)="firstSearch()" (focus)="cleanValidation()"
-                    placeholder="Número de Cotización" />
+                    placeholder="Número de Constancia" />
                 </div>
 
               </div>
@@ -249,7 +249,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Pantalla de carga -->
   <div [hidden]="isLoading==false" class="loadingScreen">
     <div style="display:flex;height: 100%;width:100%">

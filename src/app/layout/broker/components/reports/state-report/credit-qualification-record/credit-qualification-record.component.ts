@@ -25,7 +25,10 @@ export class CreditQualificationRecordComponent implements OnInit {
     @Input() public reference: any; //Referencia al modal creado desde el padre de este componente 'contractor-location-index' para ser cerrado desde aquí
     @Input() public contractor: ContractorForTable; //Id de cliente
 
+    /**Lista de tipos de calificación para el modal */
     qualificationTypeList = {}; //Lista de tipos de calificación
+    /**Lista de tipos de calificación para el combobox del front */
+    qualificationList = [];
 
     isLoading: Boolean = false;
     // datepicker
@@ -96,7 +99,7 @@ export class CreditQualificationRecordComponent implements OnInit {
                 res.forEach(element => {
                     this.qualificationTypeList[element.Id] = element.Name;
                 });
-                console.log(this.qualificationTypeList);
+                this.qualificationList = res;
             },
             error => {
                 Swal.fire("Información", this.genericErrorMessage, "error");
