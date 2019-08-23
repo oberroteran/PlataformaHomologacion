@@ -10,14 +10,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <!-- <div class="col-sm-4">
+                        <div class="col-sm-4">
                             <span>CALIFICACIÓN</span>
                             <select formControlName="qualification">
                                 <option value="">Todos</option>
-                                <option *ngFor="let item of qualificationTypeList" value="{{item.Id}}">{{item.Name}}
+                                <option *ngFor="let item of qualificationList" value="{{item.Id}}">{{item.Name}}
                                 </option>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="col-sm-4">
                             <span>DESDE</span>
                             <input type="text" formControlName="startDate" placeholder="dd/mm/yyyy" #dp="bsDatepicker"
