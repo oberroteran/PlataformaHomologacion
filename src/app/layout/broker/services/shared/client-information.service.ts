@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { AppConfig } from "../../../app.config";
+import { AppConfig } from "../../../../app.config";
 import { Observable } from 'rxjs';
-import { DocumentType } from '../models/shared/client-information/document-type'
-import { PersonType } from '../models/shared/client-information/person-type';
-import { Nacionality } from '../models/shared/client-information/nationality-type';
-import { Gender } from '../models/shared/client-information/gender-type';
-import { CivilStatus } from '../models/shared/client-information/civilStatus-type';
-import { Profession } from '../models/shared/client-information/profession-type';
-import { EconomicActivity } from '../models/shared/client-information/economic-activity';
-import { PhoneType } from '../models/shared/client-information/phone-type';
-import { CityCode } from '../models/shared/client-information/city-code';
-import { EmailType } from '../models/shared/client-information/email-type';
-import { DirectionType } from '../models/shared/client-information/direction-type';
-import { RoadType } from '../models/shared/client-information/road-type';
-import { InteriorType } from '../models/shared/client-information/interior-type';
-import { BlockType } from '../models/shared/client-information/block-type';
-import { CJHTType } from '../models/shared/client-information/cjht-type';
-import { Country } from '../models/shared/client-information/country';
-import { Currency } from '../models/shared/client-information/currency-type';
-import { Response } from '../models/shared/client-information/response';
-import { ClientDataToSearch } from '../models/shared/client-information/client-data-to-search';
-import { Tariff } from '../models/shared/client-information/tariff';
+import { DocumentType } from '../../models/shared/client-information/document-type'
+import { PersonType } from '../../models/shared/client-information/person-type';
+import { Nacionality } from '../../models/shared/client-information/nationality-type';
+import { Gender } from '../../models/shared/client-information/gender-type';
+import { CivilStatus } from '../../models/shared/client-information/civilStatus-type';
+import { Profession } from '../../models/shared/client-information/profession-type';
+import { EconomicActivity } from '../../models/shared/client-information/economic-activity';
+import { PhoneType } from '../../models/shared/client-information/phone-type';
+import { CityCode } from '../../models/shared/client-information/city-code';
+import { EmailType } from '../../models/shared/client-information/email-type';
+import { DirectionType } from '../../models/shared/client-information/direction-type';
+import { RoadType } from '../../models/shared/client-information/road-type';
+import { InteriorType } from '../../models/shared/client-information/interior-type';
+import { BlockType } from '../../models/shared/client-information/block-type';
+import { CJHTType } from '../../models/shared/client-information/cjht-type';
+import { Country } from '../../models/shared/client-information/country';
+import { Currency } from '../../models/shared/client-information/currency-type';
+import { Response } from '../../models/shared/client-information/response';
+import { ClientDataToSearch } from '../../models/shared/client-information/client-data-to-search';
+import { Tariff } from '../../models/shared/client-information/tariff';
 
 
 @Injectable({
