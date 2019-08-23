@@ -122,6 +122,7 @@ import { TypeDocumentPipe } from './pipes/type-document.pipe';
 import { NameContractorPipe } from './pipes/name-contractor.pipe';
 import { MilesPipe } from './pipes/miles.pipe';
 import { FileNamePipe } from './pipes/file-name.pipe';
+import { FilterPipe } from './pipes/filter.pipe';
 
 // Services
 import { AuthGuard } from './guards/auth.guard';
@@ -180,6 +181,7 @@ import { CampaignListComponent } from './components/campaign/campaign-list/campa
 import { CampaignAddComponent } from './components/campaign/campaign-add/campaign-add.component';
 import { CampaignService } from './services/campaign/campaign.service';
 import { DeliveryService } from './services/delivery/delivery.service';
+
 //Kuntur Services 20190812
 
 
@@ -303,6 +305,7 @@ import { DeliveryService } from './services/delivery/delivery.service';
         AddCiiuComponent, // Kuntur 20190812
         MilesPipe, // Kuntur 20190812
         FileNamePipe, // Kuntur 20190812
+        FilterPipe, // Kuntur 20190812
         ValErrorComponent, // Kuntur 20190812
         PolicyDocumentsComponent, // Kuntur 20190812
         ContractorStateComponent, // Kuntur 20190812
