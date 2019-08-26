@@ -104,7 +104,7 @@ export class GlobalValidators {
 			for (let i = 0; i < control.value.toString().trim().length; i++) {
 				// if (/[aeiouAEIOU]/.test(control.value.toString().trim().charAt(i))) vowelCount++;
 				// else vowelCount = 0;
-				if (/[aeiouÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/.test(control.value.toString().trim().charAt(i))) vowelCount++;
+				if (/[AEIOUaeiouÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/.test(control.value.toString().trim().charAt(i))) vowelCount++;
 				else if (/[\']/.test(control.value.toString().trim().charAt(i)) == false) vowelCount = 0;
 
 				if (vowelCount > 3) return { 'moreThanThreeVowels': true };

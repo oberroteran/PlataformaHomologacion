@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
-//import { RequestStatus } from "./../../../../broker/models/requeststatus";
 import { UtilityService } from "../../../../../shared/services/general/utility.service";
 import { Router } from "@angular/router";
 import { DatePipe } from "@angular/common";
@@ -96,7 +95,6 @@ export class RequestStatusComponent implements OnInit {
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         this.isExternalUser = !AccessFilter.hasPermission("11");
         if (this.isExternalUser) this.brokerName = JSON.parse(localStorage.getItem("currentUser"))["desCanal"];
-        console.log(this.isExternalUser)
         this.canApproveQuotation = AccessFilter.hasPermission("12");
         this.canModifyQuotation = AccessFilter.hasPermission("37");
 
@@ -213,8 +211,6 @@ export class RequestStatusComponent implements OnInit {
             event.preventDefault();
         }
         if (documentType == "") Swal.fire("Información", "Debes seleccionar un tipo de documento", "error");
-        // console.log(this.mainFormGroup.controls.contractorDocumentNumber.value);
-        // console.log(this.mainFormGroup.controls.brokerDocumentNumber.value);
     }
 
     /**
@@ -325,7 +321,6 @@ export class RequestStatusComponent implements OnInit {
                 this.documentTypeList = res;
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -521,7 +516,6 @@ export class RequestStatusComponent implements OnInit {
      * @param quotationNumber 
      */
     modifyQuotation(quotationNumber: string) {
-        // this.router.navigate(['/broker/quotation-evaluation'], { queryParams: { quotationNumber: quotationNumber, mode: "recotizar" } });
         this.router.navigate(['/broker/quotation'], { queryParams: { quotationNumber: quotationNumber, mode: "recotizar" } });
 
     }
@@ -604,7 +598,6 @@ export class RequestStatusComponent implements OnInit {
         this.mainFormGroup.updateValueAndValidity();
     }
     onPaste(event: ClipboardEvent) {
-        //let clipboardData = event.clipboardData || window.clipboardData;
         let clipboardData = event.clipboardData;
         let pastedText = clipboardData.getData('text');
         if (!isNumeric(pastedText)) {

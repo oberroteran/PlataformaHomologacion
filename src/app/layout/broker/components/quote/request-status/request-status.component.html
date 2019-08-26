@@ -7,7 +7,6 @@
             <div class="header-content">
                 <div class="containt-item">
                     <div class="header-item">
-                        <!-- <span class="title">Consulta Estado Solicitud</span> -->
                         <span class="title">Consulta Solicitudes de Cotización</span>
                     </div>
                 </div>
@@ -79,18 +78,6 @@
                                         class="mensaje-error-control">{{invalidEndDateOrderMessage}}</span>
                                 </ng-container>
                             </div>
-                            <!-- <div class="col-sm-3">
-                <span>DESDE</span>
-                <input type="text" placeholder="dd/mm/yyyy" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker
-                  [disabled]="filter.QuotationNumber!=null && filter.QuotationNumber.trim()!='' "
-                  [(bsValue)]="filter.StartDate" value="{{ filter.StartDate | date:'dd/MM/yyyy' }}" />
-              </div> -->
-                            <!-- <div class="col-sm-3">
-                <span>HASTA</span>
-                <input type="text" placeholder="dd/mm/yyyy" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker
-                  [disabled]="filter.QuotationNumber!=null && filter.QuotationNumber.trim()!='' "
-                  [(bsValue)]="filter.EndDate" value="{{ filter.EndDate | date:'dd/MM/yyyy' }}" />
-              </div> -->
                         </div>
                         <br>
                         <div class="row">
@@ -134,23 +121,6 @@
                                     </ng-template>
                                 </span>
                             </div>
-                            <!-- <div *ngIf="mainFormGroup.controls.contractorSearchMode.value=='1'" class="col-sm-3">
-                <span>NRO. DOC. CONTRATANTE</span>
-                <input type="text" placeholder="Nro. Doc. Contratante" formControlName="contractorDocumentNumber"
-                  (keyup.enter)="firstSearch()"
-                  (keypress)="documentNumberKeyPress($event,mainFormGroup.controls.contractorDocumentType.value)"
-                  maxlength={{contractorDocumentMaxLength}}
-                  [ngClass]="{'error-validate': mainFormGroup.controls.contractorDocumentNumber.touched}" />
-                <span
-                  *ngIf="isValidatedInClickButton && !mainFormGroup.controls.contractorDocumentNumber.valid && !mainFormGroup.valid"
-                  class="mensaje-error-control">
-                  <ng-container
-                    *ngIf="mainFormGroup.get('contractorDocumentNumber').hasError('required'); then required_contractorDocumentNumber else invalid_contractorDocumentNumber">
-                  </ng-container>
-                  <ng-template #required_contractorDocumentNumber>El Nro de Documento es requerido.</ng-template>
-                  <ng-template #invalid_contractorDocumentNumber>El Nro de Documento no es válido.</ng-template>
-                </span>
-              </div> -->
 
                             <div *ngIf="mainFormGroup.controls.contractorSearchMode.value=='2'" class="col-sm-3">
                                 <span>TIPO PERSONA</span>
@@ -334,10 +304,6 @@
                                         <a (click)="openDetails(item)"><img alt="Ver detalles"
                                                 src="assets/icons/enviar.png" title="Ver detalles"
                                                 style="cursor: pointer;height: 24px;margin-left: 15px"></a>
-                                        <!-- <a *ngIf="canModifyQuotation"
-                                            (click)="modifyQuotation(item.QuotationNumber)"><img alt="Recotizar"
-                                                src="assets/icons/editar.png" title="Recotizar"
-                                                style="cursor: pointer;height: 24px;margin-left: 15px"></a> -->
                                     </td>
 
                                 </tr>

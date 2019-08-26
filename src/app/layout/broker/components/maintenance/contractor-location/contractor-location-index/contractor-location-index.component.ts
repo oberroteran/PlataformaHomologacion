@@ -66,10 +66,8 @@ export class ContractorLocationIndexComponent implements OnInit {
         this.getDocumentTypeList();
         this.createForm();
         this.initializeForm();
-        //let self=this;
         this.activatedRoute.queryParams.subscribe(params => {
 
-            //console.log(params);
             if (params.Sender != null && params.Sender == "add-contractor") {
                 this.mainFormGroup.controls.searchMode.patchValue("1");
                 this.mainFormGroup.controls.documentType.patchValue(params.DocumentType);
@@ -120,7 +118,6 @@ export class ContractorLocationIndexComponent implements OnInit {
     openContractorModal(item: ContractorForTable) {
         const modalRef = this.modalService.open(ContractorViewComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
         modalRef.componentInstance.reference = modalRef;
-        //modalRef.componentInstance.contractorLocationList = locationList;
         modalRef.componentInstance.contractor = item;
 
         modalRef.result.then((shouldReload) => {
@@ -129,8 +126,6 @@ export class ContractorLocationIndexComponent implements OnInit {
                 this.processPageChanged();
             }
         }, (reason) => {
-            //nothing
-            //this.firstSearch();
         });
     }
 
@@ -260,7 +255,6 @@ export class ContractorLocationIndexComponent implements OnInit {
             },
             err => {
                 Swal.fire("Información", "Error inesperado, contáctese con soporte.", "warning");
-                console.log(err);
             }
         );
     }
@@ -299,7 +293,6 @@ export class ContractorLocationIndexComponent implements OnInit {
     }
     pageChanged(page: number) {
         this.currentPage = page;
-        console.log(page);
         this.processPageChanged();
     }
 
@@ -352,7 +345,6 @@ export class ContractorLocationIndexComponent implements OnInit {
                 }
             },
             err_2 => {
-                console.log(err_2);
                 this.isLoadingScreenNotVisible = true;
                 Swal.fire("Información", this.genericErrorMessage, "error");
             }
@@ -493,11 +485,9 @@ export class ContractorLocationIndexComponent implements OnInit {
 
                                                 self.foundResults.push(row)
                                             });
-                                            console.log(this.foundResults);
                                             this.isLoadingScreenNotVisible = true;
                                         }
                                         else {
-                                            console.log('here');
                                             this.existResults = true;
                                             this.totalItems = 1;
                                             this.foundResults.push(this.currentClient)
@@ -509,7 +499,6 @@ export class ContractorLocationIndexComponent implements OnInit {
                                     }
                                 },
                                 err_2 => {
-                                    console.log(err_2);
                                     this.isLoadingScreenNotVisible = true;
                                 }
                             );
@@ -590,7 +579,6 @@ export class ContractorLocationIndexComponent implements OnInit {
 
             },
             err => {
-                console.log(err);
                 this.isLoadingScreenNotVisible = true;
                 Swal.fire("Información", "Error inesperado, contáctese con soporte.", "error");
             }

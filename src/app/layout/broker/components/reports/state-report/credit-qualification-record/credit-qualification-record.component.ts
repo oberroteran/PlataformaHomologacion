@@ -33,8 +33,8 @@ export class CreditQualificationRecordComponent implements OnInit {
     isLoading: Boolean = false;
     // datepicker
     public bsConfig: Partial<BsDatepickerConfig>;
-    bsValueIni: Date = new Date("01/01/2019");  //Fecha inicial del componente
-    bsValueFin: Date = new Date("12/30/2019");  //Fecha final del componente
+    bsValueIni: Date = ModuleConfig.StartDate;  //Fecha inicial del componente
+    bsValueFin: Date = ModuleConfig.EndDate;  //Fecha final del componente
     /**
      * Variables de paginación
      */
@@ -108,8 +108,8 @@ export class CreditQualificationRecordComponent implements OnInit {
     }
     createForm() {
         this.mainFormGroup = this.formBuilder.group({
-            startDate: [new Date("01/01/2019"), [Validators.required]],
-            endDate: [new Date("12/30/2019"), [Validators.required]],
+            startDate: [ModuleConfig.StartDate, [Validators.required]],
+            endDate: [ModuleConfig.EndDate, [Validators.required]],
             qualification: [""]
         });
     }
