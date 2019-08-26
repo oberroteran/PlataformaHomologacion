@@ -28,7 +28,6 @@ import { ClientEnablement } from '../../../../models/report/state-report/request
     styleUrls: ['./contractor-state.component.css']
 })
 export class ContractorStateComponent implements OnInit {
-    // @Input() contractor = new ContractorForTable();
     contractor = new ContractorForTable();
 
     isLoading: boolean = false;  //True para mostrar pantalla de carga, false para ocultarla
@@ -216,8 +215,6 @@ export class ContractorStateComponent implements OnInit {
     /**
      * Habilitar crédito
      */
-    //'El cliente posee ' + this.contractor.LatePaymentDays + ' días de morosidad ¿Desea habilitar sus movimientos?'
-    // 'El client ha sido bloqueado por morosidad ¿Desea habilitar sus movimientos?'
     enable() {
         Swal.fire({
             title: 'Habilitar',
@@ -267,7 +264,6 @@ export class ContractorStateComponent implements OnInit {
                 this.contractor.LastCreditEvaluationName = contractor.LastCreditEvaluationName;
             }
         }, (reason) => {
-            //this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
     }
 

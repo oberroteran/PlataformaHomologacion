@@ -30,7 +30,6 @@ export class ContractorLocationContactComponent implements OnInit {
 
   @Input() public existentContactList = [];
   @Input() public rowToBeIgnored: number;
-  //@ViewChild('modalContent') private modalContent;
   public currentUser: number;
   public mainFormGroup: FormGroup;
 
@@ -52,7 +51,7 @@ export class ContractorLocationContactComponent implements OnInit {
     }
     else {
       this.currentContact.Action = '2'; //crear contacto
-      
+
       this.title = "Modificación de contacto";
       this.currentContact.Id = this.receivedContactData.Id;
       this.currentContact.ContractorLocationId = this.receivedContactData.LocationId;
@@ -86,7 +85,6 @@ export class ContractorLocationContactComponent implements OnInit {
       res => {
         if (res.P_NCODE == 0) {
           this.successList.push(res.P_SMESSAGE);
-          //Swal.fire('Información',res.P_SMESSAGE,'success');
           this.formModalReference.close();
 
         } else if (res.P_NCODE == 1) {
@@ -170,7 +168,6 @@ export class ContractorLocationContactComponent implements OnInit {
       } else {
         if (this.currentContact.ContractorLocationId == null) {
           this.formModalReference.close(this.currentContact);
-          //Swal.fire('Información', 'Contacto agregado exitosamente', 'success');
         } else {
           this.updateContact();
         }

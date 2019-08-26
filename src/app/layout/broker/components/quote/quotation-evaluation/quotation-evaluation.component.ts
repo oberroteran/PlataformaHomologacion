@@ -246,7 +246,6 @@ export class QuotationEvaluationComponent implements OnInit {
             },
             err => {
                 swal.fire('Información', 'Error inesperado, por favor contáctese con soporte.', 'error');
-                console.log(err);
             }
         );
     }
@@ -549,7 +548,6 @@ export class QuotationEvaluationComponent implements OnInit {
                                 item.Variation = element.VARIACION_TASA; //Variación de la tasa
 
                                 self.InputsQuotation.PensionDetailsList.push(item);
-                                // self.InputsQuotation.PensionNetAmount = self.FormatValue(parseFloat(self.InputsQuotation.PensionNetAmount) + parseFloat(element.PRIMA));
                                 self.InputsQuotation.PensionNewNetAmount = self.FormatValue(parseFloat(self.InputsQuotation.PensionNewNetAmount) + parseFloat(element.AUT_PRIMA));
 
                                 self.InputsQuotation.PensionNetAmount = element.NSUM_PREMIUMN;
@@ -575,7 +573,6 @@ export class QuotationEvaluationComponent implements OnInit {
                                 item.Variation = element.VARIACION_TASA; //Variación de la tasa
 
                                 self.InputsQuotation.SaludDetailsList.push(item);
-                                // self.InputsQuotation.SaludNetAmount = self.FormatValue(parseFloat(self.InputsQuotation.SaludNetAmount) + parseFloat(element.PRIMA));
                                 self.InputsQuotation.SaludNewNetAmount = self.FormatValue(parseFloat(self.InputsQuotation.SaludNewNetAmount) + parseFloat(element.AUT_PRIMA));
 
                                 self.InputsQuotation.SaludNetAmount = element.NSUM_PREMIUMN;
@@ -592,13 +589,6 @@ export class QuotationEvaluationComponent implements OnInit {
                             });
                             if (add == true) self.InputsQuotation.SharedDetailsList.push({ "RiskTypeId": element.TIP_RIESGO, "RiskTypeName": element.DES_RIESGO, "WorkersCount": element.NUM_TRABAJADORES, "PayrollAmount": element.MONTO_PLANILLA });
                         });
-                        // this.InputsQuotation.PensionCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNetAmount * 1.03 * 1.18) - this.InputsQuotation.PensionNetAmount);
-                        // this.InputsQuotation.PensionGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNetAmount));
-
-                        // this.InputsQuotation.SaludCalculatedIGV = this.FormatValue((this.InputsQuotation.SaludNetAmount * 1.18) - this.InputsQuotation.SaludNetAmount);
-                        // this.InputsQuotation.SaludGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNetAmount));
-
-
                         this.InputsQuotation.PensionNewCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNewNetAmount * this.pensionIGV) - this.InputsQuotation.PensionNewNetAmount);
                         this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
 
@@ -679,7 +669,6 @@ export class QuotationEvaluationComponent implements OnInit {
 
             this.InputsQuotation.PensionDetailsList.forEach((element) => {
                 if (element.AuthorizedRate == 0 || element.AuthorizedRate.toString().trim() == "") {
-                    //console.log("pensión: tasa autorizada inválida");
                 } else {
                     //obtener monto de planilla según riesgo
                     let payRollAmount = 0;
@@ -691,7 +680,6 @@ export class QuotationEvaluationComponent implements OnInit {
                     item.RiskTypeId = element.RiskTypeId;
                     item.AuthorizedRate = element.AuthorizedRate;
                     item.AuthorizedPremium = element.NewPremium;
-                    // item.Premium = self.FormatValue((parseFloat(payRollAmount.toString()) * parseFloat(element.AuthorizedRate)) / 100);
 
                     self.statusChangeRequest.pensionAuthorizedRateList.push(item);
                 }
@@ -699,7 +687,6 @@ export class QuotationEvaluationComponent implements OnInit {
             });
             this.InputsQuotation.SaludDetailsList.forEach((element) => {
                 if (element.AuthorizedRate == 0 || element.AuthorizedRate.toString().trim() == "") {
-                    //console.log("salud: tasa autorizada inválida");
                 } else {
                     //obtener monto de planilla según riesgo
                     let payRollAmount = 0;
@@ -711,13 +698,11 @@ export class QuotationEvaluationComponent implements OnInit {
                     item.RiskTypeId = element.RiskTypeId;
                     item.AuthorizedRate = element.AuthorizedRate;
                     item.AuthorizedPremium = element.NewPremium;
-                    // item.Premium = self.FormatValue((parseFloat(payRollAmount.toString()) * parseFloat(element.AuthorizedRate)) / 100);
 
                     self.statusChangeRequest.saludAuthorizedRateList.push(item);
                 }
             });
 
-            console.log(this.statusChangeRequest)
             formData.append("statusChangeData", JSON.stringify(this.statusChangeRequest));
 
             this.quotationService.changeStatus(formData).subscribe(
@@ -845,7 +830,6 @@ export class QuotationEvaluationComponent implements OnInit {
             });
 
             formData.append("quotationModification", JSON.stringify(quotation));
-            console.log(quotation);
             this.quotationService.modifyQuotation(formData).subscribe(
                 res => {
                     if (res.P_COD_ERR == 0) {
@@ -916,7 +900,6 @@ export class QuotationEvaluationComponent implements OnInit {
     }
     /**Búsqueda de estados de la cotización accionados por el cambio de página */
     pageChanged(event) {
-        // this.filter.PageNumber=event;
         this.searchTracking();
     }
     /**Proceso de búsqueda de cambios de estado de la cotización */
@@ -934,7 +917,6 @@ export class QuotationEvaluationComponent implements OnInit {
                 }
             },
             err => {
-                console.log(err);
                 swal.fire("Información", this.genericServerErrorMessage, "error");
             }
         );
@@ -1021,18 +1003,14 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.PensionDetailsList.map(element => {
                 element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
                 element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
-                //if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
             });
-            console.log(this.InputsQuotation.PensionDetailsList);
         }
 
         if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
             this.InputsQuotation.SaludDetailsList.map(element => {
                 element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
                 element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
-                //if (element.Premium > 0 && element.ProposedRate == 0) areValid = false;
             });
-            console.log(this.InputsQuotation.SaludDetailsList);
         }
 
         return areValid;
@@ -1048,7 +1026,6 @@ export class QuotationEvaluationComponent implements OnInit {
                 return element;
             });
         }
-        console.log(this.InputsQuotation.PensionDetailsList);
         if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
             this.InputsQuotation.SaludDetailsList.map(element => {
                 element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
@@ -1058,7 +1035,6 @@ export class QuotationEvaluationComponent implements OnInit {
             });
 
         }
-        console.log(this.InputsQuotation.SaludDetailsList);
         return areValid;
     }
 }

@@ -20,6 +20,7 @@ import { StateReportService } from '../../../services/report/state-report/state-
 //Configuración
 import { GlobalValidators } from './../../global-validators';
 import { ContractorSearch } from '../../../models/maintenance/contractor-location/Request/contractor-search';
+import { ThrowStmt } from '@angular/compiler';
 @Component({
     selector: 'app-state-report',
     templateUrl: './state-report.component.html',
@@ -87,7 +88,6 @@ export class StateReportComponent implements OnInit {
         this.clientInformationService.getDocumentTypeList().subscribe(
             res => {
                 this.documentTypeList = res;
-                //this.mainFormGroup.controls.documentType.patchValue("2");
             },
             err => {
                 Swal.fire("Información", this.genericErrorMessage, "error");
@@ -98,14 +98,6 @@ export class StateReportComponent implements OnInit {
      * Obtiene la lista de tipos de de persona
      */
     getPersonTypeList() {
-        // this.clientInformationService.getDocumentTypeList().subscribe(
-        //   res => {
-        //     this.documentTypeList = res;
-        //   },
-        //   err => {
-        //     Swal.fire("Información", this.genericErrorMessage, "error");
-        //   }
-        // );
         this.personTypeList = [{ Id: "1", Name: "Persona Natural" }, { Id: "2", Name: "Persona Jurídica" }];
     }
 
@@ -317,7 +309,7 @@ export class StateReportComponent implements OnInit {
                 if (res.P_NCODE == 0) {
                     if (res.EListClient != null && res.EListClient.length > 0) {
                         if (res.EListClient.length != 1) {
-                            //this.isLoading = false;
+                            this.isLoading = false;
                             const modalRef = this.modalService.open(SearchContractingComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
                             modalRef.componentInstance.formModalReference = modalRef;
                             modalRef.componentInstance.EListClient = res.EListClient;
@@ -372,7 +364,6 @@ export class StateReportComponent implements OnInit {
                                     );
                                 }
                             }, (reason) => {
-                                //nothing
                             });
                         } else if (res.EListClient[0].P_SCLIENT != null) {
 
@@ -393,7 +384,6 @@ export class StateReportComponent implements OnInit {
                                 data.DocumentType = "RUC";
                                 data.FullName = res.EListClient[0].P_SLEGALNAME;
                             } else {
-                                //let sel = document.getElementById("DocumentSelected"
                                 this.documentTypeList.map(function (item) {
                                     if (item.Id == res.EListClient[0].P_NIDDOC_TYPE) data.DocumentType = item.Name;
                                 });
@@ -481,6 +471,5 @@ export class StateReportComponent implements OnInit {
     openAccountTransactionModal(contractor: ContractorForTable) {
         sessionStorage.setItem('cs-contractor', JSON.stringify(contractor));
         this.router.navigate(['/broker/contractor-state']);
-        // this.router.navigate(['/broker/contractor-state'], { queryParams: { Id: contractor.Id, DocumentNumber: contractor.DocumentNumber, DocumentType: contractor.DocumentType, FullName: contractor.FullName, IsCreditEnabled: contractor.IsCreditEnabled, IsMovementEnabled: contractor.IsMovementEnabled } });
     }
 }

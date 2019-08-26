@@ -12,12 +12,6 @@
               <span class="title">Mantenimiento Contratante-Sede</span>
             </div>
           </div>
-          <!-- <div class="containt-item">
-            <button (click)="addContractor()" class="full-color pull-right">
-              <img src="assets/icons/add.png" />
-              <span>Crear Contratante</span>
-            </button>
-          </div> -->
         </div>
         <div class="filter">
           <div class="card">
@@ -48,12 +42,9 @@
                 </div>
                 <div [hidden]="mainFormGroup.controls.searchMode.value!='2'" class="col-sm-3">
                   <span>TIPO PERSONA</span>
-                  <select formControlName="personType" (change)="changeValidators()"
-                    [disabled]="mainFormGroup.controls.searchMode.value=='1' && mainFormGroup.controls.documentType.value=='2'">
+                  <select formControlName="personType" (change)="changeValidators()">
                     <option value="0" disabled>Seleccionar</option>
-                    <option
-                      [selected]="mainFormGroup.controls.searchMode.value=='1' && mainFormGroup.controls.documentType.value=='2'"
-                      value="1">Persona Natural
+                    <option value="1">Persona Natural
                     </option>
                     <option value="2">Persona Jurídica</option>
                   </select>
@@ -73,12 +64,6 @@
                     <ng-template #required_documentNumber>El Nro de Documento es requerido.</ng-template>
                     <ng-template #invalid_documentNumber>El Nro de Documento no es válido.</ng-template>
                   </span>
-                  <!-- <ng-container [ngSwitch]="true" *ngIf="mainFormGroup.get('dniNumber').errors!=null && mainFormGroup.get('dniNumber').dirty">
-                        <span *ngSwitchCase="mainFormGroup.get('dniNumber').hasError('required')" class="mensaje-error-control">El Dni es requerido.</span>
-                        <span *ngSwitchCase="mainFormGroup.get('dniNumber').hasError('minlength')" class="mensaje-error-control">El Dni debe tener 8 dígitos.</span>
-                        <span *ngSwitchCase="mainFormGroup.get('dniNumber').errors.allCharactersAreEqual==true" class="mensaje-error-control">No todos los dígitos pueden ser iguales.</span>
-                        <span *ngSwitchCase="mainFormGroup.get('dniNumber').errors.consecutiveNumbers==true" class="mensaje-error-control">No todos los dígitos pueden ser consecutivos.</span>
-                      </ng-container> -->
                 </div>
               </div>
               <div class="row">
@@ -143,7 +128,6 @@
                     class="mensaje-error-control">
                     <ng-container *ngIf="!mainFormGroup.get('maternalLastName').valid; then invalid_maternalLastName">
                     </ng-container>
-                    <!-- <ng-template #required_maternalLastName>El apellido materno es requerido.</ng-template> -->
                     <ng-template #invalid_maternalLastName>El apellido materno no es válido.</ng-template>
                   </span>
                 </div>
@@ -177,9 +161,7 @@
             <table class="table">
               <thead>
                 <tr class="grid-title">
-                  <!-- <td class="grid-title-item">Código</td> -->
                   <td class="grid-title-item">Documento</td>
-                  <!-- <td class="grid-title-item">Nro. Documento</td> -->
                   <td class="grid-title-item">Razón Social/Apellidos Nombres</td>
                   <td class="grid-title-item">Correo Electrónico</td>
                   <td class="grid-title-item">Teléfono</td>
@@ -187,8 +169,8 @@
                   <td class="grid-title-item">Descripción Sede</td>
                   <td class="grid-title-item">Ubigeo</td>
                   <td class="grid-title-item">Actividad Económica</td>
-                  <td class="grid-title-item text-center">Estado</td>
-                  <td class="grid-title-item text-center">Opciones</td>
+                  <td class="grid-title-item">Estado</td>
+                  <td class="grid-title-item">Opciones</td>
                 </tr>
               </thead>
 
@@ -197,15 +179,13 @@
             <ng-template #showGrid>
               <tbody>
                 <tr>
-                  <!-- <td colspan="8">{{msgErrorLista}}</td> -->
-                  <td colspan="9" class="text-center">No se encontraron registros</td>
+                  <td colspan="9">No se encontraron registros</td>
                 </tr>
               </tbody>
             </ng-template>
             <ng-template #hideGrid>
               <tbody *ngFor="let item of foundResults">
                 <tr>
-                  <!-- <td>{{ item.Id }}</td> -->
                   <td>{{ item.DocumentType }}: {{ item.DocumentNumber }}</td>
                   <td>{{ item.FullName }}</td>
                   <td *ngIf="item.Email==''; then nullEmail else email"></td>
@@ -229,22 +209,16 @@
                     <td>No tiene sedes</td>
                     <td>No tiene sedes</td>
                     <td>No tiene sedes</td>
-                    <td class="text-center">No tiene sedes</td>
+                    <td>No tiene sedes</td>
                   </ng-template>
                   <ng-template #LocationFound>
                     <td>{{ item.LocationType }}</td>
                     <td>{{ item.LocationDescription }}</td>
                     <td>{{ item.LocationDepartment }} - {{ item.LocationProvince }} - {{ item.LocationDistrict }}</td>
                     <td>{{ item.LocationEconomicActivity }}</td>
-                    <td class="text-center">{{ item.LocationStatus }}</td>
+                    <td>{{ item.LocationStatus }}</td>
                   </ng-template>
-
-                  <!-- <td>{{ item.ContractorLocationType }}</td>
-                  <td>{{ item.ContractorLocationDescription }}</td>
-                  <td>{{ item.ContractorLocationEmail }}</td>
-                  <td>{{ item.ContractorLocationPhone }}</td> -->
-
-                  <td class="text-center">
+                  <td>
                     <a (click)='openContractorModal(item)'><img alt="Editar" src="assets/icons/preview_soat_box.png"
                         title="Editar" style="cursor: pointer;height: 24px"></a>
                   </td>
@@ -264,39 +238,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal de alerta para operaciones -->
-  <ng-template #modalContent let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title">Mensaje</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <!-- <button type="button" class="close" aria-label="Close" (click)="closeAlertModal()">
-          <span aria-hidden="true">&times;</span>
-      </button> -->
-    </div>
-    <div class="modal-body">
-
-      <ul>
-        <li *ngFor="let sms of successList">
-          {{sms}}
-        </li>
-      </ul>
-      <p *ngIf="errorList.length>0 && successList.length>0">---------------------------------------------</p>
-      <ul *ngIf="errorList.length>0">
-        <li style="font-weight: bold;list-style-type: none;font-size: 18px">Errores:</li>
-        <li *ngFor="let error of errorList">
-          {{error}}
-        </li>
-      </ul>
-
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">CERRAR</button>
-      <!-- <button type="button" class="btn btn-light" (click)="closeAlertModal()">Close</button> -->
-    </div>
-  </ng-template>
-
   <!-- Pantalla de carga -->
   <div [hidden]="isLoadingScreenNotVisible" class="loadingScreen">
     <div style="display:flex;height: 100%;width:100%">

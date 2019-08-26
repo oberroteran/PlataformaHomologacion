@@ -138,7 +138,6 @@ export class PolicyMovementProofComponent implements OnInit {
     getMovementTypeList() {
         this.policyService.getMovementTypeList().subscribe(
             res => {
-                // this.movementTypeList = res.GenericResponse;
                 res.GenericResponse.forEach(element => {
                     if (element.Id == "1" || element.Id == "2" || element.Id == "3" || element.Id == "4" || element.Id == "5") this.movementTypeList.push(element);
                 });

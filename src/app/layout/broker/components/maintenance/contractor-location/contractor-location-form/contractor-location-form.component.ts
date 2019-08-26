@@ -44,7 +44,6 @@ export class ContractorLocationFormComponent implements OnInit {
     maxSize = 5;
     public itemsPerPage = 3; // cantidad de items por pagina
     public totalItems = 0; //total de items encontrados
-    //public contactList: any = [];
     public itemsWereFound: boolean;
 
     public currentLocation = new ContractorLocationREQUEST();
@@ -65,13 +64,11 @@ export class ContractorLocationFormComponent implements OnInit {
             this.currentLocation.ProvinceId = 0;
             this.currentLocation.DistrictId = 0;
             this.currentLocation.StateId = '1';
-            //this.currentLocation.EconomicActivityId = '0';
 
             this.currentLocation.TypeId = this.suggestedLocationType;
             this.currentLocation.ContactList = [];
             this.fillTypeList();
             this.fillTechnicalActivityList();
-            //this.fillEconomicActivityList();
             this.fillDepartmentList();
         }
         else { //Modo edición
@@ -92,7 +89,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 this.currentLocation.UserCode = this.currentUser;
                 this.fillContactList();
             } else {
-                console.log(this.rowToBeIgnored);
                 this.currentLocation.Id = this.existentLocationList[this.rowToBeIgnored].Id;
                 this.currentLocation.ContractorId = this.existentLocationList[this.rowToBeIgnored].ContractorId;
                 this.currentLocation.TypeId = this.existentLocationList[this.rowToBeIgnored].TypeId;
@@ -109,8 +105,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 if (this.currentLocation.ContactList != null && this.currentLocation.ContactList.length > 0) this.itemsWereFound = true;
             }
 
-            //this.fillTechnicalActivityList();
-            //this.fillEconomicActivityList();
             this.getTechnicalActivityList().subscribe(
                 res => {
                     this.technicalActivityList = res;
@@ -124,7 +118,6 @@ export class ContractorLocationFormComponent implements OnInit {
                     )
                 },
                 err => {
-                    console.log(err);
                 }
             );
             this.fillTypeList();
@@ -209,7 +202,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 this.contractorLocationTypeList = res;
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -229,7 +221,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 this.economicActivityList = res;
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -240,7 +231,6 @@ export class ContractorLocationFormComponent implements OnInit {
 
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -260,18 +250,15 @@ export class ContractorLocationFormComponent implements OnInit {
                                     this.districtList = res;
                                 },
                                 err => {
-                                    console.log(err);
                                 }
                             );
                         },
                         err => {
-                            console.log(err);
                         }
                     );
                 }
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -287,7 +274,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 this.provinceList = res;
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -300,7 +286,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 this.districtList = res;
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -318,7 +303,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 }
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -328,7 +312,6 @@ export class ContractorLocationFormComponent implements OnInit {
     }
     pageChanged(page: number) {
         this.currentPage = page;
-        console.log(page);
         this.searchContacts();
     }
     searchContacts() {
@@ -339,12 +322,10 @@ export class ContractorLocationFormComponent implements OnInit {
                 this.totalItems = +res.P_NTOTALROWS;
                 if (this.totalItems > 0) {
                     this.itemsWereFound = true;
-                    //this.contactList = res.GENERICLIST;
                     this.currentLocation.ContactList = res.GENERICLIST;
                 }
             },
             err => {
-                console.log(err);
             }
 
         );
@@ -355,13 +336,10 @@ export class ContractorLocationFormComponent implements OnInit {
         this.contractorLocationIndexService.updateContractorLocationContact(_contact).subscribe(
             res => {
                 if (res.P_NCODE == 0) {
-                    console.log(res.P_SMESSAGE);
                 } else if (res.P_NCODE == 1) {
-                    console.log(res.P_SMESSAGE);
                 }
             },
             err => {
-                console.log(err);
             }
         );
     }
@@ -389,7 +367,6 @@ export class ContractorLocationFormComponent implements OnInit {
                                     },
                                     err => {
                                         Swal.fire('Información', err, 'error');
-                                        console.log(err);
                                     }
                                 );
                             }
@@ -397,7 +374,6 @@ export class ContractorLocationFormComponent implements OnInit {
                         },
                         err => {
                             Swal.fire('Información', err, 'error');
-                            console.log(err);
                         }
                     );
                 } else {
@@ -405,7 +381,6 @@ export class ContractorLocationFormComponent implements OnInit {
                     let self = this;
                     this.existentLocationList.map(function (existentLocation) {
                         if (existentLocation.P_NROW - 1 != self.rowToBeIgnored) {
-                            console.log(self.rowToBeIgnored);
                             if (existentLocation.Description == self.currentLocation.Description.trim() && existentLocation.EconomicActivityId == self.currentLocation.EconomicActivityId && existentLocation.Address == self.currentLocation.Address.trim()
                                 && existentLocation.DistrictId == self.currentLocation.DistrictId) existent = 1;
                         }
@@ -488,7 +463,6 @@ export class ContractorLocationFormComponent implements OnInit {
                                 }
 
                                 Swal.fire('Información', res.P_SMESSAGE, 'success');
-                                //Swal.fire(res.P_SMESSAGE);
                                 this.formModalReference.close(true);
 
                             } else if (res.P_NCODE == 1) {
@@ -497,7 +471,6 @@ export class ContractorLocationFormComponent implements OnInit {
                         },
                         err => {
                             Swal.fire('Información', err, 'error');
-                            console.log(err);
                         }
                     );
                 }
@@ -540,7 +513,6 @@ export class ContractorLocationFormComponent implements OnInit {
             this.mainFormGroup.controls.address.updateValueAndValidity();
 
             Swal.fire('Información', this.listToString(errorList), 'error');
-            //this.openBackDropCustomClass(this.modalContent);
         }
 
 
@@ -571,8 +543,6 @@ export class ContractorLocationFormComponent implements OnInit {
                     this.openContactModal(openModalInEditMode, res);
                 },
                 err => {
-                    console.log(err);
-
                 }
             );
         } else {
@@ -588,10 +558,8 @@ export class ContractorLocationFormComponent implements OnInit {
         modalRef.componentInstance.receivedContactData = contactData;
         modalRef.componentInstance.openedInEditMode = openModalInEditMode;
         modalRef.componentInstance.existentContactList = this.currentLocation.ContactList;
-        //modalRef.componentInstance.rowToBeIgnored=;
 
         modalRef.result.then((newContactForTable) => {
-            //if (newContactForTable != null) { // debemos actualizar tabla de SEDES?
             if (this.openedInEditMode == true && this.willBeSaved == true) {
                 this.firstSearch();
             } else if (newContactForTable != null) {
@@ -600,7 +568,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 this.currentLocation.ContactList.push(newContactForTable);
             }
         }, (reason) => {
-            //this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
 
     }
@@ -614,9 +581,7 @@ export class ContractorLocationFormComponent implements OnInit {
 
         modalRef.result.then((newContactForTable) => {
             this.currentLocation.ContactList[ind] = newContactForTable;
-            //if(newContactForTable!=null) this.contactList.push(newContactForTable);
         }, (reason) => {
-            //this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
     }
     confirmDeletion(ind: number) {
@@ -632,7 +597,6 @@ export class ContractorLocationFormComponent implements OnInit {
                 if (this.openedInEditMode == true && this.willBeSaved == true) this.deleteContact(ind);
                 else this.deleteContactOnlyInView(ind);
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                //nothing
             }
         })
     }
@@ -644,15 +608,10 @@ export class ContractorLocationFormComponent implements OnInit {
     deleteContact(contactId: number) {
         this.contractorLocationIndexService.deleteContact(contactId, this.currentUser).subscribe(
             res => {
-                // this.successList.push("Contacto eliminado exitosamente.");
-                // console.log('successful');
                 this.firstSearch();
-
                 Swal.fire('Información', 'Contacto eliminado exitosamente.', 'success');
             },
             err => {
-                console.log(err);
-
             }
         );
 

@@ -178,7 +178,6 @@ export class AgencyIndexComponent implements OnInit {
         this.mainFormGroup.controls.maternalLastName.updateValueAndValidity();
         this.mainFormGroup.controls.legalName.setValidators(null);
         this.mainFormGroup.controls.legalName.updateValueAndValidity();
-        // this.mainFormGroup.updateValueAndValidity();
     }
 
     /**

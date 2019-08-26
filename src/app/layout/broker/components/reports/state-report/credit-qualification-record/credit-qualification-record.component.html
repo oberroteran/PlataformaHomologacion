@@ -21,8 +21,9 @@
                         <div class="col-sm-4">
                             <span>DESDE</span>
                             <input type="text" formControlName="startDate" placeholder="dd/mm/yyyy" #dp="bsDatepicker"
-                                (keyup.enter)="firstSearch(false)" [bsConfig]="bsConfig" bsDatepicker DateDirective
-                                (focus)="cleanValidation()" [(bsValue)]="bsValueIni"
+                                value="{{bsValueIni.toString() | date:'dd/MM/yyyy'}}" (keyup.enter)="firstSearch(false)"
+                                [bsConfig]="bsConfig" bsDatepicker DateDirective (focus)="cleanValidation()"
+                                [(bsValue)]="bsValueIni"
                                 [ngClass]="{'error-validate': isValidatedInClickButton && (!mainFormGroup.controls.startDate.valid || mainFormGroup.hasError('datesNotSortedCorrectly')) && !mainFormGroup.valid}" />
                             <ng-container [ngSwitch]="true"
                                 *ngIf="isValidatedInClickButton && (!mainFormGroup.controls.startDate.valid || mainFormGroup.hasError('datesNotSortedCorrectly')) && !mainFormGroup.valid">
@@ -39,8 +40,9 @@
                         <div class="col-sm-4">
                             <span>HASTA</span>
                             <input type="text" formControlName="endDate" placeholder="dd/mm/yyyy" #dp="bsDatepicker"
-                                (keyup.enter)="firstSearch(false)" [bsConfig]="bsConfig" bsDatepicker DateDirective
-                                (focus)="cleanValidation()" [(bsValue)]="bsValueFin"
+                                value="{{bsValueFin.toString() | date:'dd/MM/yyyy'}}" (keyup.enter)="firstSearch(false)"
+                                [bsConfig]="bsConfig" bsDatepicker DateDirective (focus)="cleanValidation()"
+                                [(bsValue)]="bsValueFin"
                                 [ngClass]="{'error-validate': isValidatedInClickButton && (!mainFormGroup.controls.endDate.valid || mainFormGroup.hasError('datesNotSortedCorrectly'))  && !mainFormGroup.valid}" />
                             <ng-container [ngSwitch]="true"
                                 *ngIf="isValidatedInClickButton && (!mainFormGroup.controls.endDate.valid || mainFormGroup.hasError('datesNotSortedCorrectly'))  && !mainFormGroup.valid">
@@ -90,7 +92,7 @@
                                 <tbody *ngFor="let item of foundResults;let rownum=index">
                                     <tr>
                                         <td>{{item.Qualification}}</td>
-                                        <td>{{item.Date | date: 'dd/MM/yyyy' }}</td>
+                                        <td>{{item.Date | date:'dd/MM/yyyy, h:mm a' }}</td>
                                         <td>{{item.User}}</td>
                                     </tr>
                                 </tbody>
