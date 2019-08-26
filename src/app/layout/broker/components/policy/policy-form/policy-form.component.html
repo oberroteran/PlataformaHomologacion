@@ -26,7 +26,7 @@
 								<span>NRO. COTIZACIÓN </span>
 								<input [ngClass]="{'error-validate': errorNroCot}" [(ngModel)]="nrocotizacion"
 									name="nrocotizacion" (keydown.enter)="buscarCotizacion($event.preventDefault())"
-									(click)="clearVal()" type="text" placeholder="Nro. Cotización"
+									(click)="clearVal()" type="text" placeholder="Nro. Cotización" maxlength="10"
 									(keypress)="valText($event, 1)">
 
 							</div>

@@ -305,7 +305,7 @@ export class PolicyFormComponent implements OnInit {
 		let typeMovement = "1";
 		//Cabeza Cotizacion | Datos de la póliza
 		if (this.nrocotizacion != undefined && this.nrocotizacion != 0) {
-			this.policyemit.getPolicyEmitCab(this.nrocotizacion, typeMovement)
+			this.policyemit.getPolicyEmitCab(this.nrocotizacion, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"])
 				.subscribe((res: any) => {
 					let self = this;
 					this.cotizacionID = this.nrocotizacion;
@@ -831,19 +831,19 @@ export class PolicyFormComponent implements OnInit {
 				break;
 			}
 			case 2: { // Alfanumericos sin espacios
-				pattern = /[0-9A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/;
+				pattern = /[0-9A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/;
 				break;
 			}
 			case 3: { // Alfanumericos con espacios
-				pattern = /[0-9A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
+				pattern = /[0-9A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
 				break;
 			}
 			case 4: { // LegalName
-				pattern = /[a-zA-ZÁÉÍÓÚáéíóúÄËÏÖÜäëïöü0-9-,:()&$#. ]/;
+				pattern = /[a-zA-ZñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü0-9-,:()&$#. ]/;
 				break;
 			}
 			case 5: { // Solo texto
-				pattern = /[A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
+				pattern = /[A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
 				break;
 			}
 			case 6: { // Email

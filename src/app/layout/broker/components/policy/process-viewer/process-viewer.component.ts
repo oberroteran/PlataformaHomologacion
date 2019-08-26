@@ -46,15 +46,8 @@ export class ProcessViewerComponent implements OnInit {
   visualizadorProcess() {
 
     this.listToShow = [];
-    // let msg: string = "";
-
-
-    // if (msg != "") {
-    //   swal.fire("Información", msg, "error");
-    // } else {
-
+    
     this.isLoading = true;
-    //Fecha Inicio
     this.currentPage = 1; //página actual
     this.rotate = true; //
     this.maxSize = 10; // cantidad de paginas que se mostrarán en el paginado

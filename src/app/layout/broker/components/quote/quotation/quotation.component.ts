@@ -67,6 +67,7 @@ export class QuotationComponent implements OnInit {
     stateWorker = false;
     messageWorker = "";
     maxlength = 8;
+    minlength = 8;
     typeDocument = 0;
     documentTypeList: DocumentType[];
     currencyList: Currency[];
@@ -438,9 +439,41 @@ export class QuotationComponent implements OnInit {
 
     BuscarContratante() {
         let self = this;
+
+        let msg = "";
+
+
+        if (this.InputsQuotation.P_TYPE_SEARCH == 1) {
+            if (this.InputsQuotation.P_NIDDOC_TYPE == -1) {
+                msg += "Debe ingresar tipo de documento <br />"
+            }
+            if (this.InputsQuotation.P_SIDDOC.trim() == "") {
+                msg += "Debe ingresar número de documento <br />"
+            }
+        } else {
+            if (this.InputsQuotation.P_PERSON_TYPE == 1) {
+                if (this.InputsQuotation.P_SFIRSTNAME.trim() == "") {
+                    msg += "Debe ingresar nombre del contratante <br />"
+                }
+                if (this.InputsQuotation.P_SLASTNAME.trim() == "") {
+                    msg += "Debe ingresar apellido paterno del contratante <br />"
+                }
+            }
+            else {
+                if (this.InputsQuotation.P_SLEGALNAME.trim() == "") {
+                    msg += "Debe ingresar razón social <br />"
+                }
+            }
+
+        }
+
+        if (msg != "") {
+            swal.fire("Información", msg, "error");
+            return
+        }
+
         if (this.InputsQuotation.P_NIDDOC_TYPE == 1 && this.InputsQuotation.P_SIDDOC.trim().length > 1) {
             if (this.InputsQuotation.P_SIDDOC.substr(0, 2) != "10" && this.InputsQuotation.P_SIDDOC.substr(0, 2) != "15" && this.InputsQuotation.P_SIDDOC.substr(0, 2) != "17" && this.InputsQuotation.P_SIDDOC.substr(0, 2) != "20") {
-                console.log(this.InputsQuotation.P_SIDDOC.substr(0, 2))
                 swal.fire("Información", "El número de RUC no es válido, debe empezar con 10, 15, 17, 20", "error");
                 return
             }
@@ -506,8 +539,7 @@ export class QuotationComponent implements OnInit {
                                     });
                             } else swal.fire("Información", "No hay información con los datos ingresados", "error");
                         } else {
-                            this.stateQuotation = false;
-                            this.blockSearch = true;
+
                             if (res.EListClient.length == 1) {
                                 this.onSelectEconomicActivity();
                                 this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
@@ -516,6 +548,8 @@ export class QuotationComponent implements OnInit {
                                 this.InputsQuotation.P_SFIRSTNAME = "";
                                 this.InputsQuotation.P_SLASTNAME = "";
                                 this.InputsQuotation.P_SLASTNAME2 = "";
+                                this.stateQuotation = false;
+                                this.blockSearch = true;
                                 this.stateSearch = false;
                                 this.ContractorId = res.EListClient[0].P_SCLIENT;
                                 this.InputsQuotation.P_NIDDOC_TYPE = res.EListClient[0].P_NIDDOC_TYPE;
@@ -539,9 +573,7 @@ export class QuotationComponent implements OnInit {
                                 }
                                 this.getContractorLocationList(this.ContractorId);
                             } else {
-                                // self.isLoading=false;
                                 this.EListClient = res.EListClient;
-
                                 const modalRef = this.modalService.open(SearchContractingComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
                                 modalRef.componentInstance.formModalReference = modalRef;
                                 modalRef.componentInstance.EListClient = this.EListClient;
@@ -555,6 +587,8 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_SFIRSTNAME = "";
                                         this.InputsQuotation.P_SLASTNAME = "";
                                         this.InputsQuotation.P_SLASTNAME2 = "";
+                                        this.stateQuotation = false;
+                                        this.blockSearch = true;
                                         this.stateSearch = false;
                                         this.ContractorId = ContractorData.P_SCLIENT;
                                         this.InputsQuotation.P_NIDDOC_TYPE = ContractorData.P_NIDDOC_TYPE;
@@ -876,29 +910,39 @@ export class QuotationComponent implements OnInit {
                 this.InputsQuotation.P_NIDDOC_TYPE = "-1";
                 this.typeDocument = 0;
                 this.maxlength = 8;
+                this.minlength = 8;
                 break;
             case "1":
                 this.InputsQuotation.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 11;
+                this.minlength = 11;
                 this.VAL_QUOTATION[0] = "";
                 break;
             case "2":
                 this.InputsQuotation.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 8;
+                this.minlength = 8;
                 this.VAL_QUOTATION[0] = "";
                 break;
             case "4":
                 this.InputsQuotation.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 12;
+                this.minlength = 8;
                 this.VAL_QUOTATION[0] = "";
+                break;
+            case "6":
+                this.InputsQuotation.P_NIDDOC_TYPE = typeDocumentID;
+                this.maxlength = 12;
+                this.minlength = 8;
                 break;
             default:
                 this.InputsQuotation.P_NIDDOC_TYPE = typeDocumentID;
                 this.typeDocument = typeDocumentID;
                 this.maxlength = 15;
+                this.minlength = 8;
                 this.VAL_QUOTATION[0] = "";
                 break;
         }
@@ -1951,19 +1995,19 @@ export class QuotationComponent implements OnInit {
                 break;
             }
             case 2: { // Alfanumericos sin espacios
-                pattern = /[0-9A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/;
+                pattern = /[0-9A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/;
                 break;
             }
             case 3: { // Alfanumericos con espacios
-                pattern = /[0-9A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
+                pattern = /[0-9A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
                 break;
             }
             case 4: { // LegalName
-                pattern = /[a-zA-ZÁÉÍÓÚáéíóúÄËÏÖÜäëïöü0-9-,:()&$#. ]/;
+                pattern = /[a-zA-ZñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü0-9-,:()&$#'. ]/;
                 break;
             }
             case 5: { // Solo texto
-                pattern = /[A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
+                pattern = /[A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
                 break;
             }
             case 6: { // Email

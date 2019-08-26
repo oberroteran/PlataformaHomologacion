@@ -433,7 +433,7 @@ export class QuotationEvaluationComponent implements OnInit {
         let self = this;
         let typeMovement = "0";
 
-        forkJoin(this.policyService.getPolicyEmitCab(this.quotationNumber, typeMovement),
+        forkJoin(this.policyService.getPolicyEmitCab(this.quotationNumber, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"]),
             this.policyService.getPolicyEmitComer(this.quotationNumber),
             this.policyService.getPolicyEmitDet(this.quotationNumber)).subscribe(
                 (res: any) => {

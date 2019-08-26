@@ -31,6 +31,7 @@ export class SearchBrokerComponent implements OnInit {
   blockDoc = true;
   stateSearch = false;
   maxlength = 8;
+  minlength = 8;
   typeDocument = 0;
   InputsBroker: any = {};
   documentTypeList: any = [];
@@ -117,6 +118,7 @@ export class SearchBrokerComponent implements OnInit {
       case "-1":
         this.InputsBroker.P_NIDDOC_TYPE = "-1";
         this.maxlength = 8;
+        this.minlength = 8;
         break;
       case "1":
         this.InputsBroker.P_NIDDOC_TYPE = typeDocumentID;
@@ -129,10 +131,17 @@ export class SearchBrokerComponent implements OnInit {
       case "4":
         this.InputsBroker.P_NIDDOC_TYPE = typeDocumentID;
         this.maxlength = 12;
+        this.minlength = 8;
+        break;
+      case "6":
+        this.InputsBroker.P_NIDDOC_TYPE = typeDocumentID;
+        this.maxlength = 12;
+        this.minlength = 8;
         break;
       default:
         this.InputsBroker.P_NIDDOC_TYPE = typeDocumentID;
         this.maxlength = 15;
+        this.minlength = 8;
         break;
     }
   }
@@ -226,8 +235,8 @@ export class SearchBrokerComponent implements OnInit {
       if (this.InputsBroker.P_SIDDOC.trim() == "") {
         msg += "Debe ingresar el número de documento <br />"
       } else {
-        if (this.InputsBroker.P_SIDDOC.trim().length != this.maxlength) {
-          msg += "El número de documento de tener " + this.maxlength + " dígitos";
+        if (this.InputsBroker.P_SIDDOC.trim().length < this.minlength) {
+          msg += "El número de documento de tener como mínimo " + this.minlength + " dígitos";
         }
       }
 
@@ -287,20 +296,23 @@ export class SearchBrokerComponent implements OnInit {
           // console.log(searchBroker);
           break;
       }
-
+      console.log(searchBroker)
       this.quotationService.searchBroker(searchBroker).subscribe(
         res => {
-          // console.log(res)
-          if (res.length > 0) {
-            this.listBroker = res;
-            this.totalItems = this.listBroker.length;
-            this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
-          } else {
-            swal.fire("Información", "No hay informacion con los datos ingresados", "error");
+          if (res.P_NCODE == 0) {
+            if (res.listBroker.length > 0) {
+              this.listBroker = res.listBroker;
+              this.totalItems = this.listBroker.length;
+              this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
+            } else {
+              swal.fire("Información", "No hay informacion con los datos ingresados", "error");
+            }
+          }else{
+            swal.fire("Información", res.P_SMESSAGE, "error");
           }
+
         },
         err => {
-          // console.log(err);
           swal.fire("Información", "Ocurrió un problema al solicitar su petición", "error");
         }
       );
@@ -310,7 +322,6 @@ export class SearchBrokerComponent implements OnInit {
   pageChanged(currentPage) {
     this.currentPage = currentPage;
     this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
-    // this.selectedPolicy = "";
   }
 
   documentNumberKeyPress(event: any) {
@@ -350,19 +361,19 @@ export class SearchBrokerComponent implements OnInit {
         break;
       }
       case 2: { // Alfanumericos sin espacios
-        pattern = /[0-9A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/;
+        pattern = /[0-9A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü]/;
         break;
       }
       case 3: { // Alfanumericos con espacios
-        pattern = /[0-9A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
+        pattern = /[0-9A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
         break;
       }
       case 4: { // LegalName
-        pattern = /[a-zA-ZÁÉÍÓÚáéíóúÄËÏÖÜäëïöü0-9-,:()&$#. ]/;
+        pattern = /[a-zA-ZñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü0-9-,:()&$#'. ]/;
         break;
       }
       case 5: { // Solo texto
-        pattern = /[A-Za-zÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
+        pattern = /[A-Za-zñÑÁÉÍÓÚáéíóúÄËÏÖÜäëïöü ]/;
         break;
       }
       case 6: { // Email
