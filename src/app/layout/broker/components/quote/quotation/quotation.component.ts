@@ -1172,7 +1172,6 @@ export class QuotationComponent implements OnInit {
                 if (dato.id == valor) {
                     dato.planilla = totPlan;
                     dato.premiumMonth = self.formateaValor((totPlan * parseFloat(dato.rate)) / 100);
-                    console.log((totPlan * parseFloat(dato.rate)) / 100)
                 }
                 netoPension = netoPension + parseFloat(dato.premiumMonth)
             });
@@ -1603,8 +1602,6 @@ export class QuotationComponent implements OnInit {
                             msg += "Debe ingresar un monto en el campo planilla de la categoría " + item.description + " <br>"
                         }
                     }
-
-
                     if (item.planilla == 0) {
                         this.VAL_QUOTATION[9] = "9";
                         countPlanilla++;
@@ -1613,6 +1610,13 @@ export class QuotationComponent implements OnInit {
                             msg += "Debe ingresar trabajadores de la categoría " + item.description + " <br>"
                         }
                     }
+
+                    if(item.totalWorkes == 0 && item.planilla == 0){
+                        if(item.planProp != 0){
+                            msg += "No puedes proponer tasa en la categoría " + item.description + "<br>"
+                        }
+                    }
+
                 });
 
                 if (countPlanilla == this.tasasList.length) {

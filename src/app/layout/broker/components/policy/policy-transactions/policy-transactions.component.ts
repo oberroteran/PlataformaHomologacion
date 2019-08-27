@@ -512,6 +512,7 @@ export class PolicyTransactionsComponent implements OnInit {
   changeSaludPropuesta(cantComPro, valor) {
     let ComProp = cantComPro != "" ? parseFloat(cantComPro) : 0;
     ComProp = isNaN(ComProp) ? 0 : ComProp;
+    console.log(ComProp)
 
     this.polizaEmitComer.map(function (dato) {
       if (dato.DOC_COMER == valor) {
@@ -535,7 +536,7 @@ export class PolicyTransactionsComponent implements OnInit {
   changeTasaPropuestaPension(planPro, valor) {
     let planProp = planPro != "" ? parseFloat(planPro) : 0;
     planProp = isNaN(planProp) ? 0 : planProp;
-
+    console.log()
     //Lista Pension
     if (this.pensionList != "") {
       this.pensionList.map(function (dato) {
@@ -1224,7 +1225,6 @@ export class PolicyTransactionsComponent implements OnInit {
               //Detalle de cotizacion
               this.policyemit.getPolicyEmitDet(this.nrocotizacion)
                 .subscribe((res: any) => {
-                  console.log(res)
                   if (res.length > 0) {
                     this.primatotalSCTR = 0;
                     this.primatotalSalud = 0;
@@ -1254,7 +1254,7 @@ export class PolicyTransactionsComponent implements OnInit {
                         this.primatotalSalud = self.formateaValor(item.NSUM_PREMIUMN);
                         this.igvSalud = self.formateaValor(item.NSUM_IGV);
                         this.totalSalud = self.formateaValor(item.NSUM_PREMIUM);
-                        
+
                         this.totalNetoSaludSave = self.formateaValor(item.NSUM_PREMIUMN);
                         this.igvSaludSave = self.formateaValor(item.NSUM_IGV);
                         this.brutaTotalSaludSave = self.formateaValor(item.NSUM_PREMIUM);
@@ -1615,6 +1615,9 @@ export class PolicyTransactionsComponent implements OnInit {
               mensaje += "Debe ingresar trabajadores de la categoría " + item.DES_RIESGO + " <br>"
             }
           }
+
+
+          
         });
 
         if (countPlanilla == this.tasasList.length) {
@@ -1631,6 +1634,26 @@ export class PolicyTransactionsComponent implements OnInit {
         }
 
       }
+    }
+    let msg = ""
+    this.pensionList.forEach(item => {
+      if (parseFloat(item.NUM_TRABAJADORES) == 0 && parseFloat(item.MONTO_PLANILLA) == 0) {
+        if (item.TASA_PRO != 0) {
+          msg = "No puedes proponer tasa en la categoría " + item.DES_RIESGO + "<br>"
+        }
+      }
+    });
+
+    this.saludList.forEach(item => {
+      if (parseFloat(item.NUM_TRABAJADORES) == 0 && parseFloat(item.MONTO_PLANILLA) == 0) {
+        if (item.TASA_PRO != 0) {
+          msg = "No puedes proponer tasa en la categoría " + item.DES_RIESGO + "<br>"
+        }
+      }
+    });
+
+    if(msg != ""){
+      mensaje += msg;
     }
 
     if (this.mode == "cancel") {
