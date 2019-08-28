@@ -599,6 +599,7 @@
                                                placeholder="0"
                                                [disabled]="statePrimaSalud"
                                                disabled
+                                               (ngModelChange)="changePrimaPropuesta($event, saludID)"
                                                [(ngModel)]="InputsQuotation.P_PRIMA_MIN_SALUD_PRO"
                                                FloatDirective />
                                     </div>
@@ -709,6 +710,7 @@
                                                id=""
                                                [disabled]="statePrimaPension"
                                                disabled
+                                               (ngModelChange)="changePrimaPropuesta($event, pensionID)"
                                                [(ngModel)]="InputsQuotation.P_PRIMA_MIN_PENSION_PRO"
                                                FloatDirective />
                                     </div>

@@ -59,8 +59,6 @@ export class QuotationComponent implements OnInit {
     stateTasaPension = true;
     stateBrokerTasaSalud = true;
     stateBrokerTasaPension = true;
-    //stateCotizadorSalud = true;
-    //stateCotizadorPension = true;
     blockDoc = true;
     blockSearch = true;
     stateSearch = false;
@@ -177,7 +175,6 @@ export class QuotationComponent implements OnInit {
             {
                 dateInputFormat: "DD/MM/YYYY",
                 locale: "es",
-                // containerClass: 'theme-dark-blue',
                 showWeekNumbers: false
             }
         );
@@ -1167,7 +1164,7 @@ export class QuotationComponent implements OnInit {
         }
 
         //Lista Pension
-        if (this.listaTasasPension != "") {
+        if (this.listaTasasPension.length > 0) {
             this.listaTasasPension.map(function (dato) {
                 if (dato.id == valor) {
                     dato.planilla = totPlan;
@@ -1196,7 +1193,66 @@ export class QuotationComponent implements OnInit {
         this.Calcular();
     }
 
-    // Onchange Planilla
+    changePrimaPropuesta(cantPrima, valor) {
+        let totPrima = cantPrima != "" ? parseFloat(cantPrima) : 0;
+        totPrima = isNaN(totPrima) ? 0 : totPrima;
+        console.log(totPrima)
+        let self = this;
+
+        //Lista Salud
+        if (this.listaTasasSalud.length > 0) {
+            if (totPrima > 0) {
+                if (parseFloat(this.totalNetoSalud.toString()) < totPrima) {
+                    this.totalNetoSaludSave = totPrima
+                    this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+                    this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toLocaleString()) + parseFloat(this.igvSaludSave.toLocaleString()));
+                    this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                } else {
+                    this.mensajePrimaSalud = ""
+                    this.totalNetoSaludSave = this.totalNetoSalud
+                    this.igvSaludSave = this.igvSalud;
+                    this.brutaTotalSaludSave = this.brutaTotalSalud;
+                    console.log(this.brutaTotalPensionSave)
+                }
+            } else {
+                this.mensajePrimaSalud = ""
+                this.totalNetoSaludSave = this.totalNetoSalud
+                this.igvSaludSave = this.igvSalud;
+                this.brutaTotalSaludSave = this.brutaTotalSalud;
+                console.log(this.brutaTotalPensionSave)
+            }
+
+        }
+
+        //Lista Pension
+        if (this.listaTasasPension.length > 0) {
+            if (totPrima > 0) {
+                console.log(parseFloat(this.totalNetoPension.toString()))
+                if (parseFloat(this.totalNetoPension.toString()) < totPrima) {
+                    this.totalNetoPensionSave = totPrima
+                    this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+                    this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+                    this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                } else {
+                    this.mensajePrimaPension = ""
+                    this.totalNetoPensionSave = this.totalNetoPension
+                    this.igvPensionSave = this.igvPension;
+                    this.brutaTotalPensionSave = this.brutaTotalPension;
+                    console.log(this.brutaTotalPensionSave)
+                }
+            } else {
+                this.mensajePrimaPension = ""
+                this.totalNetoPensionSave = this.totalNetoPension
+                this.igvPensionSave = this.igvPension;
+                this.brutaTotalPensionSave = this.brutaTotalPension;
+                console.log(this.brutaTotalPensionSave)
+            }
+
+        }
+
+        this.Calcular();
+    }
+
     changeTasaPropuestaSalud(planPro, valor) {
         let planProp = planPro != "" ? parseFloat(planPro) : 0;
         planProp = isNaN(planProp) ? 0 : planProp;
@@ -1611,8 +1667,8 @@ export class QuotationComponent implements OnInit {
                         }
                     }
 
-                    if(item.totalWorkes == 0 && item.planilla == 0){
-                        if(item.planProp != 0){
+                    if (item.totalWorkes == 0 && item.planilla == 0) {
+                        if (item.planProp != 0) {
                             msg += "No puedes proponer tasa en la categoría " + item.description + "<br>"
                         }
                     }
