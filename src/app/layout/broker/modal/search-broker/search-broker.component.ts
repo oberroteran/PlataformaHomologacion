@@ -63,9 +63,6 @@ export class SearchBrokerComponent implements OnInit {
     this.InputsBroker.P_SLEGALNAME = ""; // Razon social
     this.InputsBroker.P_SE_MAIL = ""; // Email
     this.InputsBroker.P_SDESDIREBUSQ = ""; // Direccion
-
-    //console.log(this.listaBroker);
-
   }
 
   getDocumentTypeList() {
@@ -146,7 +143,6 @@ export class SearchBrokerComponent implements OnInit {
     }
   }
   onSelectTypePerson(typePersonID) {
-    // this.clearInputsQuotation();
     switch (typePersonID) {
       case "1":
         this.blockDoc = true;
@@ -226,7 +222,6 @@ export class SearchBrokerComponent implements OnInit {
   SearchContrator() {
     let msg: string = "";
 
-
     if (this.InputsBroker.P_TYPE_SEARCH == "1") {
       if (this.InputsBroker.P_NIDDOC_TYPE == "-1") {
         msg += "Seleccionar tipo de documento <br />"
@@ -296,7 +291,7 @@ export class SearchBrokerComponent implements OnInit {
           // console.log(searchBroker);
           break;
       }
-      console.log(searchBroker)
+
       this.quotationService.searchBroker(searchBroker).subscribe(
         res => {
           if (res.P_NCODE == 0) {
@@ -307,7 +302,7 @@ export class SearchBrokerComponent implements OnInit {
             } else {
               swal.fire("Información", "No hay informacion con los datos ingresados", "error");
             }
-          }else{
+          } else {
             swal.fire("Información", res.P_SMESSAGE, "error");
           }
 

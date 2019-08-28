@@ -120,7 +120,7 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-9">
-								<span>NOMBRE o RAZON SOCIAL</span>
+								<span>NOMBRE / RAZÓN SOCIAL</span>
 
 								<input type="text" [(ngModel)]='polizaEmitComerDTOPrincipal.COMERCIALIZADOR'
 									name="COMERCIALIZADOR" placeholder="Nombres" disabled />
@@ -143,13 +143,13 @@
 									style="margin-top: 2px !important;" FloatDirective />
 							</div>
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
-								<span>COMISIÓN PENSION</span>
+								<span>COMISIÓN PENSIÓN</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION =$event"
 									name="COMISION_PENSION" placeholder="0" id="" disabled />
 							</div>
 							<div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
-								<span>COMISIÓN PENSION PROPUESTA</span>
+								<span>COMISIÓN PENSIÓN PROPUESTA</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO =$event"
 									name="COMISION_PENSION_PRO" placeholder="0" disabled
@@ -254,7 +254,7 @@
 										type="checkbox" [disabled]="facVencido"
 										[(ngModel)]="polizaEmit.facturacionVencido" (ngModelChange)="onFacturacion()"
 										name="FAC_VENCIDO" class="checkbox"><span class="schk"
-										style="margin-top: 15px; font-size: 13px;">FACTURACIÓN A MES
+										style="margin-top: 15px; font-size: 13px;">PROFORMA A MES
 										VENCIDO</span></label>
 
 								<label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input
@@ -498,7 +498,7 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col-sm">
-												<h5>SCTR Pension</h5>
+												<h5>SCTR PENSIÓN</h5>
 											</div>
 										</div>
 										<div class="row">
@@ -555,6 +555,39 @@
 								<span>COMENTARIO</span>
 								<textarea cols="40" rows="5" style="width:100%" [(ngModel)]="polizaEmit.comentario"
 									name="comentario" (keypress)="valText($event, 4)"></textarea>
+							</div>
+						</div>
+						<div class="row" style="margin-top: 25px;">
+							<div class="col-sm-12">
+								<h5>ARCHIVO ADJUNTOS</h5>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<table class="table table-borderless riesgo tblbroker">
+									<thead>
+										<tr class="d-flex">
+											<th class="col-sm text-center"><label>Nombre</label></th>
+											<th class="col-sm text-center"><label>Descargar</label></th>
+										</tr>
+									</thead>
+									<tbody
+										*ngIf="filePathList!=null && filePathList.length>0">
+										<tr *ngFor="let item of filePathList" class="d-flex">
+											<td class="col-sm text-center"><span>{{ item | fileName }}</span></td>
+											<td class="col-sm text-center"><a (click)="downloadFile(item)"><img
+														src="assets/icons/imprimir.png" title="Descargar"
+														style="cursor:pointer;" alt="Descargar" /></a></td>
+										</tr>
+									</tbody>
+									<tbody
+										*ngIf="filePathList==null || filePathList.length==0">
+										<tr class="d-flex">
+											<td colspan="2" class="col-sm text-center"><span>No se encontraron
+													archivos</span></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 						<div>

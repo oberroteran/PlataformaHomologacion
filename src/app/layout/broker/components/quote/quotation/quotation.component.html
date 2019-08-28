@@ -362,7 +362,7 @@
                             <div class="col-sm-3">
                                 <span>MONEDA</span>
                                 <select [(ngModel)]="InputsQuotation.P_NCURRENCY"
-                                        [disabled]="stateQuotation" disabled>
+                                        [disabled]="true" >
                                     <option *ngFor="let currency of currencyList"
                                             value="{{currency.NCODIGINT}}">
                                         {{currency.SDESCRIPT}}</option>

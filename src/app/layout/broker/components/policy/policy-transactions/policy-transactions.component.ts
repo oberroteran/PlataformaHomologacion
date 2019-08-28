@@ -142,8 +142,6 @@ export class PolicyTransactionsComponent implements OnInit {
   processID = "";
   mode: String; //emitir, incluir, renovar : emit, include, renew
   title: string; //titulo del formulario
-
-  //
   stateBrokerSalud = true;
   stateBrokerPension = true;
   statePrimaSalud = true;
@@ -154,7 +152,7 @@ export class PolicyTransactionsComponent implements OnInit {
   stateBrokerTasaPension = true;
   stateTasaSalud = true;
   stateTasaPension = true;
-  //infoPolicy: any = {}
+  stateTransac = true;
   objEdit: any = [];
   numberWH: number;
   pensionID = JSON.parse(localStorage.getItem("pensionID"))["id"];
@@ -467,8 +465,8 @@ export class PolicyTransactionsComponent implements OnInit {
       let totalPreviewSalud = parseFloat(this.primatotalSalud.toLocaleString()) + parseFloat(this.igvSalud.toLocaleString());
       this.totalSalud = this.formateaValor(totalPreviewSalud)
 
-      if (parseFloat(this.primatotalSalud.toLocaleString()) < this.polizaEmitCab.MIN_SALUD) {
-        this.totalNetoSaludSave = this.polizaEmitCab.MIN_SALUD
+      if (parseFloat(this.primatotalSalud.toLocaleString()) < this.polizaEmitCab.PRIMA_SALUD_END) {
+        this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
         this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
         this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toLocaleString()) + parseFloat(this.igvSaludSave.toLocaleString()));
         this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
@@ -495,8 +493,8 @@ export class PolicyTransactionsComponent implements OnInit {
       this.totalSTRC = this.formateaValor(totalPreviewPension)
 
 
-      if (parseFloat(this.primatotalSCTR.toLocaleString()) < this.polizaEmitCab.MIN_PENSION) {
-        this.totalNetoPensionSave = this.polizaEmitCab.MIN_PENSION
+      if (parseFloat(this.primatotalSCTR.toLocaleString()) < this.polizaEmitCab.PRIMA_PEN_END) {
+        this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
         this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
         this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toLocaleString()) + parseFloat(this.igvPensionSave.toLocaleString()));
         this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
@@ -1264,23 +1262,26 @@ export class PolicyTransactionsComponent implements OnInit {
                     let sumWorkers = 0;
                     if (this.pensionList.length > 0) {
                       this.tasasList = this.pensionList;
-                      this.pensionList.map(function (dato) {
-                        dato.TASA_PRO = "";
-                        self.endosoPension = dato.PRIMA_END;
-                        dato.rateDet = dato.TASA_RIESGO;
-                        sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
-                      });
                     } else if (this.saludList.length > 0) {
                       this.tasasList = this.saludList;
-                      this.saludList.map(function (dato) {
-                        dato.TASA_PRO = "";
-                        self.endosoSalud = dato.PRIMA_END;
-                        dato.rateDet = dato.TASA_RIESGO;
-                        sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
-                      });
                     } else {
                       this.tasasList = [];
                     }
+
+                    this.pensionList.map(function (dato) {
+                      dato.TASA_PRO = "";
+                      self.endosoPension = dato.PRIMA_END;
+                      dato.rateDet = dato.TASA_RIESGO;
+                      sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
+                    });
+
+                    this.saludList.map(function (dato) {
+                      dato.TASA_PRO = "";
+                      self.endosoSalud = dato.PRIMA_END;
+                      dato.rateDet = dato.TASA_RIESGO;
+                      sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
+                    });                    
+
                     this.polizaEmit.P_WORKER = sumWorkers;
 
                     if (sumWorkers <= 50) {
@@ -1471,7 +1472,7 @@ export class PolicyTransactionsComponent implements OnInit {
             this.saludList = []
             this.primatotalSCTR = 0;
             this.primatotalSalud = 0;
-            console.log(res)
+
             res.forEach(item => {
               if (item.ID_PRODUCTO == this.pensionID) {
                 item.PRIMA = self.formateaValor(item.PRIMA)
@@ -1479,12 +1480,16 @@ export class PolicyTransactionsComponent implements OnInit {
                 this.prodPension = true;
                 this.activityVariationPension = item.VARIACION_TASA;
 
+                if (parseFloat(item.NSUM_PREMIUMN) > 0 || parseFloat(item.NSUM_IGV) > 0 || parseFloat(item.NSUM_PREMIUM) > 0) {
+                  this.stateTransac = false;
+                }
+
                 this.primatotalSCTR = self.formateaValor(item.NSUM_PREMIUMN);
                 this.igvPension = self.formateaValor(item.NSUM_IGV);
                 this.totalSTRC = self.formateaValor(item.NSUM_PREMIUM);
 
-                if (parseFloat(this.primatotalSCTR.toLocaleString()) < this.polizaEmitCab.MIN_PENSION) {
-                  this.totalNetoPensionSave = this.polizaEmitCab.MIN_PENSION
+                if (parseFloat(this.primatotalSCTR.toLocaleString()) < this.polizaEmitCab.PRIMA_PEN_END) {
+                  this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
                   this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                   this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toLocaleString()) + parseFloat(this.igvPensionSave.toLocaleString()));
                   this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
@@ -1501,12 +1506,16 @@ export class PolicyTransactionsComponent implements OnInit {
                 this.prodSalud = true;
                 this.activityVariationSalud = item.VARIACION_TASA;
 
+                if (parseFloat(item.NSUM_PREMIUMN) > 0 || parseFloat(item.NSUM_IGV) > 0 || parseFloat(item.NSUM_PREMIUM) > 0) {
+                  this.stateTransac = false;
+                }
+
                 this.primatotalSalud = self.formateaValor(item.NSUM_PREMIUMN);
                 this.igvSalud = self.formateaValor(item.NSUM_IGV);
                 this.totalSalud = self.formateaValor(item.NSUM_PREMIUM);
 
-                if (parseFloat(this.primatotalSalud.toLocaleString()) < this.polizaEmitCab.MIN_SALUD) {
-                  this.totalNetoSaludSave = this.polizaEmitCab.MIN_SALUD
+                if (parseFloat(this.primatotalSalud.toLocaleString()) < this.polizaEmitCab.PRIMA_SALUD_END) {
+                  this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
                   this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                   this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toLocaleString()) + parseFloat(this.igvSaludSave.toLocaleString()));
                   this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
@@ -1617,7 +1626,7 @@ export class PolicyTransactionsComponent implements OnInit {
           }
 
 
-          
+
         });
 
         if (countPlanilla == this.tasasList.length) {
@@ -1652,7 +1661,7 @@ export class PolicyTransactionsComponent implements OnInit {
       }
     });
 
-    if(msg != ""){
+    if (msg != "") {
       mensaje += msg;
     }
 

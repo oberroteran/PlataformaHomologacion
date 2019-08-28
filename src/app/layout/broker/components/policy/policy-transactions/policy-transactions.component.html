@@ -265,7 +265,7 @@
 								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmit.facturacionVencido" name="facturacionVencido"
 										(ngModelChange)="onFacturacion()" class="checkbox" [disabled]="facVencido"><span
-										class="schk" style="margin-top: 15px; font-size: 13px;">FACTURACIÓN A MES
+										class="schk" style="margin-top: 15px; font-size: 13px;">PROFORMA A MES
 										VENCIDO</span></label>
 
 								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
@@ -393,7 +393,7 @@
 										50</span></label>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" [hidden]="stateTransac">
 							<div class="col-sm-6">
 								<table class="table table-borderless riesgo" style="margin: 15px 0;">
 									<thead>
@@ -430,12 +430,12 @@
 								</table>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" [hidden]="stateTransac">
 							<div class="col-sm-12" *ngIf="stateWorker">
 								<p class="msg-error">{{messageWorker}}</p>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" [hidden]="stateTransac">
 							<div class="col-sm-6" *ngIf="saludList.length > 0">
 								<div class="row">
 									<div class="col-sm-6">
@@ -547,7 +547,7 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col-sm">
-												<h5>SCTR Pensión</h5>
+												<h5>SCTR PENSIÓN</h5>
 											</div>
 										</div>
 										<div class="row">
