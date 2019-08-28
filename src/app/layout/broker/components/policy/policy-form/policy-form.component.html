@@ -25,12 +25,13 @@
 							<div class="col-sm-3">
 								<span>NRO. COTIZACIÓN </span>
 								<input [ngClass]="{'error-validate': errorNroCot}" [(ngModel)]="nrocotizacion"
-									name="nrocotizacion" (keydown.enter)="buscarCotizacion($event.preventDefault())"
-									(click)="clearVal()" type="text" placeholder="Nro. Cotización" maxlength="10"
+									[disabled]="hasQuotationNumber" name="nrocotizacion"
+									(keydown.enter)="buscarCotizacion($event.preventDefault())" (click)="clearVal()"
+									type="text" placeholder="Nro. Cotización" maxlength="10"
 									(keypress)="valText($event, 1)">
 
 							</div>
-							<div class="col-sm-3 ">
+							<div *ngIf="!hasQuotationNumber" class="col-sm-3 ">
 								<span>&nbsp;</span>
 								<button type="button" (click)="buscarCotizacion($event.preventDefault())"
 									style="margin-top: 5px;"><span>Buscar</span></button>
@@ -571,8 +572,7 @@
 											<th class="col-sm text-center"><label>Descargar</label></th>
 										</tr>
 									</thead>
-									<tbody
-										*ngIf="filePathList!=null && filePathList.length>0">
+									<tbody *ngIf="filePathList!=null && filePathList.length>0">
 										<tr *ngFor="let item of filePathList" class="d-flex">
 											<td class="col-sm text-center"><span>{{ item | fileName }}</span></td>
 											<td class="col-sm text-center"><a (click)="downloadFile(item)"><img
@@ -580,8 +580,7 @@
 														style="cursor:pointer;" alt="Descargar" /></a></td>
 										</tr>
 									</tbody>
-									<tbody
-										*ngIf="filePathList==null || filePathList.length==0">
+									<tbody *ngIf="filePathList==null || filePathList.length==0">
 										<tr class="d-flex">
 											<td colspan="2" class="col-sm text-center"><span>No se encontraron
 													archivos</span></td>

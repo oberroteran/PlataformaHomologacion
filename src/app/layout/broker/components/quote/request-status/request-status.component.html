@@ -268,8 +268,8 @@
                                     <td class="grid-title-item">Nro. Trabajadores</td>
                                     <td class="grid-title-item">Planilla</td>
                                     <td class="grid-title-item">Broker</td>
-                                    <td class="grid-title-item">Comisión</td>
                                     <td class="grid-title-item">Estado</td>
+                                    <td class="grid-title-item">Fecha Aprobación</td>
                                     <td class="grid-title-item">Opciones</td>
                                 </tr>
                             </thead>
@@ -294,8 +294,8 @@
                                     <td>{{ item.WorkersCount }}</td>
                                     <td>{{ item.Payroll}}</td>
                                     <td>{{item.BrokerFullName}}</td>
-                                    <td>{{ item.Bounty}}</td>
                                     <td>{{ item.Status}}</td>
+                                    <td>{{ item.ApprovalDate}}</td>
                                     <td style="display: flex">
 
                                         <a (click)="seeTracking(item.QuotationNumber)"><img alt="Ver movimientos"
