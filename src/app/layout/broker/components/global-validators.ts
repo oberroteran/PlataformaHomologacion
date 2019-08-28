@@ -133,6 +133,23 @@ export class GlobalValidators {
 			return null;
 		}
 	}
+	/**
+	 * Valida un email
+	 * @param control valor de control de formulario
+	 */
+	// static emailValidation(control: AbstractControl): { [key: string]: boolean } | null {
+	// 	if (control.value != null && control.value.toString().trim() != "") {
+	// 		let email = control.value.toString().trim();
+	// 		if (email.indexOf("@") == -1) return { 'invalidEmail': true }
+	// 		else {
+	// 			let localPart = email.substring(0, email.indexOf("@") + 1);
+	// 			if(email.)
+	// 			if (/^[0-9]+$/.test(control.value)) return null;
+	// 		}
+	// 	} else {
+	// 		return null;
+	// 	}
+	// }
 
 	/**
 	 * Validar que la fecha de inicio "startDate" no sea posterior a la fecha de fin "endDate"
