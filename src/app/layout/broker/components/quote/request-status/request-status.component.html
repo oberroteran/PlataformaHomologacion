@@ -268,8 +268,8 @@
                                     <td class="grid-title-item">Nro. Trabajadores</td>
                                     <td class="grid-title-item">Planilla</td>
                                     <td class="grid-title-item">Broker</td>
-                                    <td class="grid-title-item">Comisión</td>
                                     <td class="grid-title-item">Estado</td>
+                                    <td class="grid-title-item">Fecha Aprobación</td>
                                     <td class="grid-title-item">Opciones</td>
                                 </tr>
                             </thead>
@@ -294,16 +294,22 @@
                                     <td>{{ item.WorkersCount }}</td>
                                     <td>{{ item.Payroll}}</td>
                                     <td>{{item.BrokerFullName}}</td>
-                                    <td>{{ item.Bounty}}</td>
                                     <td>{{ item.Status}}</td>
+                                    <td>{{ item.ApprovalDate}}</td>
                                     <td style="display: flex">
 
                                         <a (click)="seeTracking(item.QuotationNumber)"><img alt="Ver movimientos"
                                                 src="assets/icons/preview_soat_box.png" title="Ver movimientos"
                                                 style="cursor: pointer;height: 24px"></a>
                                         <a (click)="openDetails(item)"><img alt="Ver detalles"
-                                                src="assets/icons/enviar.png" title="Ver detalles"
+                                                src="assets/icons/see.svg" title="Ver detalles"
                                                 style="cursor: pointer;height: 24px;margin-left: 15px"></a>
+                                        <ng-container *ngIf="item.Mode=='emitir'">
+                                            <a (click)="emit(item)"><img alt="Emitir" src="assets/icons/enviar.png"
+                                                    title="Emitir"
+                                                    style="cursor: pointer;height: 24px;margin-left: 15px"></a>
+                                        </ng-container>
+
                                     </td>
 
                                 </tr>

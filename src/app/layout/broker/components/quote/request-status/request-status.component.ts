@@ -637,4 +637,7 @@ export class RequestStatusComponent implements OnInit {
         sessionStorage.setItem('cs-quotation', JSON.stringify(item));
         this.router.navigate(['/broker/quotation-evaluation']);
     }
+    emit(item: any) {
+        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: item.QuotationNumber } });
+    }
 }
