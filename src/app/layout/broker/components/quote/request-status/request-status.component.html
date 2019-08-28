@@ -302,8 +302,14 @@
                                                 src="assets/icons/preview_soat_box.png" title="Ver movimientos"
                                                 style="cursor: pointer;height: 24px"></a>
                                         <a (click)="openDetails(item)"><img alt="Ver detalles"
-                                                src="assets/icons/enviar.png" title="Ver detalles"
+                                                src="assets/icons/see.svg" title="Ver detalles"
                                                 style="cursor: pointer;height: 24px;margin-left: 15px"></a>
+                                        <ng-container *ngIf="item.Mode=='emitir'">
+                                            <a (click)="emit(item)"><img alt="Emitir" src="assets/icons/enviar.png"
+                                                    title="Emitir"
+                                                    style="cursor: pointer;height: 24px;margin-left: 15px"></a>
+                                        </ng-container>
+
                                     </td>
 
                                 </tr>
