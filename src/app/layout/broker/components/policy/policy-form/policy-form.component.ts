@@ -313,7 +313,6 @@ export class PolicyFormComponent implements OnInit {
 			this.policyemit.getPolicyEmitCab(this.nrocotizacion, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"])
 				.subscribe((res: any) => {
 					let self = this;
-					console.log(res)
 					this.cotizacionID = this.nrocotizacion;
 					if (res.GenericResponse !== null) {
 						if (res.GenericResponse.COD_ERR == 0) {
