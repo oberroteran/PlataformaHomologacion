@@ -6,62 +6,63 @@
 
 </div>
 <div class="modal-body">
-  <div class="grid form-group">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr class="grid-title">
-            <td class="grid-title-item">#</td>
-            <td class="grid-title-item">TIPO DOCUMENTO</td>
-            <td class="grid-title-item">NRO DOCUMENTO</td>
-            <td class="grid-title-item">RAZÓN SOCIAL/NOMBRES Y APELLIDOS</td>
-          </tr>
-        </thead>
-        <ng-container *ngIf="EListClient!=null && EListClient.length>0; then showGrid else hideGrid"></ng-container>
-      </table>
-      <ng-template #hideGrid>
-        <tbody>
-          <tr>
-            <td colspan="4">NO SE ENCONTRARON REGISTROS</td>
-          </tr>
-        </tbody>
-      </ng-template>
-      <ng-template #showGrid>
-        <tbody>
-          <tr class="selectable" (dblclick)="chooseContractor(item)"
-            *ngFor="let item of listToShow; let row_no = index">
-            <td><input value={{item.P_SIDDOC}} type="radio" name="contractorList" [(ngModel)]="selectedContractor"></td>
-            <td>{{ item.P_NIDDOC_TYPE | typeDocument}}</td>
-            <td>{{ item.P_SIDDOC }}</td>
-            <td>{{ item | nameContractor }}</td>
-          </tr>
-        </tbody>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="grid form-group">
+        <table class="table">
+          <thead>
+            <tr class="grid-title">
+              <td class="grid-title-item">#</td>
+              <td class="grid-title-item">TIPO DOCUMENTO</td>
+              <td class="grid-title-item">NRO DOCUMENTO</td>
+              <td class="grid-title-item">RAZÓN SOCIAL/NOMBRES Y APELLIDOS</td>
+            </tr>
+          </thead>
+          <ng-container *ngIf="EListClient!=null && EListClient.length>0; then showGrid else hideGrid">
+          </ng-container>
+        </table>
+        <ng-template #hideGrid>
+          <tbody>
+            <tr>
+              <td colspan="4">NO SE ENCONTRARON REGISTROS</td>
+            </tr>
+          </tbody>
+        </ng-template>
+        <ng-template #showGrid>
+          <tbody>
+            <tr class="selectable" (dblclick)="chooseContractor(item)"
+              *ngFor="let item of listToShow  | filter : {P_SIDDOC: searchText, P_SFIRSTNAME:searchText, P_SLASTNAME:searchText, P_SLASTNAME2:searchText, P_SLEGALNAME:searchText}; let row_no = index">
+              <td><input value={{row_no}} type="radio" name="contractorList" [(ngModel)]="selectedContractor">
+              </td>
+              <td>{{ item.P_NIDDOC_TYPE | typeDocument}}</td>
+              <td>{{ item.P_SIDDOC }}</td>
+              <td>{{ item | nameContractor }}</td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </div>
+      <ng-container *ngIf="EListClient!=null && EListClient.length>0; then showPagination"></ng-container>
+      <ng-template #showPagination>
+        <div class="row">
+          <div class="col-sm-12">
+            <ngb-pagination [(page)]="currentPage" [pageSize]="itemsPerPage" [collectionSize]="totalItems"
+              [maxSize]="maxSize" (pageChange)="pageChanged(currentPage)">
+              <ng-template ngbPaginationPrevious>ANTERIOR</ng-template>
+              <ng-template ngbPaginationNext>SIGUIENTE</ng-template>
+            </ngb-pagination>
+          </div>
+        </div>
       </ng-template>
     </div>
-    <ng-container *ngIf="EListClient!=null && EListClient.length>0; then showPagination"></ng-container>
-    <ng-template #showPagination>
-      <div class="row">
-        <div class="col-sm-12">
-          <ngb-pagination [(page)]="currentPage" [pageSize]="itemsPerPage" [collectionSize]="totalItems"
-            [maxSize]="maxSize" (pageChange)="pageChanged(currentPage)">
-            <ng-template ngbPaginationPrevious>ANTERIOR</ng-template>
-            <ng-template ngbPaginationNext>SIGUIENTE</ng-template>
-          </ngb-pagination>
-        </div>
-      </div>
-    </ng-template>
-
   </div>
 
-</div>
-
-<div class="modal-footer">
-  <button (click)="formModalReference.close()"><span>Volver</span></button>
-  <button (click)="chooseContractorByRadioButton()" class="full-color"><span>Seleccionar</span></button>
-</div>
-<!-- Pantalla de carga -->
-<!-- <div [hidden]="isLoading==false" class="loadingScreen">
+  <div class="modal-footer">
+    <button (click)="formModalReference.close()"><span>Volver</span></button>
+    <button (click)="chooseContractorByRadioButton()" class="full-color"><span>Seleccionar</span></button>
+  </div>
+  <!-- Pantalla de carga -->
+  <!-- <div [hidden]="isLoading==false" class="loadingScreen">
   <div style="display:flex;height: 100%;width:100%">
-    <i style="margin:auto;font-size: 50px" class="fa fa-spinner fa-spin"></i>
+    <i style="margin:auto;font-size: 50px" class="fas fa-spinner fa-spin"></i>
   </div>
 </div> -->

@@ -153,17 +153,17 @@
               <table class="table">
                 <thead>
                   <tr class="grid-title">
-                    <td *ngIf="userType!==4" class="grid-title-item">Sel.</td>
+                    <td *ngIf="userType!==4" class="grid-title-item text-center">Sel.</td>
                     <td class="grid-title-item">Producto</td>
                     <td class="grid-title-item">Póliza</td>
                     <td class="grid-title-item">RUC/DNI</td>
                     <td class="grid-title-item">Razón social/Apellidos Nombres</td>
                     <td class="grid-title-item">Sede</td>
-                    <td class="grid-title-item">Fecha Emisión</td>
-                    <td class="grid-title-item">Inicio Vigencia</td>
-                    <td class="grid-title-item">Fin Vigencia</td>
-                    <td class="grid-title-item">Nro. Renovaciones</td>
-                    <td class="grid-title-item">Movimientos</td>
+                    <td class="grid-title-item text-center">Fecha Emisión</td>
+                    <td class="grid-title-item text-center">Inicio Vigencia</td>
+                    <td class="grid-title-item text-center">Fin Vigencia</td>
+                    <td class="grid-title-item text-center">Nro. Renovaciones</td>
+                    <td class="grid-title-item text-center">Movimientos</td>
                   </tr>
                 </thead>
                 <ng-container *ngIf="policyList!=null && policyList.length>0; then showGrid else hideGrid">
@@ -173,7 +173,7 @@
             <ng-template #hideGrid>
               <tbody>
                 <tr>
-                  <td colspan="11">
+                  <td colspan="11" class="text-center">
                     No se encontraron registros
                   </td>
                 </tr>
@@ -182,18 +182,18 @@
             <ng-template #showGrid>
               <tbody>
                 <tr *ngFor="let item of listToShow; let row_no = index">
-                  <td *ngIf="userType!==4"><input type="radio" value={{item.NRO_COTIZACION}} name="policy"
+                  <td *ngIf="userType!==4" class="text-center"><input type="radio" value={{item.NRO_COTIZACION}} name="policy"
                       [(ngModel)]="selectedPolicy"></td>
                   <td>{{ item.NOMBRE_PRODUCT }}</td>
                   <td>{{ item.POLIZA }}</td>
                   <td>{{ item.DOCUMENTO }}</td>
                   <td>{{ item.NOMBRE_CONTRATANTE }}</td>
                   <td>{{ item.SEDE }}</td>
-                  <td>{{ item.FECHA_EMISION }}</td>
-                  <td>{{ item.INICIO_VIGENCIA }}</td>
-                  <td>{{ item.FIN_VIGENCIA }}</td>
-                  <td>{{ item.NRO_RENOVACIONES }}</td>
-                  <td>
+                  <td class="text-center">{{ item.FECHA_EMISION }}</td>
+                  <td class="text-center">{{ item.INICIO_VIGENCIA }}</td>
+                  <td class="text-center">{{ item.FIN_VIGENCIA }}</td>
+                  <td class="text-center">{{ item.NRO_RENOVACIONES }}</td>
+                  <td class="text-center">
                     <a (click)="openModal(row_no, item.NRO_COTIZACION)"><img alt="ver"
                         src="assets/icons/preview_soat_box.png" title="Ver detalle"
                         style="cursor: pointer;height: 24px;width: 24px"></a>

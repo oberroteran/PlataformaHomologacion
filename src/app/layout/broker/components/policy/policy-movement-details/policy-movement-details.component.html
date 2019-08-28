@@ -46,14 +46,14 @@
           <table class="table">
             <thead>
               <tr class="grid-title">
-                <td class="grid-title-item">Nro.</td>
+                <td class="grid-title-item text-center">Nro.</td>
                 <td class="grid-title-item">Movimiento</td>
-                <td class="grid-title-item">Ini. Cobertura</td>
-                <td class="grid-title-item">Fin Cobertura</td>
-                <td class="grid-title-item">Fecha Mov.</td>
+                <td class="grid-title-item text-center">Ini. Cobertura</td>
+                <td class="grid-title-item text-center">Fin Cobertura</td>
+                <td class="grid-title-item text-center">Fecha Mov.</td>
                 <td class="grid-title-item">Recibos</td>
                 <td class="grid-title-item">Usuario</td>
-                <td class="grid-title-item">Documentos</td>
+                <td class="grid-title-item text-center">Documentos</td>
                 <ng-container *ngIf="canCancelMovements">
                   <td class="grid-title-item" *ngIf="!flagAnular">Anular</td>
                 </ng-container>
@@ -68,24 +68,24 @@
         </div>
         <ng-template #hideGrid>
           <tr>
-            <td colspan="8">
+            <td colspan="8" class="text-center">
               No se encontraron registros
             </td>
           </tr>
         </ng-template>
         <ng-template #showGrid>
           <tr *ngFor="let item of listToShow; let row_no = index">
-            <td>{{ item.NRO }}</td>
+            <td class="text-center">{{ item.NRO }}</td>
             <td>{{ item.TIPO_TRANSACCION }}</td>
-            <td>{{ item.INICIO_COBERTURA }}</td>
-            <td>{{ item.FIN_COBERTURA }}</td>
-            <td>{{ item.FECHA_TRANSACCION }}</td>
+            <td class="text-center">{{ item.INICIO_COBERTURA }}</td>
+            <td class="text-center">{{ item.FIN_COBERTURA }}</td>
+            <td class="text-center">{{ item.FECHA_TRANSACCION }}</td>
             <td>{{ item.RECIBO }}</td>
             <td>{{ item.USUARIO }}</td>
-            <td><img alt="Ver Documentos" src="assets/icons/preview_soat_box.png" title="Ver Documentos"
+            <td class="text-center"><img alt="Ver Documentos" src="assets/icons/preview_soat_box.png" title="Ver Documentos"
                 (click)="openModal(item)" style="cursor: pointer;height: 24px;width: 24px"></td>
             <ng-container *ngIf="canCancelMovements">
-              <td *ngIf="!flagAnular">
+              <td *ngIf="!flagAnular" class="text-center">
                 <img *ngIf="item.MOV_ANULADO == 0" src="assets/icons/anular.png" (click)="anularMov(item.NRO)"
                   title="Anular" alt="Anular" style="cursor: pointer;" />
                 <label *ngIf="item.MOV_ANULADO != 0"><b>--</b></label>

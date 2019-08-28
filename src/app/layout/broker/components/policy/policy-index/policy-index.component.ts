@@ -47,6 +47,7 @@ export class PolicyIndexComponent implements OnInit {
     blockSearch = true;
     stateSearch = false;
     maxlength = 8;
+    minlength = 8;
     lista = [];
     selectedPolicy: string;
 
@@ -127,7 +128,7 @@ export class PolicyIndexComponent implements OnInit {
         this.bsValueIniMax = new Date();
         this.bsValueFinMin = this.bsValueIni;
         this.bsValueFinMax = new Date();
-        
+
     }
 
     getDocumentTypeList() {
@@ -178,18 +179,27 @@ export class PolicyIndexComponent implements OnInit {
         switch (this.InputsSearch.P_NIDDOC_TYPE) {
             case "-1":
                 this.maxlength = 8;
+                this.minlength = 8;
                 break;
             case "1":
                 this.maxlength = 11;
+                this.minlength = 11;
                 break;
             case "2":
                 this.maxlength = 8;
+                this.minlength = 8;
                 break;
             case "4":
                 this.maxlength = 12;
+                this.minlength = 8;
+                break;
+            case "4":
+                this.maxlength = 12;
+                this.minlength = 8;
                 break;
             default:
                 this.maxlength = 15;
+                this.minlength = 8;
                 break;
         }
     }
@@ -339,6 +349,7 @@ export class PolicyIndexComponent implements OnInit {
             data.P_APE_PAT_CONT = this.InputsSearch.P_SLASTNAME;
             data.P_APE_MAT_CONT = this.InputsSearch.P_SLASTNAME2;
             data.P_NOMBRES_CONT = this.InputsSearch.P_SFIRSTNAME;
+            data.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
             this.policyService.getPolicyTransList(data).subscribe(
                 res => {
                     this.isLoading = false;

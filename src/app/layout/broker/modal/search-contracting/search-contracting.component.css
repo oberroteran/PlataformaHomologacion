@@ -26,11 +26,11 @@
       display: flex;
   }
 
-  .filter .filter-row .filter-row-cell {
+  .filter-row .filter-row-cell {
       padding: 8px 5px;
   }
 
-  .filter .filter-row .filter-row-cell span {
+  .filter-row .filter-row-cell span {
       width: 100%;
       color: #2b0d61;
       display: block;
@@ -40,7 +40,7 @@
       line-height: 24px;
   }
 
-  .filter input[type="text"] {
+  input[type="text"] {
       /* outline: auto; */
       border: none;
       border-radius: 2px;
@@ -182,7 +182,7 @@
   }
 
   .grid {
-      width: 95%;
+      width: 100%;
       margin: 20px auto;
       font-size: 14px;
       font-weight: 300;

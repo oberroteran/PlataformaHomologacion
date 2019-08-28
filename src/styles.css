@@ -48,7 +48,6 @@ button,
     font-family: "Bliss Pro";
     font-size: 13px;
     line-height: 12px;
-    /*border: 1px solid #000;*/
 }
 
 .deshabilitado {
@@ -119,9 +118,6 @@ button,
 }
 
 .volver a img {
-    /* float: left;
-  margin-left: 5px;
-  margin-top: 5px; */
     margin-bottom: 2px;
     vertical-align: middle;
 }
@@ -231,6 +227,7 @@ bs-datepicker-body table td.selected span,
     color: #fff;
     font-size: 16px;
     margin-bottom: 0;
+    text-transform: uppercase;
 }
 
 .accordion .card-header h5:hover {

@@ -18,9 +18,7 @@ export class SearchContractingComponent implements OnInit {
   public rotate = true; //
   public maxSize = 5; // cantidad de paginas que se mostrarán en el paginado
   public itemsPerPage = 5; // limite de items por página
-  public totalItems = 0; //total de items encontrados
-
-  // dtTrigger: Subject = new Subject();
+  public totalItems = 0; //total de items en
 
   constructor() { }
 
