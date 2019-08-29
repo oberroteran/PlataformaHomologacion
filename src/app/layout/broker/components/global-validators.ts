@@ -142,9 +142,19 @@ export class GlobalValidators {
 	// 		let email = control.value.toString().trim();
 	// 		if (email.indexOf("@") == -1) return { 'invalidEmail': true }
 	// 		else {
+	// 			for (var i = 0; i < email.length; i++) {
+	// 				if (i > 0 && email.charAt(i) == email.charAt(i - 1) && email.charAt(i) == ".") return { 'invalidEmail': true }
+	// 			}
+
 	// 			let localPart = email.substring(0, email.indexOf("@") + 1);
-	// 			if(email.)
-	// 			if (/^[0-9]+$/.test(control.value)) return null;
+	// 			if (localPart.toString().length > 64) return { 'invalidEmail': true }
+	// 			if (/[A-Za-z]/.test(email.charAt(0)) == false) return { 'invalidEmail': true }
+	// 			else {
+	// 				if (/^[A-Za-z0-9\_\-\.]+$/.test(localPart) == false) return { 'invalidEmail': true }
+	// 			}
+
+	// 			let domain = email.substring(email.indexOf("@") + 1);
+	// 			if (domain.charAt(0) == "." || domain.charAt(email.length) == ".") return { 'invalidEmail': true }
 	// 		}
 	// 	} else {
 	// 		return null;
