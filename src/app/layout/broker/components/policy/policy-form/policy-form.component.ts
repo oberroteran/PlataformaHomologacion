@@ -578,7 +578,6 @@ export class PolicyFormComponent implements OnInit {
 					if (result.value) {
 						this.policyemit.savePolicyEmit(myFormData)
 							.subscribe((res: any) => {
-								console.log(res);
 								if (res.P_COD_ERR == 0) {
 									let policyPension = 0;
 									let policySalud = 0;

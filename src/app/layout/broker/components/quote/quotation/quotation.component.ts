@@ -1205,7 +1205,6 @@ export class QuotationComponent implements OnInit {
     changePrimaPropuesta(cantPrima, valor) {
         let totPrima = cantPrima != "" ? parseFloat(cantPrima) : 0;
         totPrima = isNaN(totPrima) ? 0 : totPrima;
-        console.log(totPrima)
         let self = this;
 
         //Lista Salud
@@ -1223,16 +1222,18 @@ export class QuotationComponent implements OnInit {
                     this.brutaTotalSaludSave = this.brutaTotalSalud;
                 }
             } else {
-                if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
-                    this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
-                    this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
-                    this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                    this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
-                } else {
-                    this.mensajePrimaSalud = ""
-                    this.totalNetoSaludSave = this.totalNetoSalud
-                    this.igvSaludSave = this.igvSalud;
-                    this.brutaTotalSaludSave = this.brutaTotalSalud;
+                if (this.saludID == valor) {
+                    if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
+                        this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
+                        this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+                        this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+                        this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                    } else {
+                        this.mensajePrimaSalud = ""
+                        this.totalNetoSaludSave = this.totalNetoSalud
+                        this.igvSaludSave = this.igvSalud;
+                        this.brutaTotalSaludSave = this.brutaTotalSalud;
+                    }
                 }
             }
         }
@@ -1252,16 +1253,18 @@ export class QuotationComponent implements OnInit {
                     this.brutaTotalPensionSave = this.brutaTotalPension;
                 }
             } else {
-                if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
-                    this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
-                    this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
-                    this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                    this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
-                } else {
-                    this.mensajePrimaPension = ""
-                    this.totalNetoPensionSave = this.totalNetoPension
-                    this.igvPensionSave = this.igvPension;
-                    this.brutaTotalPensionSave = this.brutaTotalPension;
+                if (this.pensionID == valor) {
+                    if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
+                        this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
+                        this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+                        this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+                        this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                    } else {
+                        this.mensajePrimaPension = ""
+                        this.totalNetoPensionSave = this.totalNetoPension
+                        this.igvPensionSave = this.igvPension;
+                        this.brutaTotalPensionSave = this.brutaTotalPension;
+                    }
                 }
             }
 
@@ -1811,7 +1814,6 @@ export class QuotationComponent implements OnInit {
             itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
             itemQuotationComMain.P_NPRINCIPAL = 1;
             dataQuotation.QuotationCom.push(itemQuotationComMain);
-            // console.log(this.brokerList);
 
             //Comercializadores
             if (this.brokerList.length > 0) {
@@ -2057,11 +2059,7 @@ export class QuotationComponent implements OnInit {
             event.preventDefault();
         }
     }
-
-    consultarContenido() {
-        console.log(this.files[0].size);
-    }
-
+    
     valText(event: any, type) {
         let pattern;
         switch (type) {

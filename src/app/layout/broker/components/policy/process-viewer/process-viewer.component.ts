@@ -63,7 +63,6 @@ export class ProcessViewerComponent implements OnInit {
     data.P_DEFFECDATE = dayIni + "/" + monthIni + "/" + yearIni;
     data.P_NLIMITPERPAGE = 99999
     data.P_NPAGENUM = 1
-    // console.log(data)
     this.policyService.GetVisualizadorProc(data).subscribe(
       res => {
         this.isLoading = false;

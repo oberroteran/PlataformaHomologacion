@@ -503,7 +503,6 @@ export class PolicyTransactionsComponent implements OnInit {
   changePrimaPropuesta(cantPrima, valor) {
     let totPrima = cantPrima != "" ? parseFloat(cantPrima) : 0;
     totPrima = isNaN(totPrima) ? 0 : totPrima;
-    console.log(totPrima)
     let self = this;
 
     //Lista Salud
@@ -521,16 +520,18 @@ export class PolicyTransactionsComponent implements OnInit {
           this.brutaTotalSaludSave = this.totalSalud;
         }
       } else {
-        if (parseFloat(this.primatotalSalud.toString()) < this.polizaEmitCab.PRIMA_SALUD_END) {
-          this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
-          this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
-          this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-          this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
-        } else {
-          this.mensajePrimaSalud = ""
-          this.totalNetoSaludSave = this.primatotalSalud
-          this.igvSaludSave = this.igvSalud;
-          this.brutaTotalSaludSave = this.totalSalud;
+        if (this.saludID == valor) {
+          if (parseFloat(this.primatotalSalud.toString()) < this.polizaEmitCab.PRIMA_SALUD_END) {
+            this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
+            this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+            this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+            this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+          } else {
+            this.mensajePrimaSalud = ""
+            this.totalNetoSaludSave = this.primatotalSalud
+            this.igvSaludSave = this.igvSalud;
+            this.brutaTotalSaludSave = this.totalSalud;
+          }
         }
       }
     }
@@ -550,28 +551,28 @@ export class PolicyTransactionsComponent implements OnInit {
           this.brutaTotalPensionSave = this.totalSTRC;
         }
       } else {
-        if (parseFloat(this.primatotalSCTR.toString()) < this.polizaEmitCab.PRIMA_PEN_END) {
-          this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
-          this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
-          this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-          this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
-        } else {
-          this.mensajePrimaPension = ""
-          this.totalNetoPensionSave = this.primatotalSCTR
-          this.igvPensionSave = this.igvPension;
-          this.brutaTotalPensionSave = this.totalSTRC;
+        if (this.pensionID == valor) {
+          if (parseFloat(this.primatotalSCTR.toString()) < this.polizaEmitCab.PRIMA_PEN_END) {
+            this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
+            this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+            this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+            this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+          } else {
+            this.mensajePrimaPension = ""
+            this.totalNetoPensionSave = this.primatotalSCTR
+            this.igvPensionSave = this.igvPension;
+            this.brutaTotalPensionSave = this.totalSTRC;
+          }
         }
       }
 
     }
-    
+
   }
 
   changeSaludPropuesta(cantComPro, valor) {
     let ComProp = cantComPro != "" ? parseFloat(cantComPro) : 0;
     ComProp = isNaN(ComProp) ? 0 : ComProp;
-    console.log(ComProp)
-
     this.polizaEmitComer.map(function (dato) {
       if (dato.DOC_COMER == valor) {
         dato.COMISION_SALUD_PRO = ComProp;
@@ -594,7 +595,6 @@ export class PolicyTransactionsComponent implements OnInit {
   changeTasaPropuestaPension(planPro, valor) {
     let planProp = planPro != "" ? parseFloat(planPro) : 0;
     planProp = isNaN(planProp) ? 0 : planProp;
-    console.log()
     //Lista Pension
     if (this.pensionList != "") {
       this.pensionList.map(function (dato) {
@@ -1853,7 +1853,7 @@ export class PolicyTransactionsComponent implements OnInit {
         dataQuotation.QuotationCom.push(itemQuotationCom);
       });
     }
-    
+
     this.policyemit.renewMod(dataQuotation).subscribe(
       res => {
         if (res.P_COD_ERR == 0) {
