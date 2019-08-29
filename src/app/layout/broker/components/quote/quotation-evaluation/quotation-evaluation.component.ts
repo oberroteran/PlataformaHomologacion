@@ -123,6 +123,10 @@ export class QuotationEvaluationComponent implements OnInit {
     pensionProductId: string;
     /**Prima total neta recalculada que se muestra cuando la prima neta actual es menor a la prima mínima*/
     pensionMessage: string;
+    /**Es la prima neta menor a la prima mínima de salud? */
+    isNetPremiumLessThanMinHealthPremium: boolean;
+    /**Es la prima neta menor a la prima mínima de pensión? */
+    isNetPremiumLessThanMinPensionPremium: boolean;
     /**Prima total neta recalculada que se muestra cuando la prima neta actual es menor a la prima mínima*/
     healthMessage: string;
 
@@ -380,11 +384,22 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludNewCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNewNetAmount));
         }
         if (parseFloat(this.InputsQuotation.SaludNewNetAmount) < parseFloat(this.InputsQuotation.SaludMinPremium)) {
-            this.healthMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.SaludMinPremium * this.healthIGV;
-        } else this.healthMessage = "";
+            this.isNetPremiumLessThanMinHealthPremium = true;
+            let premium = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
+            this.healthMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + premium * this.healthIGV;
+        } else {
+            this.isNetPremiumLessThanMinHealthPremium = false;
+            this.healthMessage = "";
+        }
+
         if (parseFloat(this.InputsQuotation.PensionNewNetAmount) < parseFloat(this.InputsQuotation.PensionMinPremium)) {
-            this.pensionMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.PensionMinPremium * this.pensionIGV;
-        } else this.pensionMessage = "";
+            this.isNetPremiumLessThanMinPensionPremium = true;
+            let premium = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
+            this.pensionMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + premium * this.pensionIGV;
+        } else {
+            this.isNetPremiumLessThanMinPensionPremium = false;
+            this.pensionMessage = "";
+        }
 
     }
     /**
@@ -428,6 +443,24 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludCalculatedIGV = this.FormatValue((this.InputsQuotation.SaludNetAmount * this.healthIGV) - this.InputsQuotation.SaludNetAmount);
             //Cálculo de nueva prima total bruta de Salud
             this.InputsQuotation.SaludGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNetAmount));
+        }
+
+        if (parseFloat(this.InputsQuotation.SaludNetAmount) < parseFloat(this.InputsQuotation.SaludMinPremium)) {
+            this.isNetPremiumLessThanMinHealthPremium = true;
+            let premium = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
+            this.healthMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + premium * this.healthIGV;
+        } else {
+            this.isNetPremiumLessThanMinHealthPremium = false;
+            this.healthMessage = "";
+        }
+
+        if (parseFloat(this.InputsQuotation.PensionNetAmount) < parseFloat(this.InputsQuotation.PensionMinPremium)) {
+            this.isNetPremiumLessThanMinPensionPremium = true;
+            let premium = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
+            this.pensionMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + premium * this.pensionIGV;
+        } else {
+            this.isNetPremiumLessThanMinPensionPremium = false;
+            this.pensionMessage = "";
         }
 
     }
@@ -772,9 +805,11 @@ export class QuotationEvaluationComponent implements OnInit {
                 item.MinimunPremium = self.InputsQuotation.PensionMinPremium;
                 item.ProposedMinimunPremium = self.InputsQuotation.PensionPropMinPremium;
                 item.EndorsmentPremium = element.EndorsmentPremium;
+
                 item.NetPremium = self.InputsQuotation.PensionNetAmount;
                 item.GrossPremium = self.InputsQuotation.PensionGrossAmount;
                 item.PremiumIGV = self.InputsQuotation.PensionCalculatedIGV;
+
                 item.RiskRate = element.RiskRate;
                 item.Discount = element.Discount;
                 item.Variation = element.Variation;
@@ -794,9 +829,11 @@ export class QuotationEvaluationComponent implements OnInit {
                 item.MinimunPremium = self.InputsQuotation.SaludMinPremium;
                 item.ProposedMinimunPremium = self.InputsQuotation.SaludPropMinPremium;
                 item.EndorsmentPremium = element.EndorsmentPremium;
+
                 item.NetPremium = self.InputsQuotation.SaludNetAmount;
                 item.GrossPremium = self.InputsQuotation.SaludGrossAmount;
                 item.PremiumIGV = self.InputsQuotation.SaludCalculatedIGV;
+
                 item.RiskRate = element.RiskRate;
                 item.Discount = element.Discount;
                 item.Variation = element.Variation;
