@@ -121,6 +121,10 @@ export class QuotationEvaluationComponent implements OnInit {
     healthProductId: string;
     /**Id de producto Pensión */
     pensionProductId: string;
+    /**Prima total neta recalculada que se muestra cuando la prima neta actual es menor a la prima mínima*/
+    pensionMessage: string;
+    /**Prima total neta recalculada que se muestra cuando la prima neta actual es menor a la prima mínima*/
+    healthMessage: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -375,6 +379,12 @@ export class QuotationEvaluationComponent implements OnInit {
             //Cálculo de nueva prima total bruta de Salud
             this.InputsQuotation.SaludNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludNewCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNewNetAmount));
         }
+        if (parseFloat(this.InputsQuotation.SaludNewNetAmount) < parseFloat(this.InputsQuotation.SaludMinPremium)) {
+            this.healthMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.SaludMinPremium * this.healthIGV;
+        } else this.healthMessage = "";
+        if (parseFloat(this.InputsQuotation.PensionNewNetAmount) < parseFloat(this.InputsQuotation.PensionMinPremium)) {
+            this.pensionMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.PensionMinPremium * this.pensionIGV;
+        } else this.pensionMessage = "";
 
     }
     /**

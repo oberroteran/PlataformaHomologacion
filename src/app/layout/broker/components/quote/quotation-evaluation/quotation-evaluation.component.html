@@ -353,6 +353,7 @@
                           </tr>
                           <ng-container
                             *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length!=0">
+                            <hr style="margin-bottom: 0;">
                             <tr class="d-flex">
                               <td class="col-sm text-center"></td>
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
@@ -386,6 +387,9 @@
                           </ng-container>
                         </tbody>
                       </table>
+                      <div class="col-sm-12">
+                        <p class="msg-error">{{healthMessage}}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -484,7 +488,7 @@
                               <td class="col-sm text-center"></td>
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
                               <td class="col-sm text-center"></td>
-                              <td class="col-sm text-right"><span>IGV + CE</span></td>
+                              <td class="col-sm text-right"><span>IGV + DE</span></td>
                               <td class="col-sm text-center"><span>{{InputsQuotation.PensionCalculatedIGV}}</span></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
@@ -505,6 +509,9 @@
 
                         </tbody>
                       </table>
+                      <div class="col-sm-12">
+                        <p class="msg-error">{{pensionMessage}}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
