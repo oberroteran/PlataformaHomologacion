@@ -31,8 +31,8 @@ export class PolicyemitService {
         let url = this._baseUrl + "/PolicyManager/PolizaEmitDet?nroCotizacion=" + nroCotizacion;
         return this.http.get(url);
     }
-    getPolicyEmitDetTX(processId: any) {
-        let url = this._baseUrl + "/PolicyManager/PolizaEmitDetTX?processId=" + processId;
+    getPolicyEmitDetTX(processId: any, typeMovement: any) {
+        let url = this._baseUrl + "/PolicyManager/PolizaEmitDetTX?processId=" + processId+ "&typeMovement=" + typeMovement;
         return this.http.get(url);
     }
     getPolicyCot(nroCotizacion: any) {

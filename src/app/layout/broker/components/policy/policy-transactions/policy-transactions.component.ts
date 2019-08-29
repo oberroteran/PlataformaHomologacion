@@ -1,15 +1,10 @@
 import { PolizaAsegurados } from '../../../models/polizaEmit/PolizaAsegurados';
-import { PolizaEmit } from '../../../models/polizaEmit/polizaEmit';
-import { PolizaEmitCab } from '../../../models/polizaEmit/PolizaEmitCab';
-import { PolizaEmitComer } from '../../../models/polizaEmit/PolizaEmitComer';
 import { TipoRenovacion } from '../../../models/polizaEmit/TipoRenovacion';
 import { FrecuenciaPago } from '../../../models/polizaEmit/FrecuenciaPago';
-import { SavedPolicyEmit } from '../../../models/polizaEmit/SavedPolicyEmit';
 import { PolizaEmitDet, PolizaEmitDetAltoRiesgo, PolizaEmitDetMedianoRiesgo, PolizaEmitDetBajoRiesgo } from '../../../models/polizaEmit/PolizaEmitDet';
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { utils, write, read, readFile, WorkBook, WorkSheet } from 'xlsx';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2'
 import { PolicyemitService } from '../../../services/policy/policyemit.service';
@@ -168,7 +163,7 @@ export class PolicyTransactionsComponent implements OnInit {
   activityVariationSalud = "";
   commissionPension = "";
   commissionSalud = "";
-  // productos
+
   prodPension = false;
   prodSalud = false;
   stateWorker = false;
@@ -198,7 +193,6 @@ export class PolicyTransactionsComponent implements OnInit {
     private policyService: PolicyService,
     private datePipe: DatePipe,
     private modalService: NgbModal) {
-
     this.bsConfig = Object.assign(
       {},
       {
@@ -216,8 +210,8 @@ export class PolicyTransactionsComponent implements OnInit {
     this.polizaEmit.workers = "";
     this.polizaEmit.P_WORKER = "";
     this.polizaEmit.comentario = "";
-    this.ObtenerTipoRenovacion();
-    this.MotivosAnulacion();
+    this.obtenerTipoRenovacion();
+    this.motivosAnulacion();
     this.getIGVPension();
     this.getIGVSalud();
 
@@ -241,7 +235,6 @@ export class PolicyTransactionsComponent implements OnInit {
     this.polizaEmitCab.frecuenciaPago = '';
 
     this.mode = this.route.snapshot.paramMap.get('mode');
-    //console.log(this.mode);
     if (this.mode == "include") { // inclusion
       this.title = "Inclusión en Póliza";
       this.typeMovement = "2";
@@ -440,7 +433,7 @@ export class PolicyTransactionsComponent implements OnInit {
 
     }
 
-    this.Calcular();
+    this.calcular();
 
   }
   changePlanilla(cantPlanilla, valor) {
@@ -571,8 +564,7 @@ export class PolicyTransactionsComponent implements OnInit {
       }
 
     }
-
-    // this.Calcular();
+    
   }
 
   changeSaludPropuesta(cantComPro, valor) {
@@ -627,15 +619,6 @@ export class PolicyTransactionsComponent implements OnInit {
     }
   }
 
-  ValidarFecha() {
-    if (this.polizaEmitCab.bsValueIni > this.polizaEmitCab.bsValueFin) {
-      this.ValFecha = true
-      this.isValidatedInClickButton = true;
-      return;
-    }
-    this.ValFecha = false;
-    this.isValidatedInClickButton = false;
-  }
   clearVal() {
     this.errorNroCot = false;
   }
@@ -665,7 +648,7 @@ export class PolicyTransactionsComponent implements OnInit {
         if (this.editFlag == true) { // Sin modificacion
           this.validarTrama();
         } else { // Con modificacion
-          this.ConModificacion();
+          this.conModificacion();
         }
       } else {
         Swal.fire("Información", "Adjunte una trama para validar", "error");
@@ -676,7 +659,7 @@ export class PolicyTransactionsComponent implements OnInit {
     }
   };
 
-  ConModificacion() {
+  conModificacion() {
     let self = this;
     let dataQuotation: any = {};
     dataQuotation.P_SCLIENT = this.polizaEmitCab.SCLIENT;
@@ -878,13 +861,13 @@ export class PolicyTransactionsComponent implements OnInit {
       this.quotationService.equivalentMunicipality(this.polizaEmitCab.COD_DISTRITO).subscribe(
         res => {
           this.municipalityTariff = res;
-          this.GetTarifario();
+          this.getTarifario();
         }
       );
     }
   }
 
-  GetTarifario() {
+  getTarifario() {
     this.retarifa = "0";
     if (this.polizaEmitCab.DES_ACT_ECONOMICA != null && this.polizaEmitCab.COD_DISTRITO != null) {
       let data: any = {};
@@ -1009,13 +992,13 @@ export class PolicyTransactionsComponent implements OnInit {
 
             if (this.saludList.length > 0 || this.pensionList.length > 0) {
               if (this.prodPension == true && this.prodSalud == true) {
-                this.Calcular();
+                this.calcular();
               } else if (this.prodPension == true && this.prodSalud == false) {
                 this.saludList = [];
-                this.Calcular();
+                this.calcular();
               } else if (this.prodPension == false && this.prodSalud == true) {
                 this.pensionList = [];
-                this.Calcular();
+                this.calcular();
               } else {
                 this.clearTariff();
                 Swal.fire("Información", "La tarifa no está configurada correctamente", "error");
@@ -1041,7 +1024,7 @@ export class PolicyTransactionsComponent implements OnInit {
 
   }
 
-  Calcular() {
+  calcular() {
     if (this.resList != "") {
       let self = this;
       self.objEdit = []
@@ -1181,7 +1164,7 @@ export class PolicyTransactionsComponent implements OnInit {
     this.brutaTotalSaludSave = 0.00
   }
 
-  AddBroker() {
+  addBroker() {
     let modalRef = this.modalService.open(SearchBrokerComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
     modalRef.componentInstance.formModalReference = modalRef;
     modalRef.componentInstance.listaBroker = this.polizaEmitComer;
@@ -1512,25 +1495,23 @@ export class PolicyTransactionsComponent implements OnInit {
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 
-  ObtenerTipoRenovacion() {
+  obtenerTipoRenovacion() {
     let requestTypeRen: any = {}
     requestTypeRen.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]
     this.policyemit.getTipoRenovacion(requestTypeRen)
       .subscribe((res: any) => {
         this.tipoRenovacion = res;
-        //console.log("tipo", this.polizaEmitCab.tipoRenovacion)
         if (this.polizaEmitCab.tipoRenovacion !== "") {
           this.policyemit.getFrecuenciaPago(this.polizaEmitCab.tipoRenovacion)
             .subscribe((res: any) => {
               this.polizaEmitCab.frecuenciaPago = "";
               this.frecuenciaPago = res;
-              //console.log(this.frecuenciaPago);
             })
         }
       })
   }
 
-  MotivosAnulacion() {
+  motivosAnulacion() {
     this.policyemit.GetAnnulment()
       .subscribe((res: any) => {
         this.annulmentList = res;
@@ -1540,7 +1521,7 @@ export class PolicyTransactionsComponent implements OnInit {
   infoCarga(processID: any) {
     let self = this;
     if (processID != "") {
-      this.policyemit.getPolicyEmitDetTX(processID)
+      this.policyemit.getPolicyEmitDetTX(processID, this.typeMovement)
         .subscribe((res: any) => {
 
           if (res.length > 0) {
@@ -1652,7 +1633,7 @@ export class PolicyTransactionsComponent implements OnInit {
   }
 
 
-  GenerarPoliza(forma: NgForm) {
+  generarPoliza(forma: NgForm) {
     let mensaje = "";
     if (this.cotizacionID == "") {
       this.errorNroCot = true;
@@ -1872,10 +1853,9 @@ export class PolicyTransactionsComponent implements OnInit {
         dataQuotation.QuotationCom.push(itemQuotationCom);
       });
     }
-    console.log(dataQuotation)
+    
     this.policyemit.renewMod(dataQuotation).subscribe(
       res => {
-        console.log(res)
         if (res.P_COD_ERR == 0) {
           self.createJob();
         } else {
@@ -1885,7 +1865,6 @@ export class PolicyTransactionsComponent implements OnInit {
       },
       err => {
         self.loading = false;
-        //console.log(err);
         Swal.fire("Información", "Hubo un error con el servidor", "error");
       }
     );
@@ -2075,9 +2054,6 @@ export class PolicyTransactionsComponent implements OnInit {
             this.brutaTotalPensionSave = this.totalSTRC;
           }
         }
-
-
-
         break;
       case 5:
         this.stateTasaSalud = !this.stateTasaSalud;

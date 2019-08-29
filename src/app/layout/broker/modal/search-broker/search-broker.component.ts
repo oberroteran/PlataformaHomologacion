@@ -296,9 +296,9 @@ export class SearchBrokerComponent implements OnInit {
         res => {
           if (res.P_NCODE == 0) {
             if (res.listBroker.length > 0) {
+              // console.log(res.listBroker)
               this.listBroker = res.listBroker;
-              this.totalItems = this.listBroker.length;
-              this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
+              this.totalItems = this.listBroker.length; this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
             } else {
               swal.fire("Información", "No hay informacion con los datos ingresados", "error");
             }
@@ -316,6 +316,7 @@ export class SearchBrokerComponent implements OnInit {
 
   pageChanged(currentPage) {
     this.currentPage = currentPage;
+    this.listToShow = this.listBroker
     this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
   }
 

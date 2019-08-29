@@ -43,7 +43,6 @@
 }
 
 .filter input[type="text"] {
-    /* outline: auto; */
     border: none;
     border-radius: 2px;
     padding: 7px 5px;
@@ -105,7 +104,7 @@
 }
 
 .checkbox[type=checkbox]:before {
-    background: #806ea0 url("http://i.imgur.com/dR1TM0y.png");
+    background: #806ea0 url(assets/icons/check.png);
     background-size: 10px 8px;
     background-repeat: no-repeat;
     background-position: 2px 3px;
@@ -129,7 +128,6 @@
 }
 
 .filter input[type="date"] {
-    /* outline: auto; */
     border: none;
     border-radius: 2px;
     padding: 6px 5px;
@@ -137,7 +135,6 @@
     border: 1px solid rgb(146, 138, 163);
     color: rgb(146, 138, 163);
     width: 100%;
-    /* margin-left: 5px; */
     font-size: 14px;
     border: 1px solid #aa9ec0;
     color: #aa9ec0;
@@ -155,8 +152,6 @@ select {
     border-radius: 2px;
     margin-top: 5px;
     color: rgb(146, 138, 163);
-    /* outline: auto; */
-    /* margin-left: 3px; */
     font-family: "Bliss Pro";
     font-size: 14px;
     height: 45px;
@@ -188,7 +183,6 @@ span, textarea {
     margin: 20px auto;
     font-size: 14px;
     font-weight: 300;
-    /* border: 1px solid rgb(146, 138, 163); */
 }
 
 .grid table {
@@ -217,7 +211,6 @@ span, textarea {
     background: rgb(169, 157, 192);
     color: #fff;
     margin: 0 2px;
-    /* outline: none; */
     height: 30px;
     width: 25px;
     font-family: "Bliss Pro";
@@ -267,7 +260,6 @@ span, textarea {
     padding: 8px 5px;
     min-width: 170px;
     height: 45px;
-    /* outline: none; */
 }
 
 .header-content .header-item button:hover {
@@ -343,12 +335,6 @@ button span {
     height: 45px;
     outline: none;
 }
-
-/*
-.header-content .header-item .full-color span{
-  color: #fff;
-}*/
-
 .input-date {
     height: 45px;
     width: fit-content;
@@ -412,8 +398,6 @@ button span {
     overflow: visible;
     border-radius: 0;
 }
-
-/*SOBRESCRITURA DE BOOTSTRAP CSS*/
 
 .modal-header button {
     padding: 1rem 1rem;

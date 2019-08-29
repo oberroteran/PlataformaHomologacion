@@ -60,7 +60,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
     data.P_NID_COTIZACION = cotizacionID;
     this.policyService.getPolicyMovementsTransList(data).subscribe(
       res => {
-        console.log(res)
         this.policyMovementList = res.C_TABLE;
         let num = 0;
         this.totalItems = this.policyMovementList.length;
@@ -93,7 +92,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
   }
 
   anularMov(nroMov: any) {
-    // console.log(nroMov)
     let myFormData: FormData = new FormData()
     let renovacion: any = {};
     renovacion.P_NID_COTIZACION = this.cotizacionID // nro cotizacion
@@ -149,7 +147,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
               }
             },
             err => {
-              // this.loading = false;
               console.log(err);
             }
           );

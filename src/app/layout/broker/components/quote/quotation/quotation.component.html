@@ -45,7 +45,7 @@
                                     <span>TIPO DOCUMENTO (*)</span>
                                     <select (change)="onSelectTypeDocument($event.target.value)"
                                             [disabled]="stateSearch"
-                                            (click)="Clear(0)"
+                                            (click)="clearText(0)"
                                             [ngClass]="{'error-validate': VAL_QUOTATION[0] != ''}"
                                             [(ngModel)]="InputsQuotation.P_NIDDOC_TYPE">
                                         <option value="-1"
@@ -71,17 +71,17 @@
                                     <input type="text"
                                            placeholder="Nro Documento"
                                            [(ngModel)]="InputsQuotation.P_SIDDOC"
-                                           (click)="Clear(1)"
+                                           (click)="clearText(1)"
                                            [ngClass]="{'error-validate': VAL_QUOTATION[1] != ''}"
                                            (keypress)="documentNumberKeyPress($event)"
                                            (ngModelChange)="changeSDOC($event)"
                                            [disabled]="stateSearch"
                                            maxlength={{maxlength}}
-                                           (keyup.enter)="BuscarContratante()" />
+                                           (keyup.enter)="buscarContratante()" />
                                 </div>
                                 <div class="col-sm-3"
                                      style="margin-top: 35px;">
-                                    <button (click)="BuscarContratante()"
+                                    <button (click)="buscarContratante()"
                                             style="margin: 0">
                                         <img src="assets/icons/buscar_certificado.png" />
                                         <span>Buscar</span>
@@ -96,7 +96,7 @@
                                            placeholder="Nombres"
                                            [disabled]="!stateSearch"
                                            [(ngModel)]="InputsQuotation.P_SFIRSTNAME"
-                                           (keyup.enter)="BuscarContratante()"
+                                           (keyup.enter)="buscarContratante()"
                                            (keypress)="valText($event, 5)" />
                                 </div>
                                 <div *ngIf="!blockDoc"
@@ -106,7 +106,7 @@
                                            placeholder="Razón Social"
                                            [disabled]="!stateSearch"
                                            [(ngModel)]="InputsQuotation.P_SLEGALNAME"
-                                           (keyup.enter)="BuscarContratante()"
+                                           (keyup.enter)="buscarContratante()"
                                            (keypress)="valText($event, 4)" />
                                 </div>
                                 <div *ngIf="blockDoc"
@@ -116,7 +116,7 @@
                                            placeholder="Apellido Paterno"
                                            [disabled]="!stateSearch"
                                            [(ngModel)]="InputsQuotation.P_SLASTNAME"
-                                           (keyup.enter)="BuscarContratante()"
+                                           (keyup.enter)="buscarContratante()"
                                            (keypress)="valText($event, 5)" />
                                 </div>
                                 <div *ngIf="blockDoc"
@@ -126,7 +126,7 @@
                                            placeholder="Apellido Materno"
                                            [disabled]="!stateSearch"
                                            [(ngModel)]="InputsQuotation.P_SLASTNAME2"
-                                           (keyup.enter)="BuscarContratante()"
+                                           (keyup.enter)="buscarContratante()"
                                            (keypress)="valText($event, 5)" />
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
                                      *ngIf="brokerList.length < 2">
                                     <span>&nbsp;</span>
                                     <a class=" pull-right"
-                                       (click)="AddBroker()"
+                                       (click)="addBroker()"
                                        title="Agregar">
                                         <img src="assets/icons/add_button_calendar.png" />
                                     </a>
@@ -350,7 +350,7 @@
                                 <span>PRODUCTOS</span>
                                 <select (change)="onSelectProducto($event.target.value)"
                                         [(ngModel)]="InputsQuotation.P_NPRODUCT"
-                                        (click)="Clear(11)"
+                                        (click)="clearText(11)"
                                         [ngClass]="{'error-validate': VAL_QUOTATION[11] != ''}">
                                     <option value="-1">SELECCIONE</option>
                                     <option value="0">Ambos productos</option>
@@ -386,7 +386,7 @@
                                 <ng-select [(ngModel)]="InputsQuotation.P_NIDSEDE"
                                            (ngModelChange)="onSelectSede()"
                                            [clearable]="true"
-                                           (click)="Clear(2)"
+                                           (click)="clearText(2)"
                                            [ngClass]="{'error-validate': VAL_QUOTATION[2] != ''}"
                                            class="border-ng"
                                            [disabled]="stateQuotation"
@@ -863,17 +863,13 @@
                 </div>
             </div>
         </div>
-
-
         <div class="accordion mt-2">
-
-
             <div class="row pull-right mt-2">
-                <button (click)="Limpiar()">
+                <button (click)="limpiar()">
                     <span>Cancelar</span>
                 </button>
                 <button class="full-color"
-                        (click)="GrabarCotizacion()">
+                        (click)="grabarCotizacion()">
                     <span>Aceptar</span>
                 </button>
             </div>
