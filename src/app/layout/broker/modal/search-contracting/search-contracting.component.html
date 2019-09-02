@@ -8,6 +8,15 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <input type="text" [(ngModel)]="searchText" placeholder="FILTRAR" style="text-transform: uppercase">
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="grid form-group">
         <table class="table">
           <thead>
@@ -31,7 +40,7 @@
         <ng-template #showGrid>
           <tbody>
             <tr class="selectable" (dblclick)="chooseContractor(item)"
-              *ngFor="let item of listToShow  | filter : {P_SIDDOC: searchText, P_SFIRSTNAME:searchText, P_SLASTNAME:searchText, P_SLASTNAME2:searchText, P_SLEGALNAME:searchText}; let row_no = index">
+              *ngFor="let item of listToShow  | filter : {P_SIDDOC: searchText, P_SFIRSTNAME:searchText, P_SLASTNAME:searchText, P_SLASTNAME2:searchText, P_SLEGALNAME:searchText, list: EListClient}; let row_no = index">
               <td><input value={{row_no}} type="radio" name="contractorList" [(ngModel)]="selectedContractor">
               </td>
               <td>{{ item.P_NIDDOC_TYPE | typeDocument}}</td>
@@ -41,7 +50,7 @@
           </tbody>
         </ng-template>
       </div>
-      <ng-container *ngIf="EListClient!=null && EListClient.length>0; then showPagination"></ng-container>
+      <ng-container *ngIf="EListClient!=null && EListClient.length>0 && searchText == ''; then showPagination"></ng-container>
       <ng-template #showPagination>
         <div class="row">
           <div class="col-sm-12">
