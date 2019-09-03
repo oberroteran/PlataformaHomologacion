@@ -373,24 +373,34 @@ export class AgencyIndexComponent implements OnInit {
         this.isLoading = true;
         this.quotationService.searchBroker(obj).subscribe(
             res => {
-                if (res != null && res.length > 0) {
-                    if (res.length == 1) {  //Si solo se ha encontrado un registro, empezamos con la búsqueda de agenciamientos
+                if (res.P_NCODE == 0) {
+                    if (res.listBroker != null && res.listBroker.length > 0) {  //Si solo se ha encontrado un registro, empezamos con la búsqueda de agenciamientos
+                        if (res.listBroker.length == 1) {
+                            this.filter.BrokerId = res.listBroker[0].NCORREDOR;
+                            this.filter.ChannelTypeId = res.listBroker[0].NTYPECHANNEL;
+                            this.filter.StartDate = this.mainFormGroup.controls.startDate.value;
+                            this.filter.EndDate = this.mainFormGroup.controls.endDate.value;
 
-                        this.filter.BrokerId = res[0].NCORREDOR;
-                        this.filter.ChannelTypeId = res[0].NTYPECHANNEL;
-                        this.filter.StartDate = this.mainFormGroup.controls.startDate.value;
-                        this.filter.EndDate = this.mainFormGroup.controls.endDate.value;
+                            this.filter.DocumentTypeId = res.listBroker[0].NTIPDOC;
+                            this.filter.DocumentNumber = res.listBroker[0].NNUMDOC;
+                            this.filter.FullName = res.listBroker[0].RAZON_SOCIAL;
 
-                        this.filter.DocumentTypeId = res[0].NTIPDOC;
-                        this.filter.DocumentNumber = res[0].NNUMDOC;
-                        this.filter.FullName = res[0].RAZON_SOCIAL;
+                            this.mainFormGroup.controls.searchMode.patchValue("1");
+                            this.mainFormGroup.controls.documentType.patchValue(this.filter.DocumentTypeId);
+                            this.mainFormGroup.controls.documentNumber.patchValue(this.filter.DocumentNumber);
+                            this.searchAgency();
+                        } else {  //Si se ha encontrado más de un resultado, mostramos el modal de selección
+                            this.openSearchModal(res.listBroker);
+                        }
+                    } else {
+                        this.filter.BrokerId = "";
+                        this.filter.ChannelTypeId = "";
+                        this.filter.DocumentTypeId = "";
+                        this.filter.DocumentNumber = "";
+                        this.filter.FullName = "";
 
-                        this.mainFormGroup.controls.searchMode.patchValue("1");
-                        this.mainFormGroup.controls.documentType.patchValue(this.filter.DocumentTypeId);
-                        this.mainFormGroup.controls.documentNumber.patchValue(this.filter.DocumentNumber);
-                        this.searchAgency();
-                    } else {  //Si se ha encontrado más de un resultado, mostramos el modal de selección
-                        this.openSearchModal(res);
+                        this.foundResults = [];
+                        Swal.fire("Información", "No se ha encontrado resultados.", "error");
                     }
                 } else {
                     this.filter.BrokerId = "";
@@ -400,7 +410,7 @@ export class AgencyIndexComponent implements OnInit {
                     this.filter.FullName = "";
 
                     this.foundResults = [];
-                    Swal.fire("Información", "No se ha encontrado ningún broker con estos datos.", "error");
+                    Swal.fire("Información", res.P_SMESSAGE, "error");
                 }
                 this.isLoading = false;
             },
