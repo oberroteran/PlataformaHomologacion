@@ -24,6 +24,21 @@ export class SearchContractingComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.EListClient.map(function (item) {
+      let name: string = item.P_SFIRSTNAME != null ? item.P_SFIRSTNAME + " " : "";
+      let lastname: string = item.P_SLASTNAME != null ? item.P_SLASTNAME + " " : "";
+      let lastname2: string = item.P_SLASTNAME2 != null ? item.P_SLASTNAME2 : "";
+      let legalname: string = item.P_SLEGALNAME != null ? item.P_SLEGALNAME : "";
+      let nameComplete: string = "";
+
+      if (item.P_NIDDOC_TYPE == "1") {
+        nameComplete = legalname;
+      } else {
+        nameComplete = name + lastname + lastname2;
+      }
+      item.RAZON_SOCIAL = nameComplete;
+    });
+    
     this.totalItems = this.EListClient.length;
     this.listToShow = this.EListClient.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
   }

@@ -96,7 +96,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
     let renovacion: any = {};
     renovacion.P_NID_COTIZACION = this.cotizacionID // nro cotizacion
     renovacion.P_DEFFECDATE = null; //Fecha Inicio
-    renovacion.P_DEXPIRDAT = null; // Fecha Fin //this.datePipe.transform(this.polizaEmitCab.bsValueFin, "dd/MM/yyyy") // Fecha hasta
+    renovacion.P_DEXPIRDAT = null; // Fecha Fin
     renovacion.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"] // Fecha hasta
     renovacion.P_NTYPE_TRANSAC = 6; // tipo de movimiento
     renovacion.P_NID_PROC = "" // codigo de proceso (Validar trama)
@@ -127,7 +127,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
                 this.getPolicyMovement(this.cotizacionID);
                 Swal.fire({
                   title: "Información",
-                  text: "Se ha anulado correctamente el movimiento, con el N° de constancia " + res.P_NCONSTANCIA,
+                  text: "Se ha anulado correctamente el movimiento",
                   type: "success",
                   confirmButtonText: 'OK',
                   allowOutsideClick: false,
