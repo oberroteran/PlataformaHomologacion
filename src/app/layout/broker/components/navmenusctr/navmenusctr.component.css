@@ -209,8 +209,6 @@
     cursor: pointer;
 }
 
-/*ususario fin*/
-
 li .glyphicon {
     margin-right: 10px;
 }
@@ -233,8 +231,6 @@ li .glyphicon {
     padding-right: 20px;
 }
 
-/* BEGIN HOME */
-
 .icon-home .li-img {
     background-image: url(assets/main/mipanel.svg) !important;
     background-repeat: no-repeat !important;
@@ -244,10 +240,6 @@ li .glyphicon {
     background-image: url(assets/main/mipanel_hover.svg) !important;
     background-repeat: no-repeat !important;
 }
-
-/* END HOME */
-
-/* BEGIN HISTORIAL */
 
 .icon-historial .li-img {
     background-image: url(assets/main/historialventas.svg) !important;
@@ -259,10 +251,6 @@ li .glyphicon {
     background-repeat: no-repeat !important;
 }
 
-/* END HISTORIAL */
-
-/* BEGIN PLANILLAS */
-
 .icon-planillas .li-img {
     background-image: url(assets/main/misplanillas.svg) !important;
     background-repeat: no-repeat !important;
@@ -272,10 +260,6 @@ li .glyphicon {
     background-image: url(assets/main/misplanillas_hover.svg) !important;
     background-repeat: no-repeat !important;
 }
-
-/* END HISTORIAL */
-
-/* BEGIN REPORTES */
 
 .icon-rv-cliente-final .li-img, .icon-rv-canal-ventas .li-img, .icon-rv-protecta .li-img, .icon-rc-protecta .li-img, .icon-rc-canal-ventas .li-img {
     background-image: url(assets/main/misproductos.svg) !important;
@@ -287,10 +271,6 @@ li .glyphicon {
     background-repeat: no-repeat !important;
 }
 
-/* END REPORTES */
-
-/* INI PRE-PLANILLAS */
-
 .icon-pre-planillas .li-img {
     background-image: url(assets/main/coin.svg) !important;
     background-repeat: no-repeat !important;
@@ -300,8 +280,6 @@ li .glyphicon {
     background-image: url(assets/main/coin_hover.svg) !important;
     background-repeat: no-repeat !important;
 }
-
-/* Icono Mantenimiento */
 
 .icon-mantenimiento .li-img {
     background-image: url(assets/main/mantenimiento.svg) !important;
@@ -313,8 +291,6 @@ li .glyphicon {
     background-repeat: no-repeat !important;
 }
 
-/* Icono Cotizacion */
-
 .icon-cotizacion .li-img {
     background-image: url(assets/main/cotizacion.svg) !important;
     background-repeat: no-repeat !important;
@@ -324,8 +300,6 @@ li .glyphicon {
     background-image: url(assets/main/cotizacion_hover.svg) !important;
     background-repeat: no-repeat !important;
 }
-
-/* Icono Poliza */
 
 .icon-poliza .li-img {
     background-image: url(assets/main/poliza.svg) !important;
@@ -337,8 +311,6 @@ li .glyphicon {
     background-repeat: no-repeat !important;
 }
 
-/* Icono Reportes */
-
 .icon-reportes .li-img {
     background-image: url(assets/main/reportes.svg) !important;
     background-repeat: no-repeat !important;
@@ -348,8 +320,6 @@ li .glyphicon {
     background-image: url(assets/main/reportes_hover.svg) !important;
     background-repeat: no-repeat !important;
 }
-
-/* Icono Productos */
 
 .icon-productos .li-img {
     background-image: url(assets/main/productos.svg) !important;

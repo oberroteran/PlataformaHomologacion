@@ -1,20 +1,16 @@
 import { PolizaAsegurados } from '../../../models/polizaEmit/PolizaAsegurados';
-import { PolizaEmit } from '../../../models/polizaEmit/polizaEmit';
 import { PolizaEmitCab } from '../../../models/polizaEmit/PolizaEmitCab';
 import { PolizaEmitComer } from '../../../models/polizaEmit/PolizaEmitComer';
 import { TipoRenovacion } from '../../../models/polizaEmit/TipoRenovacion';
 import { FrecuenciaPago } from '../../../models/polizaEmit/FrecuenciaPago';
-import { SavedPolicyEmit } from '../../..//models/polizaEmit/SavedPolicyEmit';
 import { PolizaEmitDet, PolizaEmitDetAltoRiesgo, PolizaEmitDetMedianoRiesgo, PolizaEmitDetBajoRiesgo } from '../../../models/polizaEmit/PolizaEmitDet';
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { utils, write, read, readFile, WorkBook, WorkSheet } from 'xlsx';
 import { NgForm } from '@angular/forms';
-import Swal from 'sweetalert2'
+import swal from 'sweetalert2'
 import { PolicyemitService } from '../../../services/policy/policyemit.service';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-//import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValErrorComponent } from '../../../modal/val-error/val-error.component';
 //Compartido
 import { AccessFilter } from './../../access-filter'
@@ -129,7 +125,6 @@ export class PolicyFormComponent implements OnInit {
 	canBillMonthly: boolean;
 	/**Puede facturar anticipadamente? */
 	canBillInAdvance: boolean;
-
 	/** Facturacion a mes vencido */
 	facVencido: boolean = false;
 	/** Facturacion anticipada */
@@ -138,7 +133,6 @@ export class PolicyFormComponent implements OnInit {
 	hasQuotationNumber: boolean = false;
 
 	constructor(private route: ActivatedRoute, private router: Router, private othersService: OthersService, private policyemit: PolicyemitService, private modalService: NgbModal) {
-
 		this.bsConfig = Object.assign(
 			{},
 			{
@@ -158,8 +152,7 @@ export class PolicyFormComponent implements OnInit {
 		this.polizaEmit.comentario = "";
 		//prueba mina
 		this.polizaEmitCab.MINA = false;
-		this.ObtenerTipoRenovacion();
-
+		this.obtenerTipoRenovacion();
 		this.polizaEmitCab.bsValueIni = new Date();
 		this.polizaEmitCab.bsValueFin = new Date();
 		this.polizaEmitCab.bsValueIniMin = new Date();
@@ -204,15 +197,7 @@ export class PolicyFormComponent implements OnInit {
 	getDate() {
 		return new Date()
 	}
-	ValidarFecha() {
-		if (this.polizaEmitCab.bsValueIni > this.polizaEmitCab.bsValueFin) {
-			this.ValFecha = true
-			this.isValidatedInClickButton = true;
-			return;
-		}
-		this.ValFecha = false;
-		this.isValidatedInClickButton = false;
-	}
+
 	clearVal() {
 		this.errorNroCot = false;
 	}
@@ -267,10 +252,10 @@ export class PolicyFormComponent implements OnInit {
 								modalRef.componentInstance.erroresList = this.erroresList;
 							} else {
 								this.processID = res.P_NID_PROC;
-								Swal.fire("Información", "Se validó correctamente la trama", "success");
+								swal.fire("Información", "Se validó correctamente la trama", "success");
 							}
 						} else {
-							Swal.fire("Información", "El archivo enviado contiene errores", "error");
+							swal.fire("Información", "El archivo enviado contiene errores", "error");
 						}
 
 					},
@@ -280,11 +265,11 @@ export class PolicyFormComponent implements OnInit {
 					}
 				);
 			} else {
-				Swal.fire("Información", "Adjunte una trama para validar", "error");
+				swal.fire("Información", "Adjunte una trama para validar", "error");
 			}
 
 		} else {
-			Swal.fire("Información", "Ingrese una cotización", "error");
+			swal.fire("Información", "Ingrese una cotización", "error");
 		}
 	};
 
@@ -313,26 +298,21 @@ export class PolicyFormComponent implements OnInit {
 			this.policyemit.getPolicyEmitCab(this.nrocotizacion, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"])
 				.subscribe((res: any) => {
 					let self = this;
-					console.log(res)
 					this.cotizacionID = this.nrocotizacion;
 					if (res.GenericResponse !== null) {
 						if (res.GenericResponse.COD_ERR == 0) {
-
 							this.filePathList = res.GenericResponse.RUTAS;
 							this.SClient = res.GenericResponse.SCLIENT;
 							res.GenericResponse.bsValueIni = this.polizaEmitCab.bsValueIni
 							res.GenericResponse.bsValueFin = this.polizaEmitCab.bsValueFin
 							res.GenericResponse.tipoRenovacion = this.polizaEmitCab.tipoRenovacion
 							res.GenericResponse.frecuenciaPago = this.polizaEmitCab.frecuenciaPago
-
 							this.polizaEmitCab = res.GenericResponse;
-
 							this.polizaEmitCab.bsValueIni = new Date();
 							this.polizaEmitCab.bsValueIniMin = new Date(this.polizaEmitCab.EFECTO_COTIZACION);
 							this.polizaEmitCab.bsValueFinMin = this.polizaEmitCab.bsValueIni;
 							this.polizaEmitCab.bsValueFin = new Date(res.GenericResponse.EXPIRACION_COTIZACION);
 							this.polizaEmitCab.bsValueFinMax = new Date(this.polizaEmitCab.EXPIRACION_COTIZACION);
-
 							this.polizaEmitCab.MINA = res.GenericResponse.MINA == "1" ? true : false;
 							this.polizaEmitCab.DELIMITACION = res.GenericResponse.DELIMITACION == "1" ? true : false;
 							this.flagBusqueda = true;
@@ -358,7 +338,6 @@ export class PolicyFormComponent implements OnInit {
 
 							this.policyemit.getPolicyEmitDet(this.nrocotizacion)
 								.subscribe((res: any) => {
-									console.log(res)
 									if (res.length > 0) {
 										this.primatotalSCTR = 0;
 										this.primatotalSalud = 0;
@@ -400,7 +379,7 @@ export class PolicyFormComponent implements OnInit {
 									}
 								})
 						} else {
-							Swal.fire("Información", res.GenericResponse.MENSAJE, "error");
+							swal.fire("Información", res.GenericResponse.MENSAJE, "error");
 							this.polizaEmitCab = new PolizaEmitCab();
 							this.polizaEmitCab.bsValueIni = new Date();
 							this.polizaEmitCab.bsValueFin = new Date();
@@ -443,7 +422,7 @@ export class PolicyFormComponent implements OnInit {
 				})
 		}
 		else {
-			Swal.fire("Información", "Ingresar nro de cotización", "error");
+			swal.fire("Información", "Ingresar nro de cotización", "error");
 		}
 	}
 
@@ -452,7 +431,7 @@ export class PolicyFormComponent implements OnInit {
 		return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
 	}
 
-	ObtenerTipoRenovacion() {
+	obtenerTipoRenovacion() {
 		let requestTypeRen: any = {}
 		requestTypeRen.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]
 		this.policyemit.getTipoRenovacion(requestTypeRen)
@@ -470,7 +449,6 @@ export class PolicyFormComponent implements OnInit {
 
 	downloadExcel() {
 		let client: string = this.SClient;
-		console.log(this.polizaEmitCab);
 		if (client != null && this.nrocotizacion != undefined && this.nrocotizacion != 0) {
 			this.loading = true;
 			this.policyemit.downloadExcel(client, this.nrocotizacion).subscribe((res: any) => {
@@ -490,7 +468,7 @@ export class PolicyFormComponent implements OnInit {
 				}
 
 		} else {
-			Swal.fire("Información", "Debes buscar una cotizacion", "error");
+			swal.fire("Información", "Debes buscar una cotizacion", "error");
 		}
 
 	}
@@ -500,7 +478,7 @@ export class PolicyFormComponent implements OnInit {
 	}
 
 
-	GenerarPoliza(forma: NgForm) {
+	generarPoliza(forma: NgForm) {
 		let mensaje = "";
 		if (this.cotizacionID == "") {
 			this.errorNroCot = true;
@@ -586,9 +564,8 @@ export class PolicyFormComponent implements OnInit {
 				this.savedPolicyList.push(this.savedPolicyEmit);
 			}
 
-			// console.log(this.savedPolicyList);
 			myFormData.append("objeto", JSON.stringify(this.savedPolicyList));
-			Swal.fire({
+			swal.fire({
 				title: "Información",
 				text: "¿Desea realizar la emisión?",
 				type: "question",
@@ -599,10 +576,8 @@ export class PolicyFormComponent implements OnInit {
 			})
 				.then((result) => {
 					if (result.value) {
-						// self.isLoading = true;
 						this.policyemit.savePolicyEmit(myFormData)
 							.subscribe((res: any) => {
-								console.log(res);
 								if (res.P_COD_ERR == 0) {
 									let policyPension = 0;
 									let policySalud = 0;
@@ -617,7 +592,7 @@ export class PolicyFormComponent implements OnInit {
 
 									if (policyPension > 0 && policySalud > 0) {
 
-										Swal.fire({
+										swal.fire({
 											title: "Información",
 											text: "Se ha generado correctamente la póliza de Pensión N° " + policyPension + " y la póliza de Salud N° " + policySalud + " con Constancia N° " + constancia,
 											type: "success",
@@ -627,7 +602,7 @@ export class PolicyFormComponent implements OnInit {
 									}
 									else {
 										if (policyPension > 0) {
-											Swal.fire({
+											swal.fire({
 												title: "Información",
 												text: "Se ha generado correctamente la póliza de Pensión N° " + policyPension + " con Constancia N° " + constancia,
 												type: "success",
@@ -636,7 +611,7 @@ export class PolicyFormComponent implements OnInit {
 											})
 										}
 										if (policySalud > 0) {
-											Swal.fire({
+											swal.fire({
 												title: "Información",
 												text: "Se ha generado correctamente la póliza de Salud N° " + policySalud + " con Constancia N° " + constancia,
 												type: "success",
@@ -646,7 +621,7 @@ export class PolicyFormComponent implements OnInit {
 										}
 									}
 								} else {
-									Swal.fire({
+									swal.fire({
 										title: "Información",
 										text: res.P_MESSAGE,
 										type: "error",
@@ -661,7 +636,7 @@ export class PolicyFormComponent implements OnInit {
 
 
 		} else {
-			Swal.fire("Información", mensaje, "error");
+			swal.fire("Información", mensaje, "error");
 		}
 
 	}
@@ -684,13 +659,11 @@ export class PolicyFormComponent implements OnInit {
 					this.flagExtension = true;
 				}
 			}
-
 		}
 		if (this.flagExtension) {
 			this.archivosJson.push({
 				error: 'Solo se aceptan imagenes y documentos'
 			})
-
 			return;
 		}
 		if (this.tamañoArchivo > 10) {
@@ -699,8 +672,6 @@ export class PolicyFormComponent implements OnInit {
 			})
 			return;
 		}
-
-
 	}
 
 	validarTipoRenovacion(event: any) {
@@ -764,7 +735,6 @@ export class PolicyFormComponent implements OnInit {
 
 	habilitarFechas() {
 		this.flagTipoR = false;
-
 		this.activacion = false;
 		this.disabledFecha = true;
 		this.policyemit.getFrecuenciaPago(this.polizaEmitCab.tipoRenovacion)
@@ -870,7 +840,7 @@ export class PolicyFormComponent implements OnInit {
 		this.othersService.downloadFile(filePath).subscribe(
 			res => {
 				if (res.StatusCode == 1) {
-					Swal.fire('Información', this.listToString(res.ErrorMessageList), 'error');
+					swal.fire('Información', this.listToString(res.ErrorMessageList), 'error');
 				} else {
 					//Es necesario crear un objeto BLOB con el tipo MIME (mime-type) explícitamente configurado
 					//de otra manera chrome solo funcionaría como debería
@@ -903,7 +873,7 @@ export class PolicyFormComponent implements OnInit {
 
 			},
 			err => {
-				Swal.fire('Información', 'Error inesperado, por favor contáctese con soporte.', 'error');
+				swal.fire('Información', 'Error inesperado, por favor contáctese con soporte.', 'error');
 			}
 		);
 	}

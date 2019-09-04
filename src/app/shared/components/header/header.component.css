@@ -58,7 +58,8 @@ a {
 
 .img-logo {
   min-height: 54px !important;
-  min-width: 324px !important;
+  min-width: 270px !important;
+  max-width: 270px !important;
 }
 
 .img-logo-canal {

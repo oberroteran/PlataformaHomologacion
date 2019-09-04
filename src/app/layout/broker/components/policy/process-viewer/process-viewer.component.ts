@@ -23,8 +23,6 @@ export class ProcessViewerComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
   bsValueIni: Date = new Date();
   bsValueFinMax: Date = new Date();
-
-
   constructor(
     private policyService: PolicyService,
     private datePipe: DatePipe,
@@ -65,10 +63,8 @@ export class ProcessViewerComponent implements OnInit {
     data.P_DEFFECDATE = dayIni + "/" + monthIni + "/" + yearIni;
     data.P_NLIMITPERPAGE = 99999
     data.P_NPAGENUM = 1
-    // console.log(data)
     this.policyService.GetVisualizadorProc(data).subscribe(
       res => {
-        // console.log(res)
         this.isLoading = false;
         this.processList = res.listProcess;
         this.totalItems = this.processList.length;
@@ -91,7 +87,6 @@ export class ProcessViewerComponent implements OnInit {
         console.log(err);
       }
     );
-    // }
   }
 
   pageChanged(currentPage) {

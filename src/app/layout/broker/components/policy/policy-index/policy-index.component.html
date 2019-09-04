@@ -28,18 +28,18 @@
                 <div class="col-sm-3">
                   <span>NRO. PÓLIZA</span>
                   <input type="text" placeholder="Nro. Póliza" [(ngModel)]="InputsSearch.P_NPOLICY"
-                    (ngModelChange)="changePolicy($event)" (keyup.enter)="BuscarPoliza()" OnlyNumberDirective>
+                    (ngModelChange)="changePolicy($event)" (keyup.enter)="buscarPoliza()" OnlyNumberDirective>
                 </div>
                 <div class="col-sm-3">
                   <span>DESDE </span>
-                  <input type="text" #dp="bsDatepicker" (ngModelChange)="ValInicio($event)" [bsConfig]="bsConfig"
+                  <input type="text" #dp="bsDatepicker" (ngModelChange)="valInicio($event)" [bsConfig]="bsConfig"
                     bsDatepicker [(bsValue)]="bsValueIni" [(ngModel)]="bsValueIni" [(maxDate)]="bsValueIniMax"
                     value="{{ bsValueIni | date:'dd/MM/yyyy' }}" [disabled]="stateSearch" #desde readonly>
                 </div>
                 <div class="col-sm-3">
                   <span>HASTA</span>
                   <input type="text" [(ngModel)]="bsValueFin" [bsConfig]="bsConfig" #dp="bsDatepicker"
-                    (ngModelChange)="ValFin($event)" bsDatepicker [(bsValue)]="bsValueFin"
+                    (ngModelChange)="valFin($event)" bsDatepicker [(bsValue)]="bsValueFin"
                     value="{{ bsValueFin | date:'dd/MM/yyyy' }}" [(minDate)]="bsValueFinMin" [(maxDate)]="bsValueFinMax"
                     [disabled]="stateSearch" #hasta readonly>
                 </div>
@@ -82,7 +82,7 @@
                 <div *ngIf="blockSearch" class="col-sm-3">
                   <span>NRO. DOCUMENTO</span>
                   <input type="text" placeholder="Nro Documento" [(ngModel)]="InputsSearch.P_SIDDOC"
-                    (keypress)="documentNumberKeyPress($event)" (keyup.enter)="BuscarPoliza()" maxlength={{maxlength}}
+                    (keypress)="documentNumberKeyPress($event)" (keyup.enter)="buscarPoliza()" maxlength={{maxlength}}
                     [disabled]="stateSearch" />
                 </div>
               </div>
@@ -90,27 +90,27 @@
                 <div *ngIf="blockDoc" class="col-sm-3">
                   <span>NOMBRES</span>
                   <input type="text" placeholder="Nombres" [disabled]="stateSearch"
-                    [(ngModel)]="InputsSearch.P_SFIRSTNAME" (keyup.enter)="BuscarPoliza()" OnlyTextSpaceDirective />
+                    [(ngModel)]="InputsSearch.P_SFIRSTNAME" (keyup.enter)="buscarPoliza()" OnlyTextSpaceDirective />
                 </div>
                 <div *ngIf="!blockDoc" class="col-sm-9">
                   <span>RAZÓN SOCIAL (*)</span>
                   <input type="text" placeholder="Razón Social" [disabled]="stateSearch"
-                    [(ngModel)]="InputsSearch.P_SLEGALNAME" (keyup.enter)="BuscarPoliza()" LegalNameDirective />
+                    [(ngModel)]="InputsSearch.P_SLEGALNAME" (keyup.enter)="buscarPoliza()" LegalNameDirective />
                 </div>
                 <div *ngIf="blockDoc" class="col-sm-3">
                   <span>APELLIDO PATERNO</span>
                   <input type="text" placeholder="Apellido Paterno" [disabled]="stateSearch"
-                    [(ngModel)]="InputsSearch.P_SLASTNAME" (keyup.enter)="BuscarPoliza()" OnlyTextSpaceDirective />
+                    [(ngModel)]="InputsSearch.P_SLASTNAME" (keyup.enter)="buscarPoliza()" OnlyTextSpaceDirective />
                 </div>
                 <div *ngIf="blockDoc" class="col-sm-3">
                   <span>APELLIDO MATERNO</span>
                   <input type="text" placeholder="Apellido Materno" [disabled]="stateSearch"
-                    [(ngModel)]="InputsSearch.P_SLASTNAME2" (keyup.enter)="BuscarPoliza()" OnlyTextSpaceDirective />
+                    [(ngModel)]="InputsSearch.P_SLASTNAME2" (keyup.enter)="buscarPoliza()" OnlyTextSpaceDirective />
                 </div>
               </div>
               <div class="row mt-2">
                 <div class="col-sm-12">
-                  <button class="full-color pull-right" (click)="BuscarPoliza()">
+                  <button class="full-color pull-right" (click)="buscarPoliza()">
                     <span>Buscar</span>
                   </button>
                 </div>

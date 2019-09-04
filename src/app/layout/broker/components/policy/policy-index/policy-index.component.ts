@@ -10,7 +10,6 @@ import { PolicyemitService } from '../../../services/policy/policyemit.service';
 
 //componentes para ser usados como MODAL
 import { PolicyMovementDetailsComponent } from '../policy-movement-details/policy-movement-details.component'
-import { PolicyFormComponent } from '../policy-form/policy-form.component'
 import { PolicyService } from '../../../services/policy/policy.service';
 //Compartido
 import { AccessFilter } from './../../access-filter'
@@ -90,12 +89,6 @@ export class PolicyIndexComponent implements OnInit {
             }
         );
     }
-
-    // ngAfterViewChecked() {
-    //     // console.log("! changement de la date du composant !");        
-    //     this.cdRef.detectChanges();
-    // }
-
     ngOnInit() {
         if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_transaction_query"]) == false) this.router.navigate(['/broker/home']);
         this.canRenovate = AccessFilter.hasPermission("19");
@@ -286,7 +279,7 @@ export class PolicyIndexComponent implements OnInit {
 
     }
 
-    BuscarPoliza() {
+    buscarPoliza() {
 
         this.listToShow = [];
         this.currentPage = 1; //página actual
@@ -335,7 +328,6 @@ export class PolicyIndexComponent implements OnInit {
             let monthPreviewFin = this.bsValueFin.getMonth() + 1;
             let monthFin = monthPreviewFin < 10 ? "0" + monthPreviewFin : monthPreviewFin;
             let yearFin = this.bsValueFin.getFullYear();
-
 
             let data: any = {};
             data.P_NPOLICY = this.InputsSearch.P_NPOLICY == "0" ? "" : this.InputsSearch.P_NPOLICY
@@ -453,7 +445,6 @@ export class PolicyIndexComponent implements OnInit {
     }
 
     facturarPoliza(itemFact: any) {
-        // console.log(nroMov)
         let myFormData: FormData = new FormData()
         let renovacion: any = {};
         renovacion.P_NID_COTIZACION = itemFact.NRO_COTIZACION // nro cotizacion
@@ -504,7 +495,6 @@ export class PolicyIndexComponent implements OnInit {
                             }
                         },
                         err => {
-                            // this.loading = false;
                             console.log(err);
                         }
                     );
@@ -512,11 +502,11 @@ export class PolicyIndexComponent implements OnInit {
             });
     }
 
-    ValInicio(event) {
+    valInicio(event) {
         this.bsValueFinMin = new Date(this.bsValueIni);
 
     }
-    ValFin(event) {
+    valFin(event) {
         this.bsValueIniMax = new Date(this.bsValueFin);
     }
 }

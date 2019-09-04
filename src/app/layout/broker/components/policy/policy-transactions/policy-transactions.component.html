@@ -11,7 +11,7 @@
 					</div>
 				</div>
 			</div>
-			<form #f="ngForm" (ngSubmit)="GenerarPoliza(f)">
+			<form #f="ngForm" (ngSubmit)="generarPoliza(f)">
 				<div class="accordion mt-2">
 					<div class="card-header">
 						<h5 class="mb-0" data-toggle="collapse" data-target="#contratante" aria-expanded="true"
@@ -61,7 +61,7 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-9">
-								<span>NOMBRE o RAZON SOCIAL</span>
+								<span>NOMBRES Y APELLIDOS / RAZON SOCIAL</span>
 								<input type="text" [(ngModel)]="polizaEmitCab.NOMBRE_RAZON" name="NOMBRE_RAZON"
 									placeholder="Nombres" disabled />
 							</div>
@@ -107,7 +107,7 @@
 							<div *ngIf="!editFlag" class="col-sm-6">
 								<div [hidden]="canAddSecondaryBroker" *ngIf="polizaEmitComer.length < 2">
 									<span>&nbsp;</span>
-									<a class="pull-right" (click)="AddBroker()" title="Agregar">
+									<a class="pull-right" (click)="addBroker()" title="Agregar">
 										<img src="assets/icons/add_button_calendar.png" />
 									</a>
 								</div>
@@ -125,7 +125,7 @@
 								<span>COMISIÓN SALUD</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD =$event"
-									name="COMISION_SALUD" placeholder="Comisión del Broker" id="" disabled />
+									name="COMISION_SALUD" placeholder="0" id="" disabled />
 							</div>
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<label style="margin: 0;"><span class="schk"><input type="checkbox" style="top: 3px;"
@@ -449,8 +449,8 @@
 													[disabled]="editFlag">
 												PRIMA MÍNIMA PROPUESTA</span></label>
 										<input type="text" placeholder="0" [disabled]="statePrimaSalud"
-											name="MIN_SALUD_PR" [(ngModel)]="polizaEmitCab.MIN_SALUD_PR"
-											FloatDirective />
+											(ngModelChange)="changePrimaPropuesta($event, saludID)" name="MIN_SALUD_PR"
+											[(ngModel)]="polizaEmitCab.MIN_SALUD_PR" FloatDirective />
 									</div>
 								</div>
 								<div class="card mt-3">
@@ -483,7 +483,7 @@
 													<tr class="d-flex" *ngFor="let item of saludList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA_CALC}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}}</span>
 														</td>
 														<td class="col-sm"><input type="text" class="text-center"
 																placeholder="0" name="tasaPRO_SAL-{{i}}"
@@ -491,7 +491,7 @@
 																(ngModelChange)="changeTasaPropuestaSalud($event, item.DES_RIESGO)"
 																[disabled]="stateTasaSalud" FloatDirective /></td>
 														<td class="col-sm text-center">
-															<span>{{item.PRIMA | miles}}</span></td>
+															<span>{{item.AUT_PRIMA | miles}}</span></td>
 													</tr>
 													<hr style="margin-bottom: 0;" *ngIf="saludList.length > 0">
 													<tr class="d-flex" *ngIf="saludList.length > 0">
@@ -539,8 +539,10 @@
 													[disabled]="editFlag">
 												PRIMA MÍNIMA PROPUESTA</span></label>
 										<input type="text" placeholder="0" style="margin-top: 2px !important;"
-											[disabled]="statePrimaPension" name="MIN_PENSION_PR"
-											[(ngModel)]="polizaEmitCab.MIN_PENSION_PR" FloatDirective />
+											[disabled]="statePrimaPension"
+											(ngModelChange)="changePrimaPropuesta($event, pensionID)"
+											name="MIN_PENSION_PR" [(ngModel)]="polizaEmitCab.MIN_PENSION_PR"
+											FloatDirective />
 									</div>
 								</div>
 								<div class="card mt-3">
@@ -573,7 +575,7 @@
 													<tr class="d-flex" *ngFor="let item of pensionList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA_CALC}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}}</span>
 														</td>
 														<td class="col-sm"><input type="text" class="text-center"
 																placeholder="0" name="tasaPRO_PEN-{{i}}"
@@ -582,7 +584,7 @@
 																[disabled]="stateTasaPension" FloatDirective />
 														</td>
 														<td class="col-sm text-center">
-															<span>{{item.PRIMA | miles}}</span></td>
+															<span>{{item.AUT_PRIMA | miles}}</span></td>
 													</tr>
 													<hr style="margin-bottom: 0;" *ngIf="pensionList.length > 0">
 													<tr class="d-flex" *ngIf="pensionList.length > 0">

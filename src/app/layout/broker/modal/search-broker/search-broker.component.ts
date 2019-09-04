@@ -36,6 +36,7 @@ export class SearchBrokerComponent implements OnInit {
   InputsBroker: any = {};
   documentTypeList: any = [];
   listBroker: any = [];
+  searchText = "";
 
   selectedBroker: string;
   currentPage = 1; //página actual
@@ -66,7 +67,6 @@ export class SearchBrokerComponent implements OnInit {
   }
 
   getDocumentTypeList() {
-
     this.clientInformationService.getDocumentTypeList().subscribe(
       res => {
         this.documentTypeList = res;
@@ -204,7 +204,6 @@ export class SearchBrokerComponent implements OnInit {
         existe = 1;
       }
       if (existe == 0) {
-        //console.log(this.listBroker[this.selectedBroker]);
         this.listBroker.forEach(item => {
           if (item.NNUMDOC == selection) {
             this.formModalReference.close(item);
@@ -278,7 +277,6 @@ export class SearchBrokerComponent implements OnInit {
           searchBroker.P_SAP_PATERNO = "";
           searchBroker.P_SAP_MATERNO = "";
           searchBroker.P_SNOMBRE_LEGAL = "";
-          // console.log(searchBroker);
           break;
         case "2":
           searchBroker.P_NTIPO_BUSQUEDA = this.InputsBroker.P_TYPE_SEARCH;
@@ -288,7 +286,6 @@ export class SearchBrokerComponent implements OnInit {
           searchBroker.P_SAP_PATERNO = this.InputsBroker.P_SLASTNAME.toUpperCase();
           searchBroker.P_SAP_MATERNO = this.InputsBroker.P_SLASTNAME2.toUpperCase();
           searchBroker.P_SNOMBRE_LEGAL = this.InputsBroker.P_SLEGALNAME.toUpperCase();
-          // console.log(searchBroker);
           break;
       }
 
@@ -297,8 +294,7 @@ export class SearchBrokerComponent implements OnInit {
           if (res.P_NCODE == 0) {
             if (res.listBroker.length > 0) {
               this.listBroker = res.listBroker;
-              this.totalItems = this.listBroker.length;
-              this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
+              this.totalItems = this.listBroker.length; this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
             } else {
               swal.fire("Información", "No hay informacion con los datos ingresados", "error");
             }
@@ -316,6 +312,7 @@ export class SearchBrokerComponent implements OnInit {
 
   pageChanged(currentPage) {
     this.currentPage = currentPage;
+    this.listToShow = this.listBroker
     this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
   }
 

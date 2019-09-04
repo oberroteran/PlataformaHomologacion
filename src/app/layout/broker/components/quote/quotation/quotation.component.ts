@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from "@angular/forms";
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -33,9 +32,6 @@ import { AccessFilter } from './../../access-filter';
 import { ModuleConfig } from './../../module.config'
 //SweetAlert 
 import swal from 'sweetalert2';
-import { count } from 'rxjs/operators';
-// import { Title } from '@angular/platform-browser';
-// import { toInt } from 'ngx-bootstrap/chronos/utils/type-checks';
 
 @Component({
     selector: 'app-quotation',
@@ -108,8 +104,6 @@ export class QuotationComponent implements OnInit {
     resList: any = [];
     listaTasasSalud: any = [];
     listaTasasPension: any = [];
-    //listaTasasSaludPreview: any = [];
-    //listaTasasPensionPreview: any = [];
     productList: any = [];
     EListClient: any = [];
     brokerList: any = [];
@@ -120,9 +114,6 @@ export class QuotationComponent implements OnInit {
     workerMax = 70;
     municipalityTariff = 0;
     desBroker = "";
-
-    // public primaMinimaPension = 0;
-    // public primaMinimaSalud = 0;
     discountPension = "";
     discountSalud = "";
     activityVariationPension = "";
@@ -135,13 +126,10 @@ export class QuotationComponent implements OnInit {
     PRIM_MIN_SAL: boolean = false
     igvPensionWS: number = 0.0;
     igvSaludWS: number = 0.0;
-
     mensajePrimaPension = "";
     mensajePrimaSalud = "";
-
     items: string[];
     config: any;
-
     VAL_QUOTATION: any = {}; // total de trabajadores
     P_TOTAL_TRAB: any = {}; // total de trabajadores
     P_TOTAL_PLAN: any = {}; // Total de planilla
@@ -167,7 +155,6 @@ export class QuotationComponent implements OnInit {
         private addressService: AddressService,
         private contractorLocationIndexService: ContractorLocationIndexService,
         private datePipe: DatePipe,
-        private policyService: PolicyemitService
     ) {
 
         this.bsConfig = Object.assign(
@@ -223,7 +210,7 @@ export class QuotationComponent implements OnInit {
             });
 
         if (this.InputsQuotation.P_NIDDOC_TYPE != undefined && this.InputsQuotation.P_SIDDOC != undefined && this.InputsQuotation.P_NIDDOC_TYPE != "" && this.InputsQuotation.P_SIDDOC != "") {
-            this.BuscarContratante();
+            this.buscarContratante();
             this.onSelectTypeDocument(this.InputsQuotation.P_NIDDOC_TYPE);
             this.changeSDOC(this.InputsQuotation.P_SIDDOC);
         } else {
@@ -410,10 +397,38 @@ export class QuotationComponent implements OnInit {
             case 3:
                 this.statePrimaSalud = !this.statePrimaSalud;
                 this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO = "";
+
+                if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
+                    this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
+                    this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+                    this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+                    this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                } else {
+                    this.mensajePrimaSalud = ""
+                    this.totalNetoSaludSave = this.totalNetoSalud
+                    this.igvSaludSave = this.igvSalud;
+                    this.brutaTotalSaludSave = this.brutaTotalSalud;
+                }
+
+
                 break;
             case 4:
                 this.statePrimaPension = !this.statePrimaPension;
                 this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = "";
+
+                if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
+                    this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
+                    this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+                    this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+                    this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                } else {
+                    this.mensajePrimaPension = ""
+                    this.totalNetoPensionSave = this.totalNetoPension
+                    this.igvPensionSave = this.igvPension;
+                    this.brutaTotalPensionSave = this.brutaTotalPension;
+                }
+
+
                 break;
             case 5:
                 this.stateTasaSalud = !this.stateTasaSalud;
@@ -434,12 +449,9 @@ export class QuotationComponent implements OnInit {
         }
     }
 
-    BuscarContratante() {
+    buscarContratante() {
         let self = this;
-
         let msg = "";
-
-
         if (this.InputsQuotation.P_TYPE_SEARCH == 1) {
             if (this.InputsQuotation.P_NIDDOC_TYPE == -1) {
                 msg += "Debe ingresar tipo de documento <br />"
@@ -461,7 +473,6 @@ export class QuotationComponent implements OnInit {
                     msg += "Debe ingresar razón social <br />"
                 }
             }
-
         }
 
         if (msg != "") {
@@ -476,7 +487,6 @@ export class QuotationComponent implements OnInit {
             }
         }
         self.isLoading = true;
-
         let data = new ClientDataToSearch();
         data.P_CodAplicacion = "SCTR";
         data.P_TipOper = "CON";
@@ -652,7 +662,6 @@ export class QuotationComponent implements OnInit {
     getContractorLocationList(contractorId: string) {
         this.contractorLocationIndexService.getContractorLocationList(contractorId, 999, 1).subscribe(
             res => {
-                // console.log(res)
                 let list: any = [];
                 let sedeID = null;
                 let departamento = null;
@@ -705,7 +714,7 @@ export class QuotationComponent implements OnInit {
                 this.InputsQuotation.P_NPROVINCE = null;
                 this.InputsQuotation.P_NLOCAL = null;
                 this.InputsQuotation.P_NMUNICIPALITY = null
-                this.ValidarSedes();
+                this.validarSedes();
                 break;
             default:
                 this.VAL_QUOTATION[2] = "";
@@ -781,7 +790,7 @@ export class QuotationComponent implements OnInit {
             this.quotationService.equivalentMunicipality(this.InputsQuotation.P_NMUNICIPALITY).subscribe(
                 res => {
                     this.municipalityTariff = res;
-                    this.GetTarifario();
+                    this.getTarifario();
                 }
             );
         }
@@ -819,7 +828,7 @@ export class QuotationComponent implements OnInit {
         this.equivalentMuni();
     }
 
-    ValidarSedes() {
+    validarSedes() {
         this.contractorLocationIndexService.getSuggestedLocationType(this.ContractorId, this.userId).subscribe(
             res => {
                 if (res.P_NCODE == 1) {
@@ -895,7 +904,7 @@ export class QuotationComponent implements OnInit {
         }
     }
 
-    Clear(idx) {
+    clearText(idx) {
         this.VAL_QUOTATION[idx] = "";
     }
 
@@ -1103,7 +1112,7 @@ export class QuotationComponent implements OnInit {
             }
 
         }
-        this.Calcular();
+        this.calcular();
     }
 
     changePensionPropuesta(cantComPro, valor) {
@@ -1147,13 +1156,13 @@ export class QuotationComponent implements OnInit {
             });
             this.totalNetoSalud = this.formateaValor(netoSalud);
             this.igvSalud = this.formateaValor((this.totalNetoSalud * this.igvSaludWS) - this.totalNetoSalud);
-            let totalPreviewSalud = parseFloat(this.totalNetoSalud.toLocaleString()) + parseFloat(this.igvSalud.toLocaleString());
+            let totalPreviewSalud = parseFloat(this.totalNetoSalud.toString()) + parseFloat(this.igvSalud.toString());
             this.brutaTotalSalud = this.formateaValor(totalPreviewSalud)
 
-            if (parseFloat(this.totalNetoSalud.toLocaleString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
+            if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
                 this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
                 this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
-                this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toLocaleString()) + parseFloat(this.igvSaludSave.toLocaleString()));
+                this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
                 this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
             } else {
                 this.mensajePrimaSalud = ""
@@ -1174,13 +1183,13 @@ export class QuotationComponent implements OnInit {
             });
             this.totalNetoPension = this.formateaValor(netoPension);
             this.igvPension = this.formateaValor((this.totalNetoPension * this.igvPensionWS) - this.totalNetoPension);
-            let totalPreviewPension = parseFloat(this.totalNetoPension.toLocaleString()) + parseFloat(this.igvPension.toLocaleString());
+            let totalPreviewPension = parseFloat(this.totalNetoPension.toString()) + parseFloat(this.igvPension.toString());
             this.brutaTotalPension = this.formateaValor(totalPreviewPension)
 
-            if (parseFloat(this.totalNetoPension.toLocaleString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
+            if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
                 this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
                 this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
-                this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toLocaleString()) + parseFloat(this.igvPensionSave.toLocaleString()));
+                this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
                 this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
             } else {
                 this.mensajePrimaPension = ""
@@ -1190,44 +1199,48 @@ export class QuotationComponent implements OnInit {
             }
         }
 
-        this.Calcular();
+        this.calcular();
     }
 
     changePrimaPropuesta(cantPrima, valor) {
         let totPrima = cantPrima != "" ? parseFloat(cantPrima) : 0;
         totPrima = isNaN(totPrima) ? 0 : totPrima;
-        console.log(totPrima)
         let self = this;
 
         //Lista Salud
         if (this.listaTasasSalud.length > 0) {
-            if (totPrima > 0) {
+            if (totPrima > 0 && this.saludID == valor) {
                 if (parseFloat(this.totalNetoSalud.toString()) < totPrima) {
                     this.totalNetoSaludSave = totPrima
                     this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
-                    this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toLocaleString()) + parseFloat(this.igvSaludSave.toLocaleString()));
+                    this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
                     this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
                 } else {
                     this.mensajePrimaSalud = ""
                     this.totalNetoSaludSave = this.totalNetoSalud
                     this.igvSaludSave = this.igvSalud;
                     this.brutaTotalSaludSave = this.brutaTotalSalud;
-                    console.log(this.brutaTotalPensionSave)
                 }
             } else {
-                this.mensajePrimaSalud = ""
-                this.totalNetoSaludSave = this.totalNetoSalud
-                this.igvSaludSave = this.igvSalud;
-                this.brutaTotalSaludSave = this.brutaTotalSalud;
-                console.log(this.brutaTotalPensionSave)
+                if (this.saludID == valor) {
+                    if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
+                        this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
+                        this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+                        this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+                        this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                    } else {
+                        this.mensajePrimaSalud = ""
+                        this.totalNetoSaludSave = this.totalNetoSalud
+                        this.igvSaludSave = this.igvSalud;
+                        this.brutaTotalSaludSave = this.brutaTotalSalud;
+                    }
+                }
             }
-
         }
 
         //Lista Pension
         if (this.listaTasasPension.length > 0) {
-            if (totPrima > 0) {
-                console.log(parseFloat(this.totalNetoPension.toString()))
+            if (totPrima > 0 && this.pensionID == valor) {
                 if (parseFloat(this.totalNetoPension.toString()) < totPrima) {
                     this.totalNetoPensionSave = totPrima
                     this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
@@ -1238,19 +1251,26 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoPensionSave = this.totalNetoPension
                     this.igvPensionSave = this.igvPension;
                     this.brutaTotalPensionSave = this.brutaTotalPension;
-                    console.log(this.brutaTotalPensionSave)
                 }
             } else {
-                this.mensajePrimaPension = ""
-                this.totalNetoPensionSave = this.totalNetoPension
-                this.igvPensionSave = this.igvPension;
-                this.brutaTotalPensionSave = this.brutaTotalPension;
-                console.log(this.brutaTotalPensionSave)
+                if (this.pensionID == valor) {
+                    if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
+                        this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
+                        this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+                        this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+                        this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                    } else {
+                        this.mensajePrimaPension = ""
+                        this.totalNetoPensionSave = this.totalNetoPension
+                        this.igvPensionSave = this.igvPension;
+                        this.brutaTotalPensionSave = this.brutaTotalPension;
+                    }
+                }
             }
 
         }
 
-        this.Calcular();
+        this.calcular();
     }
 
     changeTasaPropuestaSalud(planPro, valor) {
@@ -1266,7 +1286,7 @@ export class QuotationComponent implements OnInit {
             });
         }
 
-        this.Calcular();
+        this.calcular();
     }
 
     changeTasaPropuestaPension(planPro, valor) {
@@ -1281,10 +1301,10 @@ export class QuotationComponent implements OnInit {
                 }
             });
         }
-        this.Calcular();
+        this.calcular();
     }
 
-    GetTarifario() {
+    getTarifario() {
         this.InputsQuotation.P_SCTR_SALUD = false
         this.InputsQuotation.P_SCTR_PENSION = false
         this.stateBrokerSalud = true;
@@ -1315,7 +1335,6 @@ export class QuotationComponent implements OnInit {
                         data.channel.push(brokerItem);
                     } else {
                         let middlemanItem = new Channel();
-                        //Desarrollo
                         middlemanItem.middlemanId = broker.COD_CANAL.toString();
                         data.channel.push(middlemanItem);
                     }
@@ -1434,7 +1453,7 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_PRIMA_MIN_PENSION = ""; // Prima minima pension
                                         this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = ""; // Prima minima pension propuesta
                                         this.tasasList = this.listaTasasSalud;
-                                        this.Calcular();
+                                        this.calcular();
                                     } else {
                                         this.clearTariff();
                                         swal.fire("Información", "La tarifa no está configurada correctamente", "error");
@@ -1449,7 +1468,7 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO = ""; // Prima minima salud propuesta
                                         this.tasasList = this.listaTasasPension;
                                         this.listaTasasSalud = [];
-                                        this.Calcular();
+                                        this.calcular();
                                     } else {
                                         this.clearTariff();
                                         swal.fire("Información", "La tarifa no está configurada correctamente", "error");
@@ -1464,7 +1483,7 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = ""; // Prima minima pension propuesta
                                         this.tasasList = this.listaTasasSalud;
                                         this.listaTasasPension = [];
-                                        this.Calcular();
+                                        this.calcular();
                                     } else {
                                         this.clearTariff();
                                         swal.fire("Información", "La tarifa no está configurada correctamente", "error");
@@ -1498,7 +1517,7 @@ export class QuotationComponent implements OnInit {
         return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
     }
 
-    Calcular() {
+    calcular() {
         if (this.resList != "") {
             let self = this;
             this.resList.fields.forEach(item => {
@@ -1589,7 +1608,7 @@ export class QuotationComponent implements OnInit {
 
                                 this.totalNetoSalud = this.formateaValor(netoSalud);
                                 this.igvSalud = this.formateaValor((this.totalNetoSalud * this.igvSaludWS) - this.totalNetoSalud); // Solo IGV 
-                                let totalPreviewSalud = parseFloat(this.totalNetoSalud.toLocaleString()) + parseFloat(this.igvSalud.toLocaleString());
+                                let totalPreviewSalud = parseFloat(this.totalNetoSalud.toString()) + parseFloat(this.igvSalud.toString());
                                 this.brutaTotalSalud = this.formateaValor(totalPreviewSalud)
                                 if (item.channelDistributions != undefined) {
                                     item.channelDistributions.forEach(channel => {
@@ -1619,7 +1638,7 @@ export class QuotationComponent implements OnInit {
         }
     }
 
-    GrabarCotizacion() {
+    grabarCotizacion() {
         let msg = "";
         this.isLoading = true;
         if (this.InputsQuotation.P_NIDDOC_TYPE == "-1") {
@@ -1795,7 +1814,6 @@ export class QuotationComponent implements OnInit {
             itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
             itemQuotationComMain.P_NPRINCIPAL = 1;
             dataQuotation.QuotationCom.push(itemQuotationComMain);
-            // console.log(this.brokerList);
 
             //Comercializadores
             if (this.brokerList.length > 0) {
@@ -1834,7 +1852,6 @@ export class QuotationComponent implements OnInit {
                         self.isLoading = true;
                         this.quotationService.insertQuotation(myFormData).subscribe(
                             res => {
-                                // console.log(res);
                                 let quotationNumber = 0;
                                 if (res.P_COD_ERR == 0) {
                                     this.clearInsert()
@@ -1883,7 +1900,7 @@ export class QuotationComponent implements OnInit {
     getFileExtension(filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
     }
-    Limpiar() {
+    limpiar() {
         this.clearInsert()
     }
     clearInsert() {
@@ -1981,7 +1998,7 @@ export class QuotationComponent implements OnInit {
         });
     }
 
-    AddBroker() {
+    addBroker() {
         let modalRef = this.modalService.open(SearchBrokerComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
         modalRef.componentInstance.formModalReference = modalRef;
         modalRef.componentInstance.listaBroker = this.brokerList;
@@ -2042,11 +2059,7 @@ export class QuotationComponent implements OnInit {
             event.preventDefault();
         }
     }
-
-    consultarContenido() {
-        console.log(this.files[0].size);
-    }
-
+    
     valText(event: any, type) {
         let pattern;
         switch (type) {

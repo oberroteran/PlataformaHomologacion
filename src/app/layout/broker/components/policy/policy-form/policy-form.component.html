@@ -11,7 +11,7 @@
 					</div>
 				</div>
 			</div>
-			<form #f="ngForm" (ngSubmit)="GenerarPoliza(f)">
+			<form #f="ngForm" (ngSubmit)="generarPoliza(f)">
 				<div class="accordion mt-2">
 					<div class="card-header">
 						<h5 class="mb-0" data-toggle="collapse" data-target="#contratante" aria-expanded="true"
@@ -74,7 +74,7 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-9">
-								<span>RAZÓN SOCIAL</span>
+								<span>NOMBRES Y APELLIDOS / RAZÓN SOCIAL</span>
 								<input type="text" [(ngModel)]="polizaEmitCab.NOMBRE_RAZON" name="NOMBRE_RAZON"
 									placeholder="Nombres" disabled />
 							</div>
@@ -134,7 +134,7 @@
 								<span>COMISIÓN SALUD</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD =$event"
-									name="COMISION_SALUD" placeholder="Comisión del Broker" id="" disabled />
+									name="COMISION_SALUD" placeholder="0" id="" disabled />
 							</div>
 							<div class="col-sm-3 chk" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD PROPUESTA</span>
@@ -451,10 +451,10 @@
 													<tr class="d-flex" *ngFor="let item of saludList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA_CALC}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}}</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{item.PRIMA | miles}}</span></td>
+															<span>{{item.AUT_PRIMA | miles}}</span></td>
 													</tr>
 													<hr style="margin-bottom: 0;" *ngIf="saludList.length > 0">
 													<tr class="d-flex" *ngIf="saludList.length > 0">
@@ -519,10 +519,10 @@
 													<tr class="d-flex" *ngFor="let item of pensionList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA_CALC}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}}</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{item.PRIMA | miles}}</span></td>
+															<span>{{item.AUT_PRIMA | miles}}</span></td>
 													</tr>
 													<hr style="margin-bottom: 0;" *ngIf="pensionList.length > 0">
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
@@ -551,42 +551,47 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-sm-12">
-								<span>COMENTARIO</span>
-								<textarea cols="40" rows="5" style="width:100%" [(ngModel)]="polizaEmit.comentario"
-									name="comentario" (keypress)="valText($event, 4)"></textarea>
-							</div>
-						</div>
 						<div class="row" style="margin-top: 25px;">
-							<div class="col-sm-12">
-								<h5>ARCHIVO ADJUNTOS</h5>
-							</div>
-						</div>
-						<div class="row">
 							<div class="col-sm-6">
+								<h5 style="font-size: 14px;">ARCHIVO ADJUNTOS (COTIZACIÓN)</h5>
 								<table class="table table-borderless riesgo tblbroker">
 									<thead>
-										<tr class="d-flex">
-											<th class="col-sm text-center"><label>Nombre</label></th>
-											<th class="col-sm text-center"><label>Descargar</label></th>
+										<tr>
+											<th class="text-center"><label>Nombre del archivo</label></th>
+											<th class="text-center"><label>Descargar</label></th>
 										</tr>
 									</thead>
 									<tbody *ngIf="filePathList!=null && filePathList.length>0">
-										<tr *ngFor="let item of filePathList" class="d-flex">
-											<td class="col-sm text-center"><span>{{ item | fileName }}</span></td>
-											<td class="col-sm text-center"><a (click)="downloadFile(item)"><img
+										<tr *ngFor="let item of filePathList" class="">
+											<td class="">
+												<span>{{ item | fileName }}</span>
+											</td>
+											<td class="text-center"><a (click)="downloadFile(item)" style="display: block; margin-top: 0.7em;"><img
 														src="assets/icons/imprimir.png" title="Descargar"
 														style="cursor:pointer;" alt="Descargar" /></a></td>
 										</tr>
 									</tbody>
 									<tbody *ngIf="filePathList==null || filePathList.length==0">
-										<tr class="d-flex">
-											<td colspan="2" class="col-sm text-center"><span>No se encontraron
+										<tr class="">
+											<td colspan="2" class="text-center"><span>No se
+													encontraron
 													archivos</span></td>
 										</tr>
 									</tbody>
 								</table>
+							</div>
+							<div class="col-sm-6">
+								<span>COMENTARIO (COTIZACIÓN)</span>
+								<textarea cols="40" rows="5" style="width:100%" [(ngModel)]="polizaEmitCab.COMENTARIO"
+									name="comentario" disabled></textarea>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12">
+								<span>COMENTARIO</span>
+								<textarea cols="40" rows="5" style="width:100%" [(ngModel)]="polizaEmit.comentario"
+									name="comentario" (keypress)="valText($event, 4)"></textarea>
 							</div>
 						</div>
 						<div>

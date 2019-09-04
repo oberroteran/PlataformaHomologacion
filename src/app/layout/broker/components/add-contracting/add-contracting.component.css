@@ -21,7 +21,6 @@
 .filter {
 	width: 100%;
 	margin: 10px auto;
-	/* border-bottom: 1px solid rgb(172, 158, 202); */
 	padding: 10px 0 15px;
 }
 
@@ -110,7 +109,7 @@ table, h5, button{
 }
 
 .checkbox[type=checkbox]:before {
-	background: #806ea0 url("http://i.imgur.com/dR1TM0y.png");
+	background: #806ea0 url(assets/icons/check.png);
 	background-size: 10px 8px;
 	background-repeat: no-repeat;
 	background-position: 2px 3px;
@@ -134,7 +133,6 @@ table, h5, button{
 }
 
 .filter input[type="date"] {
-	/* outline: auto; */
 	border: none;
 	border-radius: 2px;
 	padding: 6px 5px;
@@ -142,7 +140,6 @@ table, h5, button{
 	border: 1px solid rgb(146, 138, 163);
 	color: rgb(146, 138, 163);
 	width: 100%;
-	/* margin-left: 5px; */
 	font-size: 14px;
 	border: 1px solid #aa9ec0;
 	color: #aa9ec0;
@@ -161,8 +158,6 @@ select {
 	border-radius: 2px;
 	margin-top: 5px;
 	color: rgb(146, 138, 163);
-	/* outline: auto; */
-	/* margin-left: 3px; */
 	font-family: "Bliss Pro";
 	font-size: 14px;
 	height: 45px;
@@ -225,7 +220,6 @@ span, textarea {
 	background: rgb(169, 157, 192);
 	color: #fff;
 	margin: 0 2px;
-	/* outline: none; */
 	height: 30px;
 	width: 25px;
 	font-family: "Bliss Pro";

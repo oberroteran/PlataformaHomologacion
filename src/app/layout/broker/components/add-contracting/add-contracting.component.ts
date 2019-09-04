@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from "@angular/forms";
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -78,7 +77,6 @@ export class AddContractingComponent implements OnInit {
             {
                 dateInputFormat: "DD/MM/YYYY",
                 locale: "es",
-                // containerClass: 'theme-dark-blue',
                 showWeekNumbers: false
             }
         );
@@ -99,11 +97,9 @@ export class AddContractingComponent implements OnInit {
         this.VAL_CLIENT[6] = ""; // Ciiu
 
         this.bsValueFNac = new Date("01/01/1950")
-        //Objeto a grabar
+
         this.route.queryParams
-            //.filter(params => params.tipoDocumento)
             .subscribe(params => {
-                // console.log(params);
                 this.InputsContracting.P_NIDDOC_TYPE = params.typeDocument;
                 this.InputsContracting.P_SIDDOC = params.document;
                 this.receiverApp = params.receiver;
@@ -111,10 +107,8 @@ export class AddContractingComponent implements OnInit {
 
         if (this.InputsContracting.P_NIDDOC_TYPE != undefined && this.InputsContracting.P_SIDDOC != undefined && this.InputsContracting.P_NIDDOC_TYPE != "" && this.InputsContracting.P_SIDDOC != "" &&
             this.receiverApp != undefined && this.receiverApp != "") {
-
             if (this.InputsContracting.P_NIDDOC_TYPE == 1 && this.InputsContracting.P_SIDDOC.trim().length > 1) {
                 if (this.InputsContracting.P_SIDDOC.substr(0, 2) != "10" && this.InputsContracting.P_SIDDOC.substr(0, 2) != "15" && this.InputsContracting.P_SIDDOC.substr(0, 2) != "17" && this.InputsContracting.P_SIDDOC.substr(0, 2) != "20") {
-                    console.log(this.InputsContracting.P_SIDDOC.substr(0, 2))
                     swal.fire("Información", "El número de RUC no es válido, debe empezar con 10, 15, 17, 20", "error");
                     return
                 }
@@ -134,7 +128,6 @@ export class AddContractingComponent implements OnInit {
             this.clientInformationService.getClientInformation(data).subscribe(
                 res => {
                     if (res.EListClient != null) {
-                        console.log("adasd")
                         if (res.EListClient.length > 0) {
                             if (res.EListClient[0].P_SCLIENT == null) {
                                 this.datosClient = res.EListClient[0];
@@ -321,11 +314,13 @@ export class AddContractingComponent implements OnInit {
         this.typeContact.P_NIDDOC_TYPE = this.InputsContracting.P_NIDDOC_TYPE;
         this.typeContact.P_SIDDOC = this.InputsContracting.P_SIDDOC;
     }
-    Clear(idx) {
+
+    valClear(idx) {
         this.VAL_CLIENT[idx] = "";
     }
+
     //Section Teléfono
-    EditarTelefono(row) {
+    editarTelefono(row) {
         let modalRef: NgbModalRef;
         let itemTelefono: any = {};
         modalRef = this.modalService.open(AddTelephoneComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
@@ -339,7 +334,7 @@ export class AddContractingComponent implements OnInit {
         modalRef.componentInstance.listaTelefonos = this.listaTelefonos;
     }
 
-    EliminarTelefono(row) {
+    eliminarTelefono(row) {
         swal.fire({
             title: "Eliminar Teléfono",
             text: "¿Estás seguro que deseas eliminar esta teléfono?",
@@ -360,7 +355,7 @@ export class AddContractingComponent implements OnInit {
             });
     }
 
-    RevertirTelefono(row) {
+    revertirTelefono(row) {
         swal.fire({
             title: "Activar Teléfono",
             text: "¿Estás seguro que deseas activar esta teléfono?",
@@ -382,7 +377,7 @@ export class AddContractingComponent implements OnInit {
     }
 
     //Section Ciiu
-    EditarCiiu(row) {
+    editarCiiu(row) {
         let modalRef: NgbModalRef;
         let itemCiiu: any = {};
         modalRef = this.modalService.open(AddCiiuComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
@@ -396,7 +391,7 @@ export class AddContractingComponent implements OnInit {
         modalRef.componentInstance.listaCiiu = this.listaCiiu;
     }
 
-    EliminarCiiu(row) {
+    eliminarCiiu(row) {
         swal.fire({
             title: "Eliminar CIIU",
             text: "¿Estás seguro que deseas eliminar este ciiu?",
@@ -417,7 +412,7 @@ export class AddContractingComponent implements OnInit {
             });
     }
 
-    RevertirCiiu(row) {
+    revertirCiiu(row) {
         swal.fire({
             title: "Activar CIIU",
             text: "¿Estás seguro que deseas activar este ciiu?",
@@ -439,7 +434,7 @@ export class AddContractingComponent implements OnInit {
     }
 
     //Section Correo
-    EditarCorreo(row) {
+    editarCorreo(row) {
         let modalRef: NgbModalRef;
         let itemCorreo: any = {};
         modalRef = this.modalService.open(AddEmailComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
@@ -453,7 +448,7 @@ export class AddContractingComponent implements OnInit {
         modalRef.componentInstance.listaCorreos = this.listaCorreos;
     }
 
-    EliminarCorreo(row) {
+    eliminarCorreo(row) {
         swal.fire({
             title: "Eliminar Correo",
             text: "¿Estás seguro que deseas eliminar esta correo?",
@@ -474,7 +469,7 @@ export class AddContractingComponent implements OnInit {
             });
     }
 
-    RevertirCorreo(row) {
+    revertirCorreo(row) {
         swal.fire({
             title: "Activar Correo",
             text: "¿Estás seguro que deseas activar esta correo?",
@@ -496,7 +491,7 @@ export class AddContractingComponent implements OnInit {
     }
 
     //Section Dirección
-    EditarDireccion(row) {
+    editarDireccion(row) {
         let modalRef: NgbModalRef;
         let itemDireccion: any = {};
         modalRef = this.modalService.open(AddAddressComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
@@ -510,7 +505,7 @@ export class AddContractingComponent implements OnInit {
         modalRef.componentInstance.listaDirecciones = this.listaDirecciones;
     }
 
-    EliminarDireccion(row) {
+    eliminarDireccion(row) {
         swal.fire({
             title: "Eliminar Dirección",
             text: "¿Estás seguro que deseas eliminar esta dirección?",
@@ -531,7 +526,7 @@ export class AddContractingComponent implements OnInit {
             });
     }
 
-    RevertirDireccion(row) {
+    revertirDireccion(row) {
         swal.fire({
             title: "Activar Dirección",
             text: "¿Estás seguro que deseas activar esta dirección?",
@@ -553,7 +548,7 @@ export class AddContractingComponent implements OnInit {
     }
 
     //Section Contacto
-    EditarContacto(row) {
+    editarContacto(row) {
         let modalRef: NgbModalRef;
         let itemContacto: any = {};
         modalRef = this.modalService.open(AddContactComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
@@ -570,7 +565,7 @@ export class AddContractingComponent implements OnInit {
         modalRef.componentInstance.listaContactos = this.listaContactos;
     }
 
-    EliminarContacto(row) {
+    eliminarContacto(row) {
         swal.fire({
             title: "Eliminar Contacto",
             text: "¿Estás seguro que deseas eliminar esta contacto?",
@@ -591,7 +586,7 @@ export class AddContractingComponent implements OnInit {
             });
     }
 
-    RevertirContacto(row) {
+    revertirContacto(row) {
         swal.fire({
             title: "Activar Contacto",
             text: "¿Estás seguro que deseas activar esta contacto?",
@@ -613,7 +608,7 @@ export class AddContractingComponent implements OnInit {
     }
 
     //Section Sedes
-    EditarSede(row) {
+    editarSede(row) {
         let modalRef: NgbModalRef;
         let itemSede: any = {};
         modalRef = this.modalService.open(ContractorLocationFormComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
@@ -631,7 +626,7 @@ export class AddContractingComponent implements OnInit {
         });
     }
 
-    EliminarSede(row) {
+    eliminarSede(row) {
         swal.fire({
             title: "Eliminar Sede",
             text: "¿Estás seguro que deseas eliminar esta sede?",
@@ -652,7 +647,7 @@ export class AddContractingComponent implements OnInit {
             });
     }
 
-    RevertirSede(row) {
+    revertirSede(row) {
         swal.fire({
             title: "Activar Sede",
             text: "¿Estás seguro que deseas activar esta sede?",
@@ -810,7 +805,6 @@ export class AddContractingComponent implements OnInit {
 
     onSelectGender(genderID) {
         this.InputsContracting.P_SSEXCLIEN = genderID;
-        //console.log(this.InputsContracting);
     }
 
     onSelectCivilStatus(civilStatusID) {
@@ -868,7 +862,7 @@ export class AddContractingComponent implements OnInit {
                 modalRef.componentInstance.openedInEditMode = false;
                 modalRef.result.then((sede) => {
                     if (sede != undefined) {
-                        this.AgregarSede(sede);
+                        this.agregarSede(sede);
                     }
                 }, (reason) => {
                 });
@@ -876,13 +870,13 @@ export class AddContractingComponent implements OnInit {
         }
     }
 
-    AgregarSede(sede) {
+    agregarSede(sede) {
         sede.P_NROW = this.listaSedes.length + 1;
         sede.P_CLASS = "";
         this.listaSedes.push(sede);
     }
 
-    EventSave(event) {
+    eventSave(event) {
 
         this.InputsContracting.P_SFIRSTNAME = this.InputsContracting.P_SFIRSTNAME == null ? "" : this.InputsContracting.P_SFIRSTNAME.toUpperCase()
         this.InputsContracting.P_SLEGALNAME = this.InputsContracting.P_SLEGALNAME == null ? "" : this.InputsContracting.P_SLEGALNAME.toUpperCase()
@@ -896,7 +890,6 @@ export class AddContractingComponent implements OnInit {
         let yearIni = this.bsValueFNac.getFullYear();
 
         this.InputsContracting.P_DBIRTHDAT = dayIni + "/" + monthIni + "/" + yearIni;
-        console.log(this.InputsContracting.P_DBIRTHDAT)
         let mensaje = "";
         if (this.InputsContracting.P_NIDDOC_TYPE == 1) { //RUC
             if (this.InputsContracting.P_SIDDOC.substr(0, 2) == "10" || this.InputsContracting.P_SIDDOC.substr(0, 2) == "15" || this.InputsContracting.P_SIDDOC.substr(0, 2) == "17") {
@@ -1011,7 +1004,6 @@ export class AddContractingComponent implements OnInit {
                                 }
                             },
                             err => {
-                                console.log(err);
                                 swal.fire("Información", err.statusText, "warning");
                             }
                         );
@@ -1023,7 +1015,7 @@ export class AddContractingComponent implements OnInit {
         }
     }
 
-    Back() {
+    back() {
         switch (this.receiverApp) {
             case "quotation":
                 this.router.navigate(['/broker/quotation']);

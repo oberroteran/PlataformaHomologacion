@@ -15,8 +15,7 @@
 
 .filter {
     width: 100%;
-    margin: 10px auto;
-    /* border-bottom: 1px solid rgb(84, 61, 129); */
+    margin: 10px auto;    
     padding: 10px 0 15px;
 }
 
@@ -40,7 +39,6 @@
 }
 
 .filter input[type="text"] {
-    /* outline: auto; */
     border: none;
     border-radius: 2px;
     padding: 7px 5px;
@@ -99,7 +97,7 @@
 }
 
 .checkbox[type=checkbox]:before {
-    background: #806ea0 url("http://i.imgur.com/dR1TM0y.png");
+    background: #806ea0 url(assets/icons/check.png);
     background-size: 10px 8px;
     background-repeat: no-repeat;
     background-position: 2px 3px;
@@ -122,7 +120,6 @@
     border-radius: 2px;
 }
 .filter input[type="date"] {
-    /* outline: auto; */
     border: none;
     border-radius: 2px;
     padding: 6px 5px;
@@ -130,7 +127,6 @@
     border: 1px solid rgb(146, 138, 163);
     color: rgb(146, 138, 163);
     width: 100%;
-    /* margin-left: 5px; */
     font-size: 14px;
     border: 1px solid #aa9ec0;
     color: #aa9ec0;
@@ -147,8 +143,6 @@ select {
     border-radius: 2px;
     margin-top: 5px;
     color: rgb(146, 138, 163);
-    /* outline: auto; */
-    /* margin-left: 3px; */
     font-family: "Bliss Pro";
     font-size: 14px;
     height: 45px;
@@ -179,7 +173,6 @@ span, textarea{
     margin: 20px auto;
     font-size: 14px;
     font-weight: 300;
-    /* border: 1px solid rgb(146, 138, 163); */
 }
 
 .grid table {
@@ -257,7 +250,6 @@ span, textarea{
     padding: 8px 5px;
     min-width: 170px;
     height: 45px;
-    /* outline: none; */
 }
 
 .header-content .header-item button:hover {
@@ -333,10 +325,6 @@ button span {
     height: 45px;
     outline: none;
 }
-/*
-.header-content .header-item .full-color span{
-  color: #fff;
-}*/
 
 .input-date {
     height: 45px;
@@ -408,7 +396,6 @@ button span {
 	opacity: 0.7;
 	transition: opacity .8s ease-in-out;
 	position: fixed;
-	/* position: absolute; */
 	height: 100%;
 	width: 100%;
 	top: 0;
@@ -416,15 +403,3 @@ button span {
 	background: #000;
 	z-index: 10000000000;
 }
- /*SOBRESCRITURA DE BOOTSTRAP CSS*/
-/* 
- .btn-secondary:hover{
-     cursor: pointer;
-     color:#81769d; 
-     background-color:white;
- }
- .btn-secondary{
-    border-color: #81769d;
-    color:white;
-    background-color:#81769d;
- } */

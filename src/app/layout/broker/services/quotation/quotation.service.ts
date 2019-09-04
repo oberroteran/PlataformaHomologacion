@@ -51,16 +51,6 @@ export class QuotationService {
         return this.http
             .post(
                 this.Url + "/QuotationManager/InsertQuotation", data);
-        // if (mode == "recotizar") {
-        //   return this.http
-        //     .post(
-        //       this.Url + "/Api/QuotationManager/ModifyQuotation", data);
-        // } else {
-        //   return this.http
-        //     .post(
-        //       this.Url + "/Api/QuotationManager/InsertQuotation", data);
-        // }
-
     }
     public approveQuotation(data: any): Observable<any> {
 
@@ -68,11 +58,7 @@ export class QuotationService {
             .post(
                 this.Url + "/QuotationManager/ApproveQuotation", data);
     }
-    // public addAgency(_agencyData: Agency,_formData: FormData):Observable<any>{
-    //   const body = JSON.stringify(_agencyData);
-    //   _formData.append('agencyData',body);
-    //   return this.http.post(this.Url+"/Api/AgencyManager/AddAgency",_formData);
-    //   }
+    
     public getStatusList(): Observable<any> {
         return this.http.get(this.Url + "/QuotationManager/GetStatusList");
     }

@@ -4,12 +4,6 @@ import { GlobalEventsManager } from "../../../../shared/services/gobal-events-ma
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/map";
-import {
-    HttpClient,
-    HttpHeaders,
-    HttpParams,
-    HttpResponse
-} from "@angular/common/http";
 import { Router } from "@angular/router";
 import { AuthenticationService } from "../../services/authentication.service";
 import { AppConfig } from "../../../../app.config";
@@ -38,7 +32,6 @@ export class NavmenusctrComponent implements OnInit {
     showSidebar = false;
 
     constructor(
-        // private http: HttpClient,
         private router: Router,
         private globalEventsManager: GlobalEventsManager,
         private authenticationService: AuthenticationService,
