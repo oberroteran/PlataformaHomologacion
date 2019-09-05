@@ -7,7 +7,7 @@ import { isNumeric } from 'rxjs/internal-compatibility';
 //Importación de servicios
 import { ClientInformationService } from '../../../services/shared/client-information.service';
 import { PolicyemitService } from '../../../services/policy/policyemit.service';
-
+import { OthersService } from '../../../services/shared/others.service';
 //Modelos
 import { PolicyProofSearch } from '../../../models/polizaEmit/request/policy-proof-search';
 
@@ -57,7 +57,8 @@ export class PolicyMovementProofComponent implements OnInit {
         private mainFormBuilder: FormBuilder,
         private policyService: PolicyemitService,
         private clientInformationService: ClientInformationService,
-        private router: Router
+        private router: Router,
+        private othersService: OthersService
     ) {
         this.bsConfig = Object.assign(
             {},
@@ -443,5 +444,43 @@ export class PolicyMovementProofComponent implements OnInit {
             }
         }
 
+    }
+
+    downloadFile(filePath: string) {
+        this.othersService.downloadFile(filePath).subscribe(
+            res => {
+                // It is necessary to create a new blob object with mime-type explicitly set
+                // otherwise only Chrome works like it should
+                var newBlob = new Blob([res], { type: "application/pdf" });
+
+                // IE doesn't allow using a blob object directly as link href
+                // instead it is necessary to use msSaveOrOpenBlob
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(newBlob);
+                    return;
+                }
+
+                // For other browsers: 
+                // Create a link pointing to the ObjectURL containing the blob.
+                const data = window.URL.createObjectURL(newBlob);
+
+                var link = document.createElement('a');
+                link.href = data;
+
+                link.download = filePath.substring(filePath.lastIndexOf("\\") + 1);
+                // this is necessary as link.click() does not work on the latest firefox
+                link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+                setTimeout(function () {
+                    // For Firefox it is necessary to delay revoking the ObjectURL
+                    window.URL.revokeObjectURL(data);
+                    link.remove();
+                }, 100);
+            },
+            err => {
+                Swal.fire('Información', 'Error inesperado, por favor contáctese con soporte.', 'error');
+                console.log(err);
+            }
+        );
     }
 }

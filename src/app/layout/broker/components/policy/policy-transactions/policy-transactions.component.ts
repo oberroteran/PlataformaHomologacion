@@ -2272,6 +2272,7 @@ export class PolicyTransactionsComponent implements OnInit {
     this.policyemit.getFrecuenciaPago(this.polizaEmitCab.tipoRenovacion)
       .subscribe((res: any) => {
         this.frecuenciaPago = res;
+        if (res != null && res.length == 1) this.polizaEmitCab.frecuenciaPago = res[0].COD_TIPO_FRECUENCIA; //Si solo hay una frecuencia de pago, está se seleccionará automáticamente
       })
   }
 

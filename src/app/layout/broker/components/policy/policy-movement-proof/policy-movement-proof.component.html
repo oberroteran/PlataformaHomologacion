@@ -198,6 +198,7 @@
                     <td class="grid-title-item">Sede</td>
                     <td class="grid-title-item">Doc. Broker</td>
                     <td class="grid-title-item">Broker</td>
+                    <td class="grid-title-item">Archivo</td>
                   </tr>
                 </thead>
                 <ng-container *ngIf="foundResults==null || foundResults.length==0; then hideGrid else showGrid">
@@ -227,6 +228,19 @@
                     <td>{{ item.ContractorLocation}}</td>
                     <td>{{ item.BrokerDocumentType }} : {{ item.BrokerDocumentNumber }}</td>
                     <td>{{ item.BrokerFullName }}</td>
+
+                    <ng-container *ngIf="item.FilePath!='', then ExistentFile else NotExistentFile"></ng-container>
+                    <ng-template #ExistentFile>
+                      <td>
+                        <a (click)="downloadFile(item.FilePath)"><img alt="Descargar" src="assets/icons/download2.png"
+                            title="Descargar" style="cursor: pointer;height: 24px"></a>
+                      </td>
+                    </ng-template>
+                    <ng-template #NotExistentFile>
+                      <td>
+                        Sin archivo
+                      </td>
+                    </ng-template>
                   </tr>
                 </tbody>
               </ng-template>

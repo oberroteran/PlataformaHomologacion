@@ -37,7 +37,7 @@ export class AgencyIndexComponent implements OnInit {
      * Variables de paginación
      */
     public rotate = true; //Si rotar las páginas cuando maxSize > el número de páginas generado 
-    public maxSize = 5; //cantidad de paginas que se mostrarán en el html del paginado
+    public maxSize = 10; //cantidad de paginas que se mostrarán en el html del paginado
     public totalItems = 0; //total de items encontrados
     public foundResults: any = [];  //Lista de registros encontrados durante la búsqueda
 
@@ -315,7 +315,7 @@ export class AgencyIndexComponent implements OnInit {
             obj.P_NTIPO_BUSQUEDA = this.mainFormGroup.controls.searchMode.value;
             obj.P_NTIPO_DOC = this.mainFormGroup.controls.documentType.value;
             obj.P_NNUM_DOC = this.mainFormGroup.controls.documentNumber.value;
-
+            obj.P_IS_AGENCY = '1';  //Solo va a buscar los que tienen tipo de canal 6 y 9
             if (this.mainFormGroup.controls.personType.value == "1") {
                 obj.P_SNOMBRE = this.mainFormGroup.controls.firstName.value;
                 obj.P_SAP_PATERNO = this.mainFormGroup.controls.paternalLastName.value;
