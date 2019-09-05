@@ -741,6 +741,8 @@ export class PolicyFormComponent implements OnInit {
 			.subscribe((res: any) => {
 				this.polizaEmitCab.frecuenciaPago = "";
 				this.frecuenciaPago = res;
+
+				if (res != null && res.length == 1) this.polizaEmitCab.frecuenciaPago = res[0].COD_TIPO_FRECUENCIA; //Si solo hay una frecuencia de pago, está se seleccionará automáticamente
 			})
 
 		var fechadesde = this.desde.nativeElement.value.split("/");
