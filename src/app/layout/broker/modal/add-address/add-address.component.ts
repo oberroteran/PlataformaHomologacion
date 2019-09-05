@@ -81,7 +81,7 @@ export class AddAddressComponent implements OnInit {
 
     if (this.itemDireccion != null) {
       console.log(this.itemDireccion);
-      this.txtAccion = "Editar Dirección";
+      this.txtAccion = "Guardar Dirección";
       this.InputsStreet.P_NROW = parseInt(this.itemDireccion.P_NROW);
       this.InputsStreet.P_SDESDIREBUSQ = this.itemDireccion.P_SDESDIREBUSQ;
       this.InputsStreet.P_SBLOCKCHALET = this.itemDireccion.P_SBLOCKCHALET;
@@ -191,8 +191,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectRoadType(event) {
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
     this.clearVal()
     if (event == undefined) {
       this.InputsStreet.P_STI_DIRE = null;
@@ -222,9 +220,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectInteriorType(event) {
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
-
     if (event == undefined) {
       this.InputsStreet.P_STI_INTERIOR = null;
       this.prefDepar = "";
@@ -238,9 +233,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectCJHTType(event) {
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
-
     if (event == undefined) {
       this.InputsStreet.P_STI_CJHT = null;
       this.prefCJHT = "";
@@ -253,9 +245,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectBlockType(event) {
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
-
     if (event == undefined) {
       this.InputsStreet.P_STI_BLOCKCHALET = null;
       this.prefBloque = "";
@@ -268,9 +257,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectConjHab(event) {
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
-
     if (event == undefined) {
       this.InputsStreet.P_STI_CJHT = null;
       this.prefBloque = "";
@@ -318,10 +304,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectDepartment(event) {
-    // console.log(event);
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
-
     if (event == undefined) {
       this.InputsStreet.P_NPROVINCE = null;
       this.InputsStreet.P_DESDEPARTAMENTO = "";
@@ -342,9 +324,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectProvince(event) {
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
-
     if (event == undefined) {
       this.InputsStreet.P_NLOCAL = null;
       this.InputsStreet.P_DESPROVINCIA = "";
@@ -362,9 +341,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSelectDistrict(event) {
-    // let selectElementText = event.target['options']
-    // [event.target['options'].selectedIndex].text;
-
     if (event == undefined) {
       this.InputsStreet.P_NMUNICIPALITY = null;
       this.InputsStreet.P_DESDISTRITO = "";
@@ -523,10 +499,7 @@ export class AddAddressComponent implements OnInit {
   }
 
   EventSave(event) {
-
-    console.log(this.prefBloque)
     this.completeInfo();
-
     this.InputsStreet.P_SNOM_DIRECCION = this.InputsStreet.P_SNOM_DIRECCION == null ? "" : this.InputsStreet.P_SNOM_DIRECCION.toUpperCase()
     this.InputsStreet.P_SNUM_DIRECCION = this.InputsStreet.P_SNUM_DIRECCION == null ? "" : this.InputsStreet.P_SNUM_DIRECCION.toUpperCase()
     this.InputsStreet.P_SNUM_INTERIOR = this.InputsStreet.P_SNUM_INTERIOR == null ? "" : this.InputsStreet.P_SNUM_INTERIOR.toUpperCase()

@@ -19,7 +19,7 @@
               <div class="row">
                 <div class="col-sm-3">
                   <span>TIPO PRODUCTO</span>
-                  <select [disabled]="stateSearch" [(ngModel)]="InputsSearch.P_NPRODUCT">
+                  <select [disabled]="stateSearch" [(ngModel)]="InputsSearch.P_NPRODUCT" class="minimal">
                     <option value="0" selected>AMBOS</option>
                     <option *ngFor="let product of productList" value="{{product.COD_PRODUCT}}">
                       {{product.DES_PRODUCT}}</option>
@@ -48,7 +48,7 @@
                 <div class="col-sm-3">
                   <span>TIPO DE TRANSACCIÓN</span>
                   <select (change)="onSelectTypePerson()" [(ngModel)]="InputsSearch.P_NIDTRANSACCION"
-                    [disabled]="stateSearch">
+                    [disabled]="stateSearch" class="minimal">
                     <option value="0" selected>TODAS</option>
                     <option *ngFor="let transaccion of transaccionList" value="{{transaccion.COD_TIPO_TRANSACCION}}">
                       {{transaccion.DES_TIPO_TRANSACCION}}</option>
@@ -65,7 +65,7 @@
                 <div *ngIf="blockSearch" class="col-sm-3">
                   <span>TIPO DOCUMENTO</span>
                   <select [disabled]="stateSearch" [(ngModel)]="InputsSearch.P_NIDDOC_TYPE"
-                    (ngModelChange)="onSelectTypeDocument()">
+                    (ngModelChange)="onSelectTypeDocument()" class="minimal">
                     <option value="-1" selected>Seleccionar</option>
                     <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
                       {{documenttype.Name}}</option>
@@ -74,7 +74,7 @@
                 <div *ngIf="!blockSearch" class="col-sm-3">
                   <span>TIPO DE PERSONA (*)</span>
                   <select (change)="onSelectTypePerson()" [(ngModel)]="InputsSearch.P_PERSON_TYPE"
-                    [disabled]="stateSearch">
+                    [disabled]="stateSearch" class="minimal">
                     <option value="1" selected>Persona Natural</option>
                     <option value="2">Persona Jurídica</option>
                   </select>

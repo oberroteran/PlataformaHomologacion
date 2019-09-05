@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">Detalle Movimiento Póliza</h4>
+  <h4 class="modal-title" id="modal-basic-title" style="text-transform: uppercase">Movimientos de Póliza</h4>
   <button type="button" class="close" aria-label="Close" (click)="reference.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -48,11 +48,12 @@
               <tr class="grid-title">
                 <td class="grid-title-item text-center">Nro.</td>
                 <td class="grid-title-item">Movimiento</td>
+                <td class="grid-title-item">Constancias</td>
                 <td class="grid-title-item text-center">Ini. Cobertura</td>
                 <td class="grid-title-item text-center">Fin Cobertura</td>
                 <td class="grid-title-item text-center">Fecha Mov.</td>
                 <td class="grid-title-item">Observaciones</td>
-                <td class="grid-title-item">Usuario</td>
+                <td class="grid-title-item text-center">Usuario</td>
                 <td class="grid-title-item text-center">Documentos</td>
                 <ng-container *ngIf="canCancelMovements">
                   <td class="grid-title-item" *ngIf="!flagAnular">Anular</td>
@@ -77,6 +78,7 @@
           <tr *ngFor="let item of listToShow; let row_no = index">
             <td class="text-center">{{ item.NRO }}</td>
             <td>{{ item.TIPO_TRANSACCION }}</td>
+            <td class="text-center">{{ item.CONSTANCIA }}</td>
             <td class="text-center">{{ item.INICIO_COBERTURA }}</td>
             <td class="text-center">{{ item.FIN_COBERTURA }}</td>
             <td class="text-center">{{ item.FECHA_TRANSACCION }}</td>

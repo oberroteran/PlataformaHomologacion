@@ -187,6 +187,7 @@ span, textarea {
 
 .grid table {
     width: 100%;
+    text-transform: uppercase;
     border-collapse: collapse;
 }
 

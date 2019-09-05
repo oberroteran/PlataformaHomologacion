@@ -137,6 +137,7 @@ export class QuotationComponent implements OnInit {
     P_PLAN_PRO_PEN: any = {}; // tasa pension propuesta
     P_COM_SAL_PRO: any = {}; // comision salud propuesta | broker
     P_COM_PEN_PRO: any = {}; // comision pension propuesta | broker
+    sedeContractor = "";
 
     /** Puede proponer comisión? */
     canProposeComission: boolean;
@@ -175,7 +176,7 @@ export class QuotationComponent implements OnInit {
         this.canProposeRate = AccessFilter.hasPermission("9");
 
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        this.userId = JSON.parse(localStorage.getItem("currentUser"))["id"];
+        this.userId = currentUser["id"];
 
         this.getDocumentTypeList();
         this.getCurrencyList();
@@ -208,7 +209,6 @@ export class QuotationComponent implements OnInit {
                 this.InputsQuotation.P_NIDDOC_TYPE = params.typeDocument;
                 this.InputsQuotation.P_SIDDOC = params.document;
             });
-
         if (this.InputsQuotation.P_NIDDOC_TYPE != undefined && this.InputsQuotation.P_SIDDOC != undefined && this.InputsQuotation.P_NIDDOC_TYPE != "" && this.InputsQuotation.P_SIDDOC != "") {
             this.buscarContratante();
             this.onSelectTypeDocument(this.InputsQuotation.P_NIDDOC_TYPE);
@@ -230,7 +230,7 @@ export class QuotationComponent implements OnInit {
             this.InputsQuotation.P_NIDSEDE = null; // Sede
             this.InputsQuotation.P_NTECHNICAL = null; // Actividad tecnica
             this.InputsQuotation.P_NECONOMIC = null; // Actividad Economica
-            this.InputsQuotation.P_DELIMITER = false; // Delimitación check
+            this.InputsQuotation.P_DELIMITER = ""; // Delimitación check
             this.InputsQuotation.P_MINA = false; // Delimitación check
             this.InputsQuotation.P_SDELIMITER = "0"; // Delimitacion  1 o 0
             this.InputsQuotation.P_NPROVINCE = null;
@@ -402,7 +402,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
                     this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                     this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                    this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                    this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaSalud = ""
                     this.totalNetoSaludSave = this.totalNetoSalud
@@ -420,7 +420,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
                     this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                     this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                    this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                    this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaPension = ""
                     this.totalNetoPensionSave = this.totalNetoPension
@@ -549,13 +549,13 @@ export class QuotationComponent implements OnInit {
 
                             if (res.EListClient.length == 1) {
                                 this.onSelectEconomicActivity();
+                                this.sedeContractor = res.EListClient[0].P_SCLIENT;
                                 this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
                                 this.InputsQuotation.P_PERSON_TYPE = "1";
                                 this.InputsQuotation.P_SLEGALNAME = "";
                                 this.InputsQuotation.P_SFIRSTNAME = "";
                                 this.InputsQuotation.P_SLASTNAME = "";
                                 this.InputsQuotation.P_SLASTNAME2 = "";
-                                this.stateQuotation = false;
                                 this.blockSearch = true;
                                 this.stateSearch = false;
                                 this.ContractorId = res.EListClient[0].P_SCLIENT;
@@ -668,29 +668,38 @@ export class QuotationComponent implements OnInit {
                 let provincia = null;
                 let municipalidad = null;
 
-                res.GENERICLIST.forEach(sede => {
-                    if (sede.State == "Activo") {
-                        list.push(sede);
+                if (res.GENERICLIST.length > 0) {
+                    this.stateQuotation = false;
 
-                        if (sede.Type == "PRINCIPAL") {
-                            sedeID = parseInt(sede.Id);
-                            departamento = parseInt(sede.Departament);
-                            provincia = parseInt(sede.Province);
-                            municipalidad = parseInt(sede.Municipality);
+                    res.GENERICLIST.forEach(sede => {
+                        if (sede.State == "Activo") {
+                            list.push(sede);
+
+                            if (sede.Type == "PRINCIPAL") {
+                                sedeID = parseInt(sede.Id);
+                                departamento = parseInt(sede.Departament);
+                                provincia = parseInt(sede.Province);
+                                municipalidad = parseInt(sede.Municipality);
+                            }
                         }
-                    }
-                });
+                    });
 
-                this.sedesList = list;
-                this.InputsQuotation.P_NPRODUCT = "-1"; //Producto
-                this.InputsQuotation.P_NIDSEDE = sedeID;
-                this.InputsQuotation.P_NPROVINCE = departamento;
-                this.InputsQuotation.P_NLOCAL = provincia
-                this.InputsQuotation.P_NMUNICIPALITY = municipalidad;
-                this.equivalentMuni();
-                this.onSelectSede();
-                this.getProvinceList();
-                this.getDistrictList();
+                    this.sedesList = list;
+                    this.InputsQuotation.P_NPRODUCT = "-1"; //Producto
+                    this.InputsQuotation.P_NIDSEDE = sedeID;
+                    this.InputsQuotation.P_NPROVINCE = departamento;
+                    this.InputsQuotation.P_NLOCAL = provincia
+                    this.InputsQuotation.P_NMUNICIPALITY = municipalidad;
+                    this.equivalentMuni();
+                    this.onSelectSede();
+                    this.getProvinceList();
+                    this.getDistrictList();
+                } else {
+                    this.InputsQuotation.P_NPRODUCT = "-1";
+                    this.stateQuotation = true;
+                }
+
+
             },
             err => {
                 console.log(err);
@@ -799,6 +808,7 @@ export class QuotationComponent implements OnInit {
         return new Date()
     }
     economicValue(sedeID) {
+        console.log()
         let activityTech = null;
         let activityID = null;
         let delimiter = "0";
@@ -822,7 +832,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NLOCAL = provincia;
         this.InputsQuotation.P_NMUNICIPALITY = municipalidad;
         this.getEconomicActivityList();
-        delimiter == "0" ? this.InputsQuotation.P_DELIMITER = false : this.InputsQuotation.P_DELIMITER = true;
+        delimiter == "0" ? this.InputsQuotation.P_DELIMITER = "" : this.InputsQuotation.P_DELIMITER = "* La actividad cuenta con delimitación";
         this.getProvinceList();
         this.getDistrictList();
         this.equivalentMuni();
@@ -980,7 +990,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NCURRENCY = "1";
         this.InputsQuotation.P_NTECHNICAL = null;
         this.InputsQuotation.P_NECONOMIC = null;
-        this.InputsQuotation.P_DELIMITER = false;
+        this.InputsQuotation.P_DELIMITER = "";
         this.InputsQuotation.P_SDELIMITER = "0";
         this.InputsQuotation.P_NLOCAL = null;
         this.InputsQuotation.P_NMUNICIPALITY = null;
@@ -1163,7 +1173,7 @@ export class QuotationComponent implements OnInit {
                 this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
                 this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                 this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
             } else {
                 this.mensajePrimaSalud = ""
                 this.totalNetoSaludSave = this.totalNetoSalud
@@ -1190,7 +1200,7 @@ export class QuotationComponent implements OnInit {
                 this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
                 this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                 this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
             } else {
                 this.mensajePrimaPension = ""
                 this.totalNetoPensionSave = this.totalNetoPension
@@ -1214,7 +1224,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoSaludSave = totPrima
                     this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                     this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                    this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                    this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaSalud = ""
                     this.totalNetoSaludSave = this.totalNetoSalud
@@ -1227,7 +1237,7 @@ export class QuotationComponent implements OnInit {
                         this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
                         this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                         this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                        this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                        this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
                     } else {
                         this.mensajePrimaSalud = ""
                         this.totalNetoSaludSave = this.totalNetoSalud
@@ -1245,7 +1255,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoPensionSave = totPrima
                     this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                     this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                    this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                    this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaPension = ""
                     this.totalNetoPensionSave = this.totalNetoPension
@@ -1258,7 +1268,7 @@ export class QuotationComponent implements OnInit {
                         this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
                         this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                         this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                        this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                        this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
                     } else {
                         this.mensajePrimaPension = ""
                         this.totalNetoPensionSave = this.totalNetoPension
@@ -1656,10 +1666,34 @@ export class QuotationComponent implements OnInit {
             msg += "Debe seleccionar un producto válido <br>"
         }
 
-        if (this.InputsQuotation.P_NIDSEDE == null || this.InputsQuotation.P_NIDSEDE == 0) {
-            this.VAL_QUOTATION[2] = "2";
-            msg += "Debe seleccionar una sede válida <br>"
+        if (this.sedesList.length > 0) {
+            if (this.InputsQuotation.P_NIDSEDE == null || this.InputsQuotation.P_NIDSEDE == 0) {
+                this.VAL_QUOTATION[2] = "2";
+                msg += "Debe seleccionar una sede válida <br>"
+            }
+        } else {
+            if (this.InputsQuotation.P_NTECHNICAL == null || this.InputsQuotation.P_NTECHNICAL == 0) {
+                this.VAL_QUOTATION[12] = "12";
+                msg += "Debe seleccionar una actividad a realizar válida <br>"
+            }
+            if (this.InputsQuotation.P_NECONOMIC == null || this.InputsQuotation.P_NECONOMIC == 0) {
+                this.VAL_QUOTATION[3] = "3";
+                msg += "Debe seleccionar una actividad económica válida <br>"
+            }
+            if (this.InputsQuotation.P_NPROVINCE == null || this.InputsQuotation.P_NPROVINCE == 0) {
+                this.VAL_QUOTATION[4] = "4";
+                msg += "Debe seleccionar un departamento válida <br>"
+            }
+            if (this.InputsQuotation.P_NLOCAL == null || this.InputsQuotation.P_NLOCAL == 0) {
+                this.VAL_QUOTATION[5] = "5";
+                msg += "Debe seleccionar una provincia válida <br>"
+            }
+            if (this.InputsQuotation.P_NMUNICIPALITY == null || this.InputsQuotation.P_NMUNICIPALITY == 0) {
+                this.VAL_QUOTATION[6] = "6";
+                msg += "Debe seleccionar un distrito válida <br>"
+            }
         }
+
 
         if (this.tasasList.length == 0) {
             this.VAL_QUOTATION[7] = "7";
@@ -1730,114 +1764,9 @@ export class QuotationComponent implements OnInit {
             return;
         } else {
             let self = this;
-
-            // Inicio
-            let now = new Date();
-            let dayIni = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
-            let monthPreviewIni = now.getMonth() + 1;
-            let monthIni = monthPreviewIni < 10 ? "0" + monthPreviewIni : monthPreviewIni;
-            let yearIni = now.getFullYear();
-
-            let dataQuotation: any = {};
-            dataQuotation.P_SCLIENT = this.ContractorId;
-            dataQuotation.P_NCURRENCY = this.InputsQuotation.P_NCURRENCY;
-            dataQuotation.P_NBRANCH = 1;
-            dataQuotation.P_DSTARTDATE = dayIni + "/" + monthIni + "/" + yearIni; //Fecha Inicio
-            dataQuotation.P_NIDCLIENTLOCATION = this.InputsQuotation.P_NIDSEDE;
-            dataQuotation.P_SCOMMENT = this.InputsQuotation.P_SCOMMENT.toUpperCase();
-            dataQuotation.P_SRUTA = "";
-            dataQuotation.P_NUSERCODE = this.userId;
-            dataQuotation.P_NACT_MINA = this.InputsQuotation.P_MINA == true ? 1 : 0;
-            dataQuotation.QuotationDet = [];
-            dataQuotation.QuotationCom = [];
-
-            //Detalle de Cotizacion Pension
-            if (this.listaTasasPension.length > 0) {
-                this.listaTasasPension.forEach(dataPension => {
-                    let itemQuotationDet: any = {};
-                    itemQuotationDet.P_NBRANCH = 1;
-                    itemQuotationDet.P_NPRODUCT = this.pensionID; // Pensión
-                    itemQuotationDet.P_NMODULEC = dataPension.id;
-                    itemQuotationDet.P_NTOTAL_TRABAJADORES = dataPension.totalWorkes;
-                    itemQuotationDet.P_NMONTO_PLANILLA = dataPension.planilla;
-                    itemQuotationDet.P_NTASA_CALCULADA = dataPension.rate;
-                    itemQuotationDet.P_NTASA_PROP = dataPension.planProp == "" ? "0" : dataPension.planProp;
-                    itemQuotationDet.P_NPREMIUM_MENSUAL = dataPension.premiumMonth;
-                    itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_PENSION;
-                    itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO;
-                    itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_PENSION == "" ? "0" : this.InputsQuotation.P_PRIMA_END_PENSION;
-                    itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoPensionSave;
-                    itemQuotationDet.P_NSUM_IGV = this.igvPensionSave;
-                    itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalPensionSave;
-                    itemQuotationDet.P_NRATE = dataPension.rateDet == "" ? "0" : dataPension.rateDet;
-                    itemQuotationDet.P_NDISCOUNT = this.discountPension == "" ? "0" : this.discountPension;
-                    itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationPension == "" ? "0" : this.activityVariationPension;
-                    itemQuotationDet.P_FLAG = "0";
-                    dataQuotation.QuotationDet.push(itemQuotationDet);
-                });
-            }
-
-            //Detalle de Cotizacion Salud
-            if (this.listaTasasSalud.length > 0) {
-                this.listaTasasSalud.forEach(dataSalud => {
-                    let itemQuotationDet: any = {};
-                    itemQuotationDet.P_NBRANCH = 1;
-                    itemQuotationDet.P_NPRODUCT = this.saludID; //Salud
-                    itemQuotationDet.P_NMODULEC = dataSalud.id;
-                    itemQuotationDet.P_NTOTAL_TRABAJADORES = dataSalud.totalWorkes;
-                    itemQuotationDet.P_NMONTO_PLANILLA = dataSalud.planilla;
-                    itemQuotationDet.P_NTASA_CALCULADA = dataSalud.rate;
-                    itemQuotationDet.P_NTASA_PROP = dataSalud.planProp == "" ? "0" : dataSalud.planProp;
-                    itemQuotationDet.P_NPREMIUM_MENSUAL = dataSalud.premiumMonth;
-                    itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_SALUD;
-                    itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO;
-                    itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_SALUD == "" ? "0" : this.InputsQuotation.P_PRIMA_END_SALUD;
-                    itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoSaludSave;
-                    itemQuotationDet.P_NSUM_IGV = this.igvSaludSave;
-                    itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalSaludSave;
-                    itemQuotationDet.P_NRATE = dataSalud.rateDet == "" ? "0" : dataSalud.rateDet;
-                    itemQuotationDet.P_NDISCOUNT = this.discountSalud == "" ? "0" : this.discountSalud;
-                    itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationSalud == "" ? "0" : this.activityVariationSalud;
-                    itemQuotationDet.P_FLAG = "0";
-                    dataQuotation.QuotationDet.push(itemQuotationDet);
-                });
-            }
-
-            //Comercializador Principal
-            let itemQuotationComMain: any = {};
-            itemQuotationComMain.P_NIDTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
-            itemQuotationComMain.P_NINTERMED = JSON.parse(localStorage.getItem("currentUser"))["canal"];
-            itemQuotationComMain.P_SCLIENT_COMER = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
-            itemQuotationComMain.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD : "0";
-            itemQuotationComMain.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO : "0";
-            itemQuotationComMain.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION : "0";
-            itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
-            itemQuotationComMain.P_NPRINCIPAL = 1;
-            dataQuotation.QuotationCom.push(itemQuotationComMain);
-
-            //Comercializadores
-            if (this.brokerList.length > 0) {
-                this.brokerList.forEach(dataBroker => {
-                    let itemQuotationCom: any = {};
-                    itemQuotationCom.P_NIDTYPECHANNEL = dataBroker.NTYPECHANNEL;
-                    itemQuotationCom.P_NINTERMED = dataBroker.COD_CANAL; //Desarrollo
-                    itemQuotationCom.P_SCLIENT_COMER = dataBroker.SCLIENT;
-                    itemQuotationCom.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD == "" ? "0" : dataBroker.P_COM_SALUD : "0";
-                    itemQuotationCom.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD_PRO == "" ? "0" : dataBroker.P_COM_SALUD_PRO : "0";
-                    itemQuotationCom.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION == "" ? "0" : dataBroker.P_COM_PENSION : "0";
-                    itemQuotationCom.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION_PRO == "" ? "0" : dataBroker.P_COM_PENSION_PRO : "0";
-                    itemQuotationCom.P_NPRINCIPAL = 0;
-                    dataQuotation.QuotationCom.push(itemQuotationCom);
-                });
-            }
-
-            let myFormData: FormData = new FormData()
-            this.files.forEach(file => {
-                myFormData.append(file.name, file);
-            });
-
+            let sedeId = "0";
             self.isLoading = false;
-            myFormData.append("objeto", JSON.stringify(dataQuotation));
+
             swal.fire({
                 title: "Información",
                 text: "¿Desea generar la cotización?",
@@ -1850,52 +1779,200 @@ export class QuotationComponent implements OnInit {
                 .then((result) => {
                     if (result.value) {
                         self.isLoading = true;
-                        this.quotationService.insertQuotation(myFormData).subscribe(
-                            res => {
-                                let quotationNumber = 0;
-                                if (res.P_COD_ERR == 0) {
-                                    this.clearInsert()
-                                    quotationNumber = res.P_NID_COTIZACION;
-                                    if (res.P_SAPROBADO == 'S') {
-                                        self.isLoading = false;
-                                        if (res.P_NCODE == 0) {
-                                            swal.fire({
-                                                title: "Información",
-                                                text: "¿Desea emitir la cotización N° " + quotationNumber + " de forma directa?",
-                                                type: "question",
-                                                showCancelButton: true,
-                                                confirmButtonText: 'Sí',
-                                                allowOutsideClick: false,
-                                                cancelButtonText: 'No'
-                                            })
-                                                .then((result) => {
-                                                    if (result.value) {
-                                                        self.isLoading = false;
-                                                        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: quotationNumber } });
-                                                    }
-                                                });
-                                        } else {
-                                            self.isLoading = false;
-                                            swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación.", "success");
-                                        }
-                                    } else {
-                                        self.isLoading = false;
-                                        swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+
+                        if (self.sedesList.length == 0) {
+                            let _contractorLocation: any = {};
+                            _contractorLocation.Action = "1"
+                            _contractorLocation.Address = "DIRECCION PRINCIPAL"
+                            _contractorLocation.ContactList = []
+                            _contractorLocation.ContractorId = this.sedeContractor
+                            _contractorLocation.DepartmentId = this.InputsQuotation.P_NPROVINCE
+                            _contractorLocation.Description = "PRINCIPAL"
+                            _contractorLocation.DistrictId = this.InputsQuotation.P_NMUNICIPALITY
+                            _contractorLocation.EconomicActivityId = this.InputsQuotation.P_NECONOMIC
+                            _contractorLocation.ProvinceId = this.InputsQuotation.P_NLOCAL
+                            _contractorLocation.StateId = "1"
+                            _contractorLocation.TechnicalActivityId = this.InputsQuotation.P_NTECHNICAL
+                            _contractorLocation.TypeId = "1"
+                            _contractorLocation.UserCode = JSON.parse(localStorage.getItem("currentUser"))["id"]
+
+                            this.contractorLocationIndexService.updateContractorLocation(_contractorLocation).subscribe(
+                                res => {
+                                    if (res.P_NCODE == 0) {
+                                        sedeId = res.P_RESULT;
+                                        self.proceso(sedeId, self)
+                                    } else if (res.P_NCODE == 1) {
+                                        swal.fire('Información', "Ocurrió un problema en la creación de la sede", 'error');
+                                        return;
                                     }
-                                } else {
-                                    self.isLoading = false;
-                                    swal.fire("Información", res.P_MESSAGE, "error");
+                                },
+                                err => {
+                                    swal.fire('Información', err, 'error');
                                 }
-                            },
-                            err => {
-                                self.isLoading = false;
-                                swal.fire("Información", "Hubo un error con el servidor", "error");
-                            }
-                        );
+                            );
+                        }
+                        else {
+                            self.proceso(sedeId, self)
+                        }
+
                     }
                 });
         }
     }
+
+    proceso(sedeId, self) {
+        // Inicio
+        let now = new Date();
+        let dayIni = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+        let monthPreviewIni = now.getMonth() + 1;
+        let monthIni = monthPreviewIni < 10 ? "0" + monthPreviewIni : monthPreviewIni;
+        let yearIni = now.getFullYear();
+
+        let dataQuotation: any = {};
+        dataQuotation.P_SCLIENT = this.ContractorId;
+        dataQuotation.P_NCURRENCY = this.InputsQuotation.P_NCURRENCY;
+        dataQuotation.P_NBRANCH = 1;
+        dataQuotation.P_DSTARTDATE = dayIni + "/" + monthIni + "/" + yearIni; //Fecha Inicio
+        dataQuotation.P_NIDCLIENTLOCATION = self.sedesList.length > 0 ? this.InputsQuotation.P_NIDSEDE : sedeId;
+        dataQuotation.P_SCOMMENT = this.InputsQuotation.P_SCOMMENT.toUpperCase();
+        dataQuotation.P_SRUTA = "";
+        dataQuotation.P_NUSERCODE = this.userId;
+        dataQuotation.P_NACT_MINA = this.InputsQuotation.P_MINA == true ? 1 : 0;
+        dataQuotation.QuotationDet = [];
+        dataQuotation.QuotationCom = [];
+
+        //Detalle de Cotizacion Pension
+        if (this.listaTasasPension.length > 0) {
+            this.listaTasasPension.forEach(dataPension => {
+                let itemQuotationDet: any = {};
+                itemQuotationDet.P_NBRANCH = 1;
+                itemQuotationDet.P_NPRODUCT = this.pensionID; // Pensión
+                itemQuotationDet.P_NMODULEC = dataPension.id;
+                itemQuotationDet.P_NTOTAL_TRABAJADORES = dataPension.totalWorkes;
+                itemQuotationDet.P_NMONTO_PLANILLA = dataPension.planilla;
+                itemQuotationDet.P_NTASA_CALCULADA = dataPension.rate;
+                itemQuotationDet.P_NTASA_PROP = dataPension.planProp == "" ? "0" : dataPension.planProp;
+                itemQuotationDet.P_NPREMIUM_MENSUAL = dataPension.premiumMonth;
+                itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_PENSION;
+                itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO;
+                itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_PENSION == "" ? "0" : this.InputsQuotation.P_PRIMA_END_PENSION;
+                itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoPensionSave;
+                itemQuotationDet.P_NSUM_IGV = this.igvPensionSave;
+                itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalPensionSave;
+                itemQuotationDet.P_NRATE = dataPension.rateDet == "" ? "0" : dataPension.rateDet;
+                itemQuotationDet.P_NDISCOUNT = this.discountPension == "" ? "0" : this.discountPension;
+                itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationPension == "" ? "0" : this.activityVariationPension;
+                itemQuotationDet.P_FLAG = "0";
+                dataQuotation.QuotationDet.push(itemQuotationDet);
+            });
+        }
+
+        //Detalle de Cotizacion Salud
+        if (this.listaTasasSalud.length > 0) {
+            this.listaTasasSalud.forEach(dataSalud => {
+                let itemQuotationDet: any = {};
+                itemQuotationDet.P_NBRANCH = 1;
+                itemQuotationDet.P_NPRODUCT = this.saludID; //Salud
+                itemQuotationDet.P_NMODULEC = dataSalud.id;
+                itemQuotationDet.P_NTOTAL_TRABAJADORES = dataSalud.totalWorkes;
+                itemQuotationDet.P_NMONTO_PLANILLA = dataSalud.planilla;
+                itemQuotationDet.P_NTASA_CALCULADA = dataSalud.rate;
+                itemQuotationDet.P_NTASA_PROP = dataSalud.planProp == "" ? "0" : dataSalud.planProp;
+                itemQuotationDet.P_NPREMIUM_MENSUAL = dataSalud.premiumMonth;
+                itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_SALUD;
+                itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO;
+                itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_SALUD == "" ? "0" : this.InputsQuotation.P_PRIMA_END_SALUD;
+                itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoSaludSave;
+                itemQuotationDet.P_NSUM_IGV = this.igvSaludSave;
+                itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalSaludSave;
+                itemQuotationDet.P_NRATE = dataSalud.rateDet == "" ? "0" : dataSalud.rateDet;
+                itemQuotationDet.P_NDISCOUNT = this.discountSalud == "" ? "0" : this.discountSalud;
+                itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationSalud == "" ? "0" : this.activityVariationSalud;
+                itemQuotationDet.P_FLAG = "0";
+                dataQuotation.QuotationDet.push(itemQuotationDet);
+            });
+        }
+
+        //Comercializador Principal
+        let itemQuotationComMain: any = {};
+        itemQuotationComMain.P_NIDTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
+        itemQuotationComMain.P_NINTERMED = JSON.parse(localStorage.getItem("currentUser"))["canal"];
+        itemQuotationComMain.P_SCLIENT_COMER = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
+        itemQuotationComMain.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD : "0";
+        itemQuotationComMain.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO : "0";
+        itemQuotationComMain.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION : "0";
+        itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
+        itemQuotationComMain.P_NPRINCIPAL = 1;
+        dataQuotation.QuotationCom.push(itemQuotationComMain);
+
+        //Comercializadores
+        if (this.brokerList.length > 0) {
+            this.brokerList.forEach(dataBroker => {
+                let itemQuotationCom: any = {};
+                itemQuotationCom.P_NIDTYPECHANNEL = dataBroker.NTYPECHANNEL;
+                itemQuotationCom.P_NINTERMED = dataBroker.COD_CANAL; //Desarrollo
+                itemQuotationCom.P_SCLIENT_COMER = dataBroker.SCLIENT;
+                itemQuotationCom.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD == "" ? "0" : dataBroker.P_COM_SALUD : "0";
+                itemQuotationCom.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD_PRO == "" ? "0" : dataBroker.P_COM_SALUD_PRO : "0";
+                itemQuotationCom.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION == "" ? "0" : dataBroker.P_COM_PENSION : "0";
+                itemQuotationCom.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION_PRO == "" ? "0" : dataBroker.P_COM_PENSION_PRO : "0";
+                itemQuotationCom.P_NPRINCIPAL = 0;
+                dataQuotation.QuotationCom.push(itemQuotationCom);
+            });
+        }
+
+        let myFormData: FormData = new FormData()
+        this.files.forEach(file => {
+            myFormData.append(file.name, file);
+        });
+
+        self.isLoading = false;
+        console.log(dataQuotation)
+        myFormData.append("objeto", JSON.stringify(dataQuotation));
+        this.quotationService.insertQuotation(myFormData).subscribe(
+            res => {
+                let quotationNumber = 0;
+                if (res.P_COD_ERR == 0) {
+                    this.clearInsert()
+                    quotationNumber = res.P_NID_COTIZACION;
+                    if (res.P_SAPROBADO == 'S') {
+                        self.isLoading = false;
+                        if (res.P_NCODE == 0) {
+                            swal.fire({
+                                title: "Información",
+                                text: "¿Desea emitir la cotización N° " + quotationNumber + " de forma directa?",
+                                type: "question",
+                                showCancelButton: true,
+                                confirmButtonText: 'Sí',
+                                allowOutsideClick: false,
+                                cancelButtonText: 'No'
+                            })
+                                .then((result) => {
+                                    if (result.value) {
+                                        self.isLoading = false;
+                                        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: quotationNumber } });
+                                    }
+                                });
+                        } else {
+                            self.isLoading = false;
+                            swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación.", "success");
+                        }
+                    } else {
+                        self.isLoading = false;
+                        swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+                    }
+                } else {
+                    self.isLoading = false;
+                    swal.fire("Información", res.P_MESSAGE, "error");
+                }
+            },
+            err => {
+                self.isLoading = false;
+                swal.fire("Información", "Hubo un error con el servidor", "error");
+            }
+        );
+    }
+
 
     getFileExtension(filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
@@ -1936,7 +2013,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NIDSEDE = null; // Sede
         this.InputsQuotation.P_NTECHNICAL = null; // Actividad Tecnica
         this.InputsQuotation.P_NECONOMIC = null; // Actividad Economica
-        this.InputsQuotation.P_DELIMITER = false; // Delimitación check
+        this.InputsQuotation.P_DELIMITER = ""; // Delimitación check
         this.InputsQuotation.P_SDELIMITER = "0"; // Delimitacion  1 o 0
         this.InputsQuotation.P_NPROVINCE = null;
         this.InputsQuotation.P_NLOCAL = null;
@@ -2059,7 +2136,7 @@ export class QuotationComponent implements OnInit {
             event.preventDefault();
         }
     }
-    
+
     valText(event: any, type) {
         let pattern;
         switch (type) {

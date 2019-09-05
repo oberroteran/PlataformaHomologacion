@@ -12,11 +12,6 @@
                 bindValue="P_SCIIU" [(ngModel)]="InputsCiiu.P_SCIIU" [clearable]="true"  [ngClass]="{'error-validate': VAL_CIIU[0] != ''}" (click)="Clear(0)"
                 placeholder="Seleccionar" dropdownPosition="bottom" notFoundText="No hay resultados">
               </ng-select>
-
-          <!-- <select (change)="onSelectCiiu($event)" [(ngModel)]="InputsCiiu.P_SCIIU">
-            <option value="0" selected>Seleccionar</option>
-            <option *ngFor="let ciiu of ciiuList" value="{{ciiu.P_SCIIU}}">{{ciiu.SDESCRIPT}}</option>
-          </select> -->
         </div>
       </div>
     </div>

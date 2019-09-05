@@ -16,7 +16,7 @@
         <div class="row">
           <div class="col-sm-6">
             <span>TIPO SEDE (*)</span>
-            <select formControlName="type" [(ngModel)]="currentLocation.TypeId">
+            <select formControlName="type" [(ngModel)]="currentLocation.TypeId" class="minimal">
 
               <option disabled value="0">Seleccionar</option>
               <option *ngFor="let item of contractorLocationTypeList" value="{{item.Id}}">{{item.Name}}</option>
@@ -47,7 +47,7 @@
             <span>DEPARTAMENTO (*)</span>
             <select formControlName="department" [(ngModel)]="currentLocation.DepartmentId" (change)="getProvinceList()"
               (focus)="clearDepartmentValidators()"
-              [ngClass]="{'error-validate': !mainFormGroup.get('department').valid && mainFormGroup.get('department').touched}">
+              [ngClass]="{'error-validate': !mainFormGroup.get('department').valid && mainFormGroup.get('department').touched}" class="minimal">
               <option disabled value="0">Seleccionar</option>
               <option *ngFor="let item of departmentList" value="{{item.Id}}">{{item.Name}}</option>
 
@@ -65,7 +65,7 @@
             <span>PROVINCIA (*)</span>
             <select formControlName="province" [(ngModel)]="currentLocation.ProvinceId" (change)="getDistrictList()"
               (focus)="clearProvinceValidators()"
-              [ngClass]="{'error-validate': !mainFormGroup.get('province').valid && mainFormGroup.get('province').touched}">
+              [ngClass]="{'error-validate': !mainFormGroup.get('province').valid && mainFormGroup.get('province').touched}" class="minimal">
               <option disabled value="0">Seleccionar</option>
               <option *ngFor="let item of provinceList" value="{{item.Id}}">{{item.Name}}</option>
             </select>
@@ -84,7 +84,7 @@
             <span>DISTRITO (*)</span>
             <select formControlName="district" [(ngModel)]="currentLocation.DistrictId"
               [ngClass]="{'error-validate': !mainFormGroup.get('district').valid && mainFormGroup.get('district').touched}"
-              (focus)="clearDistrictValidators()">
+              (focus)="clearDistrictValidators()" class="minimal">
               <option disabled value="0">Seleccionar</option>
               <option *ngFor="let item of districtList" value="{{item.Id}}">{{item.Name}}</option>
             </select>
@@ -114,7 +114,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <span style="margin-bottom: 7px">ACTIVIDAD TÉCNICA (*)</span>
+            <span style="margin-bottom: 7px">ACTIVIDAD A REALIZAR (*)</span>
             <ng-select formControlName="technicalActivity" class="border-ng"
               [(ngModel)]="currentLocation.TechnicalActivityId" (focus)="clearEconomicActivityValidators()"
               (change)="fillEconomicActivityList()" [clearable]="true" placeholder="Seleccionar"
@@ -128,8 +128,8 @@
               <ng-container
                 *ngIf="mainFormGroup.get('technicalActivity').hasError('required'); then required_technicalActivity else invalid_technicalActivity">
               </ng-container>
-              <ng-template #required_technicalActivity>La actividad técnica es requerida.</ng-template>
-              <ng-template #invalid_technicalActivity>La actividad técnica no es válida.</ng-template>
+              <ng-template #required_technicalActivity>La actividad a realizar es requerida.</ng-template>
+              <ng-template #invalid_technicalActivity>La actividad a realizar no es válida.</ng-template>
             </span>
           </div>
           <div class="col-sm-6">
@@ -161,7 +161,7 @@
           <div class="col-sm-6" *ngIf="openedInEditMode==true && willBeSaved==true">
             <span>ESTADO (*)</span>
             <select formControlName="state" [(ngModel)]="currentLocation.StateId"
-              [ngClass]="{'error-validate': !mainFormGroup.get('state').valid && mainFormGroup.get('state').touched}">
+              [ngClass]="{'error-validate': !mainFormGroup.get('state').valid && mainFormGroup.get('state').touched}" class="minimal">
               <option disabled value="0">Seleccionar</option>
               <option value="1">Activo</option>
               <option value="2">Inactivo</option>
