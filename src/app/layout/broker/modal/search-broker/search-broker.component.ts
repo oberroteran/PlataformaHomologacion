@@ -266,7 +266,7 @@ export class SearchBrokerComponent implements OnInit {
       return;
     } else {
       let searchBroker: any = {};
-
+      searchBroker.P_IS_AGENCY = '0'; 
       this.listBroker = [];
       switch (this.InputsBroker.P_TYPE_SEARCH) {
         case "1":

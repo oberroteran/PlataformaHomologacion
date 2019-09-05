@@ -249,7 +249,7 @@
         <div *ngIf="foundResults!=null && foundResults.length>0" class="row" style="display:flex">
           <div class="col-sm-12">
             <ngb-pagination [(page)]="filter.PageNumber" [pageSize]="filter.LimitPerpage" [collectionSize]="totalItems"
-              (pageChange)="pageChanged(filter.PageNumber)">
+              [maxSize]="maxSize" (pageChange)="pageChanged(filter.PageNumber)">
               <ng-template ngbPaginationPrevious>Anterior</ng-template>
               <ng-template ngbPaginationNext>Siguiente</ng-template>
             </ngb-pagination>

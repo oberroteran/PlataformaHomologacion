@@ -71,7 +71,7 @@ export class AgencyFormComponent implements OnInit {
     public bsSalud: Date = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
     public rotate = true; //
-    public maxSize = 5; // cantidad de paginas que se mostrarán en el paginado
+    public maxSize = 10; // cantidad de paginas que se mostrarán en el paginado
     public itemsPerPage = 3; // limite de items por página
     public totalItems = 0; //total de items encontrados
     public currentPage = 1;
