@@ -60,7 +60,8 @@
 							<div class="col-sm-3">
 								<span>TIPO DOCUMENTO (*)</span>
 
-								<select disabled [(ngModel)]="polizaEmitCab.TIPO_DOCUMENTO" name="TIPO_DOCUMENTO" class="minimal">
+								<select disabled [(ngModel)]="polizaEmitCab.TIPO_DOCUMENTO" name="TIPO_DOCUMENTO"
+									class="minimal">
 									<option value="" selected disabled>Seleccionar</option>
 									<option [value]="polizaEmitCab.TIPO_DOCUMENTO">
 										{{polizaEmitCab.TIPO_DES_DOCUMENTO}}</option>
@@ -97,7 +98,7 @@
 					<div class="card-header">
 						<h5 class="mb-0" data-toggle="collapse" data-target="#comercializador" aria-expanded="true"
 							aria-controls="comercializador">
-							Datos del Comercializador
+							Datos Brokers
 							<i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
 						</h5>
 					</div>
@@ -134,28 +135,28 @@
 								<span>COMISIÓN SALUD</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD =$event"
-									name="COMISION_SALUD" placeholder="0" id="" disabled />
+									name="COMISION_SALUD" placeholder="0 %" id="" disabled />
 							</div>
-							<div class="col-sm-3 chk" *ngIf="saludList.length > 0">
+							<!-- <div class="col-sm-3 chk" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD PROPUESTA</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO =$event"
 									name="COMISION_SALUD_PRO" placeholder="0" disabled
 									style="margin-top: 2px !important;" FloatDirective />
-							</div>
+							</div> -->
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION =$event"
-									name="COMISION_PENSION" placeholder="0" id="" disabled />
+									name="COMISION_PENSION" placeholder="0 %" id="" disabled />
 							</div>
-							<div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
+							<!-- <div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN PROPUESTA</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO =$event"
 									name="COMISION_PENSION_PRO" placeholder="0" disabled
 									style="margin-top: 2px !important;" FloatDirective />
-							</div>
+							</div> -->
 						</div>
 
 						<br>
@@ -278,7 +279,8 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<span>SEDE</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_TIPO_SEDE" name="COD_TIPO_SEDE" class="minimal">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_TIPO_SEDE" name="COD_TIPO_SEDE"
+									class="minimal">
 									<option value="" disabled selected>Seleccione</option>
 									<option [value]="polizaEmitCab.COD_TIPO_SEDE">{{polizaEmitCab.DES_TIPO_SEDE}}
 									</option>
@@ -287,7 +289,8 @@
 							</div>
 							<div class="col-sm-3">
 								<span>ACTIVIDAD A REALIZAR</span>
-								<select disabled [(ngModel)]="polizaEmitCab.ACT_TECNICA" name="ACT_TECNICA" class="minimal">
+								<select disabled [(ngModel)]="polizaEmitCab.ACT_TECNICA" name="ACT_TECNICA"
+									class="minimal">
 									<option disabled value="" selected>Seleccionar</option>
 									<option [value]="polizaEmitCab.ACT_TECNICA">
 										{{polizaEmitCab.DES_ACT_TECNICA}}</option>
@@ -295,7 +298,8 @@
 							</div>
 							<div class="col-sm-4">
 								<span>ACTIVIDAD ECONÓMICA</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_ACT_ECONOMICA" name="COD_ACT_ECONOMICA" class="minimal">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_ACT_ECONOMICA" name="COD_ACT_ECONOMICA"
+									class="minimal">
 									<option disabled value="" selected>Seleccionar</option>
 									<option [value]="polizaEmitCab.COD_ACT_ECONOMICA">
 										{{polizaEmitCab.DES_ACT_ECONOMICA}}</option>
@@ -318,7 +322,8 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<span>DEPARTAMENTO (*)</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_DEPARTAMENTO" name="COD_DEPARTAMENTO" class="minimal">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_DEPARTAMENTO" name="COD_DEPARTAMENTO"
+									class="minimal">
 									<option value="" selected disabled>Seleccionar</option>
 									<option [value]="polizaEmitCab.COD_DEPARTAMENTO">
 										{{polizaEmitCab.DES_DEPARTAMENTO}}</option>
@@ -327,7 +332,8 @@
 							</div>
 							<div class="col-sm-3">
 								<span>PROVINCIA (*)</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_PROVINCIA" name="COD_PROVINCIA" class="minimal">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_PROVINCIA" name="COD_PROVINCIA"
+									class="minimal">
 									<option value="" selected disabled>Seleccionar</option>
 									<option [value]="polizaEmitCab.COD_PROVINCIA">{{polizaEmitCab.DES_PROVINCIA}}
 									</option>
@@ -336,7 +342,8 @@
 							</div>
 							<div class="col-sm-3">
 								<span>DISTRITO (*)</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_DISTRITO" name="COD_DISTRITO" class="minimal">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_DISTRITO" name="COD_DISTRITO"
+									class="minimal">
 									<option value="" selected disabled>Seleccionar</option>
 									<option [value]="polizaEmitCab.COD_DISTRITO">{{polizaEmitCab.DES_DISTRITO}}
 									</option>
@@ -363,8 +370,8 @@
 									style="position: relative; top: 8px; margin: 10px 20px;">
 							</div>
 							<div class="col-sm-6" style="padding: 10px 0 15px;">
-								<button type="button" style="display: inline-block;" (click)="validarExcel()"
-									data-toggle="modal" data-target="#exampleModal"><span>Validar</span></button>
+								<button type="button" style="display: inline-block;"
+									(click)="validarExcel()"><span>Validar</span></button>
 
 								<button type="button" (click)="downloadExcel()" class="button"
 									style="display: inline-block;" *ngIf="mode!='renew'"><span>Descargar
@@ -451,7 +458,7 @@
 													<tr class="d-flex" *ngFor="let item of saludList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}} %</span>
 														</td>
 														<td class="col-sm text-center">
 															<span>{{item.AUT_PRIMA | miles}}</span></td>
@@ -519,7 +526,7 @@
 													<tr class="d-flex" *ngFor="let item of pensionList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}} %</span>
 														</td>
 														<td class="col-sm text-center">
 															<span>{{item.AUT_PRIMA | miles}}</span></td>
@@ -566,7 +573,8 @@
 											<td class="">
 												<span>{{ item | fileName }}</span>
 											</td>
-											<td class="text-center"><a (click)="downloadFile(item)" style="display: block; margin-top: 0.7em;"><img
+											<td class="text-center"><a (click)="downloadFile(item)"
+													style="display: block; margin-top: 0.7em;"><img
 														src="assets/icons/imprimir.png" title="Descargar"
 														style="cursor:pointer;" alt="Descargar" /></a></td>
 										</tr>
