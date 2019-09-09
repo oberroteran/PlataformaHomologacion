@@ -290,9 +290,9 @@
                                     <td>{{ item.QuotationNumber}}</td>
                                     <td>{{ item.ProductName }}</td>
                                     <td>{{item.ContractorFullName}}</td>
-                                    <td>{{ item.MinimalPremium }}</td>
+                                    <td>{{ item.MinimalPremium | prettyNumber:2}}</td>
                                     <td>{{ item.WorkersCount }}</td>
-                                    <td>{{ item.Payroll}}</td>
+                                    <td>{{ item.Payroll | prettyNumber:2}}</td>
                                     <td>{{item.BrokerFullName}}</td>
                                     <td>{{ item.Status}}</td>
                                     <td>{{ item.ApprovalDate | date:'dd/MM/yyyy, h:mm a'}}</td>

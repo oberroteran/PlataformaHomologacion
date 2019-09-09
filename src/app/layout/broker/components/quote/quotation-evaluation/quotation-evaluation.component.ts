@@ -19,7 +19,7 @@ import { QuotationTracking } from '../../../models/quotation/response/quotation-
 //SweetAlert 
 import swal from 'sweetalert2';
 //Configuración
-import { ModuleConfig } from './../../module.config';
+import { CommonMethods } from './../../common-methods';
 import { AccessFilter } from './../../access-filter'
 import { QuotationTrackingSearch } from '../../../models/quotation/request/quotation-tracking-search';
 import { FilePickerComponent } from '../../../modal/file-picker/file-picker.component';
@@ -95,6 +95,11 @@ export class QuotationEvaluationComponent implements OnInit {
     enabledPensionProposedRate: boolean;
     /**Flag para habilitar/deshabilitar las tasas propuestas de salud */
     enabledHealthProposedRate: boolean;
+    /**Flag para habilitar/deshabilitar las tasas autorizadas de pensión */
+    enabledPensionAuthorizedRate: boolean;
+    /**Flag para habilitar/deshabilitar las tasas autorizadas de salud */
+    enabledHealthAuthorizedRate: boolean;
+
     /**Flag para habilitar/deshabilitar el campo de prima mínima propuesta de salud */
     enabledHealthMinPropPremium: boolean;
     /**Flag para habilitar/deshabilitar el campo de prima mínima propuesta de pensión */
@@ -367,7 +372,26 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.PensionNewCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNewNetAmount * this.pensionIGV) - this.InputsQuotation.PensionNewNetAmount);
             //Cálculo de nueva prima total bruta de Pensión
             this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
+
+            let pensionPremiumToBeCompared = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
+            if (pensionNewNetAmount < pensionPremiumToBeCompared) {
+                this.isNetPremiumLessThanMinPensionPremium = true;
+                let premium = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
+
+                //Cálculo de nueva prima total neta de Pensión
+                this.InputsQuotation.PensionNewNetAmount = premium;
+                //Cálculo de IGV de la nueva prima total neta de Pensión
+                this.InputsQuotation.PensionNewCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNewNetAmount * this.pensionIGV) - this.InputsQuotation.PensionNewNetAmount);
+                //Cálculo de nueva prima total bruta de Pensión
+                this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
+
+                this.pensionMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.PensionNewGrossAmount;
+            } else {
+                this.isNetPremiumLessThanMinPensionPremium = false;
+                this.pensionMessage = "";
+            }
         }
+
         if (productId == JSON.parse(localStorage.getItem("saludID"))["id"]) { //Si el producto es Salud
             let saludNewNetAmount = 0.00; //prima prima total neta de Salud, según la tasa autorizada
             this.InputsQuotation.SaludDetailsList.forEach((element, key) => {
@@ -382,25 +406,25 @@ export class QuotationEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludNewCalculatedIGV = this.FormatValue((this.InputsQuotation.SaludNewNetAmount * this.healthIGV) - this.InputsQuotation.SaludNewNetAmount);
             //Cálculo de nueva prima total bruta de Salud
             this.InputsQuotation.SaludNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludNewCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNewNetAmount));
-        }
-        if (parseFloat(this.InputsQuotation.SaludNewNetAmount) < parseFloat(this.InputsQuotation.SaludMinPremium)) {
-            this.isNetPremiumLessThanMinHealthPremium = true;
-            let premium = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
-            this.healthMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + premium * this.healthIGV;
-        } else {
-            this.isNetPremiumLessThanMinHealthPremium = false;
-            this.healthMessage = "";
-        }
 
-        if (parseFloat(this.InputsQuotation.PensionNewNetAmount) < parseFloat(this.InputsQuotation.PensionMinPremium)) {
-            this.isNetPremiumLessThanMinPensionPremium = true;
-            let premium = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
-            this.pensionMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + premium * this.pensionIGV;
-        } else {
-            this.isNetPremiumLessThanMinPensionPremium = false;
-            this.pensionMessage = "";
-        }
+            let healthPremiumToBeCompared = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
+            if (saludNewNetAmount < healthPremiumToBeCompared) { //Si hay tasa propuesta
+                this.isNetPremiumLessThanMinHealthPremium = true;
+                let premium = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
 
+                //Cálculo de nueva prima total neta de Salud
+                this.InputsQuotation.SaludNewNetAmount = premium;
+                //Cálculo de IGV de la nueva prima total neta de Salud
+                this.InputsQuotation.SaludNewCalculatedIGV = this.FormatValue((this.InputsQuotation.SaludNewNetAmount * this.healthIGV) - this.InputsQuotation.SaludNewNetAmount);
+                //Cálculo de nueva prima total bruta de Salud
+                this.InputsQuotation.SaludNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludNewCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNewNetAmount));
+
+                this.healthMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.SaludNewGrossAmount;
+            } else {
+                this.isNetPremiumLessThanMinHealthPremium = false;
+                this.healthMessage = "";
+            }
+        }
     }
     /**
      * Calcula la prima según la tasa propuesta ingresada
@@ -584,6 +608,7 @@ export class QuotationEvaluationComponent implements OnInit {
                                 item.Premium = element.PRIMA; //Prima
                                 item.ProposedRate = element.TASA_PRO; //Tasa propuesta
                                 item.OriginalProposedRate = element.TASA_PRO; //Tasa propuesta original
+                                item.OriginalAuthorizedRate = element.TASA; //tasa autorizada original
                                 item.AuthorizedRate = element.TASA;
                                 item.NewPremium = element.AUT_PRIMA;
                                 item.EndorsmentPremium = element.PRIMA_END; //Prima de endoso
@@ -609,6 +634,7 @@ export class QuotationEvaluationComponent implements OnInit {
                                 item.Premium = element.PRIMA; //Prima
                                 item.ProposedRate = element.TASA_PRO; //Tasa propuesta
                                 item.OriginalProposedRate = element.TASA_PRO; //Tasa propuesta original
+                                item.OriginalAuthorizedRate = element.TASA; //tasa autorizada original
                                 item.AuthorizedRate = element.TASA; //tasa autorizada
                                 item.NewPremium = element.AUT_PRIMA //Nueva prima calculada con la nueva tasa autorizada
                                 item.EndorsmentPremium = element.PRIMA_END; //Prima de endoso
@@ -632,6 +658,7 @@ export class QuotationEvaluationComponent implements OnInit {
                             });
                             if (add == true) self.InputsQuotation.SharedDetailsList.push({ "RiskTypeId": element.TIP_RIESGO, "RiskTypeName": element.DES_RIESGO, "WorkersCount": element.NUM_TRABAJADORES, "PayrollAmount": element.MONTO_PLANILLA });
                         });
+
                         this.InputsQuotation.PensionNewCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNewNetAmount * this.pensionIGV) - this.InputsQuotation.PensionNewNetAmount);
                         this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
 
@@ -647,6 +674,49 @@ export class QuotationEvaluationComponent implements OnInit {
                         this.InputsQuotation.SaludDetailsList.sort(function (obj1, obj2) {  //ordenamos según el riesgo
                             return obj2.RiskTypeId - obj1.RiskTypeId;
                         });
+
+                        let healthPremiumToBeCompared = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
+                        let pensionPremiumToBeCompared = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
+
+                        if (this.mode == "recotizar") {
+                            this.checkMinimunPremiumForOriginals(this.healthProductId);
+                            this.checkMinimunPremiumForOriginals(this.pensionProductId);
+                        } else {
+                            if (parseFloat(this.InputsQuotation.SaludNewNetAmount) < healthPremiumToBeCompared) { //Si hay tasa propuesta
+                                this.isNetPremiumLessThanMinHealthPremium = true;
+                                let premium = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
+
+                                //Cálculo de nueva prima total neta de Salud
+                                this.InputsQuotation.SaludNewNetAmount = premium;
+                                //Cálculo de IGV de la nueva prima total neta de Salud
+                                this.InputsQuotation.SaludNewCalculatedIGV = this.FormatValue((this.InputsQuotation.SaludNewNetAmount * this.healthIGV) - this.InputsQuotation.SaludNewNetAmount);
+                                //Cálculo de nueva prima total bruta de Salud
+                                this.InputsQuotation.SaludNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludNewCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNewNetAmount));
+
+                                this.healthMessage = "El nuevo monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.SaludNewGrossAmount;
+                            } else {
+                                this.isNetPremiumLessThanMinHealthPremium = false;
+                                this.healthMessage = "";
+                            }
+
+                            if (parseFloat(this.InputsQuotation.PensionNewNetAmount) < pensionPremiumToBeCompared) {
+                                this.isNetPremiumLessThanMinPensionPremium = true;
+                                let premium = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
+
+                                //Cálculo de nueva prima total neta de Pensión
+                                this.InputsQuotation.PensionNewNetAmount = premium;
+                                //Cálculo de IGV de la nueva prima total neta de Pensión
+                                this.InputsQuotation.PensionNewCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNewNetAmount * this.pensionIGV) - this.InputsQuotation.PensionNewNetAmount);
+                                //Cálculo de nueva prima total bruta de Pensión
+                                this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
+
+                                this.pensionMessage = "El nuevo monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.InputsQuotation.PensionNewGrossAmount;
+                            } else {
+                                this.isNetPremiumLessThanMinPensionPremium = false;
+                                this.pensionMessage = "";
+                            }
+                        }
+
                     }
 
 
@@ -658,6 +728,54 @@ export class QuotationEvaluationComponent implements OnInit {
                     this.router.navigate(['/broker/request-status']);
                 }
             );
+    }
+
+
+    checkMinimunPremiumForOriginals(productId: string) {
+        if (productId == this.healthProductId) {
+            let healthPremiumToBeCompared = (this.InputsQuotation.SaludPropMinPremium != null && this.InputsQuotation.SaludPropMinPremium !== undefined && parseFloat(this.InputsQuotation.SaludPropMinPremium) > 0) ? this.InputsQuotation.SaludPropMinPremium : this.InputsQuotation.SaludMinPremium;
+            let originalNetPremium = 0;
+            this.InputsQuotation.SaludDetailsList.map(function (item) {
+                originalNetPremium = originalNetPremium + parseFloat(item.Premium);
+            });
+
+            if (originalNetPremium < healthPremiumToBeCompared) { //Si hay tasa propuesta
+                this.isNetPremiumLessThanMinHealthPremium = true;
+                //Cálculo de nueva prima total neta de Salud
+                this.InputsQuotation.SaludNetAmount = healthPremiumToBeCompared;
+                this.healthMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.FormatValue(healthPremiumToBeCompared * this.healthIGV);
+            } else {
+                this.isNetPremiumLessThanMinHealthPremium = false;
+                //Cálculo de nueva prima total neta de Salud
+                this.InputsQuotation.SaludNetAmount = originalNetPremium;
+                this.healthMessage = "";
+            }
+            //Cálculo de IGV de la nueva prima total neta de Salud
+            this.InputsQuotation.SaludCalculatedIGV = this.FormatValue((this.InputsQuotation.SaludNetAmount * parseFloat(this.healthIGV.toString())) - this.InputsQuotation.SaludNetAmount);
+            //Cálculo de nueva prima total bruta de Salud
+            this.InputsQuotation.SaludGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNetAmount));
+
+        } else if (productId == this.pensionProductId) {
+            let pensionPremiumToBeCompared = (this.InputsQuotation.PensionPropMinPremium != null && this.InputsQuotation.PensionPropMinPremium !== undefined && parseFloat(this.InputsQuotation.PensionPropMinPremium) > 0) ? this.InputsQuotation.PensionPropMinPremium : this.InputsQuotation.PensionMinPremium;
+            let originalNetPremium = 0;
+            this.InputsQuotation.PensionDetailsList.map(function (item) {
+                originalNetPremium = originalNetPremium + parseFloat(item.Premium);
+            });
+            if (originalNetPremium < pensionPremiumToBeCompared) {
+                this.isNetPremiumLessThanMinPensionPremium = true;
+                //Cálculo de nueva prima total neta de Pensión
+                this.InputsQuotation.PensionNetAmount = pensionPremiumToBeCompared;
+                this.pensionMessage = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S /. " + this.FormatValue(pensionPremiumToBeCompared * this.pensionIGV);
+            } else {
+                this.isNetPremiumLessThanMinPensionPremium = false;
+                this.InputsQuotation.PensionNetAmount = originalNetPremium;
+                this.pensionMessage = "";
+            }
+            //Cálculo de IGV de la nueva prima total neta de Pensión
+            this.InputsQuotation.PensionCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNetAmount * parseFloat(this.pensionIGV.toString())) - this.InputsQuotation.PensionNetAmount);
+            //Cálculo de nueva prima total bruta de Pensión
+            this.InputsQuotation.PensionGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNetAmount));
+        }
     }
 
     /**
@@ -711,39 +829,32 @@ export class QuotationEvaluationComponent implements OnInit {
             self.statusChangeRequest.pensionAuthorizedRateList = [];
 
             this.InputsQuotation.PensionDetailsList.forEach((element) => {
-                if (element.AuthorizedRate == 0 || element.AuthorizedRate.toString().trim() == "") {
-                } else {
-                    //obtener monto de planilla según riesgo
-                    let payRollAmount = 0;
-                    self.InputsQuotation.SharedDetailsList.forEach(e => {
-                        if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
-                    });
-                    let item = new AuthorizedRate();
-                    item.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
-                    item.RiskTypeId = element.RiskTypeId;
-                    item.AuthorizedRate = element.AuthorizedRate;
-                    item.AuthorizedPremium = element.NewPremium;
+                //obtener monto de planilla según riesgo
+                let payRollAmount = 0;
+                self.InputsQuotation.SharedDetailsList.forEach(e => {
+                    if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
+                });
+                let item = new AuthorizedRate();
+                item.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
+                item.RiskTypeId = element.RiskTypeId;
+                item.AuthorizedRate = element.AuthorizedRate;
+                item.AuthorizedPremium = element.NewPremium;
 
-                    self.statusChangeRequest.pensionAuthorizedRateList.push(item);
-                }
-
+                self.statusChangeRequest.pensionAuthorizedRateList.push(item);
             });
             this.InputsQuotation.SaludDetailsList.forEach((element) => {
-                if (element.AuthorizedRate == 0 || element.AuthorizedRate.toString().trim() == "") {
-                } else {
-                    //obtener monto de planilla según riesgo
-                    let payRollAmount = 0;
-                    self.InputsQuotation.SharedDetailsList.forEach(e => {
-                        if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
-                    });
-                    let item = new AuthorizedRate();
-                    item.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
-                    item.RiskTypeId = element.RiskTypeId;
-                    item.AuthorizedRate = element.AuthorizedRate;
-                    item.AuthorizedPremium = element.NewPremium;
+                //obtener monto de planilla según riesgo
+                let payRollAmount = 0;
+                self.InputsQuotation.SharedDetailsList.forEach(e => {
+                    if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
+                });
+                let item = new AuthorizedRate();
+                item.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
+                item.RiskTypeId = element.RiskTypeId;
+                item.AuthorizedRate = element.AuthorizedRate;
+                item.AuthorizedPremium = element.NewPremium;
 
-                    self.statusChangeRequest.saludAuthorizedRateList.push(item);
-                }
+                self.statusChangeRequest.saludAuthorizedRateList.push(item);
             });
 
             formData.append("statusChangeData", JSON.stringify(this.statusChangeRequest));
@@ -797,20 +908,20 @@ export class QuotationEvaluationComponent implements OnInit {
                 let item = new QuotationRisk();
                 item.RiskTypeId = element.RiskTypeId;
                 item.ProductTypeId = JSON.parse(localStorage.getItem("pensionID"))["id"];
-                item.ProposedRate = element.ProposedRate;
-                item.WorkersCount = element.WorkersCount;
-                item.PayrollAmount = element.PayrollAmount;
-                item.CalculatedRate = element.Rate;
-                item.PremimunPerRisk = element.Premium;
-                item.MinimunPremium = self.InputsQuotation.PensionMinPremium;
-                item.ProposedMinimunPremium = self.InputsQuotation.PensionPropMinPremium;
-                item.EndorsmentPremium = element.EndorsmentPremium;
+                item.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
+                item.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+                item.PayrollAmount = CommonMethods.ConvertToReadableNumber(element.PayrollAmount);
+                item.CalculatedRate = CommonMethods.ConvertToReadableNumber(element.Rate);
+                item.PremimunPerRisk = CommonMethods.ConvertToReadableNumber(element.Premium);
+                item.MinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionMinPremium);
+                item.ProposedMinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionPropMinPremium);
+                item.EndorsmentPremium = CommonMethods.ConvertToReadableNumber(element.EndorsmentPremium);
 
-                item.NetPremium = self.InputsQuotation.PensionNetAmount;
-                item.GrossPremium = self.InputsQuotation.PensionGrossAmount;
-                item.PremiumIGV = self.InputsQuotation.PensionCalculatedIGV;
+                item.NetPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionNetAmount);
+                item.GrossPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionGrossAmount);
+                item.PremiumIGV = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionCalculatedIGV);
 
-                item.RiskRate = element.RiskRate;
+                item.RiskRate = CommonMethods.ConvertToReadableNumber(element.RiskRate);
                 item.Discount = element.Discount;
                 item.Variation = element.Variation;
                 item.TariffFlag = "3";
@@ -821,20 +932,20 @@ export class QuotationEvaluationComponent implements OnInit {
                 let item = new QuotationRisk();
                 item.RiskTypeId = element.RiskTypeId;
                 item.ProductTypeId = JSON.parse(localStorage.getItem("saludID"))["id"];
-                item.ProposedRate = element.ProposedRate;
-                item.WorkersCount = element.WorkersCount;
-                item.PayrollAmount = element.PayrollAmount;
-                item.CalculatedRate = element.Rate;
-                item.PremimunPerRisk = element.Premium;
-                item.MinimunPremium = self.InputsQuotation.SaludMinPremium;
-                item.ProposedMinimunPremium = self.InputsQuotation.SaludPropMinPremium;
-                item.EndorsmentPremium = element.EndorsmentPremium;
+                item.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
+                item.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+                item.PayrollAmount = CommonMethods.ConvertToReadableNumber(element.PayrollAmount);
+                item.CalculatedRate = CommonMethods.ConvertToReadableNumber(element.Rate);
+                item.PremimunPerRisk = CommonMethods.ConvertToReadableNumber(element.Premium);
+                item.MinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludMinPremium);
+                item.ProposedMinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludPropMinPremium);
+                item.EndorsmentPremium = CommonMethods.ConvertToReadableNumber(element.EndorsmentPremium);
 
-                item.NetPremium = self.InputsQuotation.SaludNetAmount;
-                item.GrossPremium = self.InputsQuotation.SaludGrossAmount;
-                item.PremiumIGV = self.InputsQuotation.SaludCalculatedIGV;
+                item.NetPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludNetAmount);
+                item.GrossPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludGrossAmount);
+                item.PremiumIGV = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludCalculatedIGV);
 
-                item.RiskRate = element.RiskRate;
+                item.RiskRate = CommonMethods.ConvertToReadableNumber(element.RiskRate);
                 item.Discount = element.Discount;
                 item.Variation = element.Variation;
                 item.TariffFlag = "3";
@@ -848,12 +959,13 @@ export class QuotationEvaluationComponent implements OnInit {
             mainBroker.ChannelId = this.InputsQuotation.BrokerChannelId;
             mainBroker.ClientId = this.InputsQuotation.BrokerClientId;
 
-            mainBroker.HealthProposedCommission = this.InputsQuotation.BrokerSaludPropBounty == "" ? 0 : this.InputsQuotation.BrokerSaludPropBounty;
-            mainBroker.HealthCommission = this.InputsQuotation.BrokerSaludBounty == "" ? 0 : this.InputsQuotation.BrokerSaludBounty;
-            mainBroker.PensionProposedCommission = this.InputsQuotation.BrokerPensionPropBounty == "" ? 0 : this.InputsQuotation.BrokerPensionPropBounty;
-            mainBroker.PensionCommission = this.InputsQuotation.BrokerPensionBounty == "" ? 0 : this.InputsQuotation.BrokerPensionBounty;
+            mainBroker.HealthProposedCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerSaludPropBounty) ? this.InputsQuotation.BrokerSaludPropBounty : 0;
+            mainBroker.HealthCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerSaludBounty) ? this.InputsQuotation.BrokerSaludBounty : 0;
+            mainBroker.PensionProposedCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerPensionPropBounty) ? this.InputsQuotation.BrokerPensionPropBounty : 0;
+            mainBroker.PensionCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerPensionBounty) ? this.InputsQuotation.BrokerPensionBounty : 0;
             mainBroker.IsPrincipal = true;
-            mainBroker.SharedCommission = this.InputsQuotation.BrokerSharedCommission;
+            // mainBroker.SharedCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerSharedCommission) ? this.InputsQuotation.BrokerSharedCommission : 0;
+            mainBroker.SharedCommission = 0;
             quotation.BrokerList.push(mainBroker);
 
             this.InputsQuotation.SecondaryBrokerList.forEach((element) => {
@@ -862,12 +974,13 @@ export class QuotationEvaluationComponent implements OnInit {
                 item.ChannelId = element.CANAL;
                 item.ClientId = element.SCLIENT;
 
-                item.HealthProposedCommission = element.COMISION_SALUD_PRO == "" ? 0 : element.COMISION_SALUD_PRO;
-                item.HealthCommission = element.COMISION_SALUD == "" ? 0 : element.COMISION_SALUD;
-                item.PensionProposedCommission = element.COMISION_PENSION_PRO == "" ? 0 : element.COMISION_PENSION_PRO;
-                item.PensionCommission = element.COMISION_PENSION == "" ? 0 : element.COMISION_PENSION;
+                item.HealthProposedCommission = CommonMethods.isNumber(element.COMISION_SALUD_PRO) ? element.COMISION_SALUD_PRO : 0;
+                item.HealthCommission = CommonMethods.isNumber(element.COMISION_SALUD) ? element.COMISION_SALUD : 0;
+                item.PensionProposedCommission = CommonMethods.isNumber(element.COMISION_PENSION_PRO) ? element.COMISION_PENSION_PRO : 0;
+                item.PensionCommission = CommonMethods.isNumber(element.COMISION_PENSION) ? element.COMISION_PENSION : 0;
                 item.IsPrincipal = false;
-                item.SharedCommission = element.NSHARE;
+                // item.SharedCommission = CommonMethods.isNumber(element.NSHARE) ? element.NSHARE : 0;
+                item.SharedCommission = 0;
                 quotation.BrokerList.push(item);
             });
 
@@ -980,64 +1093,75 @@ export class QuotationEvaluationComponent implements OnInit {
 
     }
 
+    /**Muestra las comisión propuesta original de salud */
     switchHealthPropCommissionValue() {
-        if (this.enabledHealthMainPropCommission) this.InputsQuotation.BrokerSaludPropBounty = 0;
-        else this.InputsQuotation.BrokerSaludPropBounty = this.originalHealthMainPropComission;
+        if (!this.enabledHealthMainPropCommission) this.InputsQuotation.BrokerSaludPropBounty = this.originalHealthMainPropComission;
     }
+    /**Muestra las comisión propuesta original de pensión */
     switchPensionPropCommissionValue() {
-        if (this.enabledPensionMainPropCommission) this.InputsQuotation.BrokerPensionPropBounty = 0;
-        else this.InputsQuotation.BrokerPensionPropBounty = this.originalPensionMainPropComission;
+        if (!this.enabledPensionMainPropCommission) this.InputsQuotation.BrokerPensionPropBounty = this.originalPensionMainPropComission;
     }
-
+    /**Muestra las prima mínima propuesta original de salud */
     switchHealthMinPropPremiumValue() {
-        if (this.enabledHealthMinPropPremium) this.InputsQuotation.SaludPropMinPremium = 0;
-        else this.InputsQuotation.SaludPropMinPremium = this.originalHealthMinPropPremium;
+        if (!this.enabledHealthMinPropPremium) this.InputsQuotation.SaludPropMinPremium = this.originalHealthMinPropPremium;
+        this.checkMinimunPremiumForOriginals(this.healthProductId);
     }
+    /**Muestra las prima mínima propuesta original de pensión */
     switchPensionMinPropPremiumValue() {
-        if (this.enabledPensionMinPropPremium) this.InputsQuotation.PensionPropMinPremium = 0;
-        else this.InputsQuotation.PensionPropMinPremium = this.originalPensionMinPropPremium;
+        if (!this.enabledPensionMinPropPremium) this.InputsQuotation.PensionPropMinPremium = this.originalPensionMinPropPremium;
+        this.checkMinimunPremiumForOriginals(this.pensionProductId);
     }
+    /**Muestra las tasas propuestas originales de salud */
+    switchHealthProposedRateValues() {
+        if (!this.enabledHealthProposedRate) {
+            this.InputsQuotation.SaludDetailsList.map(function (item) {
+                return item.ProposedRate = item.OriginalProposedRate;
+            });
+        }
+    }
+    /**Muestra las tasas propuestas originales de pensión */
+    switchPensionProposedRateValues() {
+        if (!this.enabledPensionProposedRate) {
+            this.InputsQuotation.PensionDetailsList.map(function (item) {
+                return item.ProposedRate = item.OriginalProposedRate;
+            });
+        }
+    }
+    /**Muestra las tasas autorizadas originales de salud */
+    switchHealthAuthorizedRateValues() {
+        let self = this;
+        if (!this.enabledHealthAuthorizedRate) {
+            this.InputsQuotation.SaludDetailsList.map(function (item) {
+                self.calculateNewPremiums(item.OriginalAuthorizedRate, item.RiskTypeId, self.healthProductId);
+                return item.AuthorizedRate = item.OriginalAuthorizedRate;
+            });
 
-    swtichHealthProposedRateValues() {
-        if (this.enabledHealthProposedRate) {
-            this.InputsQuotation.SaludDetailsList.map(function (item) {
-                return item.ProposedRate = 0;
-            });
-        } else {
-            this.InputsQuotation.SaludDetailsList.map(function (item) {
-                return item.ProposedRate = item.OriginalProposedRate;
+        }
+    }
+    /**Muestra las tasas autorizadas originales de pensión */
+    switchPensionAuthorizedRateValues() {
+        let self = this;
+        if (!this.enabledPensionAuthorizedRate) {
+            this.InputsQuotation.PensionDetailsList.map(function (item) {
+                self.calculateNewPremiums(item.OriginalAuthorizedRate, item.RiskTypeId, self.pensionProductId);
+                return item.AuthorizedRate = item.OriginalAuthorizedRate;
             });
         }
     }
-    swtichPensionProposedRateValues() {
-        if (this.enabledPensionProposedRate) {
-            this.InputsQuotation.PensionDetailsList.map(function (item) {
-                return item.ProposedRate = 0;
-            });
-        } else {
-            this.InputsQuotation.PensionDetailsList.map(function (item) {
-                return item.ProposedRate = item.OriginalProposedRate;
-            });
-        }
-    }
+    /**Muestra la comisión propuesta original para salud*/
     switchHealthSecondaryPropCommissionValue() {
-        if (this.enabledHealthSecondaryPropCommission) {
-            this.InputsQuotation.SecondaryBrokerList.map(function (item) {
-                return item.COMISION_SALUD_PRO = 0;
-            });
-        } else {
-            this.InputsQuotation.SecondaryBrokerList.map(function (item) {
+        let self = this;
+        if (!this.enabledHealthSecondaryPropCommission) {
+            self.InputsQuotation.SecondaryBrokerList.map(function (item) {
                 return item.COMISION_SALUD_PRO = item.OriginalHealthPropCommission;
             });
         }
     }
+    /**Muestra la comisión propuesta original para pensión*/
     switchPensionSecondaryPropCommissionValue() {
-        if (this.enabledPensionSecondaryPropCommission) {
-            this.InputsQuotation.SecondaryBrokerList.map(function (item) {
-                return item.COMISION_PENSION_PRO = 0;
-            });
-        } else {
-            this.InputsQuotation.SecondaryBrokerList.map(function (item) {
+        let self = this;
+        if (!this.enabledPensionSecondaryPropCommission) {
+            self.InputsQuotation.SecondaryBrokerList.map(function (item) {
                 return item.COMISION_PENSION_PRO = item.OriginalPensionPropCommission;
             });
         }

@@ -14,5 +14,14 @@ export class CommonMethods {
         return output;
     }
 
-    
+    static isNumber(input: any): boolean {
+        if (input == null || input.toString().trim() == "") return false;
+        else return !isNaN(input);
+    }
+    static ConvertToReadableNumber(input: any) {
+        if (this.isNumber(input)) return input;
+        else return 0;
+    }
+
+
 }
