@@ -162,7 +162,7 @@
                     <td *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
                       class="col-sm"><input type="text" class="text-center"
                         [disabled]="mode!='recotizar' || !enabledHealthSecondaryPropCommission"
-                        value="{{item.COMISION_SALUD_PRO}}" />
+                        [(ngModel)]="item.COMISION_SALUD_PRO" />
                     <td
                       *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
                       class="col-sm text-center"><span>{{item.COMISION_PENSION}}</span></td>
@@ -170,7 +170,7 @@
                       *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
                       class="col-sm"><input type="text" class="text-center"
                         [disabled]="mode!='recotizar' || !enabledPensionSecondaryPropCommission"
-                        value="{{item.COMISION_PENSION_PRO}}" />
+                        [(ngModel)]="item.COMISION_PENSION_PRO" />
                     </td>
                   </tr>
                 </tbody>
@@ -291,7 +291,8 @@
                         (ngModelChange)="switchHealthMinPropPremiumValue()" [disabled]="mode!='recotizar'"> PRIMA MÍNIMA
                       PROPUESTA</span>
                     <input type="text" placeholder="0" [disabled]="mode!='recotizar' || !enabledHealthMinPropPremium"
-                      [(ngModel)]="InputsQuotation.SaludPropMinPremium" />
+                      [(ngModel)]="InputsQuotation.SaludPropMinPremium"
+                      (ngModelChange)="checkMinimunPremiumForOriginals(healthProductId)" />
                   </div>
                 </div>
                 <div class="card mt-3"
@@ -312,14 +313,15 @@
                             <th class="col-sm text-center ctasa">
                               <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
                                   [checked]="false" class="checkbox" [(ngModel)]="enabledHealthProposedRate"
-                                  (ngModelChange)="swtichHealthProposedRateValues()">
+                                  (ngModelChange)="switchHealthProposedRateValues()">
                                 <span class="schk">
                                   Propuesta</span></label>
                             </th>
                             <th class="col-sm text-center"><label>Prima Mensual</label></th>
                             <th *ngIf="mode!='recotizar'" class="col-sm text-center ctasa"><label><input
                                   *ngIf="mode=='evaluar'" type="checkbox" [disabled]="!canProposeRate" id=""
-                                  class="checkbox" [(ngModel)]="saludAuthorizedRate"><span class="schk">
+                                  class="checkbox" [(ngModel)]="enabledHealthAuthorizedRate"
+                                  (ngModelChange)="switchHealthAuthorizedRateValues()"><span class="schk">
                                   Autorizada</span></label></th>
 
                             <th *ngIf="mode!='recotizar'" class="col-sm text-center"><label>Nueva Prima Mensual</label>
@@ -341,14 +343,15 @@
                                 [(ngModel)]="InputsQuotation.SaludDetailsList[row].ProposedRate"
                                 (mouseup)="$event.target.select()" />
                             </td>
-                            <td class="col-sm text-center"><span>{{item.Premium}}</span></td>
+                            <td class="col-sm text-center"><span>{{item.Premium | prettyNumber:2}}</span></td>
                             <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
-                                [disabled]="!saludAuthorizedRate" FloatDirective
+                                [disabled]="!enabledHealthAuthorizedRate" FloatDirective
                                 [(ngModel)]="InputsQuotation.SaludDetailsList[row].AuthorizedRate"
                                 (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,healthProductId)"
                                 (mouseup)="$event.target.select()" />
                             </td>
-                            <td *ngIf="mode!='recotizar'" class="col-sm text-center"><span>{{item.NewPremium}}</span>
+                            <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                              <span>{{item.NewPremium | prettyNumber:2}}</span>
                             </td>
                           </tr>
                           <ng-container
@@ -359,30 +362,33 @@
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
                               <td class="col-sm text-center"></td>
                               <td class="col-sm text-rigth" style="text-align: right"><span>Prima Total Neta</span></td>
-                              <td class="col-sm text-center"><span>{{InputsQuotation.SaludNetAmount}}</span></td>
+                              <td class="col-sm text-center">
+                                <span>{{InputsQuotation.SaludNetAmount | prettyNumber:2}}</span></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludNewNetAmount}}</span></td>
+                                <span>{{InputsQuotation.SaludNewNetAmount | prettyNumber:2}}</span></td>
                             </tr>
                             <tr class="d-flex">
                               <td class="col-sm text-center"></td>
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
                               <td class="col-sm text-center"></td>
                               <td class="col-sm text-right"><span>IGV</span></td>
-                              <td class="col-sm text-center"><span>{{InputsQuotation.SaludCalculatedIGV}}</span></td>
+                              <td class="col-sm text-center">
+                                <span>{{InputsQuotation.SaludCalculatedIGV | prettyNumber:2}}</span></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludNewCalculatedIGV}}</span></td>
+                                <span>{{InputsQuotation.SaludNewCalculatedIGV | prettyNumber:2}}</span></td>
                             </tr>
                             <tr class="d-flex">
                               <td class="col-sm text-center"></td>
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
                               <td class="col-sm text-center"></td>
                               <td class="col-sm text-right"><span>Prima Bruta Total</span></td>
-                              <td class="col-sm text-center"><span>{{InputsQuotation.SaludGrossAmount}}</span></td>
+                              <td class="col-sm text-center">
+                                <span>{{InputsQuotation.SaludGrossAmount | prettyNumber:2}}</span></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludNewGrossAmount}}</span></td>
+                                <span>{{InputsQuotation.SaludNewGrossAmount | prettyNumber:2}}</span></td>
                             </tr>
                           </ng-container>
                         </tbody>
@@ -410,7 +416,8 @@
                       PRIMA MÍNIMA PROPUESTA</span>
                     <input type="text" placeholder="0" id="" style="top: 3px;"
                       [disabled]="mode!='recotizar' || !enabledPensionMinPropPremium"
-                      [(ngModel)]="InputsQuotation.PensionPropMinPremium" />
+                      [(ngModel)]="InputsQuotation.PensionPropMinPremium"
+                      (ngModelChange)="checkMinimunPremiumForOriginals(pensionProductId)" />
                   </div>
                 </div>
                 <div class="card mt-3"
@@ -431,14 +438,15 @@
                             <th class="col-sm text-center ctasa">
                               <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
                                   [checked]="false" class="checkbox" [(ngModel)]="enabledPensionProposedRate"
-                                  (ngModelChange)="swtichPensionProposedRateValues()">
+                                  (ngModelChange)="switchPensionProposedRateValues()">
                                 <span class="schk">
                                   Propuesta</span></label>
                             </th>
                             <th class="col-sm text-center"><label>Prima Mensual</label></th>
                             <th *ngIf="mode!='recotizar'" class="col-sm text-center ctasa">
                               <label><input *ngIf="mode=='evaluar'" [disabled]="!canProposeRate" type="checkbox"
-                                  class="checkbox" [(ngModel)]="pensionAuthorizedRate">
+                                  class="checkbox" [(ngModel)]="enabledPensionAuthorizedRate"
+                                  (ngModelChange)="switchPensionAuthorizedRateValues()">
                                 <span class="schk">
                                   Autorizada</span></label>
                             </th>
@@ -461,14 +469,15 @@
                                 [(ngModel)]="InputsQuotation.PensionDetailsList[row].ProposedRate"
                                 (mouseup)="$event.target.select()" />
                             </td>
-                            <td class="col-sm text-center"><span>{{item.Premium}}</span></td>
+                            <td class="col-sm text-center"><span>{{item.Premium | prettyNumber:2}}</span></td>
                             <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
-                                [checked]="false" [disabled]="!pensionAuthorizedRate" FloatDirective
+                                [checked]="false" [disabled]="!enabledPensionAuthorizedRate" FloatDirective
                                 [(ngModel)]="InputsQuotation.PensionDetailsList[row].AuthorizedRate"
                                 (mouseup)="$event.target.select()"
                                 (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,pensionProductId)" />
                             </td>
-                            <td *ngIf="mode!='recotizar'" class="col-sm text-center"><span>{{item.NewPremium}}</span>
+                            <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                              <span>{{item.NewPremium | prettyNumber:2}}</span>
                             </td>
                           </tr>
                           <ng-container
@@ -479,20 +488,22 @@
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
                               <td class="col-sm text-center"></td>
                               <td class="col-sm text-right" style="text-align: right"><span>Prima Total Neta</span></td>
-                              <td class="col-sm text-center"><span>{{InputsQuotation.PensionNetAmount}}</span></td>
+                              <td class="col-sm text-center">
+                                <span>{{InputsQuotation.PensionNetAmount | prettyNumber:2}}</span></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionNewNetAmount}}</span></td>
+                                <span>{{InputsQuotation.PensionNewNetAmount | prettyNumber:2}}</span></td>
                             </tr>
                             <tr class="d-flex">
                               <td class="col-sm text-center"></td>
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
                               <td class="col-sm text-center"></td>
                               <td class="col-sm text-right"><span>IGV + GASTOS</span></td>
-                              <td class="col-sm text-center"><span>{{InputsQuotation.PensionCalculatedIGV}}</span></td>
+                              <td class="col-sm text-center">
+                                <span>{{InputsQuotation.PensionCalculatedIGV | prettyNumber:2}}</span></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionNewCalculatedIGV}}</span>
+                                <span>{{InputsQuotation.PensionNewCalculatedIGV | prettyNumber:2}}</span>
                               </td>
                             </tr>
                             <tr class="d-flex">
@@ -500,10 +511,11 @@
                               <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
                               <td class="col-sm text-center"></td>
                               <td class="col-sm text-right"><span>Prima Bruta Total</span></td>
-                              <td class="col-sm text-center"><span>{{InputsQuotation.PensionGrossAmount}}</span></td>
+                              <td class="col-sm text-center">
+                                <span>{{InputsQuotation.PensionGrossAmount | prettyNumber:2}}</span></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionNewGrossAmount}}</span></td>
+                                <span>{{InputsQuotation.PensionNewGrossAmount | prettyNumber:2}}</span></td>
                             </tr>
                           </ng-container>
 

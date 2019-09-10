@@ -1271,7 +1271,7 @@ export class PolicyTransactionsComponent implements OnInit {
                 })
 
               //Detalle de cotizacion
-              this.policyemit.getPolicyEmitDet(this.nrocotizacion)
+              this.policyemit.getPolicyEmitDet(this.nrocotizacion, JSON.parse(localStorage.getItem("currentUser"))["id"])
                 .subscribe((res: any) => {
                   if (res.length > 0) {
                     this.primatotalSCTR = 0;
@@ -1521,7 +1521,7 @@ export class PolicyTransactionsComponent implements OnInit {
   infoCarga(processID: any) {
     let self = this;
     if (processID != "") {
-      this.policyemit.getPolicyEmitDetTX(processID, this.typeMovement)
+      this.policyemit.getPolicyEmitDetTX(processID, this.typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"])
         .subscribe((res: any) => {
 
           if (res.length > 0) {
