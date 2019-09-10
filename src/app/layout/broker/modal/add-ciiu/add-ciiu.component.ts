@@ -32,7 +32,7 @@ export class AddCiiuComponent implements OnInit {
     this.InputsCiiu.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
 
     if (this.itemCiiu != null) {
-      this.txtAccion = "Editar Ciiu";
+      this.txtAccion = "Guardar Ciiu";
       this.InputsCiiu.P_SDESCIIU = this.itemCiiu.P_SDESCIIU;
       this.InputsCiiu.P_NROW = this.itemCiiu.P_NROW;
       this.InputsCiiu.P_SCIIU = this.itemCiiu.P_SCIIU;

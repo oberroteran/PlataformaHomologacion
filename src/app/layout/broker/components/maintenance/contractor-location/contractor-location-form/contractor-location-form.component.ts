@@ -493,7 +493,7 @@ export class ContractorLocationFormComponent implements OnInit {
                 else errorList.push("La dirección no es válida.");
             }
             if (this.mainFormGroup.controls.economicActivity.hasError('required') || this.mainFormGroup.controls.economicActivity.value == '') errorList.push("La actividad económica es requerida");
-            if (this.mainFormGroup.controls.technicalActivity.hasError('required') || this.mainFormGroup.controls.technicalActivity.value == '') errorList.push("La actividad técnica es requerida");
+            if (this.mainFormGroup.controls.technicalActivity.hasError('required') || this.mainFormGroup.controls.technicalActivity.value == '') errorList.push("La actividad a realizar es requerida");
 
             this.mainFormGroup.controls.type.markAsTouched();
             this.mainFormGroup.controls.type.updateValueAndValidity();

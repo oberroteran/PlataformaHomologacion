@@ -51,8 +51,8 @@ export class QuotationComponent implements OnInit {
     stateSalud = false;
     statePension = false;
     stateQuotation = true;
-    stateTasaSalud = true;
-    stateTasaPension = true;
+    stateTasaSalud = false;
+    stateTasaPension = false;
     stateBrokerTasaSalud = true;
     stateBrokerTasaPension = true;
     blockDoc = true;
@@ -91,6 +91,7 @@ export class QuotationComponent implements OnInit {
     igvPension = 0.0;
     brutaTotalSalud = 0.0;
     brutaTotalPension = 0.0;
+    disabledFlat: any = [];
     /** prima total neta save */
     totalNetoSaludSave = 0.0;
     totalNetoPensionSave = 0.0;
@@ -137,7 +138,12 @@ export class QuotationComponent implements OnInit {
     P_PLAN_PRO_PEN: any = {}; // tasa pension propuesta
     P_COM_SAL_PRO: any = {}; // comision salud propuesta | broker
     P_COM_PEN_PRO: any = {}; // comision pension propuesta | broker
-
+    sedeContractor = "";
+    reloadTariff = false;
+    /** Perfil externo producción */
+    perfil = '134';
+    /** Codigo FLAT */
+    codFlat = '3Xwj0374DngFvySWvmg5MK'
     /** Puede proponer comisión? */
     canProposeComission: boolean;
     /** Puede agregar brokers secundarios? */
@@ -146,6 +152,7 @@ export class QuotationComponent implements OnInit {
     canProposeMinimunPremium: boolean;
     /** Puede proponer tasa? */
     canProposeRate: boolean;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -175,7 +182,16 @@ export class QuotationComponent implements OnInit {
         this.canProposeRate = AccessFilter.hasPermission("9");
 
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        this.userId = JSON.parse(localStorage.getItem("currentUser"))["id"];
+        this.userId = currentUser["id"];
+
+        let self = this
+
+        for (var i = 0; i < 10; i++) {
+            let item: any = {};
+            item.id = i.toString();
+            item.value = false;
+            self.disabledFlat.push(item)
+        }
 
         this.getDocumentTypeList();
         this.getCurrencyList();
@@ -200,7 +216,7 @@ export class QuotationComponent implements OnInit {
         this.VAL_QUOTATION[12] = ""; // Actividad tecnica
         this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
         this.InputsQuotation.P_PERSON_TYPE = "1"; // Tipo persona
-        this.InputsQuotation.P_CANT_WORKER = "1";
+        // this.InputsQuotation.P_CANT_WORKER = "1";
         this.InputsQuotation.P_WORKER = this.workerMin;
 
         this.route.queryParams
@@ -208,7 +224,6 @@ export class QuotationComponent implements OnInit {
                 this.InputsQuotation.P_NIDDOC_TYPE = params.typeDocument;
                 this.InputsQuotation.P_SIDDOC = params.document;
             });
-
         if (this.InputsQuotation.P_NIDDOC_TYPE != undefined && this.InputsQuotation.P_SIDDOC != undefined && this.InputsQuotation.P_NIDDOC_TYPE != "" && this.InputsQuotation.P_SIDDOC != "") {
             this.buscarContratante();
             this.onSelectTypeDocument(this.InputsQuotation.P_NIDDOC_TYPE);
@@ -230,7 +245,7 @@ export class QuotationComponent implements OnInit {
             this.InputsQuotation.P_NIDSEDE = null; // Sede
             this.InputsQuotation.P_NTECHNICAL = null; // Actividad tecnica
             this.InputsQuotation.P_NECONOMIC = null; // Actividad Economica
-            this.InputsQuotation.P_DELIMITER = false; // Delimitación check
+            this.InputsQuotation.P_DELIMITER = ""; // Delimitación check
             this.InputsQuotation.P_MINA = false; // Delimitación check
             this.InputsQuotation.P_SDELIMITER = "0"; // Delimitacion  1 o 0
             this.InputsQuotation.P_NPROVINCE = null;
@@ -402,7 +417,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
                     this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                     this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                    this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                    this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaSalud = ""
                     this.totalNetoSaludSave = this.totalNetoSalud
@@ -413,6 +428,8 @@ export class QuotationComponent implements OnInit {
 
                 break;
             case 4:
+                console.log("check prima")
+
                 this.statePrimaPension = !this.statePrimaPension;
                 this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = "";
 
@@ -420,7 +437,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
                     this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                     this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                    this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                    this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaPension = ""
                     this.totalNetoPensionSave = this.totalNetoPension
@@ -549,13 +566,13 @@ export class QuotationComponent implements OnInit {
 
                             if (res.EListClient.length == 1) {
                                 this.onSelectEconomicActivity();
+                                this.sedeContractor = res.EListClient[0].P_SCLIENT;
                                 this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
                                 this.InputsQuotation.P_PERSON_TYPE = "1";
                                 this.InputsQuotation.P_SLEGALNAME = "";
                                 this.InputsQuotation.P_SFIRSTNAME = "";
                                 this.InputsQuotation.P_SLASTNAME = "";
                                 this.InputsQuotation.P_SLASTNAME2 = "";
-                                this.stateQuotation = false;
                                 this.blockSearch = true;
                                 this.stateSearch = false;
                                 this.ContractorId = res.EListClient[0].P_SCLIENT;
@@ -668,29 +685,38 @@ export class QuotationComponent implements OnInit {
                 let provincia = null;
                 let municipalidad = null;
 
-                res.GENERICLIST.forEach(sede => {
-                    if (sede.State == "Activo") {
-                        list.push(sede);
+                if (res.GENERICLIST.length > 0) {
+                    this.stateQuotation = false;
 
-                        if (sede.Type == "PRINCIPAL") {
-                            sedeID = parseInt(sede.Id);
-                            departamento = parseInt(sede.Departament);
-                            provincia = parseInt(sede.Province);
-                            municipalidad = parseInt(sede.Municipality);
+                    res.GENERICLIST.forEach(sede => {
+                        if (sede.State == "Activo") {
+                            list.push(sede);
+
+                            if (sede.Type == "PRINCIPAL") {
+                                sedeID = parseInt(sede.Id);
+                                departamento = parseInt(sede.Departament);
+                                provincia = parseInt(sede.Province);
+                                municipalidad = parseInt(sede.Municipality);
+                            }
                         }
-                    }
-                });
+                    });
 
-                this.sedesList = list;
-                this.InputsQuotation.P_NPRODUCT = "-1"; //Producto
-                this.InputsQuotation.P_NIDSEDE = sedeID;
-                this.InputsQuotation.P_NPROVINCE = departamento;
-                this.InputsQuotation.P_NLOCAL = provincia
-                this.InputsQuotation.P_NMUNICIPALITY = municipalidad;
-                this.equivalentMuni();
-                this.onSelectSede();
-                this.getProvinceList();
-                this.getDistrictList();
+                    this.sedesList = list;
+                    this.InputsQuotation.P_NPRODUCT = "-1"; //Producto
+                    this.InputsQuotation.P_NIDSEDE = sedeID;
+                    this.InputsQuotation.P_NPROVINCE = departamento;
+                    this.InputsQuotation.P_NLOCAL = provincia
+                    this.InputsQuotation.P_NMUNICIPALITY = municipalidad;
+                    this.equivalentMuni();
+                    this.onSelectSede();
+                    this.getProvinceList();
+                    this.getDistrictList();
+                } else {
+                    this.InputsQuotation.P_NPRODUCT = "-1";
+                    this.stateQuotation = true;
+                }
+
+
             },
             err => {
                 console.log(err);
@@ -754,22 +780,6 @@ export class QuotationComponent implements OnInit {
         }
     }
 
-    onSelectWorker() {
-        this.mensajePrimaPension = ""
-        this.mensajePrimaSalud = ""
-        switch (this.InputsQuotation.P_CANT_WORKER) {
-            case "1":
-                this.InputsQuotation.P_WORKER = this.workerMin;
-                this.equivalentMuni();
-                break;
-            case "2":
-                this.InputsQuotation.P_WORKER = this.workerMax;
-                this.equivalentMuni();
-                break;
-
-        }
-    }
-
     onSelectProvince() {
         this.VAL_QUOTATION[5] = "";
         this.InputsQuotation.P_NMUNICIPALITY = null;
@@ -785,7 +795,61 @@ export class QuotationComponent implements OnInit {
         }
     }
 
+    calcularTarifa() {
+        let countWorker = 0;
+        let countPlanilla = 0;
+        let msg = "";
+
+        this.tasasList.forEach(item => {
+            if (item.totalWorkes == 0) {
+                this.VAL_QUOTATION[8] = "8";
+                countWorker++
+            } else {
+                if (item.planilla == 0) {
+                    msg += "Debe ingresar monto de planilla del riesgo " + item.description + " <br>"
+                }
+            }
+
+            if (item.planilla == 0) {
+                this.VAL_QUOTATION[9] = "9";
+                countPlanilla++;
+            } else {
+                if (item.totalWorkes == 0) {
+                    msg += "Debe ingresar trabajadores en el riesgo " + item.description + " <br>"
+                }
+            }
+        });
+
+        if (msg != "") {
+            swal.fire("Información", msg, "error");
+            return;
+        } else {
+
+            if (countPlanilla == this.tasasList.length) {
+                msg += "Debe ingresar un monto de planilla en al menos un riesgo <br>"
+            }
+
+            if (countWorker == this.tasasList.length) {
+                msg += "Debe ingresar trabajadores en al menos un riesgo <br>"
+            }
+
+            if (msg != "") {
+                swal.fire("Información", msg, "error");
+                return;
+            }
+
+            this.reloadTariff = true
+            this.equivalentMuni()
+        }
+    }
+
     equivalentMuni() {
+        // this.tasasList = [];
+        this.listaTasasSalud = [];
+        this.listaTasasPension = [];
+        this.mensajePrimaPension = ""
+        this.mensajePrimaSalud = ""
+
         if (this.InputsQuotation.P_NMUNICIPALITY != null && this.InputsQuotation.P_NTECHNICAL != null) {
             this.quotationService.equivalentMunicipality(this.InputsQuotation.P_NMUNICIPALITY).subscribe(
                 res => {
@@ -799,6 +863,7 @@ export class QuotationComponent implements OnInit {
         return new Date()
     }
     economicValue(sedeID) {
+        console.log()
         let activityTech = null;
         let activityID = null;
         let delimiter = "0";
@@ -822,7 +887,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NLOCAL = provincia;
         this.InputsQuotation.P_NMUNICIPALITY = municipalidad;
         this.getEconomicActivityList();
-        delimiter == "0" ? this.InputsQuotation.P_DELIMITER = false : this.InputsQuotation.P_DELIMITER = true;
+        delimiter == "0" ? this.InputsQuotation.P_DELIMITER = "" : this.InputsQuotation.P_DELIMITER = "* La actividad cuenta con delimitación";
         this.getProvinceList();
         this.getDistrictList();
         this.equivalentMuni();
@@ -980,7 +1045,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NCURRENCY = "1";
         this.InputsQuotation.P_NTECHNICAL = null;
         this.InputsQuotation.P_NECONOMIC = null;
-        this.InputsQuotation.P_DELIMITER = false;
+        this.InputsQuotation.P_DELIMITER = "";
         this.InputsQuotation.P_SDELIMITER = "0";
         this.InputsQuotation.P_NLOCAL = null;
         this.InputsQuotation.P_NMUNICIPALITY = null;
@@ -1027,92 +1092,108 @@ export class QuotationComponent implements OnInit {
     }
 
     // Onchange Trabajadores
-    changeTrabajadores(cantTrab, valor) {
+    changeTrabajadores(cantTrab, valor, row) {
         let totTrab = cantTrab != "" ? parseInt(cantTrab) : 0;
         totTrab = isNaN(totTrab) ? 0 : totTrab;
         let sumaTrabS = 0;
         let sumaTrabP = 0;
-        let hayCero = false;
-        if (this.listaTasasSalud != "") {
-            this.listaTasasSalud.map(function (dato) {
+        let self = this;
+
+        self.tasasList.map(function (dato) {
+            if (dato.id == valor) {
+                dato.totalWorkes = totTrab;
+            }
+        });
+
+        if (self.listaTasasSalud.length > 0) {
+            self.listaTasasSalud.map(function (dato) {
                 if (dato.id == valor) {
                     dato.totalWorkes = totTrab;
                 }
                 sumaTrabS = sumaTrabS + parseInt(dato.totalWorkes);
             });
 
-            this.totalTrabajadoresSalud = sumaTrabS;
-
-            this.listaTasasSalud.forEach(element => {
-                if (element.totalWorkes == 0) {
-                    hayCero = false;
-                }
+            self.reloadTariff = false;
+            self.stateWorker = true;
+            self.messageWorker = "* Para continuar debe calcular nuevamente";
+            self.listaTasasSalud.forEach(item => {
+                item.planProp = 0;
+                item.rate = self.formateaValor(0)
+                item.premiumMonth = self.formateaValor((parseFloat(item.planilla) * parseFloat(item.rate)) / 100);
             });
 
-            if (this.InputsQuotation.P_CANT_WORKER == "1") {
-                if (hayCero == false) {
-                    if (this.totalTrabajadoresSalud <= 50) {
-                        this.stateWorker = false;
-                        this.messageWorker = "";
-                    } else {
-                        this.stateWorker = true;
-                        this.messageWorker = "La suma de trabajadores debe ser menor o igual a 50";
-                    }
-                }
+            self.totalTrabajadoresSalud = sumaTrabS;
+            self.InputsQuotation.P_WORKER = self.totalTrabajadoresSalud;
 
-            } else {
-                if (hayCero == false) {
-                    if (this.totalTrabajadoresSalud > 50) {
-                        this.stateWorker = false;
-                        this.messageWorker = "";
-                    } else {
-                        this.stateWorker = true;
-                        this.messageWorker = "La suma de trabajadores no puede ser menor a 50";
-                    }
-                }
-            }
+            this.InputsQuotation.P_PRIMA_MIN_SALUD = "0" // Prima minima
+            this.InputsQuotation.P_PRIMA_END_SALUD = "0" // Prima endosa
+
+            this.InputsQuotation.P_COMISSION_BROKER_SALUD = "0" // Comision del broker principal
+            this.brokerList.forEach(broker => {
+                broker.P_COM_SALUD = 0; // Comision de los broker secundarios
+            });
+
+            this.totalNetoSaludSave = this.formateaValor(0);
+            this.igvSaludSave = this.formateaValor(0); // Solo IGV 
+            this.brutaTotalSaludSave = this.formateaValor(0)
+
+            this.mensajePrimaSalud = ""
         }
 
-        if (this.listaTasasPension != "") {
-            this.listaTasasPension.map(function (dato) {
+        if (self.listaTasasPension.length > 0) {
+            self.listaTasasPension.map(function (dato) {
                 if (dato.id == valor) {
                     dato.totalWorkes = totTrab;
                 }
                 sumaTrabP = sumaTrabP + parseInt(dato.totalWorkes);
             });
 
-            this.totalTrabajadoresPension = sumaTrabP;
-
-            this.listaTasasPension.forEach(element => {
-                if (element.totalWorkes == 0) {
-                    hayCero = false;
-                }
+            self.reloadTariff = false;
+            self.stateWorker = true;
+            self.messageWorker = "* Para continuar debe calcular nuevamente";
+            self.listaTasasPension.forEach(item => {
+                item.planProp = 0;
+                item.rate = self.formateaValor(0);
+                item.premiumMonth = self.formateaValor((parseFloat(item.planilla) * parseFloat(item.rate)) / 100);
             });
 
-            if (this.InputsQuotation.P_CANT_WORKER == "1") {
-                if (hayCero == false) {
-                    if (this.totalTrabajadoresPension <= 50) {
-                        this.stateWorker = false;
-                        this.messageWorker = "";
-                    } else {
-                        this.stateWorker = true;
-                        this.messageWorker = "La suma de trabajadores debe ser menor o igual a 50";
-                    }
-                }
-            } else {
-                if (hayCero == false) {
-                    if (this.totalTrabajadoresPension > 50) {
-                        this.stateWorker = false;
-                        this.messageWorker = "";
-                    } else {
-                        this.stateWorker = true;
-                        this.messageWorker = "La suma de trabajadores debe ser mayor a 50";
-                    }
-                }
-            }
+            self.totalTrabajadoresPension = sumaTrabP;
+            self.InputsQuotation.P_WORKER = self.totalTrabajadoresPension;
+
+            this.InputsQuotation.P_PRIMA_MIN_PENSION = "0" // Prima minima
+            this.InputsQuotation.P_PRIMA_END_PENSION = "0" // Prima endosa
+
+            this.InputsQuotation.P_COMISSION_BROKER_PENSION = "0" // Comision del broker principal
+            this.brokerList.forEach(broker => {
+                broker.P_COM_PENSION = 0; // Comision de los broker secundarios
+            });
+
+            this.totalNetoPensionSave = this.formateaValor(0);
+            this.igvPensionSave = this.formateaValor(0); // Solo IGV 
+            this.brutaTotalPensionSave = this.formateaValor(0)
+            this.mensajePrimaPension = ""
 
         }
-        this.calcular();
+
+        console.log(self.tasasList)
+        if (self.InputsQuotation.P_WORKER > 0) {
+            if (self.codFlat == valor) {
+                self.disabledFlat.forEach(disable => {
+                    disable.value = true;
+                    self.disabledFlat[row].value = false;
+                });
+            } else {
+                self.disabledFlat.forEach(disable => {
+                    if (disable.id == self.codFlat) {
+                        disable.value = true;
+                    }
+                });
+            }
+        } else {
+            self.disabledFlat.forEach(disable => {
+                disable.value = false;
+            });
+        }
     }
 
     changePensionPropuesta(cantComPro, valor) {
@@ -1145,6 +1226,12 @@ export class QuotationComponent implements OnInit {
         let netoSalud = 0;
         let self = this;
 
+        this.tasasList.map(function (dato) {
+            if (dato.id == valor) {
+                dato.planilla = totPlan;
+            }
+        });
+
         //Lista Salud
         if (this.listaTasasSalud.length > 0) {
             this.listaTasasSalud.map(function (dato) {
@@ -1158,18 +1245,25 @@ export class QuotationComponent implements OnInit {
             this.igvSalud = this.formateaValor((this.totalNetoSalud * this.igvSaludWS) - this.totalNetoSalud);
             let totalPreviewSalud = parseFloat(this.totalNetoSalud.toString()) + parseFloat(this.igvSalud.toString());
             this.brutaTotalSalud = this.formateaValor(totalPreviewSalud)
-
-            if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
-                this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
-                this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
-                this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+            if (parseFloat(this.totalNetoSalud.toString()) > 0) {
+                if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
+                    this.totalNetoSaludSave = this.formateaValor(this.InputsQuotation.P_PRIMA_MIN_SALUD)
+                    this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+                    this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+                    this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
+                } else {
+                    this.mensajePrimaSalud = ""
+                    this.totalNetoSaludSave = this.totalNetoSalud
+                    this.igvSaludSave = this.igvSalud;
+                    this.brutaTotalSaludSave = this.brutaTotalSalud;
+                }
             } else {
                 this.mensajePrimaSalud = ""
                 this.totalNetoSaludSave = this.totalNetoSalud
                 this.igvSaludSave = this.igvSalud;
                 this.brutaTotalSaludSave = this.brutaTotalSalud;
             }
+
         }
 
         //Lista Pension
@@ -1186,20 +1280,28 @@ export class QuotationComponent implements OnInit {
             let totalPreviewPension = parseFloat(this.totalNetoPension.toString()) + parseFloat(this.igvPension.toString());
             this.brutaTotalPension = this.formateaValor(totalPreviewPension)
 
-            if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
-                this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
-                this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
-                this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+            if (parseFloat(this.totalNetoPension.toString())) {
+                if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
+                    this.totalNetoPensionSave = this.formateaValor(this.InputsQuotation.P_PRIMA_MIN_PENSION)
+                    this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+                    this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+                    this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
+                } else {
+                    this.mensajePrimaPension = ""
+                    this.totalNetoPensionSave = this.totalNetoPension
+                    this.igvPensionSave = this.igvPension;
+                    this.brutaTotalPensionSave = this.brutaTotalPension;
+                }
             } else {
                 this.mensajePrimaPension = ""
                 this.totalNetoPensionSave = this.totalNetoPension
                 this.igvPensionSave = this.igvPension;
                 this.brutaTotalPensionSave = this.brutaTotalPension;
             }
+
         }
 
-        this.calcular();
+        //this.calcular();
     }
 
     changePrimaPropuesta(cantPrima, valor) {
@@ -1214,7 +1316,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoSaludSave = totPrima
                     this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                     this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                    this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                    this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaSalud = ""
                     this.totalNetoSaludSave = this.totalNetoSalud
@@ -1227,7 +1329,7 @@ export class QuotationComponent implements OnInit {
                         this.totalNetoSaludSave = this.InputsQuotation.P_PRIMA_MIN_SALUD
                         this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                         this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                        this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                        this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
                     } else {
                         this.mensajePrimaSalud = ""
                         this.totalNetoSaludSave = this.totalNetoSalud
@@ -1245,7 +1347,7 @@ export class QuotationComponent implements OnInit {
                     this.totalNetoPensionSave = totPrima
                     this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                     this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                    this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                    this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
                 } else {
                     this.mensajePrimaPension = ""
                     this.totalNetoPensionSave = this.totalNetoPension
@@ -1258,7 +1360,7 @@ export class QuotationComponent implements OnInit {
                         this.totalNetoPensionSave = this.InputsQuotation.P_PRIMA_MIN_PENSION
                         this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                         this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                        this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                        this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
                     } else {
                         this.mensajePrimaPension = ""
                         this.totalNetoPensionSave = this.totalNetoPension
@@ -1270,7 +1372,7 @@ export class QuotationComponent implements OnInit {
 
         }
 
-        this.calcular();
+        //this.calcular();
     }
 
     changeTasaPropuestaSalud(planPro, valor) {
@@ -1286,7 +1388,7 @@ export class QuotationComponent implements OnInit {
             });
         }
 
-        this.calcular();
+        // this.calcular();
     }
 
     changeTasaPropuestaPension(planPro, valor) {
@@ -1301,7 +1403,7 @@ export class QuotationComponent implements OnInit {
                 }
             });
         }
-        this.calcular();
+        //this.calcular();
     }
 
     getTarifario() {
@@ -1377,10 +1479,13 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO = "";
                                         item.enterprise[0].netRate.map(function (dato) {
                                             dato.rate = self.formateaValor(parseFloat(dato.rate) * 100);
-                                            dato.premiumMonth = 0;
+                                            dato.premiumMonth = self.formateaValor(parseFloat("0"));
                                             dato.planilla = 0;
                                             dato.planProp = 0;
                                             dato.totalWorkes = 0;
+                                            if (self.reloadTariff == false) {
+                                                dato.rate = self.formateaValor(0)
+                                            }
                                         });
                                     }
 
@@ -1393,8 +1498,44 @@ export class QuotationComponent implements OnInit {
                                             });
                                         });
                                     }
+
                                     if (item.enterprise[0].netRate != null) {
-                                        this.listaTasasPension = item.enterprise[0].netRate;
+                                        let activeFlat = false;
+                                        item.enterprise[0].netRate.map(function (dato) {
+                                            dato.status = 0;
+                                        });
+
+                                        var num = 0
+                                        item.enterprise[0].netRate.forEach(item => {
+                                            self.disabledFlat[num].id = item.id
+                                            self.disabledFlat[num].value = false
+                                            num++
+                                        });
+
+
+                                        if (this.perfil == JSON.parse(localStorage.getItem("currentUser"))["idProfile"]) {
+                                            item.enterprise[0].netRate.forEach(risk => {
+                                                if (risk.id == this.codFlat) {
+                                                    risk.status = 1;
+                                                    activeFlat = true;
+                                                }
+                                            });
+
+                                            if (activeFlat == false) {
+                                                item.enterprise[0].netRate.forEach(risk => {
+                                                    risk.status = 1;
+                                                });
+                                            }
+
+                                            this.listaTasasPension = item.enterprise[0].netRate;
+
+                                        } else {
+                                            item.enterprise[0].netRate.forEach(risk => {
+                                                risk.status = 1;
+                                            });
+
+                                            this.listaTasasPension = item.enterprise[0].netRate;
+                                        }
                                     } else {
                                         this.listaTasasPension = []
                                     }
@@ -1408,13 +1549,15 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO = "";
                                         item.enterprise[0].netRate.map(function (dato) {
                                             dato.rate = self.formateaValor(parseFloat(dato.rate) * 100);
-                                            dato.premiumMonth = 0;
+                                            dato.premiumMonth = self.formateaValor(parseFloat("0"));
                                             dato.planilla = 0;
                                             dato.planProp = 0;
                                             dato.totalWorkes = 0;
+                                            if (self.reloadTariff == false) {
+                                                dato.rate = self.formateaValor(0)
+                                            }
                                         });
                                     }
-
                                     if (item.enterprise[0].riskRate != undefined) {
                                         item.enterprise[0].riskRate.forEach(net => {
                                             item.enterprise[0].netRate.map(function (dato) {
@@ -1426,7 +1569,48 @@ export class QuotationComponent implements OnInit {
                                     }
 
                                     if (item.enterprise[0].netRate != null) {
-                                        this.listaTasasSalud = item.enterprise[0].netRate;
+                                        let activeFlat = false;
+
+                                        item.enterprise[0].netRate.map(function (dato) {
+                                            dato.status = 0;
+                                        });
+
+                                        var num = 0
+                                        item.enterprise[0].netRate.forEach(item => {
+                                            self.disabledFlat[num].id = item.id
+                                            self.disabledFlat[num].value = false
+                                            num++
+                                        });
+
+
+                                        if (this.perfil == JSON.parse(localStorage.getItem("currentUser"))["idProfile"]) {
+                                            item.enterprise[0].netRate.forEach(risk => {
+                                                if (risk.id == this.codFlat) {
+                                                    risk.status = 1;
+                                                    activeFlat = true;
+                                                    self.disabledFlat[num].id = item.id
+                                                    self.disabledFlat[num].value = false
+                                                    num++
+                                                }
+                                            });
+
+                                            if (activeFlat == false) {
+                                                item.enterprise[0].netRate.forEach(risk => {
+                                                    risk.status = 1;
+                                                });
+                                            }
+
+                                            this.listaTasasSalud = item.enterprise[0].netRate;
+
+                                        } else {
+
+                                            item.enterprise[0].netRate.forEach(risk => {
+                                                risk.status = 1;
+                                            });
+
+                                            this.listaTasasSalud = item.enterprise[0].netRate;
+                                        }
+                                        // this.listaTasasSalud = item.enterprise[0].netRate;
                                     } else {
                                         this.listaTasasSalud = []
                                     }
@@ -1452,7 +1636,9 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO = ""; // Prima minima salud propuesta
                                         this.InputsQuotation.P_PRIMA_MIN_PENSION = ""; // Prima minima pension
                                         this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = ""; // Prima minima pension propuesta
-                                        this.tasasList = this.listaTasasSalud;
+                                        if (this.tasasList.length == 0) {
+                                            this.tasasList = this.listaTasasPension;
+                                        }
                                         this.calcular();
                                     } else {
                                         this.clearTariff();
@@ -1466,7 +1652,9 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO = ""; // Comision salud propuesta;
                                         this.InputsQuotation.P_PRIMA_MIN_SALUD = ""; // Prima minima salud
                                         this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO = ""; // Prima minima salud propuesta
-                                        this.tasasList = this.listaTasasPension;
+                                        if (this.tasasList.length == 0) {
+                                            this.tasasList = this.listaTasasPension;
+                                        }
                                         this.listaTasasSalud = [];
                                         this.calcular();
                                     } else {
@@ -1481,7 +1669,9 @@ export class QuotationComponent implements OnInit {
                                         this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO = ""; // Comision pension propuesta
                                         this.InputsQuotation.P_PRIMA_MIN_PENSION = ""; // Prima minima pension
                                         this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = ""; // Prima minima pension propuesta
-                                        this.tasasList = this.listaTasasSalud;
+                                        if (this.tasasList.length == 0) {
+                                            this.tasasList = this.listaTasasSalud;
+                                        }
                                         this.listaTasasPension = [];
                                         this.calcular();
                                     } else {
@@ -1491,7 +1681,6 @@ export class QuotationComponent implements OnInit {
                                     }
                                     break;
                             }
-
                         } else {
                             this.clearTariff();
                             swal.fire("Información", "La combinación ingresada no cuenta con tarifas configuradas", "error");
@@ -1518,8 +1707,13 @@ export class QuotationComponent implements OnInit {
     }
 
     calcular() {
+        let self = this;
+        if (self.reloadTariff == false) {
+            this.stateWorker = true;
+            this.messageWorker = "* Para continuar debe presionar el botón calcular";
+        }
+
         if (this.resList != "") {
-            let self = this;
             this.resList.fields.forEach(item => {
                 switch (item.fieldEquivalenceCore) {
                     case this.pensionID: // Pension
@@ -1529,30 +1723,57 @@ export class QuotationComponent implements OnInit {
                             self.commissionPension = item.commission == null ? "0" : item.commission;
                             if (item.enterprise[0].netRate != undefined) {
                                 let netoPension = 0;
-                                item.enterprise[0].netRate.map(function (dato) {
-                                    if (self.listaTasasPension != "") {
-                                        self.listaTasasPension.forEach(item => {
-                                            if (item.id == dato.id) {
-                                                dato.totalWorkes = item.totalWorkes;
-                                                dato.planilla = item.planilla;
-                                                dato.planProp = item.planProp;
-                                                dato.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(dato.rate)) / 100);
-                                            }
-                                        });
-                                        netoPension = netoPension + parseFloat(dato.premiumMonth)
-                                    }
+
+                                self.listaTasasPension.forEach(item => {
+                                    self.tasasList.forEach(dato => {
+                                        if (item.id == dato.id) {
+                                            item.totalWorkes = dato.totalWorkes;
+                                            item.planilla = dato.planilla;
+                                            item.planProp = dato.planProp;
+                                            item.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(item.rate)) / 100);
+                                        }
+                                    });
+                                    netoPension = netoPension + parseFloat(item.premiumMonth)
                                 });
 
-                                if (self.listaTasasPension != "") {
-                                    this.listaTasasPension = item.enterprise[0].netRate;
-                                    this.InputsQuotation.P_PRIMA_MIN_PENSION = item.enterprise[0].minimumPremium == null ? "0" : item.enterprise[0].minimumPremium;
-                                    this.InputsQuotation.P_PRIMA_END_PENSION = item.enterprise[0].minimumPremiumEndoso == null ? "0" : item.enterprise[0].minimumPremiumEndoso;
+                                // item.enterprise[0].netRate.map(function (dato) {
+                                //     if (self.listaTasasPension != "") {
+                                //         self.listaTasasPension.forEach(item => {
+                                //             if (item.id == dato.id) {
+                                //                 dato.totalWorkes = item.totalWorkes;
+                                //                 dato.planilla = item.planilla;
+                                //                 dato.planProp = item.planProp;
+                                //                 dato.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(dato.rate)) / 100);
+                                //             }
+                                //         });
+                                //         netoPension = netoPension + parseFloat(dato.premiumMonth)
+                                //     }
+                                // });
+
+                                if (self.listaTasasPension.length > 0) {
+                                    //this.listaTasasPension = item.enterprise[0].netRate;
+                                    if (self.reloadTariff == true) {
+                                        this.InputsQuotation.P_PRIMA_MIN_PENSION = item.enterprise[0].minimumPremium == null ? "0" : item.enterprise[0].minimumPremium;
+                                        this.InputsQuotation.P_PRIMA_END_PENSION = item.enterprise[0].minimumPremiumEndoso == null ? "0" : item.enterprise[0].minimumPremiumEndoso;
+                                    }
                                 }
 
                                 this.totalNetoPension = this.formateaValor(netoPension);
                                 this.igvPension = this.formateaValor((this.totalNetoPension * this.igvPensionWS) - this.totalNetoPension); // IGV + CE
                                 let totalPreviewPension = parseFloat(this.totalNetoPension.toString()) + parseFloat(this.igvPension.toString());
                                 this.brutaTotalPension = this.formateaValor(totalPreviewPension)
+
+                                if (parseFloat(this.totalNetoPension.toString()) < this.InputsQuotation.P_PRIMA_MIN_PENSION) {
+                                    this.totalNetoPensionSave = this.formateaValor(this.InputsQuotation.P_PRIMA_MIN_PENSION)
+                                    this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+                                    this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+                                    this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
+                                } else {
+                                    this.mensajePrimaPension = ""
+                                    this.totalNetoPensionSave = this.formateaValor(this.totalNetoPension)
+                                    this.igvPensionSave = this.formateaValor(this.igvPension);
+                                    this.brutaTotalPensionSave = this.formateaValor(this.brutaTotalPension);
+                                }
 
                                 if (item.channelDistributions != undefined) {
                                     item.channelDistributions.forEach(channel => {
@@ -1574,8 +1795,6 @@ export class QuotationComponent implements OnInit {
                                 if (this.InputsQuotation.P_COMISSION_BROKER_PENSION == "") {
                                     this.InputsQuotation.P_COMISSION_BROKER_PENSION = "0";
                                 }
-
-
                             }
                         }
                         break;
@@ -1586,30 +1805,59 @@ export class QuotationComponent implements OnInit {
                             self.commissionSalud = item.commission == null ? "0" : item.commission;
                             if (item.enterprise[0].netRate != undefined) {
                                 let netoSalud = 0;
-                                item.enterprise[0].netRate.map(function (dato) {
-                                    if (self.listaTasasSalud != "") {
-                                        self.listaTasasSalud.forEach(item => {
-                                            if (item.id == dato.id) {
-                                                dato.totalWorkes = item.totalWorkes;
-                                                dato.planilla = item.planilla;
-                                                dato.planProp = item.planProp;
-                                                dato.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(dato.rate)) / 100);
-                                            }
-                                        });
-                                        netoSalud = netoSalud + parseFloat(dato.premiumMonth)
-                                    }
+
+                                self.listaTasasSalud.forEach(item => {
+                                    self.tasasList.forEach(dato => {
+                                        if (item.id == dato.id) {
+                                            item.totalWorkes = dato.totalWorkes;
+                                            item.planilla = dato.planilla;
+                                            item.planProp = dato.planProp;
+                                            item.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(item.rate)) / 100);
+                                        }
+                                    });
+                                    netoSalud = netoSalud + parseFloat(item.premiumMonth)
                                 });
 
+
+                                // item.enterprise[0].netRate.map(function (dato) {
+                                //     if (self.listaTasasSalud != "") {
+                                //         self.listaTasasSalud.forEach(item => {
+                                //             if (item.id == dato.id) {
+                                //                 dato.totalWorkes = item.totalWorkes;
+                                //                 dato.planilla = item.planilla;
+                                //                 dato.planProp = item.planProp;
+                                //                 dato.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(dato.rate)) / 100);
+                                //             }
+                                //         });
+                                //         netoSalud = netoSalud + parseFloat(dato.premiumMonth)
+                                //     }
+                                // });
+
                                 if (self.listaTasasSalud.length > 0) {
-                                    this.listaTasasSalud = item.enterprise[0].netRate;
-                                    this.InputsQuotation.P_PRIMA_MIN_SALUD = item.enterprise[0].minimumPremium == null ? "0" : item.enterprise[0].minimumPremium;
-                                    this.InputsQuotation.P_PRIMA_END_SALUD = item.enterprise[0].minimumPremiumEndoso == null ? "0" : item.enterprise[0].minimumPremiumEndoso;
+                                    // this.listaTasasSalud = item.enterprise[0].netRate;
+                                    if (self.reloadTariff == true) {
+                                        this.InputsQuotation.P_PRIMA_MIN_SALUD = item.enterprise[0].minimumPremium == null ? "0" : item.enterprise[0].minimumPremium;
+                                        this.InputsQuotation.P_PRIMA_END_SALUD = item.enterprise[0].minimumPremiumEndoso == null ? "0" : item.enterprise[0].minimumPremiumEndoso;
+                                    }
                                 }
 
                                 this.totalNetoSalud = this.formateaValor(netoSalud);
                                 this.igvSalud = this.formateaValor((this.totalNetoSalud * this.igvSaludWS) - this.totalNetoSalud); // Solo IGV 
                                 let totalPreviewSalud = parseFloat(this.totalNetoSalud.toString()) + parseFloat(this.igvSalud.toString());
                                 this.brutaTotalSalud = this.formateaValor(totalPreviewSalud)
+
+                                if (parseFloat(this.totalNetoSalud.toString()) < this.InputsQuotation.P_PRIMA_MIN_SALUD) {
+                                    this.totalNetoSaludSave = this.formateaValor(this.InputsQuotation.P_PRIMA_MIN_SALUD)
+                                    this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+                                    this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+                                    this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
+                                } else {
+                                    this.mensajePrimaSalud = ""
+                                    this.totalNetoSaludSave = this.totalNetoSalud
+                                    this.igvSaludSave = this.formateaValor(this.igvSalud);
+                                    this.brutaTotalSaludSave = this.formateaValor(this.brutaTotalSalud);
+                                }
+
                                 if (item.channelDistributions != undefined) {
                                     item.channelDistributions.forEach(channel => {
                                         if (channel.roleId == JSON.parse(localStorage.getItem("currentUser"))["canal"].toString()) {
@@ -1631,7 +1879,6 @@ export class QuotationComponent implements OnInit {
                                 }
                             }
                         }
-
                         break;
                 }
             });
@@ -1656,10 +1903,34 @@ export class QuotationComponent implements OnInit {
             msg += "Debe seleccionar un producto válido <br>"
         }
 
-        if (this.InputsQuotation.P_NIDSEDE == null || this.InputsQuotation.P_NIDSEDE == 0) {
-            this.VAL_QUOTATION[2] = "2";
-            msg += "Debe seleccionar una sede válida <br>"
+        if (this.sedesList.length > 0) {
+            if (this.InputsQuotation.P_NIDSEDE == null || this.InputsQuotation.P_NIDSEDE == 0) {
+                this.VAL_QUOTATION[2] = "2";
+                msg += "Debe seleccionar una sede válida <br>"
+            }
+        } else {
+            if (this.InputsQuotation.P_NTECHNICAL == null || this.InputsQuotation.P_NTECHNICAL == 0) {
+                this.VAL_QUOTATION[12] = "12";
+                msg += "Debe seleccionar una actividad a realizar válida <br>"
+            }
+            if (this.InputsQuotation.P_NECONOMIC == null || this.InputsQuotation.P_NECONOMIC == 0) {
+                this.VAL_QUOTATION[3] = "3";
+                msg += "Debe seleccionar una actividad económica válida <br>"
+            }
+            if (this.InputsQuotation.P_NPROVINCE == null || this.InputsQuotation.P_NPROVINCE == 0) {
+                this.VAL_QUOTATION[4] = "4";
+                msg += "Debe seleccionar un departamento válida <br>"
+            }
+            if (this.InputsQuotation.P_NLOCAL == null || this.InputsQuotation.P_NLOCAL == 0) {
+                this.VAL_QUOTATION[5] = "5";
+                msg += "Debe seleccionar una provincia válida <br>"
+            }
+            if (this.InputsQuotation.P_NMUNICIPALITY == null || this.InputsQuotation.P_NMUNICIPALITY == 0) {
+                this.VAL_QUOTATION[6] = "6";
+                msg += "Debe seleccionar un distrito válida <br>"
+            }
         }
+
 
         if (this.tasasList.length == 0) {
             this.VAL_QUOTATION[7] = "7";
@@ -1711,7 +1982,7 @@ export class QuotationComponent implements OnInit {
         }
 
         if (this.stateWorker == true) {
-            msg += "La cantidad de trabajadores no es la correcta <br />";
+            msg += "Para continuar debe haber calculado la prima <br />";
         }
 
         let sumSize = 0;
@@ -1730,114 +2001,9 @@ export class QuotationComponent implements OnInit {
             return;
         } else {
             let self = this;
-
-            // Inicio
-            let now = new Date();
-            let dayIni = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
-            let monthPreviewIni = now.getMonth() + 1;
-            let monthIni = monthPreviewIni < 10 ? "0" + monthPreviewIni : monthPreviewIni;
-            let yearIni = now.getFullYear();
-
-            let dataQuotation: any = {};
-            dataQuotation.P_SCLIENT = this.ContractorId;
-            dataQuotation.P_NCURRENCY = this.InputsQuotation.P_NCURRENCY;
-            dataQuotation.P_NBRANCH = 1;
-            dataQuotation.P_DSTARTDATE = dayIni + "/" + monthIni + "/" + yearIni; //Fecha Inicio
-            dataQuotation.P_NIDCLIENTLOCATION = this.InputsQuotation.P_NIDSEDE;
-            dataQuotation.P_SCOMMENT = this.InputsQuotation.P_SCOMMENT.toUpperCase();
-            dataQuotation.P_SRUTA = "";
-            dataQuotation.P_NUSERCODE = this.userId;
-            dataQuotation.P_NACT_MINA = this.InputsQuotation.P_MINA == true ? 1 : 0;
-            dataQuotation.QuotationDet = [];
-            dataQuotation.QuotationCom = [];
-
-            //Detalle de Cotizacion Pension
-            if (this.listaTasasPension.length > 0) {
-                this.listaTasasPension.forEach(dataPension => {
-                    let itemQuotationDet: any = {};
-                    itemQuotationDet.P_NBRANCH = 1;
-                    itemQuotationDet.P_NPRODUCT = this.pensionID; // Pensión
-                    itemQuotationDet.P_NMODULEC = dataPension.id;
-                    itemQuotationDet.P_NTOTAL_TRABAJADORES = dataPension.totalWorkes;
-                    itemQuotationDet.P_NMONTO_PLANILLA = dataPension.planilla;
-                    itemQuotationDet.P_NTASA_CALCULADA = dataPension.rate;
-                    itemQuotationDet.P_NTASA_PROP = dataPension.planProp == "" ? "0" : dataPension.planProp;
-                    itemQuotationDet.P_NPREMIUM_MENSUAL = dataPension.premiumMonth;
-                    itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_PENSION;
-                    itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO;
-                    itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_PENSION == "" ? "0" : this.InputsQuotation.P_PRIMA_END_PENSION;
-                    itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoPensionSave;
-                    itemQuotationDet.P_NSUM_IGV = this.igvPensionSave;
-                    itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalPensionSave;
-                    itemQuotationDet.P_NRATE = dataPension.rateDet == "" ? "0" : dataPension.rateDet;
-                    itemQuotationDet.P_NDISCOUNT = this.discountPension == "" ? "0" : this.discountPension;
-                    itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationPension == "" ? "0" : this.activityVariationPension;
-                    itemQuotationDet.P_FLAG = "0";
-                    dataQuotation.QuotationDet.push(itemQuotationDet);
-                });
-            }
-
-            //Detalle de Cotizacion Salud
-            if (this.listaTasasSalud.length > 0) {
-                this.listaTasasSalud.forEach(dataSalud => {
-                    let itemQuotationDet: any = {};
-                    itemQuotationDet.P_NBRANCH = 1;
-                    itemQuotationDet.P_NPRODUCT = this.saludID; //Salud
-                    itemQuotationDet.P_NMODULEC = dataSalud.id;
-                    itemQuotationDet.P_NTOTAL_TRABAJADORES = dataSalud.totalWorkes;
-                    itemQuotationDet.P_NMONTO_PLANILLA = dataSalud.planilla;
-                    itemQuotationDet.P_NTASA_CALCULADA = dataSalud.rate;
-                    itemQuotationDet.P_NTASA_PROP = dataSalud.planProp == "" ? "0" : dataSalud.planProp;
-                    itemQuotationDet.P_NPREMIUM_MENSUAL = dataSalud.premiumMonth;
-                    itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_SALUD;
-                    itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO;
-                    itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_SALUD == "" ? "0" : this.InputsQuotation.P_PRIMA_END_SALUD;
-                    itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoSaludSave;
-                    itemQuotationDet.P_NSUM_IGV = this.igvSaludSave;
-                    itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalSaludSave;
-                    itemQuotationDet.P_NRATE = dataSalud.rateDet == "" ? "0" : dataSalud.rateDet;
-                    itemQuotationDet.P_NDISCOUNT = this.discountSalud == "" ? "0" : this.discountSalud;
-                    itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationSalud == "" ? "0" : this.activityVariationSalud;
-                    itemQuotationDet.P_FLAG = "0";
-                    dataQuotation.QuotationDet.push(itemQuotationDet);
-                });
-            }
-
-            //Comercializador Principal
-            let itemQuotationComMain: any = {};
-            itemQuotationComMain.P_NIDTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
-            itemQuotationComMain.P_NINTERMED = JSON.parse(localStorage.getItem("currentUser"))["canal"];
-            itemQuotationComMain.P_SCLIENT_COMER = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
-            itemQuotationComMain.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD : "0";
-            itemQuotationComMain.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO : "0";
-            itemQuotationComMain.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION : "0";
-            itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
-            itemQuotationComMain.P_NPRINCIPAL = 1;
-            dataQuotation.QuotationCom.push(itemQuotationComMain);
-
-            //Comercializadores
-            if (this.brokerList.length > 0) {
-                this.brokerList.forEach(dataBroker => {
-                    let itemQuotationCom: any = {};
-                    itemQuotationCom.P_NIDTYPECHANNEL = dataBroker.NTYPECHANNEL;
-                    itemQuotationCom.P_NINTERMED = dataBroker.COD_CANAL; //Desarrollo
-                    itemQuotationCom.P_SCLIENT_COMER = dataBroker.SCLIENT;
-                    itemQuotationCom.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD == "" ? "0" : dataBroker.P_COM_SALUD : "0";
-                    itemQuotationCom.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD_PRO == "" ? "0" : dataBroker.P_COM_SALUD_PRO : "0";
-                    itemQuotationCom.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION == "" ? "0" : dataBroker.P_COM_PENSION : "0";
-                    itemQuotationCom.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION_PRO == "" ? "0" : dataBroker.P_COM_PENSION_PRO : "0";
-                    itemQuotationCom.P_NPRINCIPAL = 0;
-                    dataQuotation.QuotationCom.push(itemQuotationCom);
-                });
-            }
-
-            let myFormData: FormData = new FormData()
-            this.files.forEach(file => {
-                myFormData.append(file.name, file);
-            });
-
+            let sedeId = "0";
             self.isLoading = false;
-            myFormData.append("objeto", JSON.stringify(dataQuotation));
+
             swal.fire({
                 title: "Información",
                 text: "¿Desea generar la cotización?",
@@ -1850,52 +2016,200 @@ export class QuotationComponent implements OnInit {
                 .then((result) => {
                     if (result.value) {
                         self.isLoading = true;
-                        this.quotationService.insertQuotation(myFormData).subscribe(
-                            res => {
-                                let quotationNumber = 0;
-                                if (res.P_COD_ERR == 0) {
-                                    this.clearInsert()
-                                    quotationNumber = res.P_NID_COTIZACION;
-                                    if (res.P_SAPROBADO == 'S') {
-                                        self.isLoading = false;
-                                        if (res.P_NCODE == 0) {
-                                            swal.fire({
-                                                title: "Información",
-                                                text: "¿Desea emitir la cotización N° " + quotationNumber + " de forma directa?",
-                                                type: "question",
-                                                showCancelButton: true,
-                                                confirmButtonText: 'Sí',
-                                                allowOutsideClick: false,
-                                                cancelButtonText: 'No'
-                                            })
-                                                .then((result) => {
-                                                    if (result.value) {
-                                                        self.isLoading = false;
-                                                        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: quotationNumber } });
-                                                    }
-                                                });
-                                        } else {
-                                            self.isLoading = false;
-                                            swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación.", "success");
-                                        }
-                                    } else {
-                                        self.isLoading = false;
-                                        swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+
+                        if (self.sedesList.length == 0) {
+                            let _contractorLocation: any = {};
+                            _contractorLocation.Action = "1"
+                            _contractorLocation.Address = "DIRECCION PRINCIPAL"
+                            _contractorLocation.ContactList = []
+                            _contractorLocation.ContractorId = this.sedeContractor
+                            _contractorLocation.DepartmentId = this.InputsQuotation.P_NPROVINCE
+                            _contractorLocation.Description = "PRINCIPAL"
+                            _contractorLocation.DistrictId = this.InputsQuotation.P_NMUNICIPALITY
+                            _contractorLocation.EconomicActivityId = this.InputsQuotation.P_NECONOMIC
+                            _contractorLocation.ProvinceId = this.InputsQuotation.P_NLOCAL
+                            _contractorLocation.StateId = "1"
+                            _contractorLocation.TechnicalActivityId = this.InputsQuotation.P_NTECHNICAL
+                            _contractorLocation.TypeId = "1"
+                            _contractorLocation.UserCode = JSON.parse(localStorage.getItem("currentUser"))["id"]
+
+                            this.contractorLocationIndexService.updateContractorLocation(_contractorLocation).subscribe(
+                                res => {
+                                    if (res.P_NCODE == 0) {
+                                        sedeId = res.P_RESULT;
+                                        self.proceso(sedeId, self)
+                                    } else if (res.P_NCODE == 1) {
+                                        swal.fire('Información', "Ocurrió un problema en la creación de la sede", 'error');
+                                        return;
                                     }
-                                } else {
-                                    self.isLoading = false;
-                                    swal.fire("Información", res.P_MESSAGE, "error");
+                                },
+                                err => {
+                                    swal.fire('Información', err, 'error');
                                 }
-                            },
-                            err => {
-                                self.isLoading = false;
-                                swal.fire("Información", "Hubo un error con el servidor", "error");
-                            }
-                        );
+                            );
+                        }
+                        else {
+                            self.proceso(sedeId, self)
+                        }
+
                     }
                 });
         }
     }
+
+    proceso(sedeId, self) {
+        // Inicio
+        let now = new Date();
+        let dayIni = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+        let monthPreviewIni = now.getMonth() + 1;
+        let monthIni = monthPreviewIni < 10 ? "0" + monthPreviewIni : monthPreviewIni;
+        let yearIni = now.getFullYear();
+
+        let dataQuotation: any = {};
+        dataQuotation.P_SCLIENT = this.ContractorId;
+        dataQuotation.P_NCURRENCY = this.InputsQuotation.P_NCURRENCY;
+        dataQuotation.P_NBRANCH = 1;
+        dataQuotation.P_DSTARTDATE = dayIni + "/" + monthIni + "/" + yearIni; //Fecha Inicio
+        dataQuotation.P_NIDCLIENTLOCATION = self.sedesList.length > 0 ? this.InputsQuotation.P_NIDSEDE : sedeId;
+        dataQuotation.P_SCOMMENT = this.InputsQuotation.P_SCOMMENT.toUpperCase();
+        dataQuotation.P_SRUTA = "";
+        dataQuotation.P_NUSERCODE = this.userId;
+        dataQuotation.P_NACT_MINA = this.InputsQuotation.P_MINA == true ? 1 : 0;
+        dataQuotation.QuotationDet = [];
+        dataQuotation.QuotationCom = [];
+
+        //Detalle de Cotizacion Pension
+        if (this.listaTasasPension.length > 0) {
+            this.listaTasasPension.forEach(dataPension => {
+                let itemQuotationDet: any = {};
+                itemQuotationDet.P_NBRANCH = 1;
+                itemQuotationDet.P_NPRODUCT = this.pensionID; // Pensión
+                itemQuotationDet.P_NMODULEC = dataPension.id;
+                itemQuotationDet.P_NTOTAL_TRABAJADORES = dataPension.totalWorkes;
+                itemQuotationDet.P_NMONTO_PLANILLA = dataPension.planilla;
+                itemQuotationDet.P_NTASA_CALCULADA = dataPension.rate;
+                itemQuotationDet.P_NTASA_PROP = dataPension.planProp == "" ? "0" : dataPension.planProp;
+                itemQuotationDet.P_NPREMIUM_MENSUAL = dataPension.premiumMonth;
+                itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_PENSION;
+                itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO;
+                itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_PENSION == "" ? "0" : this.InputsQuotation.P_PRIMA_END_PENSION;
+                itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoPensionSave;
+                itemQuotationDet.P_NSUM_IGV = this.igvPensionSave;
+                itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalPensionSave;
+                itemQuotationDet.P_NRATE = dataPension.rateDet == "" ? "0" : dataPension.rateDet;
+                itemQuotationDet.P_NDISCOUNT = this.discountPension == "" ? "0" : this.discountPension;
+                itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationPension == "" ? "0" : this.activityVariationPension;
+                itemQuotationDet.P_FLAG = "0";
+                dataQuotation.QuotationDet.push(itemQuotationDet);
+            });
+        }
+
+        //Detalle de Cotizacion Salud
+        if (this.listaTasasSalud.length > 0) {
+            this.listaTasasSalud.forEach(dataSalud => {
+                let itemQuotationDet: any = {};
+                itemQuotationDet.P_NBRANCH = 1;
+                itemQuotationDet.P_NPRODUCT = this.saludID; //Salud
+                itemQuotationDet.P_NMODULEC = dataSalud.id;
+                itemQuotationDet.P_NTOTAL_TRABAJADORES = dataSalud.totalWorkes;
+                itemQuotationDet.P_NMONTO_PLANILLA = dataSalud.planilla;
+                itemQuotationDet.P_NTASA_CALCULADA = dataSalud.rate;
+                itemQuotationDet.P_NTASA_PROP = dataSalud.planProp == "" ? "0" : dataSalud.planProp;
+                itemQuotationDet.P_NPREMIUM_MENSUAL = dataSalud.premiumMonth;
+                itemQuotationDet.P_NPREMIUM_MIN = this.InputsQuotation.P_PRIMA_MIN_SALUD;
+                itemQuotationDet.P_NPREMIUM_MIN_PR = this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_PRIMA_MIN_SALUD_PRO;
+                itemQuotationDet.P_NPREMIUM_END = this.InputsQuotation.P_PRIMA_END_SALUD == "" ? "0" : this.InputsQuotation.P_PRIMA_END_SALUD;
+                itemQuotationDet.P_NSUM_PREMIUMN = this.totalNetoSaludSave;
+                itemQuotationDet.P_NSUM_IGV = this.igvSaludSave;
+                itemQuotationDet.P_NSUM_PREMIUM = this.brutaTotalSaludSave;
+                itemQuotationDet.P_NRATE = dataSalud.rateDet == "" ? "0" : dataSalud.rateDet;
+                itemQuotationDet.P_NDISCOUNT = this.discountSalud == "" ? "0" : this.discountSalud;
+                itemQuotationDet.P_NACTIVITYVARIATION = this.activityVariationSalud == "" ? "0" : this.activityVariationSalud;
+                itemQuotationDet.P_FLAG = "0";
+                dataQuotation.QuotationDet.push(itemQuotationDet);
+            });
+        }
+
+        //Comercializador Principal
+        let itemQuotationComMain: any = {};
+        itemQuotationComMain.P_NIDTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
+        itemQuotationComMain.P_NINTERMED = JSON.parse(localStorage.getItem("currentUser"))["canal"];
+        itemQuotationComMain.P_SCLIENT_COMER = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
+        itemQuotationComMain.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD : "0";
+        itemQuotationComMain.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO : "0";
+        itemQuotationComMain.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION : "0";
+        itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
+        itemQuotationComMain.P_NPRINCIPAL = 1;
+        dataQuotation.QuotationCom.push(itemQuotationComMain);
+
+        //Comercializadores
+        if (this.brokerList.length > 0) {
+            this.brokerList.forEach(dataBroker => {
+                let itemQuotationCom: any = {};
+                itemQuotationCom.P_NIDTYPECHANNEL = dataBroker.NTYPECHANNEL;
+                itemQuotationCom.P_NINTERMED = dataBroker.COD_CANAL; //Desarrollo
+                itemQuotationCom.P_SCLIENT_COMER = dataBroker.SCLIENT;
+                itemQuotationCom.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD == "" ? "0" : dataBroker.P_COM_SALUD : "0";
+                itemQuotationCom.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? dataBroker.P_COM_SALUD_PRO == "" ? "0" : dataBroker.P_COM_SALUD_PRO : "0";
+                itemQuotationCom.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION == "" ? "0" : dataBroker.P_COM_PENSION : "0";
+                itemQuotationCom.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? dataBroker.P_COM_PENSION_PRO == "" ? "0" : dataBroker.P_COM_PENSION_PRO : "0";
+                itemQuotationCom.P_NPRINCIPAL = 0;
+                dataQuotation.QuotationCom.push(itemQuotationCom);
+            });
+        }
+
+        let myFormData: FormData = new FormData()
+        this.files.forEach(file => {
+            myFormData.append(file.name, file);
+        });
+
+        self.isLoading = false;
+        console.log(dataQuotation)
+        myFormData.append("objeto", JSON.stringify(dataQuotation));
+        this.quotationService.insertQuotation(myFormData).subscribe(
+            res => {
+                let quotationNumber = 0;
+                if (res.P_COD_ERR == 0) {
+                    this.clearInsert()
+                    quotationNumber = res.P_NID_COTIZACION;
+                    if (res.P_SAPROBADO == 'S') {
+                        self.isLoading = false;
+                        if (res.P_NCODE == 0) {
+                            swal.fire({
+                                title: "Información",
+                                text: "¿Desea emitir la cotización N° " + quotationNumber + " de forma directa?",
+                                type: "question",
+                                showCancelButton: true,
+                                confirmButtonText: 'Sí',
+                                allowOutsideClick: false,
+                                cancelButtonText: 'No'
+                            })
+                                .then((result) => {
+                                    if (result.value) {
+                                        self.isLoading = false;
+                                        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: quotationNumber } });
+                                    }
+                                });
+                        } else {
+                            self.isLoading = false;
+                            swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación.", "success");
+                        }
+                    } else {
+                        self.isLoading = false;
+                        swal.fire("Información", "Se ha generado correctamente la cotización N° " + quotationNumber + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+                    }
+                } else {
+                    self.isLoading = false;
+                    swal.fire("Información", res.P_MESSAGE, "error");
+                }
+            },
+            err => {
+                self.isLoading = false;
+                swal.fire("Información", "Hubo un error con el servidor", "error");
+            }
+        );
+    }
+
 
     getFileExtension(filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
@@ -1911,8 +2225,8 @@ export class QuotationComponent implements OnInit {
         this.stateSalud = true;
         this.statePension = true;
         this.stateQuotation = true;
-        this.stateTasaSalud = true;
-        this.stateTasaPension = true;
+        this.stateTasaSalud = false;
+        this.stateTasaPension = false;
         this.stateBrokerTasaSalud = true;
         this.stateBrokerTasaPension = true;
         this.blockDoc = true;
@@ -1936,7 +2250,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NIDSEDE = null; // Sede
         this.InputsQuotation.P_NTECHNICAL = null; // Actividad Tecnica
         this.InputsQuotation.P_NECONOMIC = null; // Actividad Economica
-        this.InputsQuotation.P_DELIMITER = false; // Delimitación check
+        this.InputsQuotation.P_DELIMITER = ""; // Delimitación check
         this.InputsQuotation.P_SDELIMITER = "0"; // Delimitacion  1 o 0
         this.InputsQuotation.P_NPROVINCE = null;
         this.InputsQuotation.P_NLOCAL = null;
@@ -1954,7 +2268,7 @@ export class QuotationComponent implements OnInit {
 
         this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
         this.InputsQuotation.P_PERSON_TYPE = "1"; // Tipo persona
-        this.InputsQuotation.P_CANT_WORKER = "1";
+        // this.InputsQuotation.P_CANT_WORKER = "1";
         this.brokerList = [];
 
         this.discountPension = "";
@@ -2059,7 +2373,7 @@ export class QuotationComponent implements OnInit {
             event.preventDefault();
         }
     }
-    
+
     valText(event: any, type) {
         let pattern;
         switch (type) {

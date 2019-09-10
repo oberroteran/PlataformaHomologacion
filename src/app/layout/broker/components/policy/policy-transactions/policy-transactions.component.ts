@@ -462,7 +462,7 @@ export class PolicyTransactionsComponent implements OnInit {
         this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
         this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
         this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-        this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+        this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
       } else {
         this.mensajePrimaSalud = ""
         this.totalNetoSaludSave = this.primatotalSalud
@@ -490,7 +490,7 @@ export class PolicyTransactionsComponent implements OnInit {
         this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
         this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
         this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-        this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+        this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
       } else {
         this.mensajePrimaPension = ""
         this.totalNetoPensionSave = this.primatotalSCTR
@@ -512,7 +512,7 @@ export class PolicyTransactionsComponent implements OnInit {
           this.totalNetoSaludSave = totPrima
           this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
           this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-          this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+          this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
         } else {
           this.mensajePrimaSalud = ""
           this.totalNetoSaludSave = this.primatotalSalud
@@ -525,7 +525,7 @@ export class PolicyTransactionsComponent implements OnInit {
             this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
             this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
             this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-            this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+            this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
           } else {
             this.mensajePrimaSalud = ""
             this.totalNetoSaludSave = this.primatotalSalud
@@ -543,7 +543,7 @@ export class PolicyTransactionsComponent implements OnInit {
           this.totalNetoPensionSave = totPrima
           this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
           this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-          this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+          this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
         } else {
           this.mensajePrimaPension = ""
           this.totalNetoPensionSave = this.primatotalSCTR
@@ -556,7 +556,7 @@ export class PolicyTransactionsComponent implements OnInit {
             this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
             this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
             this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-            this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+            this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
           } else {
             this.mensajePrimaPension = ""
             this.totalNetoPensionSave = this.primatotalSCTR
@@ -1549,7 +1549,7 @@ export class PolicyTransactionsComponent implements OnInit {
                   this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
                   this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                   this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-                  this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+                  this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
                 } else {
                   this.mensajePrimaPension = ""
                   this.totalNetoPensionSave = this.primatotalSCTR
@@ -1575,7 +1575,7 @@ export class PolicyTransactionsComponent implements OnInit {
                   this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
                   this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                   this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-                  this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+                  this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
                 } else {
                   this.mensajePrimaSalud = ""
                   this.totalNetoSaludSave = this.primatotalSalud
@@ -2026,7 +2026,7 @@ export class PolicyTransactionsComponent implements OnInit {
             this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
             this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
             this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-            this.mensajePrimaSalud = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalSaludSave;
+            this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
           } else {
             this.mensajePrimaSalud = ""
             this.totalNetoSaludSave = this.primatotalSalud
@@ -2046,7 +2046,7 @@ export class PolicyTransactionsComponent implements OnInit {
             this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
             this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
             this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-            this.mensajePrimaPension = "El monto calculado no supera la prima mínima, la cotización se generará con el siguiente monto S/. " + this.brutaTotalPensionSave;
+            this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
           } else {
             this.mensajePrimaPension = ""
             this.totalNetoPensionSave = this.primatotalSCTR

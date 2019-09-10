@@ -8,7 +8,7 @@
     <div class="row">
       <div class="col-sm-6">
         <span>PARENTESCO (*)</span>
-        <select (change)="onSelectContactType($event)" [(ngModel)]="InputsContact.P_NTIPCONT" [ngClass]="{'error-validate': VAL_CONTACT[0] != ''}" (click)="Clear(0)" >
+        <select (change)="onSelectContactType($event)" [(ngModel)]="InputsContact.P_NTIPCONT" [ngClass]="{'error-validate': VAL_CONTACT[0] != ''}" (click)="Clear(0)" class="minimal">
           <option value="0" selected>Seleccionar</option>
           <option *ngFor="let contactType of contactTypeList" value="{{contactType.NCODIGO}}">{{contactType.SDESCRIPT}}
           </option>
@@ -32,7 +32,7 @@
     <div class="row">
       <div class="col-sm-6">
         <span>TIPO DOCUMENTO (*)</span>
-        <select (change)="onSelectDocumentType($event)" [(ngModel)]="InputsContact.P_NIDDOC_TYPE" [ngClass]="{'error-validate': VAL_CONTACT[3] != ''}" (click)="Clear(3)">
+        <select (change)="onSelectDocumentType($event)" [(ngModel)]="InputsContact.P_NIDDOC_TYPE" [ngClass]="{'error-validate': VAL_CONTACT[3] != ''}" (click)="Clear(3)" class="minimal">
           <option value="0" selected>Seleccionar</option>
           <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
             {{documenttype.Name}}</option>

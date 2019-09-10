@@ -25,7 +25,7 @@
                 <div class="col-sm-3">
                   <span>BUSCAR POR</span>
                   <select formControlName="searchMode" (change)="changeValidators()"
-                    [ngClass]="{'error-validate': !mainFormGroup.get('searchMode').valid && mainFormGroup.get('searchMode').touched}">
+                    [ngClass]="{'error-validate': !mainFormGroup.get('searchMode').valid && mainFormGroup.get('searchMode').touched}" class="minimal">
                     <option value="0" disabled>Seleccionar</option>
                     <option value="1">Nro. Documento</option>
                     <option value="2">Nombres</option>
@@ -34,7 +34,7 @@
                 <div [hidden]="mainFormGroup.controls.searchMode.value!='1'" class="col-sm-3">
                   <span>TIPO DOCUMENTO</span>
                   <select id="DocumentSelection" formControlName="documentType" (change)="changeValidators()"
-                    [ngClass]="{'error-validate': !mainFormGroup.get('documentType').valid && mainFormGroup.get('documentType').touched}">
+                    [ngClass]="{'error-validate': !mainFormGroup.get('documentType').valid && mainFormGroup.get('documentType').touched}" class="minimal">
                     <option value="" disabled>Seleccionar</option>
                     <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
                       {{documenttype.Name}}</option>
@@ -42,7 +42,7 @@
                 </div>
                 <div [hidden]="mainFormGroup.controls.searchMode.value!='2'" class="col-sm-3">
                   <span>TIPO PERSONA</span>
-                  <select formControlName="personType" (change)="changeValidators()">
+                  <select formControlName="personType" (change)="changeValidators()" class="minimal">
                     <option value="0" disabled>Seleccionar</option>
                     <option value="1">Persona Natural
                     </option>

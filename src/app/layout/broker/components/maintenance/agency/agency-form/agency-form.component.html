@@ -15,7 +15,7 @@
         <div class="row">
           <div class="col-sm-3">
             <span>TIPO DOCUMENTO</span>
-            <select disabled [(ngModel)]="brokerDocumentType" [ngModelOptions]="{standalone: true}">
+            <select disabled [(ngModel)]="brokerDocumentType" [ngModelOptions]="{standalone: true}" class="minimal">
               <option value="" disabled></option>
               <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
                 {{documenttype.Name}}</option>
@@ -45,7 +45,7 @@
           <div class="col-sm-4">
             <span>BUSCAR POR</span>
             <select formControlName="searchMode" (change)="changeValidators()"
-              [ngClass]="{'error-validate': !contractorFormGroup.get('searchMode').valid && contractorFormGroup.get('searchMode').touched}">
+              [ngClass]="{'error-validate': !contractorFormGroup.get('searchMode').valid && contractorFormGroup.get('searchMode').touched}" class="minimal">
               <option value="0" disabled>Seleccionar</option>
               <option value="1">Nro. Documento</option>
               <option value="2">Nombres</option>
@@ -54,7 +54,7 @@
           <div [hidden]="contractorFormGroup.controls.searchMode.value!='1'" class="col-sm-4">
             <span>TIPO DOCUMENTO</span>
             <select id="DocumentSelection" formControlName="documentType" (change)="changeValidators()"
-              [ngClass]="{'error-validate': !contractorFormGroup.get('documentType').valid && contractorFormGroup.get('documentType').touched}">
+              [ngClass]="{'error-validate': !contractorFormGroup.get('documentType').valid && contractorFormGroup.get('documentType').touched}" class="minimal">
               <option value="" disabled>Seleccionar</option>
               <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
                 {{documenttype.Name}}</option>
@@ -63,7 +63,7 @@
           <div [hidden]="contractorFormGroup.controls.searchMode.value!='2'" class="col-sm-4">
             <span>TIPO PERSONA</span>
             <select formControlName="personType" (change)="changeValidators()"
-              [disabled]="contractorFormGroup.controls.searchMode.value=='1' && contractorFormGroup.controls.documentType.value=='2'">
+              [disabled]="contractorFormGroup.controls.searchMode.value=='1' && contractorFormGroup.controls.documentType.value=='2'" class="minimal">
               <option value="0" disabled>Seleccionar</option>
               <option
                 [selected]="contractorFormGroup.controls.searchMode.value=='1' && contractorFormGroup.controls.documentType.value=='2'"

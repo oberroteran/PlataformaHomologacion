@@ -48,7 +48,8 @@
 							<div class="col-sm-3">
 								<span>TIPO DOCUMENTO (*)</span>
 
-								<select disabled [(ngModel)]="polizaEmitCab.TIPO_DOCUMENTO" name="TIPO_DOCUMENTO">
+								<select disabled [(ngModel)]="polizaEmitCab.TIPO_DOCUMENTO" name="TIPO_DOCUMENTO"
+									class="minimal">
 									<option [value]="polizaEmitCab.TIPO_DOCUMENTO">
 										{{polizaEmitCab.TIPO_DES_DOCUMENTO}}</option>
 								</select>
@@ -84,7 +85,7 @@
 					<div class="card-header">
 						<h5 class="mb-0" data-toggle="collapse" data-target="#comercializador" aria-expanded="true"
 							aria-controls="comercializador">
-							Datos del Comercializador
+							Datos Brokers
 							<i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
 						</h5>
 					</div>
@@ -93,7 +94,7 @@
 							<div class="col-sm-3">
 								<span>TIPO DOCUMENTO</span>
 								<select disabled [(ngModel)]="this.polizaEmitComerDTOPrincipal.TYPE_DOC_COMER"
-									name="TYPE_DOC_COMER">
+									name="TYPE_DOC_COMER" class="minimal">
 									<option [value]="this.polizaEmitComerDTOPrincipal.TYPE_DOC_COMER">
 										{{this.polizaEmitComerDTOPrincipal.DES_DOC_COMER}}</option>
 
@@ -220,7 +221,7 @@
 								<span>TIPO RENOVACIÓN</span>
 								<select [ngClass]="{'error-validate': flagTipoR}"
 									[(ngModel)]="polizaEmitCab.tipoRenovacion" name="tipoRenovacion"
-									[disabled]="editFlag" (change)="habilitarFechas()">
+									[disabled]="editFlag" (change)="habilitarFechas()" class="minimal">
 									<option *ngFor="let renovacion of tipoRenovacion"
 										[value]="renovacion.COD_TIPO_RENOVACION">{{renovacion.DES_TIPO_RENOVACION}}
 									</option>
@@ -252,7 +253,7 @@
 								<span>FRECUENCIA PAGO</span>
 								<select [ngClass]="{'error-validate': errorFrecPago}" [disabled]="editFlag"
 									[(ngModel)]="polizaEmitCab.frecuenciaPago" name="frecuenciaPago"
-									(change)="cambioFecha()">
+									(change)="cambioFecha()" class="minimal">
 									<option value="0">SELECCIONE</option>
 									<option *ngFor="let frecuencia of frecuenciaPago"
 										[value]="frecuencia.COD_TIPO_FRECUENCIA">{{frecuencia.DES_TIPO_FRECUENCIA}}
@@ -278,7 +279,7 @@
 							<div class="col-sm-3">
 								<span>MONEDA</span>
 								<select disabled [(ngModel)]="polizaEmitCab.COD_MONEDA" name="COD_MONEDA"
-									[disabled]="mode!=='emit'">
+									[disabled]="mode!=='emit'" class="minimal">
 									<option [value]="polizaEmitCab.COD_MONEDA" disabled selected>
 										{{polizaEmitCab.DES_MONEDA}}</option>
 								</select>
@@ -287,15 +288,17 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<span>SEDE</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_TIPO_SEDE" name="COD_TIPO_SEDE">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_TIPO_SEDE" name="COD_TIPO_SEDE"
+									class="minimal">
 									<option [value]="polizaEmitCab.COD_TIPO_SEDE">{{polizaEmitCab.DES_TIPO_SEDE}}
 									</option>
 
 								</select>
 							</div>
 							<div class="col-sm-3">
-								<span>ACTIVIDAD TÉCNICA</span>
-								<select disabled [(ngModel)]="polizaEmitCab.ACT_TECNICA" name="ACT_TECNICA">
+								<span>ACTIVIDAD A REALIZAR</span>
+								<select disabled [(ngModel)]="polizaEmitCab.ACT_TECNICA" name="ACT_TECNICA"
+									class="minimal">
 									<option disabled value="" selected>Seleccionar</option>
 									<option [value]="polizaEmitCab.ACT_TECNICA">
 										{{polizaEmitCab.DES_ACT_TECNICA}}</option>
@@ -303,7 +306,8 @@
 							</div>
 							<div class="col-sm-4">
 								<span>ACTIVIDAD ECONÓMICA</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_ACT_ECONOMICA" name="COD_ACT_ECONOMICA">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_ACT_ECONOMICA" name="COD_ACT_ECONOMICA"
+									class="minimal">
 									<option [value]="polizaEmitCab.COD_ACT_ECONOMICA">
 										{{polizaEmitCab.DES_ACT_ECONOMICA}}</option>
 								</select>
@@ -325,7 +329,8 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<span>DEPARTAMENTO (*)</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_DEPARTAMENTO" name="COD_DEPARTAMENTO">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_DEPARTAMENTO" name="COD_DEPARTAMENTO"
+									class="minimal">
 									<option [value]="polizaEmitCab.COD_DEPARTAMENTO">
 										{{polizaEmitCab.DES_DEPARTAMENTO}}</option>
 
@@ -333,7 +338,8 @@
 							</div>
 							<div class="col-sm-3">
 								<span>PROVINCIA (*)</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_PROVINCIA" name="COD_PROVINCIA">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_PROVINCIA" name="COD_PROVINCIA"
+									class="minimal">
 									<option [value]="polizaEmitCab.COD_PROVINCIA">{{polizaEmitCab.DES_PROVINCIA}}
 									</option>
 
@@ -341,7 +347,8 @@
 							</div>
 							<div class="col-sm-3">
 								<span>DISTRITO (*)</span>
-								<select disabled [(ngModel)]="polizaEmitCab.COD_DISTRITO" name="COD_DISTRITO">
+								<select disabled [(ngModel)]="polizaEmitCab.COD_DISTRITO" name="COD_DISTRITO"
+									class="minimal">
 									<option [value]="polizaEmitCab.COD_DISTRITO">{{polizaEmitCab.DES_DISTRITO}}
 									</option>
 
@@ -499,14 +506,14 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{primatotalSalud | miles}}</span></td>
+															<span>{{totalNetoSaludSave | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>IGV</span></td>
 														<td class="col-sm text-center">
-															<span>{{igvSalud | miles}}</span>
+															<span>{{igvSaludSave | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
@@ -515,7 +522,7 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{totalSalud | miles}}</span></td>
+															<span>{{brutaTotalSaludSave | miles}}</span></td>
 													</tr>
 												</tbody>
 											</table>
@@ -592,14 +599,14 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{primatotalSCTR | miles}}</span></td>
+															<span>{{totalNetoPensionSave | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-center"></td>
-														<td class="col-sm text-right"><span>IGV + DE</span></td>
+														<td class="col-sm text-right"><span>IGV + GASTOS</span></td>
 														<td class="col-sm text-center">
-															<span>{{igvPension | miles}}</span>
+															<span>{{igvPensionSave | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
@@ -608,7 +615,7 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{totalSTRC | miles}}</span></td>
+															<span>{{brutaTotalPensionSave | miles}}</span></td>
 												</tbody>
 											</table>
 											<div class="col-sm-12">

@@ -19,14 +19,14 @@
               <div class="row">
                 <div class="col-sm-3">
                   <span>TIPO PRODUCTO</span>
-                  <select formControlName="product">
-                    <option value="">Todos</option>
+                  <select formControlName="product" class="minimal">
+                    <option value="">Ambos</option>
                     <option *ngFor="let item of productTypeList" value="{{item.Id}}">{{item.Name}}</option>
                   </select>
                 </div>
                 <div class="col-sm-3">
                   <span>TIPO MOVIMIENTO</span>
-                  <select formControlName="movement">
+                  <select formControlName="movement" class="minimal">
                     <option value="">Todos</option>
                     <option *ngFor="let item of movementTypeList" value="{{item.Id}}">{{item.Name}}</option>
                   </select>
@@ -81,7 +81,7 @@
               <div class="row">
                 <div class="col-sm-3">
                   <span>BUSCAR POR ASEGURADO</span>
-                  <select formControlName="searchMode">
+                  <select formControlName="searchMode" class="minimal">
                     <option value="0" disabled>Seleccionar</option>
                     <option value="1">Nro. Documento</option>
                     <option value="2">Nombres</option>
@@ -90,7 +90,7 @@
                 <div [hidden]="mainFormGroup.controls.searchMode.value!='1'" class="col-sm-3">
                   <span>TIPO DOCUMENTO</span>
 
-                  <select id="DocumentSelection" formControlName="documentType" (change)="documentTypeChanged()">
+                  <select id="DocumentSelection" formControlName="documentType" (change)="documentTypeChanged()" class="minimal">
                     <option value="" disabled>Seleccionar</option>
                     <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
                       {{documenttype.Name}}</option>
@@ -207,7 +207,7 @@
               <ng-template #hideGrid>
                 <tbody>
                   <tr>
-                    <td colspan="15">No se encontraron registros.</td>
+                    <td class="text-center" colspan="14">No se encontraron registros.</td>
                   </tr>
                 </tbody>
               </ng-template>
@@ -221,7 +221,6 @@
                     <td>{{ item.TransactionDate | date:'dd/MM/yyyy, h:mm a' }}</td>
                     <td>{{ item.StartDate | date:'dd/MM/yyyy' }}</td>
                     <td>{{ item.EndDate  | date:'dd/MM/yyyy' }}</td>
-
                     <td>{{ item.InsuredDocumentType }} : {{ item.InsuredDocumentNumber }}</td>
                     <td>{{ item.InsuredFullName }}</td>
                     <td>{{ item.ContractorDocumentType }} : {{ item.ContractorDocumentNumber }}</td>

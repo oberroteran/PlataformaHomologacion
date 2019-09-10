@@ -42,7 +42,7 @@ export class AddContactComponent implements OnInit {
     this.InputsContact.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
 
     if (this.itemContacto != null) {
-      this.txtAccion = "Editar Contacto";
+      this.txtAccion = "Guardar Contacto";
       this.InputsContact.P_NROW =  parseInt(this.itemContacto.P_NROW);
       this.InputsContact.P_DESTICONTACTO = this.itemContacto.P_DESTICONTACTO;
       this.InputsContact.P_DESTIDOCUMENTO = this.itemContacto.P_DESTIDOCUMENTO;

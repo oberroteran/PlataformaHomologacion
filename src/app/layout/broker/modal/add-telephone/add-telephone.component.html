@@ -8,14 +8,14 @@
     <div class="row">
       <div class="col-sm-6">
         <span>TIPO DE TELÉFONO (*)</span>
-        <select (change)="onSelectTypePhone($event)" [(ngModel)]="InputsTelephone.P_NPHONE_TYPE" [ngClass]="{'error-validate': VAL_PHONE[0] != ''}" (click)="Clear(0)">
+        <select (change)="onSelectTypePhone($event)" [(ngModel)]="InputsTelephone.P_NPHONE_TYPE" [ngClass]="{'error-validate': VAL_PHONE[0] != ''}" (click)="Clear(0)" class="minimal">
           <option value="0" selected>Seleccionar</option>
           <option *ngFor="let phoneType of phoneTypeList" value="{{phoneType.NPHONE_TYPE}}">{{phoneType.SDESCRIPT}}</option>
         </select>
       </div>
       <div  *ngIf="!blockCelular" class="col-sm-6">
         <span>CÓDIGO DE ÁREA (*)</span>
-        <select (change)="onSelectCode($event)" [(ngModel)]="InputsTelephone.P_NAREA_CODE" [ngClass]="{'error-validate': VAL_PHONE[1] != ''}" (click)="Clear(1)">
+        <select (change)="onSelectCode($event)" [(ngModel)]="InputsTelephone.P_NAREA_CODE" [ngClass]="{'error-validate': VAL_PHONE[1] != ''}" (click)="Clear(1)" class="minimal">
           <option value="0" selected>Seleccionar</option>
           <option *ngFor="let cityCode of cityCodeList" value="{{cityCode.NAREA_CODE}}">{{cityCode.SDESCRIPT}}</option>
         </select>

@@ -36,7 +36,7 @@ export class AddEmailComponent implements OnInit {
     this.InputsEmail.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
 
     if (this.itemCorreo != null) {
-      this.txtAccion = "Editar Correo";
+      this.txtAccion = "Guardar Correo";
       this.InputsEmail.P_DESTICORREO = this.itemCorreo.P_DESTICORREO;
       this.InputsEmail.P_NROW = this.itemCorreo.P_NROW;
       this.InputsEmail.P_SE_MAIL = this.itemCorreo.P_SE_MAIL;

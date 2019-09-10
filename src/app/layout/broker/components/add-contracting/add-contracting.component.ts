@@ -96,7 +96,7 @@ export class AddContractingComponent implements OnInit {
         this.VAL_CLIENT[5] = ""; // Sedes
         this.VAL_CLIENT[6] = ""; // Ciiu
 
-        this.bsValueFNac = new Date("01/01/1950")
+        this.bsValueFNac = new Date("01/01/1990")
 
         this.route.queryParams
             .subscribe(params => {
@@ -183,9 +183,15 @@ export class AddContractingComponent implements OnInit {
                                 this.listaDirecciones.forEach(item => {
                                     item.P_NROW = numdir++;
                                     item.P_CLASS = "";
+                                    item.P_STI_DIRE = item.P_STI_DIRE == "" ? "88" : item.P_STI_DIRE
+                                    item.P_SNOM_DIRECCION = item.P_SNOM_DIRECCION == "" ? item.P_SNOM_DIRECCION : item.P_SNOM_DIRECCION.replace(/[.]/g, " ").replace(/[-]/g, " ")
+                                    item.P_SDESDIREBUSQ = item.P_SDESDIREBUSQ == "" ? item.P_SDESDIREBUSQ : item.P_SDESDIREBUSQ.replace(/[.]/g, " ").replace(/[-]/g, " ")
+                                    item.P_SNUM_DIRECCION = item.P_SNUM_DIRECCION == "" ? "0" : item.P_SNUM_DIRECCION;
                                     item.P_DESDEPARTAMENTO = item.P_DESDEPARTAMENTO == null ? item.P_SDES_DEP_DOM : item.P_DESDEPARTAMENTO;
                                     item.P_DESDISTRITO = item.P_DESDISTRITO == null ? item.P_SDES_DIS_DOM : item.P_DESDISTRITO;
                                     item.P_DESPROVINCIA = item.P_DESPROVINCIA == null ? item.P_SDES_PRO_DOM : item.P_DESPROVINCIA;
+                                    
+                                    console.log(item)
                                 });
                                 this.listaTelefonos = res.EListClient[0].EListPhoneClient;
                                 this.InputsContracting.EListPhoneClient = this.listaTelefonos;
@@ -222,7 +228,7 @@ export class AddContractingComponent implements OnInit {
                             else {
                                 swal.fire({
                                     title: "Información",
-                                    text: "El dni ingresado ya se encuentra en nuestra base de datos.",
+                                    text: "El contratante ingresado ya se encuentra en nuestra base de datos.",
                                     type: "question",
                                     showCancelButton: true,
                                     confirmButtonText: 'Aceptar',
@@ -231,6 +237,18 @@ export class AddContractingComponent implements OnInit {
                                 })
                                     .then((result) => {
                                         if (result.value) {
+                                            switch (this.receiverApp) {
+                                                case "quotation":
+                                                    this.router.navigate(['/broker/quotation'], { queryParams: { typeDocument: this.InputsContracting.P_NIDDOC_TYPE, document: this.InputsContracting.P_SIDDOC } });
+                                                    break;
+                                                case "agency":
+                                                    this.router.navigate(['/broker/agency-form'], { queryParams: { DocumentType: this.InputsContracting.P_NIDDOC_TYPE, DocumentNumber: this.InputsContracting.P_SIDDOC, ContractorId: res.P_SCOD_CLIENT, Sender: "add-contractor" } });
+                                                    break;
+                                                case "contractor-location":
+                                                    this.router.navigate(['/broker/contractor-location'], { queryParams: { DocumentType: this.InputsContracting.P_NIDDOC_TYPE, DocumentNumber: this.InputsContracting.P_SIDDOC, Sender: "add-contractor" } });
+                                                    break;
+                                            }
+                                        } else {
                                             switch (this.receiverApp) {
                                                 case "quotation":
                                                     this.router.navigate(['/broker/quotation'], { queryParams: { typeDocument: this.InputsContracting.P_NIDDOC_TYPE, document: this.InputsContracting.P_SIDDOC } });
@@ -916,10 +934,10 @@ export class AddContractingComponent implements OnInit {
                 }
             }
 
-            if (this.listaCiiu.length == 0) {
-                this.VAL_CLIENT[6] = "6";
-                mensaje += "La actividad económica es requerido <br />"
-            }
+            // if (this.listaCiiu.length == 0) {
+            //     this.VAL_CLIENT[6] = "6";
+            //     mensaje += "La actividad económica es requerido <br />"
+            // }
 
         } else {
             if (this.InputsContracting.P_SFIRSTNAME == "" || this.InputsContracting.P_SFIRSTNAME == null) {
@@ -940,10 +958,10 @@ export class AddContractingComponent implements OnInit {
             }
 
         }
-        if (this.listaSedes.length == 0 || this.InputsContracting.P_SLEGALNAME == null) {
-            this.VAL_CLIENT[5] = "5";
-            mensaje += "La sede del contratante es requerido <br />"
-        }
+        // if (this.listaSedes.length == 0 || this.InputsContracting.P_SLEGALNAME == null) {
+        //     this.VAL_CLIENT[5] = "5";
+        //     mensaje += "La sede del contratante es requerido <br />"
+        // }
 
         if (mensaje == "") {
             swal.fire({
@@ -960,7 +978,7 @@ export class AddContractingComponent implements OnInit {
                         this.clientInformationService.insertContract(this.InputsContracting).subscribe(
                             res => {
                                 if (res.P_NCODE === "0") {
-                                    console.log(res);
+                                    // console.log(res);
                                     this.InputsContracting.EListSedesClient.forEach(sede => {
                                         sede.Action = '1';
                                         sede.ContractorId = res.P_SCOD_CLIENT;

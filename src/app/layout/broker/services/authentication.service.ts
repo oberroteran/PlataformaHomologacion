@@ -58,6 +58,7 @@ export class AuthenticationService {
         const menu = response.body && response.body['menu'];
         const brokerId = response.body && response.body['brokerId'];
         const intermediaId = response.body && response.body['intermediaId'];
+        const idProfile = response.body && response.body['nidprofile'];
         const permissionList = response.body && response.body["permissionList"]; //
 
         if (token) {
@@ -90,6 +91,7 @@ export class AuthenticationService {
               menu: menu,
               brokerId: brokerId,
               intermediaId: intermediaId,
+              idProfile : idProfile,
               permissionList: permissionList
             })
           );

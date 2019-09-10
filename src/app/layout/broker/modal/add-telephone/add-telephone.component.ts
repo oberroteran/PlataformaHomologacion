@@ -45,7 +45,7 @@ export class AddTelephoneComponent implements OnInit {
     this.InputsTelephone.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
 
     if (this.itemTelefono != null) {
-      this.txtAccion = "Editar Telefono";
+      this.txtAccion = "Guardar Teléfono";
       this.InputsTelephone.P_DESAREA = this.itemTelefono.P_DESAREA;
       this.InputsTelephone.P_DESTIPOTLF = this.itemTelefono.P_DESTIPOTLF;
       this.InputsTelephone.P_NAREA_CODE = this.itemTelefono.P_NAREA_CODE;
@@ -59,7 +59,7 @@ export class AddTelephoneComponent implements OnInit {
       this.InputsTelephone.P_CLASS = this.itemTelefono.P_CLASS;
       this.onSelectTypePhoneEdit(this.itemTelefono)
     } else {
-      this.txtAccion = "Agregar Telefono";
+      this.txtAccion = "Agregar Teléfono";
       this.InputsTelephone.P_DESAREA = "";
       this.InputsTelephone.P_DESTIPOTLF = "";
       this.InputsTelephone.P_NAREA_CODE = "0";
