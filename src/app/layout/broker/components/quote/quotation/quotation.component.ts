@@ -428,8 +428,6 @@ export class QuotationComponent implements OnInit {
 
                 break;
             case 4:
-                console.log("check prima")
-
                 this.statePrimaPension = !this.statePrimaPension;
                 this.InputsQuotation.P_PRIMA_MIN_PENSION_PRO = "";
 
@@ -863,7 +861,6 @@ export class QuotationComponent implements OnInit {
         return new Date()
     }
     economicValue(sedeID) {
-        console.log()
         let activityTech = null;
         let activityID = null;
         let delimiter = "0";
@@ -1175,7 +1172,12 @@ export class QuotationComponent implements OnInit {
 
         }
 
-        console.log(self.tasasList)
+        
+        let sumPlanilla = 0;
+        self.tasasList.forEach(item => {
+            sumPlanilla = sumPlanilla + item.planilla;            
+        });
+
         if (self.InputsQuotation.P_WORKER > 0) {
             if (self.codFlat == valor) {
                 self.disabledFlat.forEach(disable => {
@@ -1190,9 +1192,11 @@ export class QuotationComponent implements OnInit {
                 });
             }
         } else {
-            self.disabledFlat.forEach(disable => {
-                disable.value = false;
-            });
+            if(sumPlanilla == 0){
+                self.disabledFlat.forEach(disable => {
+                    disable.value = false;
+                });
+            }            
         }
     }
 
@@ -1219,7 +1223,7 @@ export class QuotationComponent implements OnInit {
     }
 
     // Onchange Planilla
-    changePlanilla(cantPlanilla, valor) {
+    changePlanilla(cantPlanilla, valor, row) {
         let totPlan = cantPlanilla != "" ? parseFloat(cantPlanilla) : 0;
         totPlan = isNaN(totPlan) ? 0 : totPlan;
         let netoPension = 0;
@@ -1299,6 +1303,32 @@ export class QuotationComponent implements OnInit {
                 this.brutaTotalPensionSave = this.brutaTotalPension;
             }
 
+        }
+
+        let sumPlanilla = 0;
+        self.tasasList.forEach(item => {
+            sumPlanilla = sumPlanilla + item.planilla;            
+        });
+
+        if (self.InputsQuotation.P_WORKER > 0) {
+            if (self.codFlat == valor) {
+                self.disabledFlat.forEach(disable => {
+                    disable.value = true;
+                    self.disabledFlat[row].value = false;
+                });
+            } else {
+                self.disabledFlat.forEach(disable => {
+                    if (disable.id == self.codFlat) {
+                        disable.value = true;
+                    }
+                });
+            }
+        } else {
+            if(sumPlanilla == 0){
+                self.disabledFlat.forEach(disable => {
+                    disable.value = false;
+                });
+            }            
         }
 
         //this.calcular();
@@ -1508,7 +1538,9 @@ export class QuotationComponent implements OnInit {
                                         var num = 0
                                         item.enterprise[0].netRate.forEach(item => {
                                             self.disabledFlat[num].id = item.id
-                                            self.disabledFlat[num].value = false
+                                            if(self.reloadTariff == false){
+                                                self.disabledFlat[num].value = false
+                                            }                                            
                                             num++
                                         });
 
@@ -1578,7 +1610,9 @@ export class QuotationComponent implements OnInit {
                                         var num = 0
                                         item.enterprise[0].netRate.forEach(item => {
                                             self.disabledFlat[num].id = item.id
-                                            self.disabledFlat[num].value = false
+                                            if(self.reloadTariff == false){
+                                                self.disabledFlat[num].value = false
+                                            }
                                             num++
                                         });
 
@@ -1588,8 +1622,6 @@ export class QuotationComponent implements OnInit {
                                                 if (risk.id == this.codFlat) {
                                                     risk.status = 1;
                                                     activeFlat = true;
-                                                    self.disabledFlat[num].id = item.id
-                                                    self.disabledFlat[num].value = false
                                                     num++
                                                 }
                                             });
@@ -2164,7 +2196,6 @@ export class QuotationComponent implements OnInit {
         });
 
         self.isLoading = false;
-        console.log(dataQuotation)
         myFormData.append("objeto", JSON.stringify(dataQuotation));
         this.quotationService.insertQuotation(myFormData).subscribe(
             res => {
@@ -2232,6 +2263,8 @@ export class QuotationComponent implements OnInit {
         this.blockDoc = true;
         this.blockSearch = true;
         this.stateSearch = false;
+        this.reloadTariff = false;
+        this.messageWorker = ""
         this.maxlength = 8;
         this.typeDocument = 0;
 
