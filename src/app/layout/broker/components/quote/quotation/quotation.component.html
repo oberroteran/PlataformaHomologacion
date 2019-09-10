@@ -153,12 +153,14 @@
                                         [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_SALUD" />
                                 </div>
                                 <div class="col-sm-3" [hidden]="listaTasasSalud?.length == 0">
-                                    <label style="margin-bottom: 0;"><span><input [disabled]="!canProposeComission" type="checkbox" style="top: 3px;"
-                                            [(ngModel)]="InputsQuotation.P_SCTR_SALUD" class="checkbox"
-                                            (change)="primaPropuesta(1)">
-                                        COMISIÓN PROPUESTA</span></label>
+                                    <label style="margin-bottom: 0;"><span><input [disabled]="!canProposeComission"
+                                                type="checkbox" style="top: 3px;"
+                                                [(ngModel)]="InputsQuotation.P_SCTR_SALUD" class="checkbox"
+                                                (change)="primaPropuesta(1)">
+                                            COMISIÓN PROPUESTA</span></label>
                                     <input type="text" placeholder="0" [disabled]="stateBrokerSalud"
-                                        [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_SALUD_PRO" FloatDirective style="margin-top: 3px !important;" />
+                                        [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_SALUD_PRO" FloatDirective
+                                        style="margin-top: 3px !important;" />
                                 </div>
                                 <div class="col-sm-3" [hidden]="listaTasasPension?.length == 0">
                                     <span>COMISIÓN PENSIÓN</span>
@@ -166,12 +168,14 @@
                                         [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_PENSION" />
                                 </div>
                                 <div class="col-sm-3" [hidden]="listaTasasPension?.length == 0">
-                                    <label style="margin-bottom: 0;"><span><input [disabled]="!canProposeComission" type="checkbox" style="top: 3px;"
-                                            [(ngModel)]="InputsQuotation.P_SCTR_PENSION" class="checkbox"
-                                            (change)="primaPropuesta(2)">
-                                        COMISIÓN PROPUESTA</span></label>
+                                    <label style="margin-bottom: 0;"><span><input [disabled]="!canProposeComission"
+                                                type="checkbox" style="top: 3px;"
+                                                [(ngModel)]="InputsQuotation.P_SCTR_PENSION" class="checkbox"
+                                                (change)="primaPropuesta(2)">
+                                            COMISIÓN PROPUESTA</span></label>
                                     <input type="text" placeholder="0" [disabled]="stateBrokerPension"
-                                        [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_PENSION_PRO" FloatDirective style="margin-top: 3px !important;" />
+                                        [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_PENSION_PRO" FloatDirective
+                                        style="margin-top: 3px !important;" />
                                 </div>
                             </div>
                             <div class="row">
@@ -361,18 +365,6 @@
                 <label class="collapse-btn title" for="calculadora">Cotizador</label>
                 <div class="collapse-panel">
                     <div class="collapse-inner collapse-border">
-                        <!-- <div class="row">
-                            <div class="col-sm-12">
-                                <label><span>TRABAJADORES:</span></label>
-                                <label><span><input type="radio" [(ngModel)]="InputsQuotation.P_CANT_WORKER"
-                                            name="searchWorker" value="1" (change)="onSelectWorker()"
-                                            class="t-search" /> MENOR O IGUAL 50</span> </label> <label>
-                                    <span><input type="radio" [(ngModel)]="InputsQuotation.P_CANT_WORKER"
-                                            name="searchWorker" value="2" (change)="onSelectWorker()"
-                                            class="t-search" /> MAYOR A
-                                        50</span></label>
-                            </div>
-                        </div> -->
                         <div class="row">
                             <div class="col-sm-6">
                                 <table class="table table-borderless riesgo">
@@ -392,26 +384,30 @@
                                             </td>
                                         </tr>
                                         <tr class="d-flex" *ngFor="let tasa of tasasList; let row = index">
-                                            <td class="col-sm-4" style="padding: .5rem !important;">
+                                            <td *ngIf="tasa.status == 1" class="col-sm-4"
+                                                style="padding: .5rem !important;">
                                                 <span>{{tasa.description}}</span>
                                             </td>
-                                            <td class="col-sm-4 text-center" style="padding: .5rem !important;"><input
-                                                    type="text" placeholder="0" [(ngModel)]="tasa.totalWorkes"
-                                                    (ngModelChange)="changeTrabajadores($event, tasa.id)"
-                                                    [disabled]="stateCotizador" OnlyNumberDirective /></td>
-                                            <td class="col-sm-4" style="padding: .5rem !important;"><input type="text"
-                                                    placeholder="0" [(ngModel)]="tasa.planilla"
+                                            <td *ngIf="tasa.status == 1" class="col-sm-4 text-center"
+                                                style="padding: .5rem !important;"><input type="text" placeholder="0"
+                                                    [(ngModel)]="tasa.totalWorkes"
+                                                    (ngModelChange)="changeTrabajadores($event, tasa.id, row)"
+                                                    [disabled]="disabledFlat[row].value" OnlyNumberDirective /></td>
+                                            <td *ngIf="tasa.status == 1" class="col-sm-4"
+                                                style="padding: .5rem !important;"><input type="text" placeholder="0"
+                                                    [(ngModel)]="tasa.planilla"
                                                     (ngModelChange)="changePlanilla($event, tasa.id)"
-                                                    [disabled]="stateCotizador" FloatDirective />
+                                                    [disabled]="disabledFlat[row].value" FloatDirective />
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-sm-6" style="padding: 10px 0 15px;">
-								<button *ngIf="tasasList.length > 0" type="button" style="display: inline-block; position: absolute; bottom: 24px;" (click)="calcularTarifa()"
-									><span>Calcular</span></button>
-							</div>
+                                <button *ngIf="tasasList.length > 0" type="button"
+                                    style="display: inline-block; position: absolute; bottom: 24px;"
+                                    (click)="calcularTarifa()"><span>Calcular</span></button>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12" *ngIf="stateWorker">
@@ -452,8 +448,8 @@
                                                         </th>
                                                         <th class="col-sm text-center ctasa"><label><input
                                                                     [disabled]="!canProposeRate" type="checkbox" id=""
-                                                                    class="checkbox" (change)="primaPropuesta(5)"><span
-                                                                    class="schk">
+                                                                    class="checkbox" (ngModelChange)="primaPropuesta(5)"
+                                                                    [(ngModel)]="stateTasaSalud"><span class="schk">
                                                                     Propuesta</span></label></th>
                                                         <th class="col-sm text-center"><label>Prima Mensual</label></th>
                                                     </tr>
@@ -464,15 +460,18 @@
                                                     </tr>
                                                     <tr class="d-flex"
                                                         *ngFor="let tasa of listaTasasSalud; let row = index">
-                                                        <td class="col-sm text-center"><span>{{tasa.description}}</span>
+                                                        <td *ngIf="tasa.status == 1" class="col-sm text-center">
+                                                            <span>{{tasa.description}}</span>
                                                         </td>
-                                                        <td class="col-sm text-center"><span>{{tasa.rate}} %</span></td>
-                                                        <td class="col-sm"><input type="text" class="text-center"
-                                                                placeholder="0" [(ngModel)]="P_PLAN_PRO[row]"
+                                                        <td *ngIf="tasa.status == 1" class="col-sm text-center">
+                                                            <span>{{tasa.rate}} %</span></td>
+                                                        <td *ngIf="tasa.status == 1" class="col-sm"><input type="text"
+                                                                class="text-center" placeholder="0"
+                                                                [(ngModel)]="P_PLAN_PRO[row]"
                                                                 (ngModelChange)="changeTasaPropuestaSalud($event, tasa.id)"
-                                                                [disabled]="stateTasaSalud" FloatDirective />
+                                                                [disabled]="!stateTasaSalud" FloatDirective />
                                                         </td>
-                                                        <td class="col-sm text-center">
+                                                        <td *ngIf="tasa.status == 1" class="col-sm text-center">
                                                             <span>{{tasa.premiumMonth | miles}}</span></td>
                                                     </tr>
                                                     <hr style="margin-bottom: 0;" *ngIf="listaTasasSalud?.length > 0">
@@ -542,8 +541,8 @@
                                                         </th>
                                                         <th class="col-sm text-center ctasa"><label><input
                                                                     [disabled]="!canProposeRate" type="checkbox" id=""
-                                                                    class="checkbox" (change)="primaPropuesta(6)"><span
-                                                                    class="schk">
+                                                                    class="checkbox" (ngModelChange)="primaPropuesta(6)"
+                                                                    [(ngModel)]="stateTasaPension"><span class="schk">
                                                                     Propuesta</span></label>
                                                         </th>
                                                         <th class="col-sm text-center"><label>Prima Mensual</label></th>
@@ -556,15 +555,18 @@
                                                     </tr>
                                                     <tr class="d-flex"
                                                         *ngFor="let tasa of listaTasasPension; let row = index">
-                                                        <td class="col-sm text-center"><span>{{tasa.description}}</span>
+                                                        <td *ngIf="tasa.status == 1" class="col-sm text-center">
+                                                            <span>{{tasa.description}}</span>
                                                         </td>
-                                                        <td class="col-sm text-center"><span>{{tasa.rate}} %</span></td>
-                                                        <td class="col-sm"><input type="text" class="text-center"
-                                                                placeholder="0" [(ngModel)]="P_PLAN_PRO_PEN[row]"
+                                                        <td *ngIf="tasa.status == 1" class="col-sm text-center">
+                                                            <span>{{tasa.rate}} %</span></td>
+                                                        <td *ngIf="tasa.status == 1" class="col-sm"><input type="text"
+                                                                class="text-center" placeholder="0"
+                                                                [(ngModel)]="P_PLAN_PRO_PEN[row]"
                                                                 (ngModelChange)="changeTasaPropuestaPension($event, tasa.id)"
                                                                 [disabled]="stateTasaPension" FloatDirective />
                                                         </td>
-                                                        <td class="col-sm text-center">
+                                                        <td *ngIf="tasa.status == 1" class="col-sm text-center">
                                                             <span>{{tasa.premiumMonth | miles}}</span></td>
                                                     </tr>
                                                     <hr style="margin-bottom: 0;" *ngIf="listaTasasPension?.length > 0">
