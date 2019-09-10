@@ -501,7 +501,7 @@ export class QuotationEvaluationComponent implements OnInit {
 
         forkJoin(this.policyService.getPolicyEmitCab(this.quotationNumber, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"]),
             this.policyService.getPolicyEmitComer(this.quotationNumber),
-            this.policyService.getPolicyEmitDet(this.quotationNumber)).subscribe(
+            this.policyService.getPolicyEmitDet(this.quotationNumber, JSON.parse(localStorage.getItem("currentUser"))["id"])).subscribe(
                 (res: any) => {
                     if (res[0].GenericResponse == null || res[1].length == 0 || res[2].length == 0) { //Verificamos si todos los datos de las 3 peticiones han sido obtenidos
                         swal.fire("Información", "No se encontraron los datos necesarios para esta cotización. " + this.redirectionMessage, "error");

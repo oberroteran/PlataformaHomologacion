@@ -336,7 +336,7 @@ export class PolicyFormComponent implements OnInit {
 									}
 								})
 
-							this.policyemit.getPolicyEmitDet(this.nrocotizacion)
+							this.policyemit.getPolicyEmitDet(this.nrocotizacion, JSON.parse(localStorage.getItem("currentUser"))["id"])
 								.subscribe((res: any) => {
 									if (res.length > 0) {
 										this.primatotalSCTR = 0;

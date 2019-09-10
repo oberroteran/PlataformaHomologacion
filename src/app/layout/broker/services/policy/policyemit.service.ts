@@ -14,25 +14,25 @@ import { PolicyTransactionSearch } from '../../models/polizaEmit/request/policy-
     providedIn: 'root'
 })
 export class PolicyemitService {
-    private _baseUrl = AppConfig.URL_API_SCTR;    
+    private _baseUrl = AppConfig.URL_API_SCTR;
     private headers = new HttpHeaders({ "Content-Type": "application/json" });
 
     constructor(private http: HttpClient) { }
 
     getPolicyEmitCab(nroCotizacion: any, typeMovement: string, userCode: any) {
-        let url = this._baseUrl + "/PolicyManager/PolizaEmitCab?nroCotizacion=" + nroCotizacion + "&typeMovement=" + typeMovement+ "&userCode=" + userCode;
+        let url = this._baseUrl + "/PolicyManager/PolizaEmitCab?nroCotizacion=" + nroCotizacion + "&typeMovement=" + typeMovement + "&userCode=" + userCode;
         return this.http.get(url);
     }
     getPolicyEmitComer(nroCotizacion: any) {
         let url = this._baseUrl + "/PolicyManager/PolizaEmitComer?nroCotizacion=" + nroCotizacion;
         return this.http.get(url);
     }
-    getPolicyEmitDet(nroCotizacion: any) {
-        let url = this._baseUrl + "/PolicyManager/PolizaEmitDet?nroCotizacion=" + nroCotizacion;
+    getPolicyEmitDet(nroCotizacion: any, userCode: string) {
+        let url = this._baseUrl + "/PolicyManager/PolizaEmitDet?nroCotizacion=" + nroCotizacion + "&userCode=" + userCode;
         return this.http.get(url);
     }
-    getPolicyEmitDetTX(processId: any, typeMovement: any) {
-        let url = this._baseUrl + "/PolicyManager/PolizaEmitDetTX?processId=" + processId+ "&typeMovement=" + typeMovement;
+    getPolicyEmitDetTX(processId: any, typeMovement: any, userCode: string) {
+        let url = this._baseUrl + "/PolicyManager/PolizaEmitDetTX?processId=" + processId + "&typeMovement=" + typeMovement + "&userCode=" + userCode;
         return this.http.get(url);
     }
     getPolicyCot(nroCotizacion: any) {
