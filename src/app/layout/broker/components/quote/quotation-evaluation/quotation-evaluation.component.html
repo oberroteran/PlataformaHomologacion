@@ -19,7 +19,7 @@
         <div class="card-header">
           <h5 class="mb-0" data-toggle="collapse" data-target="#contratante" aria-expanded="true"
             aria-controls="contratante">
-            Datos del Contratante
+            DATOS DEL CONTRATANTE
             <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
           </h5>
         </div>
@@ -62,7 +62,7 @@
         <div class="card-header">
           <h5 class="mb-0" data-toggle="collapse" data-target="#comercializador" aria-expanded="true"
             aria-controls="comercializador">
-            Datos del Comercializador
+            DATOS DE BROKERS
             <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
           </h5>
         </div>
@@ -184,7 +184,7 @@
         <div class="card-header">
           <h5 class="mb-0" data-toggle="collapse" data-target="#cotizacion" aria-expanded="true"
             aria-controls="cotizacion">
-            Datos de la Cotización
+            DATOS DE LA COTIZACIÓN
             <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
           </h5>
         </div>
@@ -213,9 +213,12 @@
             </div>
             <div class="col-sm-3">
               <span>&nbsp;</span>
-              <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+              <!-- <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
                   [(ngModel)]="InputsQuotation.HasDelimiter" class="checkbox" disabled><span class="schk"
-                  style="margin-top: 5px; font-size: 13px;">Delimitación</span></label>
+                  style="margin-top: 5px; font-size: 13px;">Delimitación</span></label> -->
+              <label *ngIf="InputsQuotation.HasDelimiter" style="width: 100%;margin-bottom: 0;"><span
+                  style="margin-top: 5px; font-size: 13px; color: red; text-transform: initial;">* La actividad cuenta
+                  con delimitación</span></label>
               <label style="width: 100%;margin-bottom: 0;"><input disabled type="checkbox"
                   [(ngModel)]="InputsQuotation.IsMining" class="checkbox"><span class="schk"
                   style="margin-top: 5px;; font-size: 13px;">¿Se realiza en
@@ -248,7 +251,7 @@
         <div class="card-header">
           <h5 class="mb-0" data-toggle="collapse" data-target="#calculadora" aria-expanded="true"
             aria-controls="calculadora">
-            Cotizador
+            COTIZADOR
             <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
           </h5>
         </div>
