@@ -1,0 +1,51 @@
+<p>test works!</p>
+
+<div class="btn-visa"></div>
+<div>---------------------------------------------------------------------------------------------</div>
+<button type="button" (click)="processPE()">Pago efectivo</button>
+<div class="container-main">
+    <div class="contenido">
+        <div *ngIf="bProcesoCompra" class="mensaje-carga">
+            <h4>El proceso de su compra ya fue finalizado.</h4>
+            <button type="button" class="btn-compra" (click)="IrPlaca()">Realizar otra Compra</button>
+        </div>
+        <div *ngIf="bLoading && !bProcesoCompra" class="mensaje-carga">
+            <h4>Por favor espere unos segundos mientras generamos su código de pago...</h4>
+        </div>
+        <div *ngIf="!bLoading && bAprobado && bValidationEmission && !bProcesoCompra" class="mensaje-aprobado">
+            <h4>¡Estás a punto de culminar la compra de tu SOAT Electrónico Protecta Security!</h4>
+            <p>
+                Acércate dentro de las próximas 24 horas con tu código de pago al establecimiento elegido de tu
+                preferencia para pagar tu
+                SOAT Protecta Security y estar protegido.
+            </p>
+            <button type="button" class="btn-compra" (click)="IrPlaca()">Realizar otra Compra</button>
+        </div>
+
+        <div *ngIf="!bLoading && !bAprobado && bValidationEmission && !bProcesoCompra" class="mensaje-denegado">
+            <h4>Lamentablemente el código de pago no se realizó satisfactoriamente.</h4>
+            <p>Estimado cliente, ha ocurrido un error al intentar comunicarnos con la entidad que seleccionaste, vuelve
+                a intentar
+                nuevamente por favor</p>
+            <button type="button" class="btn-compra" (click)="IrResumen()">Volver a Intentar</button>
+        </div>
+
+        <div *ngIf="!bLoading && !bValidationEmission && !bProcesoCompra" class="mensaje-denegado">
+            <h4>No se realizó la generación de Código de Pago. </h4>
+            <p> Lamentablemente, los valores ingresados para la emisión no cumplen con las validaciones necesarias: </p>
+            <div class="mensaje-validation">
+                <p *ngFor="let mensaje of mensajes">- {{ mensaje }}</p>
+            </div>
+            <button type="button" class="btn-compra" (click)="IrResumen()">Volver a Intentar</button>
+        </div>
+    </div>
+</div>
+
+<app-modal #modalResultadoPE [close]="false" [efectivoCss]="true">
+    <div class="m-body efectivo">
+        <div class="frame-result"></div>
+        <div class="botones">
+            <button class="btn-orange" (click)="finalizar()">Finalizar</button>
+        </div>
+    </div>
+</app-modal>

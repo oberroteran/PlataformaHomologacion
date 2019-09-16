@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from "@angular/forms";
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ContractorViewComponent } from '../contractor-view/contractor-view.component';
@@ -19,6 +19,10 @@ import { CommonMethods } from './../../../common-methods';
 import { GlobalValidators } from './../../../global-validators';
 import { ModuleConfig } from './../../../module.config';
 import { AccessFilter } from './../../../access-filter';
+
+import { AppConfig } from '../../../../../../app.config';
+import { ButtonVisaComponent } from '../../../../../../shared/components/button-visa/button-visa.component';
+import { Certificado } from '../../../../models/certificado/certificado';
 @Component({
     selector: 'app-contractor-location-index',
     templateUrl: './contractor-location-index.component.html',
@@ -62,6 +66,7 @@ export class ContractorLocationIndexComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+
         if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["contractor_location"]) == false) this.router.navigate(['/broker/home']);
         this.getDocumentTypeList();
         this.createForm();
@@ -259,7 +264,6 @@ export class ContractorLocationIndexComponent implements OnInit {
         );
     }
     firstSearch() {
-
         this.isValidatedInClickButton = true;
         if (this.mainFormGroup.valid) {
             this.currentPage = 1;
@@ -351,6 +355,7 @@ export class ContractorLocationIndexComponent implements OnInit {
         );
     }
     processFirstSearch() {
+
         this.foundResults = [];
         this.isLoadingScreenNotVisible = false;
         this.existResults = false;
@@ -634,7 +639,41 @@ export class ContractorLocationIndexComponent implements OnInit {
         return responseList;
     }
 
-    // addContractor() {
-    //   this.router.navigate(['/broker/add-contracting'], { queryParams: { typeDocument: , document: this.InputsQuotation.P_SIDDOC, receiver: "quotation" } });
-    // }
+    crearBotonVisa() {
+        let certificado = new Certificado();
+        let btnVisa;
+        let viewContainerRef: ViewContainerRef;
+        let factoryResolver: ComponentFactoryResolver;
+        //this.mostrarVisa = true;
+        //this.cd.detectChanges();
+
+        // const visasession = JSON.parse(sessionStorage.getItem('visasession'));
+        let item = {
+            sessionToken: "dse12ed21",
+            purchaseNumber: "12"
+        }
+        sessionStorage.setItem('visasession', JSON.stringify(item));
+
+        const visasession = JSON.parse(sessionStorage.getItem('visasession'));
+        sessionStorage.setItem('sessionToken', visasession.sessionToken);
+        const factory = factoryResolver.resolveComponentFactory(
+            ButtonVisaComponent
+        );
+        btnVisa = factory.create(viewContainerRef.parentInjector);
+        btnVisa.instance.action = AppConfig.ACTION_FORM_VISA_BROKER;
+        btnVisa.instance.amount = certificado.P_NPREMIUM;
+        btnVisa.instance.sessionToken = visasession.sessionToken;
+        btnVisa.instance.purchaseNumber = visasession.purchaseNumber;
+        btnVisa.instance.merchantLogo = AppConfig.MERCHANT_LOGO_VISA;
+        btnVisa.instance.userId = ''; // => en el flujo broker se debe enviar el id del usuario
+        // Agregar el componente al componente contenedor
+        viewContainerRef.insert(btnVisa.hostView);
+        /*  },
+         error => {
+           console.log(error);
+         }
+       ); */
+    }
+
+
 }

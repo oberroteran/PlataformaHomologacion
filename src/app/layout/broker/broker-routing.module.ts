@@ -61,6 +61,7 @@ import { QuotationEvaluationComponent } from './components/quote/quotation-evalu
 import { ContractorStateComponent } from './components/reports/state-report/contractor-state/contractor-state.component'
 import { PolicyTransactionsComponent } from './components/policy/policy-transactions/policy-transactions.component';
 import { ProcessViewerComponent } from './components/policy/process-viewer/process-viewer.component';
+import { TestComponent } from './components/maintenance/test/test.component';
 
 
 const broutes: Routes = [
@@ -129,6 +130,7 @@ const broutes: Routes = [
             { path: 'products', component: ProductComponent },
             { path: 'contractor-state', component: ContractorStateComponent },
             { path: 'process-viewer', component: ProcessViewerComponent },
+            { path: 'test', component: TestComponent },
             { path: '**', redirectTo: 'login' }
         ]
     }

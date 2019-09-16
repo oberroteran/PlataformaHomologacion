@@ -396,7 +396,7 @@
                                             <td *ngIf="tasa.status == 1" class="col-sm-4"
                                                 style="padding: .5rem !important;"><input type="text" placeholder="0"
                                                     [(ngModel)]="tasa.planilla"
-                                                    (ngModelChange)="changePlanilla($event, tasa.id)"
+                                                    (ngModelChange)="changePlanilla($event, tasa.id, row)"
                                                     [disabled]="disabledFlat[row].value" FloatDirective />
                                             </td>
                                         </tr>
@@ -564,7 +564,7 @@
                                                                 class="text-center" placeholder="0"
                                                                 [(ngModel)]="P_PLAN_PRO_PEN[row]"
                                                                 (ngModelChange)="changeTasaPropuestaPension($event, tasa.id)"
-                                                                [disabled]="stateTasaPension" FloatDirective />
+                                                                [disabled]="!stateTasaPension" FloatDirective />
                                                         </td>
                                                         <td *ngIf="tasa.status == 1" class="col-sm text-center">
                                                             <span>{{tasa.premiumMonth | miles}}</span></td>
