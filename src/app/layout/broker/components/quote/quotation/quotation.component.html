@@ -444,13 +444,8 @@
                                                 <thead>
                                                     <tr class="d-flex">
                                                         <th class="col-sm text-center"><label>Categoría</label></th>
-                                                        <th class="col-sm text-center"><label>Tasa Calculada</label>
-                                                        </th>
-                                                        <th class="col-sm text-center ctasa"><label><input
-                                                                    [disabled]="!canProposeRate" type="checkbox" id=""
-                                                                    class="checkbox" (ngModelChange)="primaPropuesta(5)"
-                                                                    [(ngModel)]="stateTasaSalud"><span class="schk">
-                                                                    Propuesta</span></label></th>
+                                                        <th class="col-sm text-center"><label>Tasa</label></th>
+                                                        <th class="col-sm text-center"><label>Propuesta</label></th>
                                                         <th class="col-sm text-center"><label>Prima Mensual</label></th>
                                                     </tr>
                                                 </thead>
@@ -468,8 +463,8 @@
                                                         <td *ngIf="tasa.status == 1" class="col-sm"><input type="text"
                                                                 class="text-center" placeholder="0"
                                                                 [(ngModel)]="P_PLAN_PRO[row]"
-                                                                (ngModelChange)="changeTasaPropuestaSalud($event, tasa.id)"
-                                                                [disabled]="!stateTasaSalud" FloatDirective />
+                                                                (ngModelChange)="changeTasaPropuestaSalud($event, tasa.id, row)"
+                                                                [disabled]="disabledFlat[row].value" FloatDirective />
                                                         </td>
                                                         <td *ngIf="tasa.status == 1" class="col-sm text-center">
                                                             <span>{{tasa.premiumMonth | miles}}</span></td>
@@ -485,7 +480,7 @@
                                                     <tr class="d-flex" *ngIf="listaTasasSalud?.length > 0">
                                                         <td class="col-sm text-center"></td>
                                                         <td class="col-sm text-center"></td>
-                                                        <td class="col-sm text-right"><span>IGV</span></td>
+                                                        <td class="col-sm text-right"><span>IGV + GASTOS</span></td>
                                                         <td class="col-sm text-center">
                                                             <span>{{igvSaludSave | miles}}</span>
                                                         </td>
@@ -537,14 +532,8 @@
                                                 <thead>
                                                     <tr class="d-flex">
                                                         <th class="col-sm text-center"><label>Categoría</label></th>
-                                                        <th class="col-sm text-center"><label>Tasa Calculada</label>
-                                                        </th>
-                                                        <th class="col-sm text-center ctasa"><label><input
-                                                                    [disabled]="!canProposeRate" type="checkbox" id=""
-                                                                    class="checkbox" (ngModelChange)="primaPropuesta(6)"
-                                                                    [(ngModel)]="stateTasaPension"><span class="schk">
-                                                                    Propuesta</span></label>
-                                                        </th>
+                                                        <th class="col-sm text-center"><label>Tasa</label></th>
+                                                        <th class="col-sm text-center"><label>Propuesta</label></th>
                                                         <th class="col-sm text-center"><label>Prima Mensual</label></th>
                                                     </tr>
                                                 </thead>
@@ -563,8 +552,8 @@
                                                         <td *ngIf="tasa.status == 1" class="col-sm"><input type="text"
                                                                 class="text-center" placeholder="0"
                                                                 [(ngModel)]="P_PLAN_PRO_PEN[row]"
-                                                                (ngModelChange)="changeTasaPropuestaPension($event, tasa.id)"
-                                                                [disabled]="!stateTasaPension" FloatDirective />
+                                                                (ngModelChange)="changeTasaPropuestaPension($event, tasa.id, row)"
+                                                                [disabled]="disabledFlat[row].value" FloatDirective />
                                                         </td>
                                                         <td *ngIf="tasa.status == 1" class="col-sm text-center">
                                                             <span>{{tasa.premiumMonth | miles}}</span></td>

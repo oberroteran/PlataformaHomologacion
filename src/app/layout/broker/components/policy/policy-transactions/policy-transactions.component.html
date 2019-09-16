@@ -314,11 +314,13 @@
 							</div>
 							<div class="col-sm-2">
 								<span>&nbsp;</span>
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+								<!-- <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.DELIMITACION" name="DELIMITACION"
 										[checked]="polizaEmitCab.DELIMITACION" class="checkbox" disabled><span
 										class="schk"
-										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label>
+										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label> -->
+								<label style="width: 100%;margin-bottom: 0;"><span
+										style="margin-top: 5px; font-size: 13px; color: red; text-transform: initial;">{{polizaEmitCab.DELIMITACION}}</span></label>
 								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.MINA" name="MINA" [checked]="polizaEmitCab.MINA"
 										class="checkbox" disabled><span class="schk"
@@ -389,7 +391,7 @@
 						</h5>
 					</div>
 					<div id="cotizador" class="collapse show pt-1">
-						<div class="row" *ngIf="!endosoFlag">
+						<!-- <div class="row" *ngIf="!endosoFlag">
 							<div class="col-sm-12">
 								<label><span>TRABAJADORES:</span></label>
 								<label><span><input type="radio" [(ngModel)]="polizaEmit.workers" name="searchWorker"
@@ -399,7 +401,7 @@
 											value="2" (change)="onSelectWorker()" class="t-search" /> MAYOR A
 										50</span></label>
 							</div>
-						</div>
+						</div> -->
 						<div class="row" [hidden]="stateTransac">
 							<div class="col-sm-6">
 								<table class="table table-borderless riesgo" style="margin: 15px 0;">
@@ -422,13 +424,13 @@
 											</td>
 											<td class="col-sm text-center">
 												<input type="text" placeholder="0" [(ngModel)]="item.NUM_TRABAJADORES"
-													name="NRO_TRAB-{{i}}" [disabled]="endosoFlag"
+													name="NRO_TRAB-{{i}}" [disabled]="true"
 													(ngModelChange)="changeTrabajadores($event, item.TIP_RIESGO)"
 													(keypress)="valText($event, 1)" />
 											</td>
 											<td class="col-sm text-center">
 												<input type="text" placeholder="0" [(ngModel)]="item.MONTO_PLANILLA"
-													name="MON_PLAN-{{i}}" [disabled]="endosoFlag"
+													name="MON_PLAN-{{i}}" [disabled]="true"
 													(ngModelChange)="changePlanilla($event, item.TIP_RIESGO)"
 													FloatDirective />
 											</td>
@@ -471,8 +473,8 @@
 											<table class="table table-borderless riesgo tblTasas">
 												<thead>
 													<tr class="d-flex">
-														<th class="col-sm text-center"><label>Categoría</label></th>
-														<th class="col-sm text-center"><label>Tasa Calculada</label>
+														<!-- <th class="col-sm text-center"><label>Categoría</label></th>
+														<th class="col-sm text-center"><label>Tasa</label>
 														</th>
 														<th class="col-sm text-center ctasa"><label><input
 																	type="checkbox" class="checkbox"
@@ -480,7 +482,11 @@
 																	(change)="primaPropuesta(5)"><span class="schk">
 																	Propuesta</span></label>
 														</th>
-														<th class="col-sm text-center"><label>Prima Mensual</label></th>
+														<th class="col-sm text-center"><label>Prima Mensual</label></th> -->
+														<th class="col-sm text-center"><label>Categoría</label></th>
+                                                        <th class="col-sm text-center"><label>Tasa</label></th>
+                                                        <th class="col-sm text-center"><label>Propuesta</label></th>
+                                                        <th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
 												</thead>
 												<tbody>
@@ -490,13 +496,13 @@
 													<tr class="d-flex" *ngFor="let item of saludList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}} %</span>
 														</td>
 														<td class="col-sm"><input type="text" class="text-center"
 																placeholder="0" name="tasaPRO_SAL-{{i}}"
 																[(ngModel)]="item.TASA_PRO"
 																(ngModelChange)="changeTasaPropuestaSalud($event, item.DES_RIESGO)"
-																[disabled]="stateTasaSalud" FloatDirective /></td>
+																[disabled]="disabledFlat[i].value" FloatDirective /></td>
 														<td class="col-sm text-center">
 															<span>{{item.AUT_PRIMA | miles}}</span></td>
 													</tr>
@@ -563,7 +569,7 @@
 											<table class="table table-borderless riesgo tblTasas">
 												<thead>
 													<tr class="d-flex">
-														<th class="col-sm text-center"><label>Categoría</label></th>
+														<!-- <th class="col-sm text-center"><label>Categoría</label></th>
 														<th class="col-sm text-center"><label>Tasa Calculada</label>
 														</th>
 														<th class="col-sm text-center ctasa"><label><input
@@ -572,7 +578,11 @@
 																	[disabled]="editFlag"><span class="schk">
 																	Propuesta</span></label>
 														</th>
-														<th class="col-sm text-center"><label>Prima Mensual</label></th>
+														<th class="col-sm text-center"><label>Prima Mensual</label></th> -->
+														<th class="col-sm text-center"><label>Categoría</label></th>
+                                                        <th class="col-sm text-center"><label>Tasa</label></th>
+                                                        <th class="col-sm text-center"><label>Propuesta</label></th>
+                                                        <th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
 												</thead>
 												<tbody>
@@ -582,13 +592,13 @@
 													<tr class="d-flex" *ngFor="let item of pensionList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}} %</span>
 														</td>
 														<td class="col-sm"><input type="text" class="text-center"
 																placeholder="0" name="tasaPRO_PEN-{{i}}"
 																[(ngModel)]="item.TASA_PRO"
 																(ngModelChange)="changeTasaPropuestaPension($event, item.DES_RIESGO)"
-																[disabled]="stateTasaPension" FloatDirective />
+																[disabled]="disabledFlat[i].value" FloatDirective />
 														</td>
 														<td class="col-sm text-center">
 															<span>{{item.AUT_PRIMA | miles}}</span></td>

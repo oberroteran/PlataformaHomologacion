@@ -250,7 +250,7 @@
 
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div *ngIf="canBillMonthly || canBillInAdvance" class="col-sm-3">
 								<span style="margin: 0;">&nbsp;</span>
 								<label *ngIf="canBillMonthly" style="width: 100%;margin-bottom: 0;"><input
 										type="checkbox" [disabled]="facVencido"
@@ -307,11 +307,13 @@
 							</div>
 							<div class="col-sm-2">
 								<span>&nbsp;</span>
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+								<!-- <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.DELIMITACION" name="DELIMITACION"
 										[checked]="polizaEmitCab.DELIMITACION" class="checkbox" disabled><span
 										class="schk"
-										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label>
+										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label> -->
+								<label style="width: 100%;margin-bottom: 0;"><span
+										style="margin-top: 5px; font-size: 13px; color: red; text-transform: initial;">{{polizaEmitCab.DELIMITACION}}</span></label>
 								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.MINA" name="MINA" [checked]="polizaEmitCab.MINA"
 										class="checkbox" disabled><span class="schk"
@@ -446,7 +448,7 @@
 												<thead>
 													<tr class="d-flex">
 														<th class="col-sm text-center"><label>Categoría</label></th>
-														<th class="col-sm text-center"><label>Tasa Calculada</label>
+														<th class="col-sm text-center"><label>Tasa</label>
 														</th>
 														<th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
@@ -468,12 +470,13 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{primatotalSalud | miles}}</span></td>
+															<span>{{totalNetoSaludSave | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
 														<td class="col-sm text-center"></td>
-														<td class="col-sm text-right"><span>IGV</span></td>
-														<td class="col-sm text-center"><span>{{igvSalud | miles}}</span>
+														<td class="col-sm text-right"><span>IGV + GASTOS</span></td>
+														<td class="col-sm text-center">
+															<span>{{igvSaludSave | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
@@ -481,10 +484,13 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{totalSalud | miles}}</span></td>
+															<span>{{brutaTotalSaludSave | miles}}</span></td>
 													</tr>
 												</tbody>
 											</table>
+											<div class="col-sm-12">
+												<p class="msg-error">{{mensajePrimaSalud}}</p>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -514,7 +520,7 @@
 												<thead>
 													<tr class="d-flex">
 														<th class="col-sm text-center"><label>Categoría</label></th>
-														<th class="col-sm text-center"><label>Tasa Calculada</label>
+														<th class="col-sm text-center"><label>Tasa</label>
 														</th>
 														<th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
@@ -536,13 +542,13 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{primatotalSCTR | miles}}</span></td>
+															<span>{{totalNetoPensionSave | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>IGV + GASTOS</span></td>
 														<td class="col-sm text-center">
-															<span>{{igvPension | miles}}</span>
+															<span>{{igvPensionSave | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
@@ -550,9 +556,12 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{totalSTRC | miles}}</span></td>
+															<span>{{brutaTotalPensionSave | miles}}</span></td>
 												</tbody>
 											</table>
+											<div class="col-sm-12">
+												<p class="msg-error">{{mensajePrimaPension}}</p>
+											</div>
 										</div>
 									</div>
 								</div>
