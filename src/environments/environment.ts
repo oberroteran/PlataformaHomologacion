@@ -24,7 +24,7 @@ export const environment = {
   backendapi: 'http://190.216.170.173/RestDESAMG/api',
   // backendapi: 'http://localhost:2085/api',
   gestorapi: 'http://10.10.1.51/WSGClientesDesarrollo/Api',
-  kunturapi: 'http://10.10.1.56/WSPlataforma/Api',
+  kunturapi: 'http://10.10.1.56/WSPlataformaPRO/Api',
   // kunturapi: 'http://localhost:30897/Api',
   domainurl: 'http://localhost:2085',
   // domainurl: 'http://190.216.170.173',
