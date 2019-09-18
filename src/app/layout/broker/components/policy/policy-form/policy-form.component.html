@@ -630,9 +630,9 @@
 										<thead>
 											<tr>
 												<th>Nombre</th>
-												<th>Tipo</th>
-												<th>Tamaño</th>
-												<th>Accion</th>
+												<!-- <th>Tipo</th> -->
+												<th class="text-center">Tamaño</th>
+												<th class="text-center">Acción</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -640,13 +640,13 @@
 												<td>
 													<strong>{{ item.name }}</strong>
 												</td>
-												<td>
+												<!-- <td>
 													{{ item.type }}
-												</td>
-												<td nowrap>
+												</td> -->
+												<td  class="text-center">
 													{{ item.size/1024/1024 | number:'.2' }} MB
 												</td>
-												<td><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
+												<td  class="text-center"><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
 														title="Eliminar" alt="Eliminar" />
 												</td>
 											</tr>

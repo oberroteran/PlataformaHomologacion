@@ -143,7 +143,7 @@ export class QuotationComponent implements OnInit {
     /** Perfil externo */
     perfil = '134';
     /** Codigo FLAT */
-    codFlat = '3Xwj0374DngFvySWvmg5MK'
+    codFlat = '2rJ3BaQk95sPqFFmvrHWY8'
     /** Puede proponer comisión? */
     canProposeComission: boolean;
     /** Puede agregar brokers secundarios? */
@@ -1358,7 +1358,7 @@ export class QuotationComponent implements OnInit {
                 });
             }
         }
-
+        
         //this.calcular();
     }
 
@@ -2417,6 +2417,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
         this.InputsQuotation.P_PERSON_TYPE = "1"; // Tipo persona
         this.brokerList = [];
+        this.maxlength = 8;
     }
 
     clearTariff() {
@@ -2436,7 +2437,6 @@ export class QuotationComponent implements OnInit {
         this.stateSearch = false;
         this.reloadTariff = false;
         this.messageWorker = ""
-        this.maxlength = 8;
         this.typeDocument = 0;
         this.tasasList = [];
         this.listaTasasPension = []

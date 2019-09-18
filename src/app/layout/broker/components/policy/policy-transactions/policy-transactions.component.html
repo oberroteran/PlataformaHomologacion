@@ -62,7 +62,7 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-9">
-								<span>NOMBRES Y APELLIDOS / RAZON SOCIAL</span>
+								<span>NOMBRES Y APELLIDOS / RAZÓN SOCIAL</span>
 								<input type="text" [(ngModel)]="polizaEmitCab.NOMBRE_RAZON" name="NOMBRE_RAZON"
 									placeholder="Nombres" disabled />
 							</div>
@@ -116,7 +116,7 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-9">
-								<span>NOMBRE o RAZON SOCIAL</span>
+								<span>NOMBRES Y APELLIDOS / RAZÓN SOCIAL</span>
 								<input type="text" [(ngModel)]='polizaEmitComerDTOPrincipal.COMERCIALIZADOR'
 									name="COMERCIALIZADOR" placeholder="Nombres" disabled />
 							</div>
@@ -138,7 +138,7 @@
 									style="margin-top: 2px !important;" FloatDirective />
 							</div>
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
-								<span>COMISIÓN PENSION</span>
+								<span>COMISIÓN PENSIÓN</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION =$event"
 									name="COMISION_PENSION" placeholder="0" disabled />
@@ -517,7 +517,7 @@
 													<tr class="d-flex" *ngIf="saludList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-center"></td>
-														<td class="col-sm text-right"><span>IGV</span></td>
+														<td class="col-sm text-right"><span>IGV + GASTOS</span></td>
 														<td class="col-sm text-center">
 															<span>{{igvSaludSave | miles}}</span>
 														</td>
@@ -672,9 +672,9 @@
 										<thead>
 											<tr>
 												<th>Nombre</th>
-												<th>Tipo</th>
-												<th>Tamaño</th>
-												<th>Accion</th>
+												<!-- <th>Tipo</th> -->
+												<th class="text-center">Tamaño</th>
+												<th class="text-center">Acción</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -682,13 +682,13 @@
 												<td>
 													<strong>{{ item.name }}</strong>
 												</td>
-												<td>
+												<!-- <td>
 													{{ item.type }}
-												</td>
-												<td nowrap>
+												</td> -->
+												<td  class="text-center">
 													{{ item.size/1024/1024 | number:'.2' }} MB
 												</td>
-												<td><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
+												<td  class="text-center"><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
 														title="Eliminar" alt="Eliminar" />
 												</td>
 											</tr>

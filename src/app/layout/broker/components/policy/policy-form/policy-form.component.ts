@@ -336,34 +336,19 @@ export class PolicyFormComponent implements OnInit {
 
 						res.forEach(item => {
 							if (item.ID_PRODUCTO == this.pensionID) {
-								this.polizaEmitCab.MIN_PENSION = item.PRIMA_MIN_PRO;
+								this.polizaEmitCab.MIN_PENSION = item.PRIMA_MIN;
 								item.PRIMA = self.formateaValor(item.PRIMA)
 								this.pensionList.push(item);
 								// this.prodPension = true;
 								this.activityVariationPension = item.VARIACION_TASA;
 
-								// if (parseFloat(item.NSUM_PREMIUMN) > 0 || parseFloat(item.NSUM_IGV) > 0 || parseFloat(item.NSUM_PREMIUM) > 0) {
-								//   this.stateTransac = false;
-								// }
-
 								this.primatotalSCTR = self.formateaValor(item.NSUM_PREMIUMN);
 								this.igvPension = self.formateaValor(item.NSUM_IGV);
 								this.totalSTRC = self.formateaValor(item.NSUM_PREMIUM);
 
-								if (item.NSUM_PREMIUMN == this.polizaEmitCab.MIN_PENSION) {
-									this.totalNetoPensionSave = this.polizaEmitCab.MIN_PENSION
-									this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
-									this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-									this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
-								} else {
-									this.mensajePrimaPension = ""
-									this.totalNetoPensionSave = this.primatotalSCTR
-									this.igvPensionSave = this.igvPension;
-									this.brutaTotalPensionSave = this.totalSTRC;
-								}
 							}
 							if (item.ID_PRODUCTO == this.saludID) {
-								this.polizaEmitCab.MIN_SALUD = item.PRIMA_MIN_PRO;
+								this.polizaEmitCab.MIN_SALUD = item.PRIMA_MIN;
 								item.PRIMA = self.formateaValor(item.PRIMA)
 								this.saludList.push(item);
 								this.activityVariationSalud = item.VARIACION_TASA;
@@ -372,40 +357,87 @@ export class PolicyFormComponent implements OnInit {
 								this.igvSalud = self.formateaValor(item.NSUM_IGV);
 								this.totalSalud = self.formateaValor(item.NSUM_PREMIUM);
 
-								if (item.NSUM_PREMIUMN == this.polizaEmitCab.MIN_SALUD) {
-									this.totalNetoSaludSave = this.polizaEmitCab.MIN_SALUD
-									this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
-									this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-									this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
-								} else {
-									this.mensajePrimaSalud = ""
-									this.totalNetoSaludSave = this.primatotalSalud
-									this.igvSaludSave = this.igvSalud;
-									this.brutaTotalSaludSave = this.totalSalud;
-								}
 							}
 						});
+
+						let sumPen = 0;
+						this.pensionList.forEach(item => {
+							sumPen = sumPen + parseFloat(item.AUT_PRIMA)
+						});
+
+						if (self.formateaValor(sumPen) == this.primatotalSCTR) {
+							this.mensajePrimaPension = ""
+							this.totalNetoPensionSave = this.primatotalSCTR
+							this.igvPensionSave = this.igvPension;
+							this.brutaTotalPensionSave = this.totalSTRC;
+						} else {
+							if (parseFloat(this.primatotalSCTR.toString()) <= parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+								this.totalNetoPensionSave = this.formateaValor(this.polizaEmitCab.MIN_PENSION)
+								this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+								this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+								this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
+							} else {
+								this.mensajePrimaPension = ""
+								this.totalNetoPensionSave = this.primatotalSCTR
+								this.igvPensionSave = this.igvPension;
+								this.brutaTotalPensionSave = this.totalSTRC;
+							}
+						}
+
+						let sumSal = 0;
+						this.saludList.forEach(item => {
+							sumSal = sumSal + parseFloat(item.AUT_PRIMA)
+						});
+
+						if (self.formateaValor(sumSal) == this.primatotalSalud) {
+							this.mensajePrimaSalud = ""
+								this.totalNetoSaludSave = this.primatotalSalud
+								this.igvSaludSave = this.igvSalud;
+								this.brutaTotalSaludSave = this.totalSalud;
+						} else {
+							if (this.primatotalSalud <= parseFloat(this.polizaEmitCab.MIN_SALUD)) {
+								this.totalNetoSaludSave = this.formateaValor(this.polizaEmitCab.MIN_SALUD)
+								this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+								this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+								this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
+							} else {
+								this.mensajePrimaSalud = ""
+								this.totalNetoSaludSave = this.primatotalSalud
+								this.igvSaludSave = this.igvSalud;
+								this.brutaTotalSaludSave = this.totalSalud;
+							}
+						}
+
+
+
 
 						let sumWorkers = 0;
 						if (this.pensionList.length > 0) {
 							this.tasasList = this.pensionList;
 							this.pensionList.map(function (dato) {
+								dato.AUT_PRIMA = self.formateaValor(dato.AUT_PRIMA)
 								dato.TASA_PRO = "";
 								self.endosoPension = dato.PRIMA_END;
 								dato.rateDet = dato.TASA_RIESGO;
 								sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
 							});
-						} else if (this.saludList.length > 0) {
+						}
+
+						if (this.saludList.length > 0) {
 							this.tasasList = this.saludList;
 							this.saludList.map(function (dato) {
+								dato.AUT_PRIMA = self.formateaValor(dato.AUT_PRIMA)
 								dato.TASA_PRO = "";
 								self.endosoSalud = dato.PRIMA_END;
 								dato.rateDet = dato.TASA_RIESGO;
 								sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
 							});
-						} else {
+						}
+
+						if (this.pensionList.length == 0 && this.saludList.length == 0) {
 							this.tasasList = [];
 						}
+
 						this.polizaEmit.P_WORKER = sumWorkers;
 
 						if (sumWorkers <= 50) {
@@ -607,10 +639,12 @@ export class PolicyFormComponent implements OnInit {
 		let client: string = this.SClient;
 		if (client != null && this.nrocotizacion != undefined && this.nrocotizacion != 0) {
 			this.loading = true;
-			this.policyemit.downloadExcel(client, this.nrocotizacion).subscribe((res: any) => {
+			this.policyemit.downloadExcel(client, this.nrocotizacion, '1', '0', '0').subscribe((res: any) => {
 				if (res.GenericResponse != null) {
 					this.loading = false;
 					let Url: string = this.policyemit.getUrl();
+					Url = Url.substring(0, Url.length - 4);
+					console.log(Url);
 					let ruta: string = res.GenericResponse;
 					ruta = (Url + '//' + ruta.replace("\\", "//"));
 					parent.location.href = ruta;

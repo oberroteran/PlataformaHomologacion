@@ -45,7 +45,17 @@
     line-height: 24px;
 }
 
-.filter input[type="text"] {
+.grid table .grid-title td {
+    padding: 15px !important;
+}
+
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 0.25rem 1.25rem 0.75rem;
+}
+
+input[type="text"] {
     /* outline: auto; */
     border: none;
     border-radius: 2px;
@@ -60,6 +70,7 @@
     height: 45px;
     font-weight: 300;
     padding-left: 12px;
+    text-transform: uppercase;
 }
 
 .pminima {

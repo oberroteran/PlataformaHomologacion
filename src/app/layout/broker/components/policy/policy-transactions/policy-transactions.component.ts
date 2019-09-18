@@ -262,7 +262,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.title = "Anular Póliza";
       this.typeMovement = "7";
       this.questionText = "¿Deseas hacer la anulación de la póliza?"
-      this.responseText = "Se ha realizado la anulación correctamente "
+      this.responseText = "Se ha realizado la anulación correctamente"
       if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_cancel"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "exclude") { // excluir
       this.title = "Excluir en Póliza";
@@ -274,7 +274,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.title = "Endosar Póliza";
       this.typeMovement = "8";
       this.questionText = "¿Deseas hacer el endoso de la póliza?"
-      this.responseText = "Se ha realizado el endoso con constancia N° "
+      this.responseText = "Se ha realizado el endoso correctamente"
       if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_endorsement"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "netear") { // netear
       this.title = "Neteo de Póliza";
@@ -1550,7 +1550,7 @@ export class PolicyTransactionsComponent implements OnInit {
             res.forEach(item => {
               if (item.ID_PRODUCTO == this.pensionID) {
                 if (this.mode == "renew") {
-                  this.polizaEmitCab.PRIMA_PEN_END = item.PRIMA_MIN_PRO;
+                  this.polizaEmitCab.PRIMA_PEN_END = item.PRIMA_MIN;
                 }
 
                 item.PRIMA = self.formateaValor(item.PRIMA)
@@ -1566,8 +1566,8 @@ export class PolicyTransactionsComponent implements OnInit {
                 this.igvPension = self.formateaValor(item.NSUM_IGV);
                 this.totalSTRC = self.formateaValor(item.NSUM_PREMIUM);
 
-                if (parseFloat(this.primatotalSCTR.toString()) < this.polizaEmitCab.PRIMA_PEN_END) {
-                  this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
+                if (this.primatotalSCTR <= parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+                  this.totalNetoPensionSave = self.formateaValor(this.polizaEmitCab.PRIMA_PEN_END)
                   this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                   this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
                   this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
@@ -1581,7 +1581,7 @@ export class PolicyTransactionsComponent implements OnInit {
 
               if (item.ID_PRODUCTO == this.saludID) {
                 if (this.mode == "renew") {
-                  this.polizaEmitCab.PRIMA_SALUD_END = item.PRIMA_MIN_PRO;
+                  this.polizaEmitCab.PRIMA_SALUD_END = item.PRIMA_MIN;
                 }
                 item.PRIMA = self.formateaValor(item.PRIMA)
                 this.saludList.push(item);
@@ -1596,8 +1596,9 @@ export class PolicyTransactionsComponent implements OnInit {
                 this.igvSalud = self.formateaValor(item.NSUM_IGV);
                 this.totalSalud = self.formateaValor(item.NSUM_PREMIUM);
 
-                if (parseFloat(this.primatotalSalud.toString()) < this.polizaEmitCab.PRIMA_SALUD_END) {
-                  this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
+
+                if (this.primatotalSalud <= parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+                  this.totalNetoSaludSave = self.formateaValor(this.polizaEmitCab.PRIMA_SALUD_END)
                   this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                   this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
                   this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
@@ -1806,7 +1807,7 @@ export class PolicyTransactionsComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           if (this.mode == "endosar") {
-            this.EndososarPolicy();
+            this.endososarPolicy();
           } else {
             this.createJob()
           }
@@ -1817,7 +1818,7 @@ export class PolicyTransactionsComponent implements OnInit {
     }
   }
 
-  EndososarPolicy() {
+  endososarPolicy() {
     let self = this;
     self.loading = true;
     let dataQuotation: any = {};
@@ -1975,7 +1976,7 @@ export class PolicyTransactionsComponent implements OnInit {
       res => {
         this.loading = false;
         if (res.P_COD_ERR == 0) {
-          if (this.mode == "cancel") {
+          if (this.mode == "cancel" || this.mode == "endosar") {
             Swal.fire({
               title: "Información",
               text: this.responseText,
