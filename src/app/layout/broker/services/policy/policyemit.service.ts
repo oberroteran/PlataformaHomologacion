@@ -120,13 +120,19 @@ export class PolicyemitService {
             headers: this.headers
         });
     }
-    downloadExcel(data: any, cotizacion: any) {
+    downloadExcel(data: any, cotizacion: any, operacion: any, movimiento: any, poliza: any) {
         const body = JSON.stringify(data);
-        let url = this._baseUrl + "/PolicyManager/downloadExcel?client=" + data + "&Cotizacion=" + cotizacion;
+        let url = this._baseUrl + '/PolicyManager/downloadExcel?client=' + data + '&Cotizacion=' + cotizacion +
+            '&operacion=' + operacion + '&movimiento=' + movimiento + '&poliza=' + poliza;
+        return this.http.get(url);
+
+    }
+    valBilling(data: any): Observable<any> {
+        const body = JSON.stringify(data);
+        let url = this._baseUrl + "/PolicyManager/valBilling";
         return this.http.post(url, body, {
             headers: this.headers
         });
-
     }
     getUrl() {
         return this._baseUrl;

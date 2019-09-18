@@ -9,7 +9,10 @@ export const environment = {
     versioncheckurl: 'https://soatdigital.protectasecurity.pe/version.json',
     //   backendapi: 'https://soatservicios.protectasecurity.pe/RestDigital/api',
     backendapi: 'http://190.216.170.173/RestPRO/api',
+<<<<<<< HEAD
     // backendapi: 'http://190.216.170.173/RestDESAMG/api',
+=======
+>>>>>>> origin/DevJDD
     // backendapi: 'http://localhost:2085/api',
     gestorapi: 'https://soatservicios.protectasecurity.pe/WSGestorCliente/Api',
     kunturapi: 'http://190.216.170.173/WSPlataformaPRO/Api',

@@ -404,7 +404,7 @@ export class PolicyIndexComponent implements OnInit {
                                             this.router.navigate(['/broker/policy/transaction/endosar'], { queryParams: { nroCotizacion: item.NRO_COTIZACION } });
                                             break;
                                         case 9: //Facturacion
-                                            this.facturarPoliza(item);
+                                            this.recibosPoliza(item);
                                             break;
                                     }
                                 } else {
@@ -444,7 +444,7 @@ export class PolicyIndexComponent implements OnInit {
         evt.preventDefault();
     }
 
-    facturarPoliza(itemFact: any) {
+    recibosPoliza(itemFact: any) {
         let myFormData: FormData = new FormData()
         let renovacion: any = {};
         renovacion.P_NID_COTIZACION = itemFact.NRO_COTIZACION // nro cotizacion
@@ -465,10 +465,10 @@ export class PolicyIndexComponent implements OnInit {
 
         Swal.fire({
             title: "Información",
-            text: "¿Deseas facturar la(s) póliza(s) " + itemFact.POLIZA + "?",
+            text: "¿Deseas generar recibos de la(s) póliza(s) " + itemFact.POLIZA + "?",
             type: "question",
             showCancelButton: true,
-            confirmButtonText: 'Sí',
+            confirmButtonText: 'Generar',
             allowOutsideClick: false,
             cancelButtonText: 'Cancelar'
         })
@@ -479,7 +479,7 @@ export class PolicyIndexComponent implements OnInit {
                             if (res.P_COD_ERR == 0) {
                                 Swal.fire({
                                     title: "Información",
-                                    text: "Se ha realizado la facturación correctamente",
+                                    text: "Se ha realizado la generación de recibos correctamente",
                                     type: "success",
                                     confirmButtonText: 'OK',
                                     allowOutsideClick: false,

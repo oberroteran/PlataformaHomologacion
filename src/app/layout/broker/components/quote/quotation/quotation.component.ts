@@ -65,7 +65,7 @@ export class QuotationComponent implements OnInit {
     typeDocument = 0;
     documentTypeList: DocumentType[];
     currencyList: Currency[];
-    economicActivityList: EconomicActivity[];
+    economicActivityList: any[];
     technicalList: any = [];
     departmentList: Department[];
     provinceList: Province[];
@@ -111,7 +111,7 @@ export class QuotationComponent implements OnInit {
     tasasList: any = [];
     pensionID = JSON.parse(localStorage.getItem("pensionID"))["id"];
     saludID = JSON.parse(localStorage.getItem("saludID"))["id"];
-    workerMin = 15;
+    workerMin = 0;
     workerMax = 70;
     municipalityTariff = 0;
     desBroker = "";
@@ -140,10 +140,10 @@ export class QuotationComponent implements OnInit {
     P_COM_PEN_PRO: any = {}; // comision pension propuesta | broker
     sedeContractor = "";
     reloadTariff = false;
-    /** Perfil externo producción */
+    /** Perfil externo */
     perfil = '134';
     /** Codigo FLAT */
-    codFlat = '3Xwj0374DngFvySWvmg5MK'
+    codFlat = '2rJ3BaQk95sPqFFmvrHWY8'
     /** Puede proponer comisión? */
     canProposeComission: boolean;
     /** Puede agregar brokers secundarios? */
@@ -353,7 +353,6 @@ export class QuotationComponent implements OnInit {
     }
 
     getEconomicActivityList() {
-
         this.clientInformationService.getEconomicActivityList(this.InputsQuotation.P_NTECHNICAL).subscribe(
             res => {
                 this.economicActivityList = res;
@@ -845,6 +844,7 @@ export class QuotationComponent implements OnInit {
         // this.tasasList = [];
         this.listaTasasSalud = [];
         this.listaTasasPension = [];
+        // console.log(this.disabledFlat)
         this.mensajePrimaPension = ""
         this.mensajePrimaSalud = ""
 
@@ -950,6 +950,7 @@ export class QuotationComponent implements OnInit {
 
     onSelectTechnicalActivity() {
         this.economicActivityList = null;
+        this.InputsQuotation.P_DELIMITER = "";
         this.InputsQuotation.P_NECONOMIC = null
         if (this.InputsQuotation.P_NTECHNICAL != null) {
             this.getEconomicActivityList();
@@ -960,8 +961,11 @@ export class QuotationComponent implements OnInit {
 
     onSelectEconomicActivity() {
         if (this.InputsQuotation.P_NECONOMIC != null) {
+            let delimiter = this.economicActivityList[0].Delimiter;
+            delimiter == "0" ? this.InputsQuotation.P_DELIMITER = "" : this.InputsQuotation.P_DELIMITER = "* La actividad cuenta con delimitación";
             this.equivalentMuni();
         } else {
+            this.InputsQuotation.P_DELIMITER = "";
             this.VAL_QUOTATION[3] = "";
         }
     }
@@ -1036,6 +1040,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_SLASTNAME2 = "";
         this.InputsQuotation.P_SDESDIREBUSQ = "";
         this.InputsQuotation.P_SE_MAIL = "";
+        this.reloadTariff = false;
 
         // Cotizacion    
         this.InputsQuotation.P_NIDSEDE = null;
@@ -1047,6 +1052,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NLOCAL = null;
         this.InputsQuotation.P_NMUNICIPALITY = null;
         this.InputsQuotation.P_NPROVINCE = null;
+        this.InputsQuotation.P_NPRODUCT = "-1";
 
         // Sedes
         this.sedesList = [];
@@ -1059,6 +1065,8 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO = "";
         this.InputsQuotation.P_COMISSION_BROKER_PENSION = "";
         this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO = "";
+
+        this.clearTariff()
     }
 
     changeSDOC(sdoc) {
@@ -1095,6 +1103,7 @@ export class QuotationComponent implements OnInit {
         let sumaTrabS = 0;
         let sumaTrabP = 0;
         let self = this;
+        self.reloadTariff = true
 
         self.tasasList.map(function (dato) {
             if (dato.id == valor) {
@@ -1110,11 +1119,11 @@ export class QuotationComponent implements OnInit {
                 sumaTrabS = sumaTrabS + parseInt(dato.totalWorkes);
             });
 
-            self.reloadTariff = false;
+            // self.reloadTariff = true;
             self.stateWorker = true;
             self.messageWorker = "* Para continuar debe calcular nuevamente";
             self.listaTasasSalud.forEach(item => {
-                item.planProp = 0;
+                //item.planProp = 0;
                 item.rate = self.formateaValor(0)
                 item.premiumMonth = self.formateaValor((parseFloat(item.planilla) * parseFloat(item.rate)) / 100);
             });
@@ -1133,7 +1142,6 @@ export class QuotationComponent implements OnInit {
             this.totalNetoSaludSave = this.formateaValor(0);
             this.igvSaludSave = this.formateaValor(0); // Solo IGV 
             this.brutaTotalSaludSave = this.formateaValor(0)
-
             this.mensajePrimaSalud = ""
         }
 
@@ -1145,11 +1153,11 @@ export class QuotationComponent implements OnInit {
                 sumaTrabP = sumaTrabP + parseInt(dato.totalWorkes);
             });
 
-            self.reloadTariff = false;
+            // self.reloadTariff = true;
             self.stateWorker = true;
             self.messageWorker = "* Para continuar debe calcular nuevamente";
             self.listaTasasPension.forEach(item => {
-                item.planProp = 0;
+                //item.planProp = 0;
                 item.rate = self.formateaValor(0);
                 item.premiumMonth = self.formateaValor((parseFloat(item.planilla) * parseFloat(item.rate)) / 100);
             });
@@ -1169,13 +1177,22 @@ export class QuotationComponent implements OnInit {
             this.igvPensionSave = this.formateaValor(0); // Solo IGV 
             this.brutaTotalPensionSave = this.formateaValor(0)
             this.mensajePrimaPension = ""
-
         }
 
-        
+
         let sumPlanilla = 0;
         self.tasasList.forEach(item => {
-            sumPlanilla = sumPlanilla + item.planilla;            
+            sumPlanilla = sumPlanilla + item.planilla;
+        });
+
+        let sumPropSalud = 0;
+        self.listaTasasSalud.forEach(item => {
+            sumPropSalud = sumPropSalud + item.planProp;
+        });
+
+        let sumPropPension = 0;
+        self.listaTasasPension.forEach(item => {
+            sumPropPension = sumPropPension + item.planProp;
         });
 
         if (self.InputsQuotation.P_WORKER > 0) {
@@ -1192,12 +1209,13 @@ export class QuotationComponent implements OnInit {
                 });
             }
         } else {
-            if(sumPlanilla == 0){
+            if (sumPlanilla == 0 && sumPropSalud == 0 && sumPropPension == 0) {
                 self.disabledFlat.forEach(disable => {
                     disable.value = false;
                 });
-            }            
+            }
         }
+
     }
 
     changePensionPropuesta(cantComPro, valor) {
@@ -1307,10 +1325,20 @@ export class QuotationComponent implements OnInit {
 
         let sumPlanilla = 0;
         self.tasasList.forEach(item => {
-            sumPlanilla = sumPlanilla + item.planilla;            
+            sumPlanilla = sumPlanilla + item.planilla;
         });
 
-        if (self.InputsQuotation.P_WORKER > 0) {
+        let sumPropSalud = 0;
+        self.listaTasasSalud.forEach(item => {
+            sumPropSalud = sumPropSalud + item.planProp;
+        });
+
+        let sumPropPension = 0;
+        self.listaTasasPension.forEach(item => {
+            sumPropPension = sumPropPension + item.planProp;
+        });
+
+        if (sumPlanilla > 0) {
             if (self.codFlat == valor) {
                 self.disabledFlat.forEach(disable => {
                     disable.value = true;
@@ -1324,13 +1352,13 @@ export class QuotationComponent implements OnInit {
                 });
             }
         } else {
-            if(sumPlanilla == 0){
+            if (self.InputsQuotation.P_WORKER == 0 && sumPropSalud == 0 && sumPropPension == 0) {
                 self.disabledFlat.forEach(disable => {
                     disable.value = false;
                 });
-            }            
+            }
         }
-
+        
         //this.calcular();
     }
 
@@ -1405,34 +1433,103 @@ export class QuotationComponent implements OnInit {
         //this.calcular();
     }
 
-    changeTasaPropuestaSalud(planPro, valor) {
+    changeTasaPropuestaSalud(planPro, valor, row) {
         let planProp = planPro != "" ? parseFloat(planPro) : 0;
         planProp = isNaN(planProp) ? 0 : planProp;
         let self = this;
+
         //Lista Salud
-        if (this.listaTasasSalud != "") {
-            this.listaTasasSalud.map(function (dato) {
-                if (dato.id == valor) {
-                    dato.planProp = planProp;
+        let sumPropSalud = 0;
+        if (this.listaTasasSalud.length > 0) {
+            self.listaTasasSalud.forEach(item => {
+                if (item.id == valor) {
+                    item.planProp = planProp;
                 }
+                sumPropSalud = sumPropSalud + item.planProp;
             });
         }
 
+        let sumPlanilla = 0;
+        self.tasasList.forEach(item => {
+            sumPlanilla = sumPlanilla + item.planilla;
+        });
+
+        let sumPropPension = 0;
+        self.listaTasasPension.forEach(item => {
+            sumPropPension = sumPropPension + item.planProp;
+        });
+
+
+        if (sumPropSalud > 0) {
+            if (self.codFlat == valor) {
+                self.disabledFlat.forEach(disable => {
+                    disable.value = true;
+                    self.disabledFlat[row].value = false;
+                });
+            } else {
+                self.disabledFlat.forEach(disable => {
+                    if (disable.id == self.codFlat) {
+                        disable.value = true;
+                    }
+                });
+            }
+        } else {
+            if (sumPlanilla == 0 && sumPropPension == 0 && self.InputsQuotation.P_WORKER == 0) {
+                self.disabledFlat.forEach(disable => {
+                    disable.value = false;
+                });
+            }
+        }
         // this.calcular();
     }
 
-    changeTasaPropuestaPension(planPro, valor) {
+    changeTasaPropuestaPension(planPro, valor, row) {
         let planProp = planPro != "" ? parseFloat(planPro) : 0;
         planProp = isNaN(planProp) ? 0 : planProp;
+        let self = this;
 
         //Lista Pension
-        if (this.listaTasasPension != "") {
-            this.listaTasasPension.map(function (dato) {
-                if (dato.id == valor) {
-                    dato.planProp = planProp;
+        let sumPropPension = 0;
+        if (this.listaTasasPension.length > 0) {
+            self.listaTasasPension.forEach(item => {
+                if (item.id == valor) {
+                    item.planProp = planProp;
                 }
+                sumPropPension = sumPropPension + item.planProp;
             });
         }
+
+        let sumPlanilla = 0;
+        self.tasasList.forEach(item => {
+            sumPlanilla = sumPlanilla + item.planilla;
+        });
+
+        let sumPropSalud = 0;
+        self.listaTasasSalud.forEach(item => {
+            sumPropSalud = sumPropSalud + item.planProp;
+        });
+
+        if (sumPropPension > 0) {
+            if (self.codFlat == valor) {
+                self.disabledFlat.forEach(disable => {
+                    disable.value = true;
+                    self.disabledFlat[row].value = false;
+                });
+            } else {
+                self.disabledFlat.forEach(disable => {
+                    if (disable.id == self.codFlat) {
+                        disable.value = true;
+                    }
+                });
+            }
+        } else {
+            if (sumPlanilla == 0 && self.InputsQuotation.P_WORKER == 0 && sumPropSalud == 0) {
+                self.disabledFlat.forEach(disable => {
+                    disable.value = false;
+                });
+            }
+        }
+
         //this.calcular();
     }
 
@@ -1461,7 +1558,7 @@ export class QuotationComponent implements OnInit {
             //Agregando los brokerId y middlemanId | Lista de comercializadores
             if (this.brokerList.length > 0) {
                 this.brokerList.forEach(broker => {
-                    if (broker.NTYPECHANNEL == 6 || broker.NTYPECHANNEL == 8) {
+                    if (broker.NTYPECHANNEL == "6" || broker.NTYPECHANNEL == "8") {
                         let brokerItem = new Channel();
                         brokerItem.brokerId = broker.NCORREDOR.toString();
                         data.channel.push(brokerItem);
@@ -1491,6 +1588,7 @@ export class QuotationComponent implements OnInit {
                         let self = this;
                         this.COM_SAL_PRO = false
                         this.COM_PEN_PRO = false
+                        this.P_PLAN_PRO = [];
                         this.P_PLAN_PRO_PEN = [];
                         this.P_COM_SAL_PRO = [];
                         this.stateBrokerTasaPension = true;
@@ -1538,18 +1636,18 @@ export class QuotationComponent implements OnInit {
                                         var num = 0
                                         item.enterprise[0].netRate.forEach(item => {
                                             self.disabledFlat[num].id = item.id
-                                            if(self.reloadTariff == false){
+                                            if (self.reloadTariff == false) {
                                                 self.disabledFlat[num].value = false
-                                            }                                            
+                                            }
                                             num++
                                         });
-
 
                                         if (this.perfil == JSON.parse(localStorage.getItem("currentUser"))["idProfile"]) {
                                             item.enterprise[0].netRate.forEach(risk => {
                                                 if (risk.id == this.codFlat) {
                                                     risk.status = 1;
                                                     activeFlat = true;
+                                                    num++
                                                 }
                                             });
 
@@ -1568,6 +1666,7 @@ export class QuotationComponent implements OnInit {
 
                                             this.listaTasasPension = item.enterprise[0].netRate;
                                         }
+
                                     } else {
                                         this.listaTasasPension = []
                                     }
@@ -1610,12 +1709,11 @@ export class QuotationComponent implements OnInit {
                                         var num = 0
                                         item.enterprise[0].netRate.forEach(item => {
                                             self.disabledFlat[num].id = item.id
-                                            if(self.reloadTariff == false){
+                                            if (self.reloadTariff == false) {
                                                 self.disabledFlat[num].value = false
                                             }
                                             num++
                                         });
-
 
                                         if (this.perfil == JSON.parse(localStorage.getItem("currentUser"))["idProfile"]) {
                                             item.enterprise[0].netRate.forEach(risk => {
@@ -1761,7 +1859,7 @@ export class QuotationComponent implements OnInit {
                                         if (item.id == dato.id) {
                                             item.totalWorkes = dato.totalWorkes;
                                             item.planilla = dato.planilla;
-                                            item.planProp = dato.planProp;
+                                            item.planProp = 0;
                                             item.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(item.rate)) / 100);
                                         }
                                     });
@@ -1843,7 +1941,7 @@ export class QuotationComponent implements OnInit {
                                         if (item.id == dato.id) {
                                             item.totalWorkes = dato.totalWorkes;
                                             item.planilla = dato.planilla;
-                                            item.planProp = dato.planProp;
+                                            item.planProp = 0;
                                             item.premiumMonth = self.formateaValor((parseFloat(dato.planilla) * parseFloat(item.rate)) / 100);
                                         }
                                     });
@@ -1968,16 +2066,18 @@ export class QuotationComponent implements OnInit {
             this.VAL_QUOTATION[7] = "7";
             msg += "Para generar una cotización debe tener un producto <br>"
         } else {
-            if (this.tasasList.length > 0) {
-                let countWorker = 0;
-                let countPlanilla = 0;
-                this.tasasList.forEach(item => {
+            let countWorker = 0;
+            let countPlanilla = 0;
+
+            if (this.listaTasasSalud.length > 0) {
+
+                this.listaTasasSalud.forEach(item => {
                     if (item.totalWorkes == 0) {
                         this.VAL_QUOTATION[8] = "8";
                         countWorker++
                     } else {
                         if (item.planilla == 0) {
-                            msg += "Debe ingresar un monto en el campo planilla de la categoría " + item.description + " <br>"
+                            msg += "Debe ingresar un monto en el campo planilla de la categoría " + item.description + " [Salud] <br>"
                         }
                     }
                     if (item.planilla == 0) {
@@ -1985,31 +2085,59 @@ export class QuotationComponent implements OnInit {
                         countPlanilla++;
                     } else {
                         if (item.totalWorkes == 0) {
-                            msg += "Debe ingresar trabajadores de la categoría " + item.description + " <br>"
+                            msg += "Debe ingresar trabajadores de la categoría " + item.description + " [Salud] <br>"
                         }
                     }
 
                     if (item.totalWorkes == 0 && item.planilla == 0) {
                         if (item.planProp != 0) {
-                            msg += "No puedes proponer tasa en la categoría " + item.description + "<br>"
+                            msg += "No puedes proponer tasa en la categoría " + item.description + " [Salud]<br>"
                         }
                     }
 
                 });
+            }
 
-                if (countPlanilla == this.tasasList.length) {
-                    if (countWorker == this.tasasList.length) {
-                        msg += "Debe ingresar trabajadores al menos en un tipo de riesgo <br>";
+            if (this.listaTasasPension.length > 0) {
+
+                this.listaTasasPension.forEach(item => {
+                    if (item.totalWorkes == 0) {
+                        this.VAL_QUOTATION[8] = "8";
+                        countWorker++
+                    } else {
+                        if (item.planilla == 0) {
+                            msg += "Debe ingresar un monto en el campo planilla de la categoría " + item.description + " [Pensión]<br>"
+                        }
                     }
-                }
+                    if (item.planilla == 0) {
+                        this.VAL_QUOTATION[9] = "9";
+                        countPlanilla++;
+                    } else {
+                        if (item.totalWorkes == 0) {
+                            msg += "Debe ingresar trabajadores de la categoría " + item.description + " [Pensión]<br>"
+                        }
+                    }
 
+                    if (item.totalWorkes == 0 && item.planilla == 0) {
+                        if (item.planProp != 0) {
+                            msg += "No puedes proponer tasa en la categoría " + item.description + " [Pensión]<br>"
+                        }
+                    }
 
+                });
+            }
+
+            if (countPlanilla == this.tasasList.length) {
                 if (countWorker == this.tasasList.length) {
-                    if (countPlanilla == this.tasasList.length) {
-                        msg += "Debe ingresar planilla al menos en un tipo de riesgo <br>";
-                    }
+                    msg += "Debe ingresar trabajadores al menos en un tipo de riesgo <br>";
                 }
+            }
 
+
+            if (countWorker == this.tasasList.length) {
+                if (countPlanilla == this.tasasList.length) {
+                    msg += "Debe ingresar planilla al menos en un tipo de riesgo <br>";
+                }
             }
         }
 
@@ -2249,25 +2377,6 @@ export class QuotationComponent implements OnInit {
         this.clearInsert()
     }
     clearInsert() {
-        this.stateBrokerSalud = true;
-        this.stateBrokerPension = true;
-        this.statePrimaSalud = true;
-        this.statePrimaPension = true;
-        this.stateSalud = true;
-        this.statePension = true;
-        this.stateQuotation = true;
-        this.stateTasaSalud = false;
-        this.stateTasaPension = false;
-        this.stateBrokerTasaSalud = true;
-        this.stateBrokerTasaPension = true;
-        this.blockDoc = true;
-        this.blockSearch = true;
-        this.stateSearch = false;
-        this.reloadTariff = false;
-        this.messageWorker = ""
-        this.maxlength = 8;
-        this.typeDocument = 0;
-
         //Datos Contratante
         this.InputsQuotation.P_NIDDOC_TYPE = "-1"; // Tipo de documento
         this.InputsQuotation.P_SIDDOC = ""; // Nro de documento
@@ -2290,29 +2399,45 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_NMUNICIPALITY = null;
         this.InputsQuotation.P_NPRODUCT = "-1";
 
+        // Sedes
+        this.sedesList = [];
+        this.stateQuotation = true;
+        this.provinceList = [];
+        this.districtList = [];
+        this.listaTasasPension = [];
+        this.listaTasasSalud = [];
+        this.InputsQuotation.P_COMISSION_BROKER_SALUD = "";
+        this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO = "";
+        this.InputsQuotation.P_COMISSION_BROKER_PENSION = "";
+        this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO = "";
+
         //Cotizador
         this.clearTariff();
 
-        //Comentario
-        this.InputsQuotation.P_SCOMMENT = "";
-
-        //Archivos
-        this.files = [];
-
         this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
         this.InputsQuotation.P_PERSON_TYPE = "1"; // Tipo persona
-        // this.InputsQuotation.P_CANT_WORKER = "1";
         this.brokerList = [];
-
-        this.discountPension = "";
-        this.discountSalud = "";
-        this.activityVariationPension = "";
-        this.activityVariationSalud = "";
-        this.commissionPension = "";
-        this.commissionSalud = "";
+        this.maxlength = 8;
     }
 
     clearTariff() {
+        this.stateBrokerSalud = true;
+        this.stateBrokerPension = true;
+        this.statePrimaSalud = true;
+        this.statePrimaPension = true;
+        this.stateSalud = true;
+        this.statePension = true;
+        this.stateQuotation = true;
+        this.stateTasaSalud = false;
+        this.stateTasaPension = false;
+        this.stateBrokerTasaSalud = true;
+        this.stateBrokerTasaPension = true;
+        this.blockDoc = true;
+        this.blockSearch = true;
+        this.stateSearch = false;
+        this.reloadTariff = false;
+        this.messageWorker = ""
+        this.typeDocument = 0;
         this.tasasList = [];
         this.listaTasasPension = []
         this.listaTasasSalud = []
@@ -2336,6 +2461,14 @@ export class QuotationComponent implements OnInit {
         this.igvSaludSave = 0.00
         this.brutaTotalPensionSave = 0.00
         this.brutaTotalSaludSave = 0.00
+        this.discountPension = "";
+        this.discountSalud = "";
+        this.activityVariationPension = "";
+        this.activityVariationSalud = "";
+        this.commissionPension = "";
+        this.commissionSalud = "";
+        this.InputsQuotation.P_SCOMMENT = ""; // Comentario
+        this.files = []; // Archivos
     }
 
     uploadFiles(files: File[]) {
