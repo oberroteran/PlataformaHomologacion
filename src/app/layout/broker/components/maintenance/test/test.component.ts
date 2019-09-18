@@ -132,8 +132,28 @@ export class TestComponent implements OnInit {
   //   const idClientTrack = sessionStorage.getItem('idClientTrack');
   // }
   processPE() {
+    this.cliente.p_NPERSON_TYP = "1";
+    this.cliente.p_NDOCUMENT_TYP = "2";
+    this.cliente.p_SDOCUMENT = "72185297";
+    this.cliente.p_SLEGALNAME = "";
+    this.cliente.p_SCLIENT_NAME = "WALTER FREDY";
+    this.cliente.p_SCLIENT_APPPAT = "HUANACO";
+    this.cliente.p_SCLIENT_APPMAT = "HUAYTA";
+    this.cliente.p_NPROVINCE = "3";
+    this.cliente.p_NLOCAT = "301";
+    this.cliente.p_NMUNICIPALITY = "30104";
+    this.cliente.p_SADDRESS = "ddqweqwe12312";
+    this.cliente.p_SMAIL = "adqwe@gmail.com";
+    this.cliente.p_SPHONE = "971879879";
+    this.cliente.p_NIDPROCESS = "2135304";
+    this.cliente.V_NIDPROCESS = "2135304";
+
+    this.canal = "2015000002";
+    this.puntoDeVenta = "2";
+
+
     let item = {
-      ProcessId: "xxxx12312x",
+      ProcessId: "4421210",
       Name: "Nombre Nombre",
       LastName: "Apellido Apellido",
       Email: "abc@hotmail.com",

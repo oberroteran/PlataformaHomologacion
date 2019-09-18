@@ -805,10 +805,8 @@ export class QuotationEvaluationComponent implements OnInit {
      * Envia la petición de cambio de estado de la cotización e inserción de tasas autorizadas con las primas autorizadas
      */
     AddStatusChange() {
-
-        //let areAllAuthorizedRatesValid = 0; // 0:válido | 1:no válido
-        let areAuthorizedRatesValid = this.AreAuthorizedRatesValid();
-        if (this.mainFormGroup.valid == true && areAuthorizedRatesValid) {
+        let errorList = this.AreAuthorizedRatesValid();
+        if (this.mainFormGroup.valid == true && (errorList == null || errorList.length == 0)) {
 
             let self = this;
             this.isLoading = true;
@@ -877,11 +875,8 @@ export class QuotationEvaluationComponent implements OnInit {
                 }
             );
         } else {
-            let errorList = [];
+
             if (this.mainFormGroup.controls.status.hasError('required')) errorList.push("El estado es obligatorio.");
-
-
-            if (areAuthorizedRatesValid == false) errorList.push("No todas las tasas autorizadas son válidas.");
             swal.fire("Información", this.listToString(errorList), "error");
         }
 
@@ -889,7 +884,8 @@ export class QuotationEvaluationComponent implements OnInit {
 
     /**Modificar cotización | recotizar */
     modifyQuotation() {
-        if (this.AreProposedRatesValid()) {
+        let errorList = this.AreProposedRatesValid();
+        if (errorList == null || errorList.length == 0) {
             let self = this;
             let quotation = new QuotationModification();
             quotation.Number = this.quotationNumber;
@@ -1031,7 +1027,7 @@ export class QuotationEvaluationComponent implements OnInit {
                 }
             );
         } else {
-            swal.fire("Información", "No todas las tasas propuestas son válidas.", "error")
+            swal.fire("Información", CommonMethods.listToString(errorList), "error")
         }
 
     }
@@ -1168,44 +1164,64 @@ export class QuotationEvaluationComponent implements OnInit {
     }
 
     /**Valida las tasas propuestas */
-    AreProposedRatesValid(): boolean {
-        let areValid = true;
+    AreProposedRatesValid(): string[] {
+        let errorList = [];
         if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
             this.InputsQuotation.PensionDetailsList.map(element => {
-                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
-                element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
+                element.Premium = CommonMethods.ConvertToReadableNumber(element.Premium);
+                element.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+
+                if (element.WorkersCount <= 0) {
+                    element.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
+                    if (element.ProposedRate > 0) errorList.push("No puedes proponer tasas en la categoría " + element.RiskTypeName + " de Pensión.");
+                }
+                else {
+                    if (CommonMethods.isNumber(element.ProposedRate) == false) errorList.push("La tasa propuesta en la categoría " + element.RiskTypeName + " de Pensión no es válida.");
+                }
+                return element;
             });
         }
 
         if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
             this.InputsQuotation.SaludDetailsList.map(element => {
-                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
-                element.ProposedRate = element.ProposedRate != null && isNaN(element.ProposedRate) == false && element.ProposedRate != "" ? element.ProposedRate : 0;
+                element.Premium = CommonMethods.ConvertToReadableNumber(element.Premium);
+                element.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+
+                if (element.WorkersCount <= 0) {
+                    element.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
+                    if (element.ProposedRate > 0) errorList.push("No puedes proponer tasas en la categoría " + element.RiskTypeName + " de Salud.");
+                }
+                else {
+                    if (CommonMethods.isNumber(element.ProposedRate) == false) errorList.push("La tasa propuesta en la categoría " + element.RiskTypeName + " de Salud no es válida.");
+                }
+                return element;
             });
         }
 
-        return areValid;
+        return errorList;
     }
     /**Valida las tasas autorizadas */
-    AreAuthorizedRatesValid(): boolean {
-        let areValid = true;
+    AreAuthorizedRatesValid(): string[] {
+        let errorList = [];
         if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
             this.InputsQuotation.PensionDetailsList.map(element => {
-                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
-                element.AuthorizedRate = element.AuthorizedRate != null && isNaN(element.AuthorizedRate) == false && element.AuthorizedRate != "" ? element.AuthorizedRate : 0;
-                if (element.Premium > 0 && element.AuthorizedRate == 0) areValid = false;
+                element.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+                element.Premium = CommonMethods.ConvertToReadableNumber(element.Premium);
+                element.AuthorizedRate = CommonMethods.ConvertToReadableNumber(element.AuthorizedRate);
+                if (element.WorkersCount > 0 && element.AuthorizedRate == 0) errorList.push("La tasa autorizada en la categoría " + element.RiskTypeName + " de Pensión debe ser mayor a cero.");
                 return element;
             });
         }
         if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
             this.InputsQuotation.SaludDetailsList.map(element => {
-                element.Premium = element.Premium != null && isNaN(element.Premium) == false && element.Premium != "" ? element.Premium : 0;
-                element.AuthorizedRate = element.AuthorizedRate != null && isNaN(element.AuthorizedRate) == false && element.AuthorizedRate != "" ? element.AuthorizedRate : 0;
-                if (element.Premium > 0 && element.AuthorizedRate == 0) areValid = false;
+                element.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+                element.Premium = CommonMethods.ConvertToReadableNumber(element.Premium);
+                element.AuthorizedRate = CommonMethods.ConvertToReadableNumber(element.AuthorizedRate);
+                if (element.WorkersCount > 0 && element.AuthorizedRate == 0) errorList.push("La tasa autorizada en la categoría " + element.RiskTypeName + " de Salud debe ser mayor a cero.");
                 return element;
             });
 
         }
-        return areValid;
+        return errorList;
     }
 }
