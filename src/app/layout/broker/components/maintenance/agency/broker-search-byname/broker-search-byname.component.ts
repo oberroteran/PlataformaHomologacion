@@ -17,6 +17,7 @@ export class BrokerSearchBynameComponent implements OnInit {
   @Input() public foundResults: any[]; //
   listToShow: any[] = [];
   isLoading: boolean = false;
+  searchText = "";
   public selectedBroker: string;
   public currentPage = 1; //página actual
   public rotate = true; //
@@ -43,14 +44,6 @@ export class BrokerSearchBynameComponent implements OnInit {
     }
   }
   chooseBrokerByRadioButton(selection: any) {
-    // console.log(this.selectedBroker)
-    // if (this.selectedBroker === undefined) {
-    //   Swal.fire("Información", "No ha seleccionado ningún broker.", "error");
-    // } else {
-    //   this.formModalReference.close(this.foundResults[this.selectedBroker]);
-    // }
-
-
     if (selection != undefined && selection != "") {
       this.foundResults.forEach(item => {
         if (item.NNUMDOC == selection) {
