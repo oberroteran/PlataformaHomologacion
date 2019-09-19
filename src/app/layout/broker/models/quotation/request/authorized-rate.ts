@@ -8,4 +8,6 @@ export class AuthorizedRate {
     public RiskTypeId: string
     /**Prima calculada con la tasa autorizada */
     public AuthorizedPremium: number
+    /**Prima mínima autorizada */
+    public AuthorizedMinimunPremium: number
 }
