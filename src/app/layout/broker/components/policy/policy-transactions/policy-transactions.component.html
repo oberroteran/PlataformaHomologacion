@@ -124,9 +124,9 @@
 						<div class="row">
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD =$event"
-									name="COMISION_SALUD" placeholder="0" id="" disabled />
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT =$event"
+									name="COMISION_SALUD_AUT" placeholder="0" id="" disabled />
 							</div>
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<label style="margin: 0;"><span class="schk"><input type="checkbox" style="top: 3px;"
@@ -139,9 +139,9 @@
 							</div>
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION =$event"
-									name="COMISION_PENSION" placeholder="0" disabled />
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT =$event"
+									name="COMISION_PENSION_AUT" placeholder="0" disabled />
 							</div>
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
 								<label style="margin: 0;"><span class="schk"><input type="checkbox" style="top: 3px;"
@@ -183,7 +183,7 @@
 									<td class="col-sm text-center"><span>{{comer.DOC_COMER}}</span></td>
 									<td class="col-sm text-center"><span>{{comer.COMERCIALIZADOR}}</span></td>
 									<td class="col-sm text-center" *ngIf="saludList.length > 0">
-										<span>{{comer.COMISION_SALUD}}</span></td>
+										<span>{{comer.COMISION_SALUD_AUT}}</span></td>
 									<td class="col-sm" *ngIf="saludList.length > 0"><input type="text"
 											class="text-center" name="comissionPRO_SAL-{{i}}"
 											[disabled]="stateBrokerTasaSalud" placeholder="0"
@@ -195,7 +195,7 @@
 									<td class="col-sm" *ngIf="pensionList.length > 0"><input type="text"
 											class="text-center" name="comissionPRO_PEN-{{i}}"
 											[disabled]="stateBrokerTasaPension" placeholder="0"
-											[(ngModel)]="comer.COMISION_PENSION_PRO"
+											[(ngModel)]="comer.COMISION_PENSION_AUT"
 											(ngModelChange)="changePensionPropuesta($event, comer.DOC_COMER)"
 											FloatDirective />
 									<td *ngIf="!editFlag"><span style="padding: 0 12px;"><img

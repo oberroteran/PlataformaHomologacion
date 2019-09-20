@@ -133,9 +133,9 @@
 						<div class="row">
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD =$event"
-									name="COMISION_SALUD" placeholder="0 %" id="" disabled />
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT =$event"
+									name="COMISION_SALUD_AUT" placeholder="0 %" id="" disabled />
 							</div>
 							<!-- <div class="col-sm-3 chk" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD PROPUESTA</span>
@@ -146,9 +146,9 @@
 							</div> -->
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION =$event"
-									name="COMISION_PENSION" placeholder="0 %" id="" disabled />
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT =$event"
+									name="COMISION_PENSION_AUT" placeholder="0 %" id="" disabled />
 							</div>
 							<!-- <div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN PROPUESTA</span>
@@ -169,12 +169,12 @@
 									<th class="col-sm text-center"><label>Nombres y Apellidos</label></th>
 									<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Comisión
 											Salud</label></th>
-									<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Propuesta</label>
-									</th>
+									<!-- <th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Propuesta</label>
+									</th> -->
 									<th class="col-sm text-center" *ngIf="pensionList.length > 0"><label>Comisión
 											Pensión</label></th>
-									<th class="col-sm text-center" *ngIf="pensionList.length > 0">
-										<label>Propuesta</label></th>
+									<!-- <th class="col-sm text-center" *ngIf="pensionList.length > 0">
+										<label>Propuesta</label></th> -->
 								</tr>
 							</thead>
 							<tbody>
@@ -183,13 +183,13 @@
 									<td class="col-sm text-center"><span>{{comer.DOC_COMER}}</span></td>
 									<td class="col-sm text-center"><span>{{comer.COMERCIALIZADOR}}</span></td>
 									<td class="col-sm text-center" *ngIf="saludList.length > 0">
-										<span>{{comer.COMISION_SALUD}}</span></td>
-									<td class="col-sm text-center" *ngIf="saludList.length > 0">
-										<span>{{comer.COMISION_SALUD_PRO}}</span></td>
+										<span>{{comer.COMISION_SALUD_AUT}}</span></td>
+									<!-- <td class="col-sm text-center" *ngIf="saludList.length > 0">
+										<span>{{comer.COMISION_SALUD_PRO}}</span></td> -->
 									<td class="col-sm text-center" *ngIf="pensionList.length > 0">
-										<span>{{comer.COMISION_PENSION}}</span></td>
-									<td class="col-sm text-center" *ngIf="pensionList.length > 0">
-										<span>{{comer.COMISION_PENSION_PRO}}</span></td>
+										<span>{{comer.COMISION_PENSION_AUT}}</span></td>
+									<!-- <td class="col-sm text-center" *ngIf="pensionList.length > 0">
+										<span>{{comer.COMISION_PENSION_AUT}}</span></td> -->
 								</tr>
 							</tbody>
 						</table>
@@ -426,7 +426,7 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA SALUD</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD" name="MIN_SALUD"
+										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD_AUT" name="MIN_SALUD_AUT"
 											placeholder="Prima Mínima" disabled>
 									</div>
 
@@ -499,7 +499,7 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA PENSIÓN</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION" name="MIN_PENSION"
+										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION_AUT" name="MIN_PENSION_AUT"
 											placeholder="Prima Mínima" disabled>
 									</div>
 									<!-- <div class="col-sm-6">
