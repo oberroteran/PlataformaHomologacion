@@ -962,7 +962,7 @@ export class AddContractingComponent implements OnInit {
         //     this.VAL_CLIENT[5] = "5";
         //     mensaje += "La sede del contratante es requerido <br />"
         // }
-
+        console.log(this.InputsContracting)
         if (mensaje == "") {
             swal.fire({
                 title: "Información",

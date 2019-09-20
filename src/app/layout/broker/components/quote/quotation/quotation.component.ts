@@ -2427,7 +2427,7 @@ export class QuotationComponent implements OnInit {
         this.statePrimaPension = true;
         this.stateSalud = true;
         this.statePension = true;
-        this.stateQuotation = true;
+        //this.stateQuotation = true;
         this.stateTasaSalud = false;
         this.stateTasaPension = false;
         this.stateBrokerTasaSalud = true;

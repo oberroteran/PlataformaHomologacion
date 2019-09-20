@@ -88,8 +88,8 @@
 							</div>
 							<div class="col-sm-3">
 								<span>CORREO ELECTRÓNICO</span>
-								<input type="text" [(ngModel)]="polizaEmitCab.CORREO" name="CORREO"
-									placeholder="Correo Electrónico" disabled />
+								<input type="text" [(ngModel)]="polizaEmitCab.CORREO" [ngClass]="{'error-validate': flagEmail}" name="CORREO"
+									placeholder="Correo Electrónico" (keypress)="valText($event, 6)" [disabled]="flagEmailNull" />
 							</div>
 						</div>
 					</div>
