@@ -280,7 +280,6 @@ export class PolicyIndexComponent implements OnInit {
     }
 
     buscarPoliza() {
-
         this.listToShow = [];
         this.currentPage = 1; //página actual
         this.maxSize = 10; // cantidad de paginas que se mostrarán en el paginado

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Documentos y Archivos adjuntos</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
     <button type="button" class="close" aria-label="Close" (click)="reference.dismiss()">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -10,7 +10,7 @@
         <span>Motivo de Anulación</span>
         <input type="text" [(ngModel)]="motAnulacion" disabled />
     </div>
-    <div class="col-sm-12 mt-3">
+    <div class="col-sm-12 mt-3" *ngIf="codTransac != 6">
         <div class="card">
 
             <div class="col-sm-12 mt-3">
@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 mt-2 mb-3">
+    <div class="col-sm-12 mt-2 mb-3" *ngIf="codTransac != 6">
         <div class="card">
             <div class="col-sm-12 mt-3">
                 <h5>Archivos adjuntos</h5>
@@ -74,6 +74,12 @@
                 </div>
                 <br>
             </div>
+        </div>
+    </div>
+    <div class="col-sm-12 mt-2 mb-3" *ngIf="codTransac == 6">
+        <div class="col-sm-12 mt-3 mb-3">
+            <h5>Comentarios</h5>
+            <textarea cols="40" [(ngModel)]="comentario" rows="5" style="width:100%" [disabled]="true"></textarea>
         </div>
     </div>
     <!--  -->

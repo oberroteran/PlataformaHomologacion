@@ -15,12 +15,20 @@ export class PolicyDocumentsComponent implements OnInit {
   @Input() public generadosList: any;
   @Input() public comentario: any;
   @Input() public motAnulacion: any;
+  @Input() public codTransac: any;
+
+  title = "";
 
   constructor(
     private othersService: OthersService
   ) { }
 
   ngOnInit() {
+    if(this.codTransac == "6"){
+      this.title = "Detalle - Anulación de movimiento"
+    }else{
+      this.title = "Documentos y Archivos adjuntos"
+    }
   }
 
   downloadFile(filePath: string) {  //Descargar archivos de cotización

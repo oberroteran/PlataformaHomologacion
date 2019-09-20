@@ -2378,6 +2378,7 @@ export class QuotationComponent implements OnInit {
     }
     clearInsert() {
         //Datos Contratante
+        this.blockDoc = true;
         this.InputsQuotation.P_NIDDOC_TYPE = "-1"; // Tipo de documento
         this.InputsQuotation.P_SIDDOC = ""; // Nro de documento
         this.InputsQuotation.P_SFIRSTNAME = ""; // Nombre 
@@ -2432,7 +2433,6 @@ export class QuotationComponent implements OnInit {
         this.stateTasaPension = false;
         this.stateBrokerTasaSalud = true;
         this.stateBrokerTasaPension = true;
-        this.blockDoc = true;
         this.blockSearch = true;
         this.stateSearch = false;
         this.reloadTariff = false;

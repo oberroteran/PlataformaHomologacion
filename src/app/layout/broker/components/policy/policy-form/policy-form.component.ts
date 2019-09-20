@@ -725,6 +725,8 @@ export class PolicyFormComponent implements OnInit {
 			if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(this.polizaEmitCab.CORREO) == false) {
 				this.flagEmail = true;
 				mensaje += "El correo electrónico es inválido <br />";
+			}else{
+				this.flagEmail = false;
 			}
 		}
 
@@ -882,6 +884,7 @@ export class PolicyFormComponent implements OnInit {
 					this.policyemit.savePolicyEmit(myFormData)
 						.subscribe((res: any) => {
 							if (res.P_COD_ERR == 0) {
+								this.flagEmailNull =  true;
 								let policyPension = 0;
 								let policySalud = 0;
 								let constancia = 0
@@ -902,6 +905,11 @@ export class PolicyFormComponent implements OnInit {
 										confirmButtonText: 'OK',
 										allowOutsideClick: false,
 									})
+										.then((result) => {
+											if (result.value) {
+												this.router.navigate(['/broker/policy-transactions']);
+											}
+										});
 								}
 								else {
 									if (policyPension > 0) {
@@ -912,6 +920,11 @@ export class PolicyFormComponent implements OnInit {
 											confirmButtonText: 'OK',
 											allowOutsideClick: false,
 										})
+											.then((result) => {
+												if (result.value) {
+													this.router.navigate(['/broker/policy-transactions']);
+												}
+											});
 									}
 									if (policySalud > 0) {
 										swal.fire({
@@ -921,6 +934,11 @@ export class PolicyFormComponent implements OnInit {
 											confirmButtonText: 'OK',
 											allowOutsideClick: false,
 										})
+											.then((result) => {
+												if (result.value) {
+													this.router.navigate(['/broker/policy-transactions']);
+												}
+											});
 									}
 								}
 							} else {

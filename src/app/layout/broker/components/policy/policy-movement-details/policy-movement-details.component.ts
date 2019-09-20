@@ -206,6 +206,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
   }
 
   openModal(item: any) {
+    console.log(item)
     let modalRef: NgbModalRef;
     modalRef = this.modalService.open(PolicyDocumentsComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
     modalRef.componentInstance.reference = modalRef;
@@ -213,6 +214,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
     modalRef.componentInstance.generadosList = item.RUTAS_GEN;
     modalRef.componentInstance.comentario = item.COMENTARIO;
     modalRef.componentInstance.motAnulacion = item.MOT_ANULACION;
+    modalRef.componentInstance.codTransac = item.COD_TRANSAC;
   }
 
 }
