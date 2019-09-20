@@ -26,6 +26,8 @@ import { FilePickerComponent } from '../../../modal/file-picker/file-picker.comp
 import { QuotationBroker } from '../../../models/quotation/request/quotation-modification/quotation-broker';
 import { QuotationModification } from '../../../models/quotation/request/quotation-modification/quotation-modification';
 import { QuotationRisk } from '../../../models/quotation/request/quotation-modification/quotation-risk';
+import { Broker } from '../../../models/quotation/request/broker';
+import { BrokerProduct } from '../../../models/quotation/request/broker-product';
 
 @Component({
     selector: 'app-quotation-evaluation',
@@ -829,13 +831,46 @@ export class QuotationEvaluationComponent implements OnInit {
             //Preparación de tasas autorizadas y primas recalculadas a enviar
             self.statusChangeRequest.saludAuthorizedRateList = [];
             self.statusChangeRequest.pensionAuthorizedRateList = [];
+            this.statusChangeRequest.BrokerList = [];
+
+            if (this.InputsQuotation.BrokerChannelId != "2015000002") {
+                let item = new Broker();
+                item.Id = this.InputsQuotation.BrokerChannelId;
+                item.ProductList = [];
+                if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
+                    let obj = new BrokerProduct();
+                    obj.Product = self.pensionProductId;
+                    obj.AuthorizedCommission = self.InputsQuotation.BrokerPensionAuthBounty;
+                    item.ProductList.push(obj);
+                }
+                if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
+                    let obj = new BrokerProduct();
+                    obj.Product = self.healthProductId;
+                    obj.AuthorizedCommission = self.InputsQuotation.BrokerSaludAuthBounty;
+                    item.ProductList.push(obj);
+                }
+                this.statusChangeRequest.BrokerList.push(item);
+            }
+            this.InputsQuotation.SecondaryBrokerList.forEach(element => {
+                let item = new Broker();
+                item.Id = element.CANAL;
+                item.ProductList = [];
+                if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
+                    let obj = new BrokerProduct();
+                    obj.Product = self.pensionProductId;
+                    obj.AuthorizedCommission = element.COMISION_PENSION_AUT;
+                    item.ProductList.push(obj);
+                }
+                if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
+                    let obj = new BrokerProduct();
+                    obj.Product = self.healthProductId;
+                    obj.AuthorizedCommission = element.COMISION_SALUD_AUT;
+                    item.ProductList.push(obj);
+                }
+                self.statusChangeRequest.BrokerList.push(item);
+            });
 
             this.InputsQuotation.PensionDetailsList.forEach((element) => {
-                //obtener monto de planilla según riesgo
-                let payRollAmount = 0;
-                self.InputsQuotation.SharedDetailsList.forEach(e => {
-                    if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
-                });
                 let item = new AuthorizedRate();
                 item.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
                 item.RiskTypeId = element.RiskTypeId;
@@ -846,11 +881,6 @@ export class QuotationEvaluationComponent implements OnInit {
                 self.statusChangeRequest.pensionAuthorizedRateList.push(item);
             });
             this.InputsQuotation.SaludDetailsList.forEach((element) => {
-                //obtener monto de planilla según riesgo
-                let payRollAmount = 0;
-                self.InputsQuotation.SharedDetailsList.forEach(e => {
-                    if (e.RiskTypeId == element.RiskTypeId) payRollAmount = e.PayrollAmount;
-                });
                 let item = new AuthorizedRate();
                 item.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
                 item.RiskTypeId = element.RiskTypeId;
@@ -1249,13 +1279,15 @@ export class QuotationEvaluationComponent implements OnInit {
     validateAuthorizedCommmissions(): string[] {
         let self = this;
         let errorList = [];
-        if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
-            if (CommonMethods.isNumber(this.InputsQuotation.BrokerSaludAuthBounty) == false) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " no es válida.");
-            else if (this.InputsQuotation.BrokerSaludAuthBounty <= 0) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
-        }
-        if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
-            if (CommonMethods.isNumber(this.InputsQuotation.BrokerPensionAuthBounty) == false) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " no es válida.");
-            else if (this.InputsQuotation.BrokerPensionAuthBounty <= 0) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
+        if (this.InputsQuotation.BrokerChannelId != "2015000002") {
+            if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
+                if (CommonMethods.isNumber(this.InputsQuotation.BrokerSaludAuthBounty) == false) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " no es válida.");
+                else if (this.InputsQuotation.BrokerSaludAuthBounty <= 0) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
+            }
+            if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
+                if (CommonMethods.isNumber(this.InputsQuotation.BrokerPensionAuthBounty) == false) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " no es válida.");
+                else if (this.InputsQuotation.BrokerPensionAuthBounty <= 0) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
+            }
         }
 
         this.InputsQuotation.SecondaryBrokerList.map(function (item) {
