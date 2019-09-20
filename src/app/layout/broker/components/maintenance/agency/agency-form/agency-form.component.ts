@@ -606,10 +606,8 @@ export class AgencyFormComponent implements OnInit {
                 let text = self.createContent(salud_SuccessList, salud_ErrorList, successList, errorList);
                 let icon;
                 if (this.sctrSaludSucceed) {
-                    // text = "<ul><li>El agenciamiento de SCTR Salud ha sido exitoso.</li><li>El agenciamiento de SCTR Pensión no puedo ser procesado.</li></ul>";
                     icon = "warning";
                 } else {
-                    // text = "<ul><li>El agenciamiento de SCTR Salud no puedo ser procesado.</li><li>El agenciamiento de SCTR Pensión no puedo ser procesado.</li></ul>";
                     icon = "error";
                 }
 
@@ -689,7 +687,7 @@ export class AgencyFormComponent implements OnInit {
                     },
                     err => {
                         this.sctrSaludSucceed = false;
-                        errorList.push("El agenciamiento de SCTR Salud no puedo ser procesado.");
+                        errorList.push("El agenciamiento de SCTR Salud no pudo ser procesado.");
                         self.tryToProcessPensionAgency(errorList, successList);
                         console.log(err);
 
@@ -748,7 +746,7 @@ export class AgencyFormComponent implements OnInit {
                         }
                     },
                     err => {
-                        errorList.push("El agenciamiento de SCTR Salud no puedo ser procesado.");
+                        errorList.push("El agenciamiento de SCTR Salud no pudo ser procesado.");
                         this.sctrSaludSucceed = false;
                         this.isLoading = false;
                         Swal.fire("Información", this.createContent(null, errorList, null, null), "error");
@@ -807,7 +805,7 @@ export class AgencyFormComponent implements OnInit {
                         }
                     },
                     err => {
-                        errorList.push("El agenciamiento de SCTR Pensión no puedo ser procesado.");
+                        errorList.push("El agenciamiento de SCTR Pensión no pudo ser procesado.");
                         this.isLoading = false;
                         this.sctrPensionSucceed = false;
                         Swal.fire("Información", this.createContent(null, null, null, errorList), "error");
