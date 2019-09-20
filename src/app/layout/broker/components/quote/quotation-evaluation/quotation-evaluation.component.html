@@ -653,7 +653,8 @@
                   <ng-template #invalid_status>El estado no es válido.</ng-template>
                 </span>
               </div>
-              <div *ngIf="mainFormGroup.get('status').value!='2'" class="col-sm-3">
+              <!-- <div *ngIf="mainFormGroup.get('status').value!='2'" class="col-sm-3"> -->
+              <div *ngIf="reasonList!=null && reasonList.length>0" class="col-sm-3">
                 <span>MOTIVO</span>
                 <select formControlName="reason">
                   <option value="">Seleccione</option>
@@ -722,7 +723,7 @@
                   <thead>
                     <tr class="grid-title">
                       <th style="text-align: center" class="grid-title-item">Estado</th>
-                      <!-- <th style="text-align: center" class="grid-title-item">Motivo</th> -->
+                      <th style="text-align: center" class="grid-title-item">Motivo</th>
                       <th style="text-align: center" class="grid-title-item">Usuario</th>
                       <th style="text-align: center" class="grid-title-item">Perfil</th>
                       <th style="text-align: center" class="grid-title-item">Fecha</th>
@@ -739,7 +740,7 @@
 
                     <tr *ngFor="let item of statusChangeList; let i=index">
                       <td>{{item.Status}}</td>
-                      <!-- <td>{{item.Reason}}</td> -->
+                      <td>{{item.Reason}}</td>
                       <td>{{item.User}}</td>
                       <td>{{item.Profile}}</td>
                       <td>{{item.EventDate | date:'dd/MM/yyyy, h:mm a'}}</td>
