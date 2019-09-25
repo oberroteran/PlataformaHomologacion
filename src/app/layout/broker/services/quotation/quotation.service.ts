@@ -26,6 +26,13 @@ export class QuotationService {
         });
     }
 
+    public getPolicyList(data: QuotationSearch): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this.Url + "/QuotationManager/GetPolicyList", body, {
+            headers: this.headers
+        });
+    }
+
     public getTrackingList(data: QuotationTrackingSearch): Observable<any> {
         const body = JSON.stringify(data);
         return this.http.post(this.Url + "/QuotationManager/GetTrackingList", body, {
@@ -59,8 +66,9 @@ export class QuotationService {
                 this.Url + "/QuotationManager/ApproveQuotation", data);
     }
     
-    public getStatusList(): Observable<any> {
-        return this.http.get(this.Url + "/QuotationManager/GetStatusList");
+    public getStatusList(certype : string): Observable<any> {
+        let _params = { certype : certype}
+        return this.http.get(this.Url + "/QuotationManager/GetStatusList", {params: _params});
     }
     public getReasonList(_statusCode: string): Observable<any> {
         let _params = { statusCode: _statusCode }

@@ -205,7 +205,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
     });
   }
 
-  openModal(item: any) {
+  verDocumentos(item: any) {
     console.log(item)
     let modalRef: NgbModalRef;
     modalRef = this.modalService.open(PolicyDocumentsComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });

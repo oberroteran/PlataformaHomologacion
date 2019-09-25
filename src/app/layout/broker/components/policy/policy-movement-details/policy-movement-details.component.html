@@ -86,7 +86,7 @@
             <td>{{ item.RECIBO }}</td>
             <td>{{ item.USUARIO }}</td>
             <td class="text-center"><img alt="Ver Documentos" src="assets/icons/preview_soat_box.png"
-                title="Ver Documentos" (click)="openModal(item)" style="cursor: pointer;height: 24px;width: 24px"></td>
+                title="Ver Documentos" (click)="verDocumentos(item)" style="cursor: pointer;height: 24px;width: 24px"></td>
             <ng-container *ngIf="canCancelMovements">
               <td *ngIf="!flagAnular" class="text-center">
                 <img *ngIf="item.MOV_ANULADO == 0" src="assets/icons/anular.png" (click)="anularMov(item, 6)"

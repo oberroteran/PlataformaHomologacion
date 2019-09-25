@@ -143,7 +143,7 @@ export class RequestStatusComponent implements OnInit {
      * Obtener lista de estados
      */
     getStatusList() {
-        this.quotationService.getStatusList().subscribe(
+        this.quotationService.getStatusList("3").subscribe(
             res => {
                 res.forEach(element => {
                     if (element.Id != "5") this.statusList.push(element);

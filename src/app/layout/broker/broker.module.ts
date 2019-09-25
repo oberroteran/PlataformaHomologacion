@@ -184,6 +184,8 @@ import { CampaignService } from './services/campaign/campaign.service';
 import { DeliveryService } from './services/delivery/delivery.service';
 import { PrettyNumberPipe } from './pipes/pretty-number.pipe';
 import { TestComponent } from './components/maintenance/test/test.component';
+import { PolicyRequestComponent } from './components/policy/policy-request/policy-request.component';
+import { PolicyEvaluationComponent } from './components/policy/policy-evaluation/policy-evaluation.component';
 
 //Kuntur Services 20190812
 
@@ -318,7 +320,7 @@ import { TestComponent } from './components/maintenance/test/test.component';
         ProcessViewerComponent, // Kuntur 20190919
         PrettyNumberPipe, // Kuntur 20190919
         TestComponent, // Kuntur 20190919
-        AnulMovComponent // Kuntur 20190812
+        AnulMovComponent, PolicyRequestComponent, PolicyEvaluationComponent // Kuntur 20190812
     ],
     entryComponents: [
         ResVaucherComponent,

@@ -267,14 +267,14 @@ export class PolicyFormComponent implements OnInit {
 				}
 			}
 
-			if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+			if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_SALUD)) {
 				this.mensajePrimaSalud = ""
 				this.totalNetoSaludSave = this.primatotalSalud
 				this.igvSaludSave = this.igvSalud;
 				this.brutaTotalSaludSave = this.totalSalud;
 			} else {
-				if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
-					this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+				if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_SALUD)) {
+					this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión"
 					this.totalNetoSaludSave = this.primatotalSalud
 					this.igvSaludSave = this.igvSalud;
 					this.brutaTotalSaludSave = this.totalSalud;
@@ -282,7 +282,7 @@ export class PolicyFormComponent implements OnInit {
 					this.totalNetoSaludSave = this.primatotalSalud
 					this.igvSaludSave = this.igvSalud;
 					this.brutaTotalSaludSave = this.totalSalud;
-					this.mensajePrimaPension = "";
+					this.mensajePrimaSalud = "";
 				}
 			}
 

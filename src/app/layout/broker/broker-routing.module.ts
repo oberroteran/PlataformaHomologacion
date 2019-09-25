@@ -62,6 +62,8 @@ import { ContractorStateComponent } from './components/reports/state-report/cont
 import { PolicyTransactionsComponent } from './components/policy/policy-transactions/policy-transactions.component';
 import { ProcessViewerComponent } from './components/policy/process-viewer/process-viewer.component';
 import { TestComponent } from './components/maintenance/test/test.component';
+import { PolicyEvaluationComponent } from './components/policy/policy-evaluation/policy-evaluation.component';
+import { PolicyRequestComponent } from './components/policy/policy-request/policy-request.component';
 
 
 const broutes: Routes = [
@@ -130,6 +132,8 @@ const broutes: Routes = [
             { path: 'products', component: ProductComponent },
             { path: 'contractor-state', component: ContractorStateComponent },
             { path: 'process-viewer', component: ProcessViewerComponent },
+            { path: 'policy-evaluation', component: PolicyEvaluationComponent },
+            { path: "policy-request", component: PolicyRequestComponent },
             { path: 'test', component: TestComponent },
             { path: '**', redirectTo: 'login' }
         ]

@@ -1,5 +1,6 @@
 export class QuotationSearch { //Datos para búsqueda de cotizaciones
     public QuotationNumber: string //Número de cotización
+    public PolicyNumber: string //Número de poliza
 
     public ProductType: string  //Id tipo de producto
     public StartDate: Date   //Fecha de límite inferior

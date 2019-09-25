@@ -363,13 +363,13 @@ export class PolicyTransactionsComponent implements OnInit {
     if (this.polizaEmit.facturacionVencido == true) {
       this.facAnticipada = true;
 
-      if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+      if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
         this.mensajePrimaPension = ""
         this.totalNetoPensionSave = this.primatotalSCTR
         this.igvPensionSave = this.igvPension;
         this.brutaTotalPensionSave = this.totalSTRC;
       } else {
-        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
           this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
           this.totalNetoPensionSave = this.primatotalSCTR
           this.igvPensionSave = this.igvPension;
@@ -382,14 +382,14 @@ export class PolicyTransactionsComponent implements OnInit {
         }
       }
 
-      if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+      if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
         this.mensajePrimaSalud = ""
         this.totalNetoSaludSave = this.primatotalSalud
         this.igvSaludSave = this.igvSalud;
         this.brutaTotalSaludSave = this.totalSalud;
       } else {
-        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
-          this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+          this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión"
           this.totalNetoSaludSave = this.primatotalSalud
           this.igvSaludSave = this.igvSalud;
           this.brutaTotalSaludSave = this.totalSalud;
@@ -397,20 +397,20 @@ export class PolicyTransactionsComponent implements OnInit {
           this.totalNetoSaludSave = this.primatotalSalud
           this.igvSaludSave = this.igvSalud;
           this.brutaTotalSaludSave = this.totalSalud;
-          this.mensajePrimaPension = "";
+          this.mensajePrimaSalud = "";
         }
       }
 
     } else {
 
-      if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+      if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
         this.mensajePrimaPension = ""
         this.totalNetoPensionSave = this.primatotalSCTR
         this.igvPensionSave = this.igvPension;
         this.brutaTotalPensionSave = this.totalSTRC;
       } else {
-        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
-          this.totalNetoPensionSave = this.formateaValor(this.polizaEmitCab.MIN_PENSION)
+        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+          this.totalNetoPensionSave = this.formateaValor(this.polizaEmitCab.PRIMA_PEN_END)
           this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
           this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
           this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
@@ -422,14 +422,14 @@ export class PolicyTransactionsComponent implements OnInit {
         }
       }
 
-      if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.MIN_SALUD)) {
+      if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
         this.mensajePrimaSalud = ""
         this.totalNetoSaludSave = this.primatotalSalud
         this.igvSaludSave = this.igvSalud;
         this.brutaTotalSaludSave = this.totalSalud;
       } else {
-        if (this.primatotalSalud < parseFloat(this.polizaEmitCab.MIN_SALUD)) {
-          this.totalNetoSaludSave = this.formateaValor(this.polizaEmitCab.MIN_SALUD)
+        if (this.primatotalSalud < parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+          this.totalNetoSaludSave = this.formateaValor(this.polizaEmitCab.PRIMA_SALUD_END)
           this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
           this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
           this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
@@ -1702,13 +1702,13 @@ export class PolicyTransactionsComponent implements OnInit {
             });
 
             if (this.polizaEmit.facturacionVencido == true) {
-              if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+              if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
                 this.mensajePrimaPension = ""
                 this.totalNetoPensionSave = this.primatotalSCTR
                 this.igvPensionSave = this.igvPension;
                 this.brutaTotalPensionSave = this.totalSTRC;
               } else {
-                if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+                if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
                   this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
                   this.totalNetoPensionSave = this.primatotalSCTR
                   this.igvPensionSave = this.igvPension;
@@ -1747,14 +1747,14 @@ export class PolicyTransactionsComponent implements OnInit {
             });
 
             if (this.polizaEmit.facturacionVencido == true) {
-              if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+              if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
                 this.mensajePrimaSalud = ""
                 this.totalNetoSaludSave = this.primatotalSalud
                 this.igvSaludSave = this.igvSalud;
                 this.brutaTotalSaludSave = this.totalSalud;
               } else {
-                if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
-                  this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+                if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+                  this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión"
                   this.totalNetoSaludSave = this.primatotalSalud
                   this.igvSaludSave = this.igvSalud;
                   this.brutaTotalSaludSave = this.totalSalud;
@@ -1762,7 +1762,7 @@ export class PolicyTransactionsComponent implements OnInit {
                   this.totalNetoSaludSave = this.primatotalSalud
                   this.igvSaludSave = this.igvSalud;
                   this.brutaTotalSaludSave = this.totalSalud;
-                  this.mensajePrimaPension = "";
+                  this.mensajePrimaSalud = "";
                 }
               }
             } else {
