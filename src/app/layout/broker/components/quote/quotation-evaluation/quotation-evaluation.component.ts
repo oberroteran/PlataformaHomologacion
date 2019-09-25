@@ -1282,22 +1282,22 @@ export class QuotationEvaluationComponent implements OnInit {
         if (this.InputsQuotation.BrokerChannelId != "2015000002") {
             if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
                 if (CommonMethods.isNumber(this.InputsQuotation.BrokerSaludAuthBounty) == false) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " no es válida.");
-                else if (this.InputsQuotation.BrokerSaludAuthBounty <= 0) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
+                else if (this.InputsQuotation.BrokerSaludAuthBounty <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
             }
             if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
                 if (CommonMethods.isNumber(this.InputsQuotation.BrokerPensionAuthBounty) == false) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " no es válida.");
-                else if (this.InputsQuotation.BrokerPensionAuthBounty <= 0) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
+                else if (this.InputsQuotation.BrokerPensionAuthBounty <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
             }
         }
 
         this.InputsQuotation.SecondaryBrokerList.map(function (item) {
             if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
                 if (CommonMethods.isNumber(item.COMISION_SALUD_AUT) == false) errorList.push("La comisión autorizada de salud de " + item.COMERCIALIZADOR + " no es válida.");
-                else if (item.COMISION_SALUD_AUT <= 0) errorList.push("La comisión autorizada de salud de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
+                else if (item.COMISION_SALUD_AUT <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de salud de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
             }
             if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
                 if (CommonMethods.isNumber(item.COMISION_PENSION_AUT) == false) errorList.push("La comisión autorizada de pensión de " + item.COMERCIALIZADOR + " no es válida.");
-                else if (item.COMISION_PENSION_AUT <= 0) errorList.push("La comisión autorizada de pensión de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
+                else if (item.COMISION_PENSION_AUT <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de pensión de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
             }
         });
         return errorList;
@@ -1306,10 +1306,10 @@ export class QuotationEvaluationComponent implements OnInit {
     validateAuthorizedPremiums(): string[] {
         let errorList = [];
         if (CommonMethods.isNumber(this.InputsQuotation.HealthAuthMinPremium) == false) errorList.push("La prima mínima autorizada de salud no es válida.");
-        else if (this.InputsQuotation.HealthAuthMinPremium <= 0) errorList.push("La prima mínima autorizada de salud debe ser mayor a cero.");
+        else if (this.InputsQuotation.HealthAuthMinPremium <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La prima mínima autorizada de salud debe ser mayor a cero.");
 
         if (CommonMethods.isNumber(this.InputsQuotation.PensionAuthMinPremium) == false) errorList.push("La prima mínima autorizada de pensión no es válida.");
-        else if (this.InputsQuotation.PensionAuthMinPremium <= 0) errorList.push("La prima mínima autorizada de pensión debe ser mayor a cero.");
+        else if (this.InputsQuotation.PensionAuthMinPremium <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La prima mínima autorizada de pensión debe ser mayor a cero.");
 
         return errorList;
     }
@@ -1321,7 +1321,7 @@ export class QuotationEvaluationComponent implements OnInit {
                 element.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
                 element.Premium = CommonMethods.ConvertToReadableNumber(element.Premium);
                 element.AuthorizedRate = CommonMethods.ConvertToReadableNumber(element.AuthorizedRate);
-                if (element.WorkersCount > 0 && element.AuthorizedRate == 0) errorList.push("La tasa autorizada en la categoría " + element.RiskTypeName + " de Pensión debe ser mayor a cero.");
+                if (element.WorkersCount > 0 && element.AuthorizedRate == 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La tasa autorizada en la categoría " + element.RiskTypeName + " de Pensión debe ser mayor a cero.");
                 return element;
             });
         }
@@ -1330,7 +1330,7 @@ export class QuotationEvaluationComponent implements OnInit {
                 element.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
                 element.Premium = CommonMethods.ConvertToReadableNumber(element.Premium);
                 element.AuthorizedRate = CommonMethods.ConvertToReadableNumber(element.AuthorizedRate);
-                if (element.WorkersCount > 0 && element.AuthorizedRate == 0) errorList.push("La tasa autorizada en la categoría " + element.RiskTypeName + " de Salud debe ser mayor a cero.");
+                if (element.WorkersCount > 0 && element.AuthorizedRate == 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La tasa autorizada en la categoría " + element.RiskTypeName + " de Salud debe ser mayor a cero.");
                 return element;
             });
 

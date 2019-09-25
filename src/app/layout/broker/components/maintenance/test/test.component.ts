@@ -43,39 +43,39 @@ export class TestComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    //this.crearBotonVisa();
+    this.crearBotonVisa();
 
   }
   crearBotonVisa() {
-    // let certificado = new Certificado();
-    // certificado.P_NPREMIUM = 124.00;
-    // let item = {
-    //   amount: 60,
-    //   expirationTime: "1568156130971",
-    //   flujoId: null,
-    //   id: 20388,
-    //   planillaId: 0,
-    //   purchaseNumber: "568153430",
-    //   sessionKey: "9aeae54eb2bd8b09f475bcc921df75269badae8f97d3ec7a458ecd3a9ea4411d",
-    //   sessionToken: "568153430",
-    //   userId: null
-    // }
-    // sessionStorage.setItem('visasession', JSON.stringify(item));
+    // // let certificado = new Certificado();
+    // // certificado.P_NPREMIUM = 124.00;
+    // // let item = {
+    // //   amount: 60,
+    // //   expirationTime: "1568156130971",
+    // //   flujoId: null,
+    // //   id: 20388,
+    // //   planillaId: 0,
+    // //   purchaseNumber: "568153430",
+    // //   sessionKey: "9aeae54eb2bd8b09f475bcc921df75269badae8f97d3ec7a458ecd3a9ea4411d",
+    // //   sessionToken: "568153430",
+    // //   userId: null
+    // // }
+    // // sessionStorage.setItem('visasession', JSON.stringify(item));
 
-    // const visasession = JSON.parse(sessionStorage.getItem('visasession'));
-    // sessionStorage.setItem('sessionToken', visasession.sessionToken);
-    // const factory = this.factoryResolver.resolveComponentFactory(
-    //   ButtonVisaComponent
-    // );
-    // this.btnVisa = factory.create(this.viewContainerRef.parentInjector);
-    // this.btnVisa.instance.action = AppConfig.ACTION_FORM_VISA_BROKER;
-    // this.btnVisa.instance.amount = certificado.P_NPREMIUM;
-    // this.btnVisa.instance.sessionToken = visasession.sessionToken;
-    // this.btnVisa.instance.purchaseNumber = visasession.purchaseNumber;
-    // this.btnVisa.instance.merchantLogo = AppConfig.MERCHANT_LOGO_VISA;
-    // this.btnVisa.instance.userId = ''; // => en el flujo broker se debe enviar el id del usuario
+    // // const visasession = JSON.parse(sessionStorage.getItem('visasession'));
+    // // sessionStorage.setItem('sessionToken', visasession.sessionToken);
+    // // const factory = this.factoryResolver.resolveComponentFactory(
+    // //   ButtonVisaComponent
+    // // );
+    // // this.btnVisa = factory.create(this.viewContainerRef.parentInjector);
+    // // this.btnVisa.instance.action = AppConfig.ACTION_FORM_VISA_BROKER;
+    // // this.btnVisa.instance.amount = certificado.P_NPREMIUM;
+    // // this.btnVisa.instance.sessionToken = visasession.sessionToken;
+    // // this.btnVisa.instance.purchaseNumber = visasession.purchaseNumber;
+    // // this.btnVisa.instance.merchantLogo = AppConfig.MERCHANT_LOGO_VISA;
+    // // this.btnVisa.instance.userId = ''; // => en el flujo broker se debe enviar el id del usuario
     // // Agregar el componente al componente contenedor
-    // this.viewContainerRef.insert(this.btnVisa.hostView);
+    // // this.viewContainerRef.insert(this.btnVisa.hostView);
 
 
     this.visaService.generarSessionToken(65.20, 2201) // user Id
