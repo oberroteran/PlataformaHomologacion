@@ -67,77 +67,7 @@
           </h5>
         </div>
         <div id="comercializador" class="collapse show pt-1">
-          <div class="row">
-            <div class="col-sm-3">
-              <span>TIPO DOCUMENTO</span>
-              <select [(ngModel)]="InputsQuotation.BrokerDocumentTypeId" disabled>
-                <option value="{{InputsQuotation.BrokerDocumentTypeId}}">{{InputsQuotation.BrokerDocumentTypeName}}
-                </option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>NRO. DOCUMENTO</span>
-              <input type="text" placeholder="Documento" id="" [(ngModel)]="InputsQuotation.BrokerDocumentNumber"
-                disabled />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-9">
-              <span>NOMBRE / RAZÓN SOCIAL</span>
-              <input type="text" placeholder="Nombres" [(ngModel)]="InputsQuotation.BrokerName" disabled />
-            </div>
-          </div>
-          <div *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0"
-            class="row  mb-3">
-            <div class="col-sm-3">
-              <span>COMISIÓN SALUD</span>
-              <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.BrokerSaludBounty" />
-            </div>
-            <div class="col-sm-3">
-              <span><input *ngIf="mode=='recotizar'" type="checkbox" style="top: 3px;" class="checkbox"
-                  [disabled]="mode!='recotizar'" [checked]="false" [(ngModel)]="enabledHealthMainPropCommission"
-                  (ngModelChange)="switchHealthPropCommissionValue()">
-                COMISIÓN
-                PROPUESTA</span>
-              <input type="text" placeholder="0" [disabled]="mode!='recotizar' || !enabledHealthMainPropCommission"
-                [(ngModel)]="InputsQuotation.BrokerSaludPropBounty" />
-            </div>
-            <div class="col-sm-3" *ngIf="mode!='recotizar'">
-              <span><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" style="top: 3px;" class="checkbox"
-                  [checked]="false" [(ngModel)]="enabledHealthMainAuthCommission"
-                  (ngModelChange)="switchHealthAuthCommissionValue()">
-                COMISIÓN
-                AUTORIZADA</span>
-              <input type="text" [disabled]="!enabledHealthMainAuthCommission"
-                [(ngModel)]="InputsQuotation.BrokerSaludAuthBounty" />
-            </div>
-          </div>
-          <div *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0"
-            class="row  mb-3">
-            <div class="col-sm-3">
-              <span>COMISIÓN PENSIÓN</span>
-              <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.BrokerPensionBounty" />
-            </div>
-            <div class="col-sm-3">
-              <span><input *ngIf="mode=='recotizar'" type="checkbox" style="top: 3px;" class="checkbox"
-                  [disabled]="mode!='recotizar'" [checked]="false" [(ngModel)]="enabledPensionMainPropCommission"
-                  (ngModelChange)="switchPensionPropCommissionValue()">
-                COMISIÓN
-                PROPUESTA</span>
-              <input type="text" placeholder="0" [disabled]="mode!='recotizar' || !enabledPensionMainPropCommission"
-                [(ngModel)]="InputsQuotation.BrokerPensionPropBounty" />
-            </div>
-            <div class="col-sm-3" *ngIf="mode!='recotizar'">
-              <span><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" style="top: 3px;" class="checkbox"
-                  [checked]="false" [(ngModel)]="enabledPensionMainAuthCommission"
-                  (ngModelChange)="switchPensionAuthCommissionValue()">
-                COMISIÓN
-                AUTORIZADA</span>
-              <input type="text" [disabled]="!enabledPensionMainAuthCommission"
-                [(ngModel)]="InputsQuotation.BrokerPensionAuthBounty" />
-            </div>
-          </div>
-          <div class="row">
+          <div class="row" style="margin-top: 20px">
             <div class="col-sm-12"
               *ngIf="InputsQuotation.SecondaryBrokerList!=null && InputsQuotation.SecondaryBrokerList.length>0">
               <table class="table table-borderless riesgo tblbroker">
@@ -172,14 +102,14 @@
                             [checked]="false" class="checkbox" [(ngModel)]="enabledPensionSecondaryPropCommission"
                             (ngModelChange)="switchPensionSecondaryPropCommissionValue()">
                           <span class="schk">
-                            Propuesta Pensión</span></label>
+                            Pensión Propuesta</span></label>
                       </th>
                       <th class="col-sm text-center ctasa" *ngIf="mode!='recotizar'">
                         <label><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" [checked]="false"
                             class="checkbox" [(ngModel)]="enabledPensionSecondaryAuthCommission"
                             (ngModelChange)="switchPensionSecondaryAuthCommissionValue()">
                           <span class="schk">
-                            Autorizada Pensión</span></label>
+                            Pensión Autorizada</span></label>
                       </th>
                     </ng-container>
 
@@ -243,7 +173,14 @@
                 <option value="{{InputsQuotation.LocationId}}">{{InputsQuotation.LocationName}}</option>
               </select>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-3">
+              <span>ACTIVIDAD A REALIZAR</span>
+              <select [(ngModel)]="InputsQuotation.TechnicalActivityId" disabled>
+                <option value="{{InputsQuotation.TechnicalActivityId}}">{{InputsQuotation.TechnicalActivityName}}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm-3">
               <span>ACTIVIDAD ECONÓMICA</span>
               <select [(ngModel)]="InputsQuotation.EconomicActivityId" disabled>
                 <option value="{{InputsQuotation.EconomicActivityId}}">{{InputsQuotation.EconomicActivityName}}

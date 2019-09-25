@@ -518,6 +518,8 @@ export class QuotationEvaluationComponent implements OnInit {
 
                         this.InputsQuotation.EconomicActivityId = res[0].GenericResponse.COD_ACT_ECONOMICA;
                         this.InputsQuotation.EconomicActivityName = res[0].GenericResponse.DES_ACT_ECONOMICA;
+                        this.InputsQuotation.TechnicalActivityId = res[0].GenericResponse.ACT_TECNICA;
+                        this.InputsQuotation.TechnicalActivityName = res[0].GenericResponse.DES_ACT_TECNICA;
                         this.InputsQuotation.HasDelimiter = parseInt(res[0].GenericResponse.DELIMITACION) == 0 ? false : true;
                         this.InputsQuotation.IsMining = parseInt(res[0].GenericResponse.MINA) == 0 ? false : true;
                         this.InputsQuotation.DepartmentId = res[0].GenericResponse.COD_DEPARTAMENTO;
@@ -544,36 +546,18 @@ export class QuotationEvaluationComponent implements OnInit {
                         //Datos de brokers
                         this.InputsQuotation.SecondaryBrokerList = [];
                         res[1].forEach(item => {
-                            if (item.PRINCIPAL == 1) {
-                                self.InputsQuotation.Id = item.CANAL;
-                                self.InputsQuotation.BrokerDocumentTypeId = item.TYPE_DOC_COMER;
-                                self.InputsQuotation.BrokerClientId = item.SCLIENT;
-                                self.InputsQuotation.BrokerDocumentTypeName = item.DES_DOC_COMER;
-                                self.InputsQuotation.BrokerDocumentNumber = item.DOC_COMER;
-                                self.InputsQuotation.BrokerName = item.COMERCIALIZADOR;
-                                self.InputsQuotation.BrokerChannelTypeId = item.TIPO_CANAL;
-                                self.InputsQuotation.BrokerChannelId = item.CANAL;
+                            item.COMISION_SALUD_PRO = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD_PRO);
+                            item.COMISION_PENSION_PRO = CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION_PRO);
+                            item.COMISION_SALUD_AUT = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD_AUT);
+                            item.COMISION_PENSION_AUT = CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION_AUT);
+                            item.COMISION_SALUD = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD);
+                            item.COMISION_PENSION = CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION);
 
-                                self.InputsQuotation.BrokerPensionBounty = item.COMISION_PENSION;
-                                self.InputsQuotation.BrokerPensionPropBounty = item.COMISION_PENSION_PRO;
-                                self.InputsQuotation.BrokerSaludBounty = item.COMISION_SALUD;
-                                self.InputsQuotation.BrokerSaludPropBounty = item.COMISION_SALUD_PRO;
-                                self.InputsQuotation.BrokerSaludAuthBounty = item.COMISION_SALUD_AUT;
-                                self.InputsQuotation.BrokerPensionAuthBounty = item.COMISION_PENSION_AUT;
-
-                                self.InputsQuotation.BrokerSharedCommission = item.NSHARE;
-
-                                self.originalHealthMainPropComission = item.COMISION_SALUD_PRO;
-                                self.originalPensionMainPropComission = item.COMISION_PENSION_PRO;
-                                self.originalPensionMainAuthComission = self.InputsQuotation.BrokerPensionAuthBounty;
-                                self.originalHealthMainAuthComission = self.InputsQuotation.BrokerSaludAuthBounty;
-                            } else {
-                                item.OriginalHealthPropCommission = item.COMISION_SALUD_PRO;
-                                item.OriginalPensionPropCommission = item.COMISION_PENSION_PRO;
-                                item.OriginalHealthAuthCommission = item.COMISION_SALUD_AUT;
-                                item.OriginalPensionAuthCommission = item.COMISION_PENSION_AUT;
-                                self.InputsQuotation.SecondaryBrokerList.push(item);
-                            }
+                            item.OriginalHealthPropCommission = item.COMISION_SALUD_PRO;
+                            item.OriginalPensionPropCommission = item.COMISION_PENSION_PRO;
+                            item.OriginalHealthAuthCommission = item.COMISION_SALUD_AUT;
+                            item.OriginalPensionAuthCommission = item.COMISION_PENSION_AUT;
+                            self.InputsQuotation.SecondaryBrokerList.push(item);
                         });
 
                         //Detalles de cotización
@@ -833,24 +817,6 @@ export class QuotationEvaluationComponent implements OnInit {
             self.statusChangeRequest.pensionAuthorizedRateList = [];
             this.statusChangeRequest.BrokerList = [];
 
-            if (this.InputsQuotation.BrokerChannelId != "2015000002") {
-                let item = new Broker();
-                item.Id = this.InputsQuotation.BrokerChannelId;
-                item.ProductList = [];
-                if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
-                    let obj = new BrokerProduct();
-                    obj.Product = self.pensionProductId;
-                    obj.AuthorizedCommission = self.InputsQuotation.BrokerPensionAuthBounty;
-                    item.ProductList.push(obj);
-                }
-                if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
-                    let obj = new BrokerProduct();
-                    obj.Product = self.healthProductId;
-                    obj.AuthorizedCommission = self.InputsQuotation.BrokerSaludAuthBounty;
-                    item.ProductList.push(obj);
-                }
-                this.statusChangeRequest.BrokerList.push(item);
-            }
             this.InputsQuotation.SecondaryBrokerList.forEach(element => {
                 let item = new Broker();
                 item.Id = element.CANAL;
@@ -986,19 +952,6 @@ export class QuotationEvaluationComponent implements OnInit {
             });
 
             quotation.BrokerList = [];
-            let mainBroker = new QuotationBroker();
-            mainBroker.ChannelTypeId = this.InputsQuotation.BrokerChannelTypeId;
-            mainBroker.ChannelId = this.InputsQuotation.BrokerChannelId;
-            mainBroker.ClientId = this.InputsQuotation.BrokerClientId;
-
-            mainBroker.HealthProposedCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerSaludPropBounty) ? this.InputsQuotation.BrokerSaludPropBounty : 0;
-            mainBroker.HealthCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerSaludBounty) ? this.InputsQuotation.BrokerSaludBounty : 0;
-            mainBroker.PensionProposedCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerPensionPropBounty) ? this.InputsQuotation.BrokerPensionPropBounty : 0;
-            mainBroker.PensionCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerPensionBounty) ? this.InputsQuotation.BrokerPensionBounty : 0;
-            mainBroker.IsPrincipal = true;
-            // mainBroker.SharedCommission = CommonMethods.isNumber(this.InputsQuotation.BrokerSharedCommission) ? this.InputsQuotation.BrokerSharedCommission : 0;
-            mainBroker.SharedCommission = 0;
-            quotation.BrokerList.push(mainBroker);
 
             this.InputsQuotation.SecondaryBrokerList.forEach((element) => {
                 let item = new QuotationBroker();
@@ -1279,25 +1232,16 @@ export class QuotationEvaluationComponent implements OnInit {
     validateAuthorizedCommmissions(): string[] {
         let self = this;
         let errorList = [];
-        if (this.InputsQuotation.BrokerChannelId != "2015000002") {
-            if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
-                if (CommonMethods.isNumber(this.InputsQuotation.BrokerSaludAuthBounty) == false) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " no es válida.");
-                else if (this.InputsQuotation.BrokerSaludAuthBounty <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de salud de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
-            }
-            if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
-                if (CommonMethods.isNumber(this.InputsQuotation.BrokerPensionAuthBounty) == false) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " no es válida.");
-                else if (this.InputsQuotation.BrokerPensionAuthBounty <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de pensión de " + this.InputsQuotation.BrokerName + " debe ser mayor a cero.");
-            }
-        }
-
         this.InputsQuotation.SecondaryBrokerList.map(function (item) {
-            if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
-                if (CommonMethods.isNumber(item.COMISION_SALUD_AUT) == false) errorList.push("La comisión autorizada de salud de " + item.COMERCIALIZADOR + " no es válida.");
-                else if (item.COMISION_SALUD_AUT <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de salud de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
-            }
-            if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
-                if (CommonMethods.isNumber(item.COMISION_PENSION_AUT) == false) errorList.push("La comisión autorizada de pensión de " + item.COMERCIALIZADOR + " no es válida.");
-                else if (item.COMISION_PENSION_AUT <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de pensión de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
+            if (item.CANAL != "2015000002") {
+                if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
+                    if (CommonMethods.isNumber(item.COMISION_SALUD_AUT) == false) errorList.push("La comisión autorizada de salud de " + item.COMERCIALIZADOR + " no es válida.");
+                    else if (item.COMISION_SALUD_AUT <= 0 && self.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de salud de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
+                }
+                if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
+                    if (CommonMethods.isNumber(item.COMISION_PENSION_AUT) == false) errorList.push("La comisión autorizada de pensión de " + item.COMERCIALIZADOR + " no es válida.");
+                    else if (item.COMISION_PENSION_AUT <= 0 && self.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La comisión autorizada de pensión de " + item.COMERCIALIZADOR + " debe ser mayor a cero.");
+                }
             }
         });
         return errorList;
