@@ -234,11 +234,103 @@ export class PolicyFormComponent implements OnInit {
 	}
 
 	onFacturacion() {
+		let self = this;
+		let sumPen = 0;
+		this.pensionList.forEach(item => {
+			sumPen = sumPen + parseFloat(item.AUT_PRIMA)
+		});
+
+		let sumSal = 0;
+		this.saludList.forEach(item => {
+			sumSal = sumSal + parseFloat(item.AUT_PRIMA)
+		});
+
 		if (this.polizaEmit.facturacionVencido == true) {
 			this.facAnticipada = true;
-		} else if (this.polizaEmit.facturacionAnticipada == true) {
-			this.facVencido = true;
+
+			if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+				this.mensajePrimaPension = ""
+				this.totalNetoPensionSave = this.primatotalSCTR
+				this.igvPensionSave = this.igvPension;
+				this.brutaTotalPensionSave = this.totalSTRC;
+			} else {
+				if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+					this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+					this.totalNetoPensionSave = this.primatotalSCTR
+					this.igvPensionSave = this.igvPension;
+					this.brutaTotalPensionSave = this.totalSTRC;
+				} else {
+					this.totalNetoPensionSave = this.primatotalSCTR
+					this.igvPensionSave = this.igvPension;
+					this.brutaTotalPensionSave = this.totalSTRC;
+					this.mensajePrimaPension = "";
+				}
+			}
+
+			if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+				this.mensajePrimaSalud = ""
+				this.totalNetoSaludSave = this.primatotalSalud
+				this.igvSaludSave = this.igvSalud;
+				this.brutaTotalSaludSave = this.totalSalud;
+			} else {
+				if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+					this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+					this.totalNetoSaludSave = this.primatotalSalud
+					this.igvSaludSave = this.igvSalud;
+					this.brutaTotalSaludSave = this.totalSalud;
+				} else {
+					this.totalNetoSaludSave = this.primatotalSalud
+					this.igvSaludSave = this.igvSalud;
+					this.brutaTotalSaludSave = this.totalSalud;
+					this.mensajePrimaPension = "";
+				}
+			}
+
 		} else {
+			if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+				this.mensajePrimaPension = ""
+				this.totalNetoPensionSave = this.primatotalSCTR
+				this.igvPensionSave = this.igvPension;
+				this.brutaTotalPensionSave = this.totalSTRC;
+			} else {
+				if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+					this.totalNetoPensionSave = this.formateaValor(this.polizaEmitCab.MIN_PENSION)
+					this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+					this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+					this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
+				} else {
+					this.mensajePrimaPension = ""
+					this.totalNetoPensionSave = this.primatotalSCTR
+					this.igvPensionSave = this.igvPension;
+					this.brutaTotalPensionSave = this.totalSTRC;
+				}
+			}
+
+			if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.MIN_SALUD)) {
+				this.mensajePrimaSalud = ""
+				this.totalNetoSaludSave = this.primatotalSalud
+				this.igvSaludSave = this.igvSalud;
+				this.brutaTotalSaludSave = this.totalSalud;
+			} else {
+				if (this.primatotalSalud < parseFloat(this.polizaEmitCab.MIN_SALUD)) {
+					this.totalNetoSaludSave = this.formateaValor(this.polizaEmitCab.MIN_SALUD)
+					this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+					this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+					this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
+				} else {
+					this.mensajePrimaSalud = ""
+					this.totalNetoSaludSave = this.primatotalSalud
+					this.igvSaludSave = this.igvSalud;
+					this.brutaTotalSaludSave = this.totalSalud;
+				}
+			}
+		}
+
+		if (this.polizaEmit.facturacionAnticipada == true) {
+			this.facVencido = true;
+		}
+
+		if (this.polizaEmit.facturacionVencido == false && this.polizaEmit.facturacionAnticipada == false) {
 			this.facVencido = false;
 			this.facAnticipada = false;
 		}
@@ -369,51 +461,93 @@ export class PolicyFormComponent implements OnInit {
 							sumPen = sumPen + parseFloat(item.AUT_PRIMA)
 						});
 
-						if (self.formateaValor(sumPen) == this.primatotalSCTR) {
-							this.mensajePrimaPension = ""
-							this.totalNetoPensionSave = this.primatotalSCTR
-							this.igvPensionSave = this.igvPension;
-							this.brutaTotalPensionSave = this.totalSTRC;
-						} else {
-							if (parseFloat(this.primatotalSCTR.toString()) <= parseFloat(this.polizaEmitCab.MIN_PENSION)) {
-								this.totalNetoPensionSave = this.formateaValor(this.polizaEmitCab.MIN_PENSION)
-								this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
-								this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
-								this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
-							} else {
+						if (this.polizaEmit.facturacionVencido == true) {
+							if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
 								this.mensajePrimaPension = ""
 								this.totalNetoPensionSave = this.primatotalSCTR
 								this.igvPensionSave = this.igvPension;
 								this.brutaTotalPensionSave = this.totalSTRC;
+							} else {
+								if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+									this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+									this.totalNetoPensionSave = this.primatotalSCTR
+									this.igvPensionSave = this.igvPension;
+									this.brutaTotalPensionSave = this.totalSTRC;
+								} else {
+									this.totalNetoPensionSave = this.primatotalSCTR
+									this.igvPensionSave = this.igvPension;
+									this.brutaTotalPensionSave = this.totalSTRC;
+									this.mensajePrimaPension = "";
+								}
+							}
+						} else {
+							if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+								this.mensajePrimaPension = ""
+								this.totalNetoPensionSave = this.primatotalSCTR
+								this.igvPensionSave = this.igvPension;
+								this.brutaTotalPensionSave = this.totalSTRC;
+							} else {
+								if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+									this.totalNetoPensionSave = this.formateaValor(this.polizaEmitCab.MIN_PENSION)
+									this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+									this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+									this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
+								} else {
+									this.mensajePrimaPension = ""
+									this.totalNetoPensionSave = this.primatotalSCTR
+									this.igvPensionSave = this.igvPension;
+									this.brutaTotalPensionSave = this.totalSTRC;
+								}
 							}
 						}
+
+
 
 						let sumSal = 0;
 						this.saludList.forEach(item => {
 							sumSal = sumSal + parseFloat(item.AUT_PRIMA)
 						});
 
-						if (self.formateaValor(sumSal) == this.primatotalSalud) {
-							this.mensajePrimaSalud = ""
-							this.totalNetoSaludSave = this.primatotalSalud
-							this.igvSaludSave = this.igvSalud;
-							this.brutaTotalSaludSave = this.totalSalud;
-						} else {
-							if (this.primatotalSalud <= parseFloat(this.polizaEmitCab.MIN_SALUD)) {
-								this.totalNetoSaludSave = this.formateaValor(this.polizaEmitCab.MIN_SALUD)
-								this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
-								this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
-								this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
-							} else {
+
+						if (this.polizaEmit.facturacionVencido == true) {
+							if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.MIN_PENSION)) {
 								this.mensajePrimaSalud = ""
 								this.totalNetoSaludSave = this.primatotalSalud
 								this.igvSaludSave = this.igvSalud;
 								this.brutaTotalSaludSave = this.totalSalud;
+							} else {
+								if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.MIN_PENSION)) {
+									this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+									this.totalNetoSaludSave = this.primatotalSalud
+									this.igvSaludSave = this.igvSalud;
+									this.brutaTotalSaludSave = this.totalSalud;
+								} else {
+									this.totalNetoSaludSave = this.primatotalSalud
+									this.igvSaludSave = this.igvSalud;
+									this.brutaTotalSaludSave = this.totalSalud;
+									this.mensajePrimaPension = "";
+								}
+							}
+						} else {
+							if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.MIN_SALUD)) {
+								this.mensajePrimaSalud = ""
+								this.totalNetoSaludSave = this.primatotalSalud
+								this.igvSaludSave = this.igvSalud;
+								this.brutaTotalSaludSave = this.totalSalud;
+							} else {
+								if (this.primatotalSalud < parseFloat(this.polizaEmitCab.MIN_SALUD)) {
+									this.totalNetoSaludSave = this.formateaValor(this.polizaEmitCab.MIN_SALUD)
+									this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+									this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+									this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
+								} else {
+									this.mensajePrimaSalud = ""
+									this.totalNetoSaludSave = this.primatotalSalud
+									this.igvSaludSave = this.igvSalud;
+									this.brutaTotalSaludSave = this.totalSalud;
+								}
 							}
 						}
-
-
-
 
 						let sumWorkers = 0;
 						if (this.pensionList.length > 0) {
@@ -512,13 +646,9 @@ export class PolicyFormComponent implements OnInit {
 								this.clientInformationService.getClientInformation(data).subscribe(
 									res => {
 										this.contractingdata = res.EListClient[0]
-										console.log(this.contractingdata)
 									}
 
 								);
-
-
-								//contractingdata
 							}
 							this.polizaEmitCab.bsValueIni = new Date();
 							this.polizaEmitCab.bsValueIniMin = new Date(this.polizaEmitCab.EFECTO_COTIZACION);
@@ -535,12 +665,14 @@ export class PolicyFormComponent implements OnInit {
 									this.polizaEmitComer = [];
 									if (res.length > 0 && res !== null) {
 										res.forEach(com => {
-											if (com.PRINCIPAL == 1) {
-												this.polizaEmitComerDTOPrincipal = com;
-											} else {
-												this.polizaEmitComer.push(com);
-											}
+											com.COMISION_PENSION_AUT = com.COMISION_PENSION_AUT == "" ? "0" : com.COMISION_PENSION_AUT;
+											com.COMISION_PENSION_PRO = com.COMISION_PENSION_PRO == "" ? "0" : com.COMISION_PENSION_PRO;
+											com.COMISION_PENSION = com.COMISION_PENSION == "" ? "0" : com.COMISION_PENSION;
+											com.COMISION_SALUD = com.COMISION_SALUD == "" ? "0" : com.COMISION_SALUD;
+											com.COMISION_SALUD_AUT = com.COMISION_SALUD_AUT == "" ? "0" : com.COMISION_SALUD_AUT;
+											com.COMISION_SALUD_PRO = com.COMISION_SALUD_PRO == "" ? "0" : com.COMISION_SALUD_PRO;
 										});
+										this.polizaEmitComer = res
 										this.flagBusqueda = true;
 									} else {
 										this.polizaEmitComerDTOPrincipal = {};
@@ -725,7 +857,7 @@ export class PolicyFormComponent implements OnInit {
 			if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(this.polizaEmitCab.CORREO) == false) {
 				this.flagEmail = true;
 				mensaje += "El correo electrónico es inválido <br />";
-			}else{
+			} else {
 				this.flagEmail = false;
 			}
 		}
@@ -884,7 +1016,7 @@ export class PolicyFormComponent implements OnInit {
 					this.policyemit.savePolicyEmit(myFormData)
 						.subscribe((res: any) => {
 							if (res.P_COD_ERR == 0) {
-								this.flagEmailNull =  true;
+								this.flagEmailNull = true;
 								let policyPension = 0;
 								let policySalud = 0;
 								let constancia = 0

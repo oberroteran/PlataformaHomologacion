@@ -88,8 +88,10 @@
 							</div>
 							<div class="col-sm-3">
 								<span>CORREO ELECTRÓNICO</span>
-								<input type="text" [(ngModel)]="polizaEmitCab.CORREO" [ngClass]="{'error-validate': flagEmail}" name="CORREO"
-									placeholder="Correo Electrónico" (keypress)="valText($event, 6)" [disabled]="flagEmailNull" />
+								<input type="text" [(ngModel)]="polizaEmitCab.CORREO"
+									[ngClass]="{'error-validate': flagEmail}" name="CORREO"
+									placeholder="Correo Electrónico" (keypress)="valText($event, 6)"
+									[disabled]="flagEmailNull" />
 							</div>
 						</div>
 					</div>
@@ -103,7 +105,7 @@
 						</h5>
 					</div>
 					<div id="comercializador" class="collapse show pt-1">
-						<div class="row">
+						<!-- <div class="row">
 							<div class="col-sm-3">
 								<span>TIPO DOCUMENTO</span>
 								<select disabled [(ngModel)]="this.polizaEmitComerDTOPrincipal.TYPE_DOC_COMER"
@@ -119,8 +121,8 @@
 								<input [(ngModel)]="this.polizaEmitComerDTOPrincipal.DOC_COMER" name="DOC_COMER"
 									type="text" placeholder="Documento" id="" disabled />
 							</div>
-						</div>
-						<div class="row">
+						</div> -->
+						<!-- <div class="row">
 							<div class="col-sm-9">
 								<span>NOMBRE / RAZÓN SOCIAL</span>
 
@@ -129,44 +131,45 @@
 							</div>
 
 
-						</div>
-						<div class="row">
+						</div> -->
+						<!-- <div class="row">
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT =$event"
 									name="COMISION_SALUD_AUT" placeholder="0 %" id="" disabled />
-							</div>
-							<!-- <div class="col-sm-3 chk" *ngIf="saludList.length > 0">
+							</div> -->
+						<!-- <div class="col-sm-3 chk" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD PROPUESTA</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO =$event"
 									name="COMISION_SALUD_PRO" placeholder="0" disabled
 									style="margin-top: 2px !important;" FloatDirective />
 							</div> -->
-							<div class="col-sm-3" *ngIf="pensionList.length > 0">
+						<!-- <div class="col-sm-3" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT =$event"
 									name="COMISION_PENSION_AUT" placeholder="0 %" id="" disabled />
-							</div>
-							<!-- <div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
+							</div> -->
+						<!-- <div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN PROPUESTA</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO =$event"
 									name="COMISION_PENSION_PRO" placeholder="0" disabled
 									style="margin-top: 2px !important;" FloatDirective />
 							</div> -->
-						</div>
+						<!-- </div> -->
 
 						<br>
 
-						<table *ngIf="polizaEmitComer.length !== 0" class="table table-borderless riesgo tblbroker">
+						<table class="table table-borderless riesgo tblbroker">
 							<thead>
 								<tr class="d-flex">
 									<th class="col-sm text-center"><label>Tipo Documento</label></th>
 									<th class="col-sm text-center"><label>Nro Documento</label></th>
-									<th class="col-sm text-center"><label>Nombres y Apellidos</label></th>
+									<th class="col-sm text-center"><label>Razón Social / Nombres y Apellidos</label>
+									</th>
 									<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Comisión
 											Salud</label></th>
 									<!-- <th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Propuesta</label>
@@ -178,6 +181,9 @@
 								</tr>
 							</thead>
 							<tbody>
+								<tr class="d-flex" *ngIf="polizaEmitComer.length == 0">
+									<td class="col-sm text-center">No hay brokers</td>
+								</tr>
 								<tr class="d-flex" *ngFor="let comer of polizaEmitComer; let i = index">
 									<td class="col-sm text-center"><span>{{comer.DES_DOC_COMER}}</span></td>
 									<td class="col-sm text-center"><span>{{comer.DOC_COMER}}</span></td>
@@ -256,7 +262,7 @@
 										type="checkbox" [disabled]="facVencido"
 										[(ngModel)]="polizaEmit.facturacionVencido" (ngModelChange)="onFacturacion()"
 										name="FAC_VENCIDO" class="checkbox"><span class="schk"
-										style="margin-top: 15px; font-size: 13px;">PROFORMA A MES
+										style="margin-top: 15px; font-size: 13px;">REGULA A MES
 										VENCIDO</span></label>
 
 								<label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input
@@ -426,8 +432,8 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA SALUD</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD_AUT" name="MIN_SALUD_AUT"
-											placeholder="Prima Mínima" disabled>
+										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD_AUT"
+											name="MIN_SALUD_AUT" placeholder="Prima Mínima" disabled>
 									</div>
 
 									<!-- <div class="col-sm-6">
@@ -499,8 +505,8 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA PENSIÓN</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION_AUT" name="MIN_PENSION_AUT"
-											placeholder="Prima Mínima" disabled>
+										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION_AUT"
+											name="MIN_PENSION_AUT" placeholder="Prima Mínima" disabled>
 									</div>
 									<!-- <div class="col-sm-6">
 										<span>PRIMA MÍNIMA PROPUESTA</span>
@@ -643,11 +649,11 @@
 												<!-- <td>
 													{{ item.type }}
 												</td> -->
-												<td  class="text-center">
+												<td class="text-center">
 													{{ item.size/1024/1024 | number:'.2' }} MB
 												</td>
-												<td  class="text-center"><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
-														title="Eliminar" alt="Eliminar" />
+												<td class="text-center"><img src="assets/icons/anular.png"
+														(click)="files.splice(i,1)" title="Eliminar" alt="Eliminar" />
 												</td>
 											</tr>
 										</tbody>

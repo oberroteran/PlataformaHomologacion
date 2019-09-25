@@ -116,37 +116,28 @@
                     <label class="collapse-btn title" for="comercializador">Datos Brokers</label>
                     <div class="collapse-panel">
                         <div class="collapse-inner collapse-border">
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <span>TIPO DOCUMENTO</span>
-                                    <select [(ngModel)]="InputsQuotation.P_NIDDOC_TYPE_COM" disabled class="minimal">
-                                        <option value="-1" selected>Seleccionar</option>
-                                        <option *ngFor="let documenttype of documentTypeList"
-                                            value="{{documenttype.Id}}">
-                                            {{documenttype.Name}}</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <span>NRO. DOCUMENTO</span>
-                                    <input type="text" placeholder="Documento" id=""
-                                        [(ngModel)]="InputsQuotation.P_SIDDOC_COM" disabled />
-                                </div>
-                                <div [hidden]="!canAddSecondaryBroker" class="col-sm-6" *ngIf="brokerList.length < 2">
-                                    <span>&nbsp;</span>
-                                    <a class=" pull-right" (click)="addBroker()" title="Agregar">
-                                        <img src="assets/icons/add_button_calendar.png" />
-                                    </a>
-                                </div>
+                            <!-- <div class="col-sm-3">
+                                <span>TIPO DOCUMENTO</span>
+                                <select [(ngModel)]="InputsQuotation.P_NIDDOC_TYPE_COM" disabled class="minimal">
+                                    <option value="-1" selected>Seleccionar</option>
+                                    <option *ngFor="let documenttype of documentTypeList" value="{{documenttype.Id}}">
+                                        {{documenttype.Name}}</option>
+                                </select>
                             </div>
+                            <div class="col-sm-3">
+                                <span>NRO. DOCUMENTO</span>
+                                <input type="text" placeholder="Documento" id=""
+                                    [(ngModel)]="InputsQuotation.P_SIDDOC_COM" disabled />
+                            </div>
+
                             <div class="row">
                                 <div class="col-sm-9">
                                     <span>RAZÓN SOCIAL</span>
                                     <input type="text" placeholder="Nombres"
                                         [(ngModel)]="InputsQuotation.P_SFIRSTNAME_COM" disabled />
                                 </div>
-                            </div>
-                            <div class="row  mb-3">
+                            </div> -->
+                            <!-- <div class="row  mb-3">
                                 <div class="col-sm-3" [hidden]="listaTasasSalud?.length == 0">
                                     <span>COMISIÓN SALUD</span>
                                     <input type="text" placeholder="0" disabled
@@ -177,15 +168,20 @@
                                         [(ngModel)]="InputsQuotation.P_COMISSION_BROKER_PENSION_PRO" FloatDirective
                                         style="margin-top: 3px !important;" />
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="row">
-                                <div class="col-sm-12" *ngIf="brokerList.length > 0">
-                                    <table class="table table-borderless riesgo tblbroker">
+                                <div class="col-sm-12">
+                                    <div [hidden]="!canAddSecondaryBroker" *ngIf="brokerList.length < 3">
+                                        <button class=" pull-right" (click)="addBroker()" style="margin: 0">
+                                            <span>Agregar</span>
+                                        </button>
+                                    </div>
+                                    <table class="table table-borderless riesgo tblbroker" style="margin-top: 60px;">
                                         <thead>
                                             <tr class="d-flex">
                                                 <th class="col-sm text-center"><label>Tipo Documento</label></th>
                                                 <th class="col-sm text-center"><label>Nro Documento</label></th>
-                                                <th class="col-sm text-center"><label>Nombres y Apellidos</label></th>
+                                                <th class="col-sm text-center"><label>Razón Social / Nombres y Apellidos</label></th>
                                                 <th class="col-sm text-center" [hidden]="listaTasasSalud?.length == 0">
                                                     <label>Comisión
                                                         Salud</label>
@@ -210,7 +206,7 @@
                                         </thead>
                                         <tbody>
                                             <tr class="d-flex" *ngIf="brokerList.length == 0">
-                                                <td class="col-sm text-center">No hay tasas asociadas</td>
+                                                <td class="col-sm text-center">No hay brokers</td>
                                             </tr>
                                             <tr class="d-flex" *ngFor="let broker of brokerList; let row = index">
                                                 <td class="col-sm text-center">
@@ -237,9 +233,12 @@
                                                         (ngModelChange)="changePensionPropuesta($event, broker.SCLIENT)"
                                                         FloatDirective />
                                                 </td>
-                                                <td class=""><span style="padding: 0 12px;"><img
-                                                            src="assets/icons/anular.png" (click)="deleteBroker(row)"
-                                                            title="Eliminar" alt="Eliminar" /></span></td>
+                                                <td class=""><span style="padding: 0 12px;"
+                                                    *ngIf="broker.BLOCK != 1"><img src="assets/icons/anular.png"
+                                                        (click)="deleteBroker(row)" title="Eliminar"
+                                                        alt="Eliminar" /></span>
+                                                <span style="padding: 0 12px;"
+                                                    *ngIf="broker.BLOCK == 1">------</span></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -629,11 +628,12 @@
                                                     <!-- <td>
                                                         {{ item.type }}
                                                     </td> -->
-                                                    <td  class="text-center">
+                                                    <td class="text-center">
                                                         {{ item.size/1024/1024 | number:'.2' }} MB
                                                     </td>
-                                                    <td  class="text-center"><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
-                                                            title="Eliminar" alt="Eliminar" />
+                                                    <td class="text-center"><img src="assets/icons/anular.png"
+                                                            (click)="files.splice(i,1)" title="Eliminar"
+                                                            alt="Eliminar" />
                                                     </td>
                                                 </tr>
                                             </tbody>

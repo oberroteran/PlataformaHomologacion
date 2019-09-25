@@ -252,13 +252,38 @@ export class QuotationComponent implements OnInit {
             this.InputsQuotation.P_NLOCAL = null;
             this.InputsQuotation.P_NMUNICIPALITY = null;
         }
-
+        console.log(JSON.parse(localStorage.getItem("currentUser")))
         //Datos del comercializador
-        this.InputsQuotation.P_COMERCIALIZADOR_LIST = this.listaComercializador; // Lista de comercializador
-        this.InputsQuotation.P_NIDDOC_TYPE_COM = currentUser["sclient"].substr(1, 1);
-        this.InputsQuotation.P_SIDDOC_COM = currentUser["sclient"].substr(3);
-        this.InputsQuotation.P_SFIRSTNAME_COM = currentUser["desCanal"];
-        this.canal = currentUser["canal"];
+        let brokerMain: any = {}
+        brokerMain.NTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
+        // brokerMain.CODCANAL = ""
+        brokerMain.COD_CANAL = JSON.parse(localStorage.getItem("currentUser"))["canal"];
+        brokerMain.NCORREDOR = JSON.parse(localStorage.getItem("currentUser"))["brokerId"];
+        brokerMain.NTIPDOC = JSON.parse(localStorage.getItem("currentUser"))["sclient"].substr(1, 1);
+        brokerMain.NNUMDOC = JSON.parse(localStorage.getItem("currentUser"))["sclient"].substr(3);
+        brokerMain.RAZON_SOCIAL = JSON.parse(localStorage.getItem("currentUser"))["desCanal"];
+        brokerMain.PROFILE = JSON.parse(localStorage.getItem("currentUser"))["idProfile"];
+        brokerMain.SCLIENT = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
+
+        brokerMain.P_NPRINCIPAL = 0;
+
+        if(brokerMain.PROFILE == this.perfil){
+            brokerMain.BLOCK = 1;
+        }else{
+            brokerMain.BLOCK = 0;                                       
+        }
+
+        brokerMain.P_COM_SALUD = 0;
+        brokerMain.P_COM_SALUD_PRO = 0;
+        brokerMain.P_COM_PENSION = 0;
+        brokerMain.P_COM_PENSION_PRO = 0;
+        this.brokerList.push(brokerMain);
+
+        // this.InputsQuotation.P_COMERCIALIZADOR_LIST = this.listaComercializador; // Lista de comercializador
+        //this.InputsQuotation.P_NIDDOC_TYPE_COM = currentUser["sclient"].substr(1, 1);
+        //this.InputsQuotation.P_SIDDOC_COM = currentUser["sclient"].substr(3);
+        //this.InputsQuotation.P_SFIRSTNAME_COM = currentUser["desCanal"];
+        //this.canal = currentUser["canal"];
 
         //Cotizador
         this.InputsQuotation.P_SCTR_SALUD = false; // Delimitacion  1 o 0
@@ -1358,7 +1383,7 @@ export class QuotationComponent implements OnInit {
                 });
             }
         }
-        
+
         //this.calcular();
     }
 
@@ -1570,16 +1595,16 @@ export class QuotationComponent implements OnInit {
                 });
             }
 
-            //Agregando los brokerId y middlemanId | Comercializador principal
-            if (JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"] == 6 || JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"] == 8) {
-                let brokerItem = new Channel();
-                brokerItem.brokerId = JSON.parse(localStorage.getItem("currentUser"))["ncorredor"].toString();
-                data.channel.push(brokerItem);
-            } else {
-                let middlemanItem = new Channel();
-                middlemanItem.middlemanId = JSON.parse(localStorage.getItem("currentUser"))["canal"].toString();
-                data.channel.push(middlemanItem);
-            }
+            // //Agregando los brokerId y middlemanId | Comercializador principal
+            // if (JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"] == 6 || JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"] == 8) {
+            //     let brokerItem = new Channel();
+            //     brokerItem.brokerId = JSON.parse(localStorage.getItem("currentUser"))["ncorredor"].toString();
+            //     data.channel.push(brokerItem);
+            // } else {
+            //     let middlemanItem = new Channel();
+            //     middlemanItem.middlemanId = JSON.parse(localStorage.getItem("currentUser"))["canal"].toString();
+            //     data.channel.push(middlemanItem);
+            // }
 
             this.clientInformationService.getTariff(data).subscribe(
                 res => {
@@ -2291,16 +2316,16 @@ export class QuotationComponent implements OnInit {
         }
 
         //Comercializador Principal
-        let itemQuotationComMain: any = {};
-        itemQuotationComMain.P_NIDTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
-        itemQuotationComMain.P_NINTERMED = JSON.parse(localStorage.getItem("currentUser"))["canal"];
-        itemQuotationComMain.P_SCLIENT_COMER = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
-        itemQuotationComMain.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD : "0";
-        itemQuotationComMain.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO : "0";
-        itemQuotationComMain.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION : "0";
-        itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
-        itemQuotationComMain.P_NPRINCIPAL = 1;
-        dataQuotation.QuotationCom.push(itemQuotationComMain);
+        // let itemQuotationComMain: any = {};
+        // itemQuotationComMain.P_NIDTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
+        // itemQuotationComMain.P_NINTERMED = JSON.parse(localStorage.getItem("currentUser"))["canal"];
+        // itemQuotationComMain.P_SCLIENT_COMER = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
+        // itemQuotationComMain.P_NCOMISION_SAL = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD : "0";
+        // itemQuotationComMain.P_NCOMISION_SAL_PR = self.listaTasasSalud.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_SALUD_PRO : "0";
+        // itemQuotationComMain.P_NCOMISION_PEN = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION : "0";
+        // itemQuotationComMain.P_NCOMISION_PEN_PR = self.listaTasasPension.length > 0 ? this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO == "" ? "0" : this.InputsQuotation.P_COMISSION_BROKER_PENSION_PRO : "0";
+        // itemQuotationComMain.P_NPRINCIPAL = 1;
+        // dataQuotation.QuotationCom.push(itemQuotationComMain);
 
         //Comercializadores
         if (this.brokerList.length > 0) {
@@ -2489,6 +2514,8 @@ export class QuotationComponent implements OnInit {
             BorkerData.P_COM_SALUD_PRO = 0;
             BorkerData.P_COM_PENSION = 0;
             BorkerData.P_COM_PENSION_PRO = 0;
+            BorkerData.PROFILE = JSON.parse(localStorage.getItem("currentUser"))["idProfile"];
+            BorkerData.BLOCK = 0; 
             this.brokerList.push(BorkerData);
             this.equivalentMuni();
         }, (reason) => {
