@@ -318,7 +318,7 @@ export class QuotationEvaluationComponent implements OnInit {
      * Obtiene una lista de estados de cotización
      */
     getStatusList() {
-        this.quotationService.getStatusList().subscribe(
+        this.quotationService.getStatusList("3").subscribe(
             res => {
                 res.forEach(element => {
                     if (element.Id == "1" || element.Id == "2" || element.Id == "3") this.statusList.push(element);

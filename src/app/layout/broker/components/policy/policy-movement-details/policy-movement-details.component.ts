@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ɵConsole } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PolicyService } from '../../../services/policy/policy.service';
 import { PolicyDocumentsComponent } from '../policy-documents/policy-documents.component'
@@ -7,6 +7,7 @@ import { PolicyemitService } from '../../../services/policy/policyemit.service';
 import Swal from 'sweetalert2'
 //Compartido
 import { AccessFilter } from './../../access-filter'
+import { AnulMovComponent } from '../../../modal/anul-mov/anul-mov.component';
 
 @Component({
   selector: 'app-policy-movement-details',
@@ -66,7 +67,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
         this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
 
         this.canCancelMovements = AccessFilter.hasPermission("20");
-        
+
         this.policyMovementList.forEach(item => {
           if (item.COD_TRANSAC == 7) {
             this.flagAnular = true;
@@ -91,20 +92,53 @@ export class PolicyMovementDetailsComponent implements OnInit {
     this.listToShow = this.policyMovementList.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
   }
 
-  anularMov(nroMov: any) {
+  facturarMov(item: any, typeMovement: any) {
+    let facturacion: any = {};
+    facturacion.P_NID_COTIZACION = this.cotizacionID // nro cotizacion
+    facturacion.P_NMOVEMENT = item.NRO // nro cotizacion
+
+    this.policyemit.valBilling(facturacion).subscribe(
+      res => {
+        if (res.P_NCODE == 0) {
+          this.transMov(item, typeMovement, res.P_SMESSAGE);
+        } else {
+          Swal.fire({
+            title: "Información",
+            text: res.P_SMESSAGE,
+            type: "info",
+            confirmButtonText: 'OK',
+            allowOutsideClick: false,
+          })
+        }
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
+  }
+
+  transMov(item: any, typeMovement: any, message?: any) {
+    let question = "";
+    let btnMov = "";
+    let response = ""
+    question = message
+    btnMov = "Facturar"
+    response = "Se ha facturado correctamente el movimiento"
+
     let myFormData: FormData = new FormData()
     let renovacion: any = {};
     renovacion.P_NID_COTIZACION = this.cotizacionID // nro cotizacion
     renovacion.P_DEFFECDATE = null; //Fecha Inicio
     renovacion.P_DEXPIRDAT = null; // Fecha Fin
     renovacion.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"] // Fecha hasta
-    renovacion.P_NTYPE_TRANSAC = 6; // tipo de movimiento
+    renovacion.P_NTYPE_TRANSAC = typeMovement; // tipo de movimiento
     renovacion.P_NID_PROC = "" // codigo de proceso (Validar trama)
     renovacion.P_FACT_MES_VENCIDO = null // Facturacion Vencida
     renovacion.P_SFLAG_FAC_ANT = null // Facturacion Anticipada
     renovacion.P_SCOLTIMRE = null // Tipo de renovacion
     renovacion.P_NPAYFREQ = null // Frecuencia Pago
-    renovacion.P_NMOV_ANUL = nroMov // Movimiento de anulacion
+    renovacion.P_NMOV_ANUL = item.NRO // Movimiento de anulacion
     renovacion.P_NNULLCODE = 0 // Motivo anulacion
     renovacion.P_SCOMMENT = "" // Frecuencia Pago
 
@@ -112,10 +146,10 @@ export class PolicyMovementDetailsComponent implements OnInit {
 
     Swal.fire({
       title: "Información",
-      text: "¿Deseas anular este movimiento?",
+      text: question,
       type: "question",
       showCancelButton: true,
-      confirmButtonText: 'Anular',
+      confirmButtonText: btnMov,
       allowOutsideClick: false,
       cancelButtonText: 'Cancelar'
     })
@@ -127,7 +161,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
                 this.getPolicyMovement(this.cotizacionID);
                 Swal.fire({
                   title: "Información",
-                  text: "Se ha anulado correctamente el movimiento",
+                  text: response,
                   type: "success",
                   confirmButtonText: 'OK',
                   allowOutsideClick: false,
@@ -154,7 +188,25 @@ export class PolicyMovementDetailsComponent implements OnInit {
       });
   }
 
-  openModal(item: any) {
+  anularMov(item: any, typeMovement: any) {
+    let modalRef: NgbModalRef;
+    modalRef = this.modalService.open(AnulMovComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
+    modalRef.componentInstance.reference = modalRef;
+    modalRef.componentInstance.itemAnul = item;
+    modalRef.componentInstance.typeMovement = typeMovement;
+    modalRef.componentInstance.cotizacionID = this.cotizacionID;
+
+    modalRef.result.then((renovacion) => {
+      if (renovacion != undefined) {
+        this.getPolicyMovement(this.cotizacionID);
+        this.router.navigate(['/broker/policy-transactions']);
+      }
+    }, (reason) => {
+    });
+  }
+
+  verDocumentos(item: any) {
+    console.log(item)
     let modalRef: NgbModalRef;
     modalRef = this.modalService.open(PolicyDocumentsComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
     modalRef.componentInstance.reference = modalRef;
@@ -162,6 +214,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
     modalRef.componentInstance.generadosList = item.RUTAS_GEN;
     modalRef.componentInstance.comentario = item.COMENTARIO;
     modalRef.componentInstance.motAnulacion = item.MOT_ANULACION;
+    modalRef.componentInstance.codTransac = item.COD_TRANSAC;
   }
 
 }

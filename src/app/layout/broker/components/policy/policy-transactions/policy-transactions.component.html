@@ -62,7 +62,7 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-9">
-								<span>NOMBRES Y APELLIDOS / RAZON SOCIAL</span>
+								<span>NOMBRES Y APELLIDOS / RAZÓN SOCIAL</span>
 								<input type="text" [(ngModel)]="polizaEmitCab.NOMBRE_RAZON" name="NOMBRE_RAZON"
 									placeholder="Nombres" disabled />
 							</div>
@@ -90,7 +90,7 @@
 						</h5>
 					</div>
 					<div id="comercializador" class="collapse show pt-1">
-						<div class="row">
+						<!-- <div class="row">
 							<div class="col-sm-3">
 								<span>TIPO DOCUMENTO</span>
 								<select disabled [(ngModel)]="this.polizaEmitComerDTOPrincipal.TYPE_DOC_COMER"
@@ -113,20 +113,20 @@
 									</a>
 								</div>
 							</div>
-						</div>
-						<div class="row">
+						</div> -->
+						<!-- <div class="row">
 							<div class="col-sm-9">
-								<span>NOMBRE o RAZON SOCIAL</span>
+								<span>NOMBRES Y APELLIDOS / RAZÓN SOCIAL</span>
 								<input type="text" [(ngModel)]='polizaEmitComerDTOPrincipal.COMERCIALIZADOR'
 									name="COMERCIALIZADOR" placeholder="Nombres" disabled />
 							</div>
-						</div>
-						<div class="row">
+						</div> -->
+						<!-- <div class="row">
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD =$event"
-									name="COMISION_SALUD" placeholder="0" id="" disabled />
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT =$event"
+									name="COMISION_SALUD_AUT" placeholder="0" id="" disabled />
 							</div>
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<label style="margin: 0;"><span class="schk"><input type="checkbox" style="top: 3px;"
@@ -138,10 +138,10 @@
 									style="margin-top: 2px !important;" FloatDirective />
 							</div>
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
-								<span>COMISIÓN PENSION</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION =$event"
-									name="COMISION_PENSION" placeholder="0" disabled />
+								<span>COMISIÓN PENSIÓN</span>
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT =$event"
+									name="COMISION_PENSION_AUT" placeholder="0" disabled />
 							</div>
 							<div class="col-sm-3" *ngIf="pensionList.length > 0">
 								<label style="margin: 0;"><span class="schk"><input type="checkbox" style="top: 3px;"
@@ -152,59 +152,80 @@
 									name="COMISION_PENSION_PRO" placeholder="0" [disabled]="stateBrokerPension"
 									style="margin-top: 2px !important;" FloatDirective />
 							</div>
+						</div> -->
+						<div class="row">
+							<div class="col-sm-12">
+								<div *ngIf="!editFlag">
+									<div [hidden]="canAddSecondaryBroker" *ngIf="polizaEmitComer.length < 3">
+										<button class=" pull-right" (click)="addBroker($event.preventDefault())"
+											style="margin: 10px 0 20px 0">
+											<span>Agregar</span>
+										</button>
+									</div>
+								</div>
+
+								<table class="table table-borderless riesgo tblbroker" style="margin-top: 10px;">
+									<thead>
+										<tr class="d-flex">
+											<th class="col-sm text-center"><label>Tipo Documento</label></th>
+											<th class="col-sm text-center"><label>Nro Documento</label></th>
+											<th class="col-sm text-center"><label>Razón Social / Nombres y
+													Apellidos</label></th>
+											<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Comisión
+													Salud</label></th>
+											<th class="col-sm text-center ctasa" *ngIf="saludList.length > 0">
+												<label><input type="checkbox" class="checkbox" [disabled]="editFlag"
+														(change)="primaPropuesta(7)" name="stateBroker"><span
+														class="schk">
+														Propuesta</span></label></th>
+											<th class="col-sm text-center" *ngIf="pensionList.length > 0">
+												<label>Comisión
+													Pensión</label></th>
+											<th class="col-sm text-center ctasa" *ngIf="pensionList.length > 0">
+												<label><input type="checkbox" class="checkbox" [disabled]="editFlag"
+														(change)="primaPropuesta(8)" name="stateBroker"><span
+														class="schk">
+														Propuesta</span></label></th>
+											<th *ngIf="!editFlag"><label>Acción</label></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="d-flex" *ngIf="polizaEmitComer.length == 0">
+											<td class="col-sm text-center">No hay brokers</td>
+										</tr>
+										<tr class="d-flex" *ngFor="let comer of polizaEmitComer; let i = index">
+											<td class="col-sm text-center"><span>{{comer.DES_DOC_COMER}}</span></td>
+											<td class="col-sm text-center"><span>{{comer.DOC_COMER}}</span></td>
+											<td class="col-sm text-center"><span>{{comer.COMERCIALIZADOR}}</span></td>
+											<td class="col-sm text-center" *ngIf="saludList.length > 0">
+												<span>{{comer.COMISION_SALUD_AUT}}</span></td>
+											<td class="col-sm" *ngIf="saludList.length > 0"><input type="text"
+													class="text-center" name="comissionPRO_SAL-{{i}}"
+													[disabled]="stateBrokerTasaSalud" placeholder="0"
+													[(ngModel)]="comer.COMISION_SALUD_PRO"
+													(ngModelChange)="changeSaludPropuesta($event, comer.DOC_COMER)"
+													FloatDirective />
+											<td class="col-sm text-center" *ngIf="pensionList.length > 0">
+												<span>{{comer.COMISION_PENSION_AUT}}</span></td>
+											<td class="col-sm" *ngIf="pensionList.length > 0"><input type="text"
+													class="text-center" name="comissionPRO_PEN-{{i}}"
+													[disabled]="stateBrokerTasaPension" placeholder="0"
+													[(ngModel)]="comer.COMISION_PENSION_PRO"
+													(ngModelChange)="changePensionPropuesta($event, comer.DOC_COMER)"
+													FloatDirective />
+											<td *ngIf="!editFlag"><span style="padding: 0 12px;" *ngIf="comer.BLOCK != 1"><img
+														src="assets/icons/anular.png" (click)="deleteBroker(row)"
+														title="Eliminar" alt="Eliminar" /></span>
+												<span style="padding: 0 12px;" *ngIf="comer.BLOCK == 1">------</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 
-						<br>
 
-						<table *ngIf="polizaEmitComer.length !== 0" class="table table-borderless riesgo tblbroker">
-							<thead>
-								<tr class="d-flex">
-									<th class="col-sm text-center"><label>Tipo Documento</label></th>
-									<th class="col-sm text-center"><label>Nro Documento</label></th>
-									<th class="col-sm text-center"><label>Razón Social</label></th>
-									<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Comisión
-											Salud</label></th>
-									<th class="col-sm text-center ctasa" *ngIf="saludList.length > 0"><label><input
-												type="checkbox" class="checkbox" [disabled]="editFlag"
-												(change)="primaPropuesta(7)" name="stateBroker"><span class="schk">
-												Propuesta</span></label></th>
-									<th class="col-sm text-center" *ngIf="pensionList.length > 0"><label>Comisión
-											Pensión</label></th>
-									<th class="col-sm text-center ctasa" *ngIf="pensionList.length > 0"><label><input
-												type="checkbox" class="checkbox" [disabled]="editFlag"
-												(change)="primaPropuesta(8)" name="stateBroker"><span class="schk">
-												Propuesta</span></label></th>
-									<th *ngIf="!editFlag"><label>Acción</label></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="d-flex" *ngFor="let comer of polizaEmitComer; let i = index">
-									<td class="col-sm text-center"><span>{{comer.DES_DOC_COMER}}</span></td>
-									<td class="col-sm text-center"><span>{{comer.DOC_COMER}}</span></td>
-									<td class="col-sm text-center"><span>{{comer.COMERCIALIZADOR}}</span></td>
-									<td class="col-sm text-center" *ngIf="saludList.length > 0">
-										<span>{{comer.COMISION_SALUD}}</span></td>
-									<td class="col-sm" *ngIf="saludList.length > 0"><input type="text"
-											class="text-center" name="comissionPRO_SAL-{{i}}"
-											[disabled]="stateBrokerTasaSalud" placeholder="0"
-											[(ngModel)]="comer.COMISION_SALUD_PRO"
-											(ngModelChange)="changeSaludPropuesta($event, comer.DOC_COMER)"
-											FloatDirective />
-									<td class="col-sm text-center" *ngIf="pensionList.length > 0">
-										<span>{{comer.COMISION_PENSION}}</span></td>
-									<td class="col-sm" *ngIf="pensionList.length > 0"><input type="text"
-											class="text-center" name="comissionPRO_PEN-{{i}}"
-											[disabled]="stateBrokerTasaPension" placeholder="0"
-											[(ngModel)]="comer.COMISION_PENSION_PRO"
-											(ngModelChange)="changePensionPropuesta($event, comer.DOC_COMER)"
-											FloatDirective />
-									<td *ngIf="!editFlag"><span style="padding: 0 12px;"><img
-												src="assets/icons/anular.png" (click)="deleteBroker(row)"
-												title="Eliminar" alt="Eliminar" /></span>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+
 					</div>
 				</div>
 				<div class="accordion mt-2">
@@ -261,17 +282,18 @@
 
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div *ngIf="canBillMonthly || canBillInAdvance" class="col-sm-3">
 								<span style="margin: 0;">&nbsp;</span>
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-										[(ngModel)]="polizaEmit.facturacionVencido" name="facturacionVencido"
-										(ngModelChange)="onFacturacion()" class="checkbox" [disabled]="facVencido"><span
-										class="schk" style="margin-top: 15px; font-size: 13px;">PROFORMA A MES
+								<label *ngIf="canBillMonthly" style="width: 100%;margin-bottom: 0;"><input
+										type="checkbox" [(ngModel)]="polizaEmit.facturacionVencido"
+										name="facturacionVencido" (ngModelChange)="onFacturacion()" class="checkbox"
+										[disabled]="facVencido"><span class="schk"
+										style="margin-top: 15px; font-size: 13px;">REGULA A MES
 										VENCIDO</span></label>
 
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-										[(ngModel)]="polizaEmit.facturacionAnticipada" name="facturacionAnticipada"
-										(ngModelChange)="onFacturacion()" class="checkbox"
+								<label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input
+										type="checkbox" [(ngModel)]="polizaEmit.facturacionAnticipada"
+										name="facturacionAnticipada" (ngModelChange)="onFacturacion()" class="checkbox"
 										[disabled]="facAnticipada"><span class="schk"
 										style="margin-top: 5px; font-size: 13px;">FACTURACIÓN
 										ANTICIPADA</span></label>
@@ -314,11 +336,13 @@
 							</div>
 							<div class="col-sm-2">
 								<span>&nbsp;</span>
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+								<!-- <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.DELIMITACION" name="DELIMITACION"
 										[checked]="polizaEmitCab.DELIMITACION" class="checkbox" disabled><span
 										class="schk"
-										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label>
+										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label> -->
+								<label style="width: 100%;margin-bottom: 0;"><span
+										style="margin-top: 5px; font-size: 13px; color: red; text-transform: initial;">{{polizaEmitCab.DELIMITACION}}</span></label>
 								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.MINA" name="MINA" [checked]="polizaEmitCab.MINA"
 										class="checkbox" disabled><span class="schk"
@@ -389,7 +413,7 @@
 						</h5>
 					</div>
 					<div id="cotizador" class="collapse show pt-1">
-						<div class="row" *ngIf="!endosoFlag">
+						<!-- <div class="row" *ngIf="!endosoFlag">
 							<div class="col-sm-12">
 								<label><span>TRABAJADORES:</span></label>
 								<label><span><input type="radio" [(ngModel)]="polizaEmit.workers" name="searchWorker"
@@ -399,7 +423,7 @@
 											value="2" (change)="onSelectWorker()" class="t-search" /> MAYOR A
 										50</span></label>
 							</div>
-						</div>
+						</div> -->
 						<div class="row" [hidden]="stateTransac">
 							<div class="col-sm-6">
 								<table class="table table-borderless riesgo" style="margin: 15px 0;">
@@ -422,13 +446,13 @@
 											</td>
 											<td class="col-sm text-center">
 												<input type="text" placeholder="0" [(ngModel)]="item.NUM_TRABAJADORES"
-													name="NRO_TRAB-{{i}}" [disabled]="endosoFlag"
+													name="NRO_TRAB-{{i}}" [disabled]="true"
 													(ngModelChange)="changeTrabajadores($event, item.TIP_RIESGO)"
 													(keypress)="valText($event, 1)" />
 											</td>
 											<td class="col-sm text-center">
 												<input type="text" placeholder="0" [(ngModel)]="item.MONTO_PLANILLA"
-													name="MON_PLAN-{{i}}" [disabled]="endosoFlag"
+													name="MON_PLAN-{{i}}" [disabled]="true"
 													(ngModelChange)="changePlanilla($event, item.TIP_RIESGO)"
 													FloatDirective />
 											</td>
@@ -471,8 +495,8 @@
 											<table class="table table-borderless riesgo tblTasas">
 												<thead>
 													<tr class="d-flex">
-														<th class="col-sm text-center"><label>Categoría</label></th>
-														<th class="col-sm text-center"><label>Tasa Calculada</label>
+														<!-- <th class="col-sm text-center"><label>Categoría</label></th>
+														<th class="col-sm text-center"><label>Tasa</label>
 														</th>
 														<th class="col-sm text-center ctasa"><label><input
 																	type="checkbox" class="checkbox"
@@ -480,6 +504,10 @@
 																	(change)="primaPropuesta(5)"><span class="schk">
 																	Propuesta</span></label>
 														</th>
+														<th class="col-sm text-center"><label>Prima Mensual</label></th> -->
+														<th class="col-sm text-center"><label>Categoría</label></th>
+														<th class="col-sm text-center"><label>Tasa</label></th>
+														<th class="col-sm text-center"><label>Propuesta</label></th>
 														<th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
 												</thead>
@@ -490,13 +518,14 @@
 													<tr class="d-flex" *ngFor="let item of saludList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}} %</span>
 														</td>
 														<td class="col-sm"><input type="text" class="text-center"
 																placeholder="0" name="tasaPRO_SAL-{{i}}"
 																[(ngModel)]="item.TASA_PRO"
 																(ngModelChange)="changeTasaPropuestaSalud($event, item.DES_RIESGO)"
-																[disabled]="stateTasaSalud" FloatDirective /></td>
+																[disabled]="disabledFlat[i].value" FloatDirective />
+														</td>
 														<td class="col-sm text-center">
 															<span>{{item.AUT_PRIMA | miles}}</span></td>
 													</tr>
@@ -511,7 +540,7 @@
 													<tr class="d-flex" *ngIf="saludList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-center"></td>
-														<td class="col-sm text-right"><span>IGV</span></td>
+														<td class="col-sm text-right"><span>IGV + GASTOS</span></td>
 														<td class="col-sm text-center">
 															<span>{{igvSaludSave | miles}}</span>
 														</td>
@@ -563,7 +592,7 @@
 											<table class="table table-borderless riesgo tblTasas">
 												<thead>
 													<tr class="d-flex">
-														<th class="col-sm text-center"><label>Categoría</label></th>
+														<!-- <th class="col-sm text-center"><label>Categoría</label></th>
 														<th class="col-sm text-center"><label>Tasa Calculada</label>
 														</th>
 														<th class="col-sm text-center ctasa"><label><input
@@ -572,6 +601,10 @@
 																	[disabled]="editFlag"><span class="schk">
 																	Propuesta</span></label>
 														</th>
+														<th class="col-sm text-center"><label>Prima Mensual</label></th> -->
+														<th class="col-sm text-center"><label>Categoría</label></th>
+														<th class="col-sm text-center"><label>Tasa</label></th>
+														<th class="col-sm text-center"><label>Propuesta</label></th>
 														<th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
 												</thead>
@@ -582,13 +615,13 @@
 													<tr class="d-flex" *ngFor="let item of pensionList; let i = index">
 														<td class="col-sm text-center"><span>{{item.DES_RIESGO}}</span>
 														</td>
-														<td class="col-sm text-center"><span>{{item.TASA}}</span>
+														<td class="col-sm text-center"><span>{{item.TASA}} %</span>
 														</td>
 														<td class="col-sm"><input type="text" class="text-center"
 																placeholder="0" name="tasaPRO_PEN-{{i}}"
 																[(ngModel)]="item.TASA_PRO"
 																(ngModelChange)="changeTasaPropuestaPension($event, item.DES_RIESGO)"
-																[disabled]="stateTasaPension" FloatDirective />
+																[disabled]="disabledFlat[i].value" FloatDirective />
 														</td>
 														<td class="col-sm text-center">
 															<span>{{item.AUT_PRIMA | miles}}</span></td>
@@ -662,9 +695,9 @@
 										<thead>
 											<tr>
 												<th>Nombre</th>
-												<th>Tipo</th>
-												<th>Tamaño</th>
-												<th>Accion</th>
+												<!-- <th>Tipo</th> -->
+												<th class="text-center">Tamaño</th>
+												<th class="text-center">Acción</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -672,14 +705,14 @@
 												<td>
 													<strong>{{ item.name }}</strong>
 												</td>
-												<td>
+												<!-- <td>
 													{{ item.type }}
-												</td>
-												<td nowrap>
+												</td> -->
+												<td class="text-center">
 													{{ item.size/1024/1024 | number:'.2' }} MB
 												</td>
-												<td><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
-														title="Eliminar" alt="Eliminar" />
+												<td class="text-center"><img src="assets/icons/anular.png"
+														(click)="files.splice(i,1)" title="Eliminar" alt="Eliminar" />
 												</td>
 											</tr>
 										</tbody>

@@ -2,7 +2,7 @@ import { PolizaAsegurados } from '../../../models/polizaEmit/PolizaAsegurados';
 import { TipoRenovacion } from '../../../models/polizaEmit/TipoRenovacion';
 import { FrecuenciaPago } from '../../../models/polizaEmit/FrecuenciaPago';
 import { PolizaEmitDet, PolizaEmitDetAltoRiesgo, PolizaEmitDetMedianoRiesgo, PolizaEmitDetBajoRiesgo } from '../../../models/polizaEmit/PolizaEmitDet';
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ɵConsole } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -74,6 +74,7 @@ export class PolicyTransactionsComponent implements OnInit {
   saludList: any = [];
   pensionList: any = [];
   tasasList: any = [];
+  disabledFlat: any = [];
   //Datos para configurar los datepicker
   bsConfig: Partial<BsDatepickerConfig>;
   igvPension = 0;
@@ -152,7 +153,7 @@ export class PolicyTransactionsComponent implements OnInit {
   numberWH: number;
   pensionID = JSON.parse(localStorage.getItem("pensionID"))["id"];
   saludID = JSON.parse(localStorage.getItem("saludID"))["id"];
-  workerMin = 15;
+  workerMin = 0;
   workerMax = 70;
   municipalityTariff = 0;
   typeMovement: string;
@@ -163,6 +164,8 @@ export class PolicyTransactionsComponent implements OnInit {
   activityVariationSalud = "";
   commissionPension = "";
   commissionSalud = "";
+  /** Perfil externo */
+  perfil = '134';
 
   prodPension = false;
   prodSalud = false;
@@ -182,7 +185,12 @@ export class PolicyTransactionsComponent implements OnInit {
   annulmentID: any = null
   fechaBase: any = "";
   fechaBaseHasta: any = "";
-
+  minPension: any = "";
+  minSalud: any = "";
+  /**Puede facturar a mes vencido? */
+  canBillMonthly: boolean;
+  /**Puede facturar anticipadamente? */
+  canBillInAdvance: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -234,6 +242,17 @@ export class PolicyTransactionsComponent implements OnInit {
     this.polizaEmitCab.COD_DISTRITO = ''
     this.polizaEmitCab.frecuenciaPago = '';
 
+    this.canBillMonthly = AccessFilter.hasPermission("16");
+    this.canBillInAdvance = AccessFilter.hasPermission("17");
+
+    let self = this
+    for (var i = 0; i < 10; i++) {
+      let item: any = {};
+      item.id = i.toString();
+      item.value = false;
+      self.disabledFlat.push(item)
+    }
+
     this.mode = this.route.snapshot.paramMap.get('mode');
     if (this.mode == "include") { // inclusion
       this.title = "Inclusión en Póliza";
@@ -251,7 +270,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.title = "Anular Póliza";
       this.typeMovement = "7";
       this.questionText = "¿Deseas hacer la anulación de la póliza?"
-      this.responseText = "Se ha realizado la anulación correctamente "
+      this.responseText = "Se ha realizado la anulación correctamente"
       if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_cancel"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "exclude") { // excluir
       this.title = "Excluir en Póliza";
@@ -263,7 +282,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.title = "Endosar Póliza";
       this.typeMovement = "8";
       this.questionText = "¿Deseas hacer el endoso de la póliza?"
-      this.responseText = "Se ha realizado el endoso con constancia N° "
+      this.responseText = "Se ha realizado el endoso correctamente"
       if (AccessFilter.hasPermission(ModuleConfig.ViewIdList["policy_endorsement"]) == false) this.router.navigate(['/broker/home']);
     } else if (this.mode == "netear") { // netear
       this.title = "Neteo de Póliza";
@@ -336,11 +355,104 @@ export class PolicyTransactionsComponent implements OnInit {
     return new Date()
   }
   onFacturacion() {
+    let self = this;
+    let sumPen = 0;
+    this.pensionList.forEach(item => {
+      sumPen = sumPen + parseFloat(item.AUT_PRIMA)
+    });
+
+    let sumSal = 0;
+    this.saludList.forEach(item => {
+      sumSal = sumSal + parseFloat(item.AUT_PRIMA)
+    });
+
     if (this.polizaEmit.facturacionVencido == true) {
       this.facAnticipada = true;
-    } else if (this.polizaEmit.facturacionAnticipada == true) {
-      this.facVencido = true;
+
+      if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+        this.mensajePrimaPension = ""
+        this.totalNetoPensionSave = this.primatotalSCTR
+        this.igvPensionSave = this.igvPension;
+        this.brutaTotalPensionSave = this.totalSTRC;
+      } else {
+        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+          this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+          this.totalNetoPensionSave = this.primatotalSCTR
+          this.igvPensionSave = this.igvPension;
+          this.brutaTotalPensionSave = this.totalSTRC;
+        } else {
+          this.totalNetoPensionSave = this.primatotalSCTR
+          this.igvPensionSave = this.igvPension;
+          this.brutaTotalPensionSave = this.totalSTRC;
+          this.mensajePrimaPension = "";
+        }
+      }
+
+      if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+        this.mensajePrimaSalud = ""
+        this.totalNetoSaludSave = this.primatotalSalud
+        this.igvSaludSave = this.igvSalud;
+        this.brutaTotalSaludSave = this.totalSalud;
+      } else {
+        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+          this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión"
+          this.totalNetoSaludSave = this.primatotalSalud
+          this.igvSaludSave = this.igvSalud;
+          this.brutaTotalSaludSave = this.totalSalud;
+        } else {
+          this.totalNetoSaludSave = this.primatotalSalud
+          this.igvSaludSave = this.igvSalud;
+          this.brutaTotalSaludSave = this.totalSalud;
+          this.mensajePrimaSalud = "";
+        }
+      }
+
     } else {
+
+      if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+        this.mensajePrimaPension = ""
+        this.totalNetoPensionSave = this.primatotalSCTR
+        this.igvPensionSave = this.igvPension;
+        this.brutaTotalPensionSave = this.totalSTRC;
+      } else {
+        if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+          this.totalNetoPensionSave = this.formateaValor(this.polizaEmitCab.PRIMA_PEN_END)
+          this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
+          this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
+          this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
+        } else {
+          this.mensajePrimaPension = ""
+          this.totalNetoPensionSave = this.primatotalSCTR
+          this.igvPensionSave = this.igvPension;
+          this.brutaTotalPensionSave = this.totalSTRC;
+        }
+      }
+
+      if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+        this.mensajePrimaSalud = ""
+        this.totalNetoSaludSave = this.primatotalSalud
+        this.igvSaludSave = this.igvSalud;
+        this.brutaTotalSaludSave = this.totalSalud;
+      } else {
+        if (this.primatotalSalud < parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+          this.totalNetoSaludSave = this.formateaValor(this.polizaEmitCab.PRIMA_SALUD_END)
+          this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
+          this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
+          this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
+        } else {
+          this.mensajePrimaSalud = ""
+          this.totalNetoSaludSave = this.primatotalSalud
+          this.igvSaludSave = this.igvSalud;
+          this.brutaTotalSaludSave = this.totalSalud;
+        }
+      }
+
+    }
+
+    if (this.polizaEmit.facturacionAnticipada == true) {
+      this.facVencido = true;
+    }
+    if (this.polizaEmit.facturacionVencido == false && this.polizaEmit.facturacionAnticipada == false) {
       this.facVencido = false;
       this.facAnticipada = false;
     }
@@ -728,17 +840,17 @@ export class PolicyTransactionsComponent implements OnInit {
     }
 
     //Comercializador Principal
-    let itemQuotationComMain: any = {};
-    itemQuotationComMain.P_NID_COTIZACION = this.cotizacionID; //Cotizacion
-    itemQuotationComMain.P_NIDTYPECHANNEL = this.polizaEmitComerDTOPrincipal.TIPO_CANAL;
-    itemQuotationComMain.P_NINTERMED = this.polizaEmitComerDTOPrincipal.CANAL;
-    itemQuotationComMain.P_SCLIENT_COMER = this.polizaEmitComerDTOPrincipal.SCLIENT;
-    itemQuotationComMain.P_NCOMISION_SAL = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD : "0";
-    itemQuotationComMain.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO : "0";
-    itemQuotationComMain.P_NCOMISION_PEN = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION : "0";
-    itemQuotationComMain.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO : "0";
-    itemQuotationComMain.P_NPRINCIPAL = this.polizaEmitComerDTOPrincipal.PRINCIPAL;
-    dataQuotation.QuotationCom.push(itemQuotationComMain);
+    // let itemQuotationComMain: any = {};
+    // itemQuotationComMain.P_NID_COTIZACION = this.cotizacionID; //Cotizacion
+    // itemQuotationComMain.P_NIDTYPECHANNEL = this.polizaEmitComerDTOPrincipal.TIPO_CANAL;
+    // itemQuotationComMain.P_NINTERMED = this.polizaEmitComerDTOPrincipal.CANAL;
+    // itemQuotationComMain.P_SCLIENT_COMER = this.polizaEmitComerDTOPrincipal.SCLIENT;
+    // itemQuotationComMain.P_NCOMISION_SAL = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT : "0";
+    // itemQuotationComMain.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO : "0";
+    // itemQuotationComMain.P_NCOMISION_PEN = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT : "0";
+    // itemQuotationComMain.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO : "0";
+    // itemQuotationComMain.P_NPRINCIPAL = this.polizaEmitComerDTOPrincipal.PRINCIPAL;
+    // dataQuotation.QuotationCom.push(itemQuotationComMain);
 
     //Comercializadores secundarios
     if (this.polizaEmitComer.length > 0) {
@@ -748,9 +860,9 @@ export class PolicyTransactionsComponent implements OnInit {
         itemQuotationCom.P_NIDTYPECHANNEL = dataBroker.TIPO_CANAL;
         itemQuotationCom.P_NINTERMED = dataBroker.CANAL; // Produccion
         itemQuotationCom.P_SCLIENT_COMER = dataBroker.SCLIENT;
-        itemQuotationCom.P_NCOMISION_SAL = self.saludList.length > 0 ? dataBroker.COMISION_SALUD == "" ? "0" : dataBroker.COMISION_SALUD : "0";
+        itemQuotationCom.P_NCOMISION_SAL = self.saludList.length > 0 ? dataBroker.COMISION_SALUD_AUT == "" ? "0" : dataBroker.COMISION_SALUD_AUT : "0";
         itemQuotationCom.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? dataBroker.COMISION_SALUD_PRO == "" ? "0" : dataBroker.COMISION_SALUD_PRO : "0";
-        itemQuotationCom.P_NCOMISION_PEN = self.pensionList.length > 0 ? dataBroker.COMISION_PENSION == "" ? "0" : dataBroker.COMISION_PENSION : "0";
+        itemQuotationCom.P_NCOMISION_PEN = self.pensionList.length > 0 ? dataBroker.COMISION_PENSION_AUT == "" ? "0" : dataBroker.COMISION_PENSION_AUT : "0";
         itemQuotationCom.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? dataBroker.COMISION_PENSION_PRO == "" ? "0" : dataBroker.COMISION_PENSION_PRO : "0";
         itemQuotationCom.P_NPRINCIPAL = dataBroker.PRINCIPAL;
         dataQuotation.QuotationCom.push(itemQuotationCom);
@@ -888,26 +1000,26 @@ export class PolicyTransactionsComponent implements OnInit {
         this.polizaEmitComer.forEach(broker => {
           if (broker.TIPO_CANAL == "6" || broker.TIPO_CANAL == "8") {
             let brokerItem: any = {};
-            brokerItem.brokerId = broker.CANAL;
+            brokerItem.brokerId = broker.CANAL.toString();
             data.channel.push(brokerItem);
           } else {
             let middlemanItem: any = {};
-            middlemanItem.middlemanId = broker.CANAL;
+            middlemanItem.middlemanId = broker.CANAL.toString();
             data.channel.push(middlemanItem);
           }
         });
       }
 
       //Agregando los brokerId y middlemanId | Comercializador principal
-      if (this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "6" || this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "8") {
-        let brokerItem: any = {};
-        brokerItem.brokerId = this.polizaEmitComerDTOPrincipal.CANAL;
-        data.channel.push(brokerItem);
-      } else {
-        let middlemanItem: any = {};
-        middlemanItem.middlemanId = this.polizaEmitComerDTOPrincipal.CANAL;
-        data.channel.push(middlemanItem);
-      }
+      // if (this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "6" || this.polizaEmitComerDTOPrincipal.TIPO_CANAL == "8") {
+      //   let brokerItem: any = {};
+      //   brokerItem.brokerId = this.polizaEmitComerDTOPrincipal.CANAL.toString();
+      //   data.channel.push(brokerItem);
+      // } else {
+      //   let middlemanItem: any = {};
+      //   middlemanItem.middlemanId = this.polizaEmitComerDTOPrincipal.CANAL.toString();
+      //   data.channel.push(middlemanItem);
+      // }
 
       this.clientInformationService.getTariff(data).subscribe(
         res => {
@@ -918,8 +1030,8 @@ export class PolicyTransactionsComponent implements OnInit {
               switch (item.fieldEquivalenceCore) {
                 case this.pensionID: // Pension
                   if (item.enterprise[0].netRate != undefined) {
-                    this.polizaEmitComerDTOPrincipal.COMISION_PENSION = "";
-                    this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO = "";
+                    // this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT = "";
+                    // this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO = "";
                     item.enterprise[0].netRate.map(function (dato) {
                       dato.TIP_RIESGO = dato.id;
                       dato.TASA_CALC = self.formateaValor(parseFloat(dato.rate) * 100);
@@ -950,8 +1062,8 @@ export class PolicyTransactionsComponent implements OnInit {
                   break;
                 case this.saludID:  // Salud
                   if (item.enterprise[0].netRate != undefined) {
-                    this.polizaEmitComerDTOPrincipal.COMISION_SALUD = "";
-                    this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO = "";
+                    // this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT = "";
+                    // this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO = "";
                     item.enterprise[0].netRate.map(function (dato) {
                       dato.TIP_RIESGO = dato.id;
                       dato.TASA_CALC = self.formateaValor(parseFloat(dato.rate) * 100);
@@ -1059,25 +1171,25 @@ export class PolicyTransactionsComponent implements OnInit {
               this.brutaTotalPensionSave = this.formateaValor(totalPreviewPension)
 
               if (item.channelDistributions != undefined) {
-                item.channelDistributions.forEach(channel => {
-                  if (channel.roleId == this.polizaEmitComerDTOPrincipal.CANAL) {
-                    this.polizaEmitComerDTOPrincipal.COMISION_PENSION = (parseFloat(self.commissionPension) * parseFloat(channel.distribution)) / 100;
-                  }
-                });
+                // item.channelDistributions.forEach(channel => {
+                //   if (channel.roleId == this.polizaEmitComerDTOPrincipal.CANAL) {
+                //     this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT = (parseFloat(self.commissionPension) * parseFloat(channel.distribution)) / 100;
+                //   }
+                // });
 
                 item.channelDistributions.forEach(channel => {
                   this.polizaEmitComer.forEach(broker => {
                     if (channel.roleId == broker.CANAL) { //Produccion
-                      broker.COMISION_PENSION = (parseFloat(self.commissionPension) * parseFloat(channel.distribution)) / 100;
+                      broker.COMISION_PENSION_AUT = (parseFloat(self.commissionPension) * parseFloat(channel.distribution)) / 100;
                     }
                   });
                 });
               }
 
               // Comision en veremos //
-              if (this.polizaEmitComerDTOPrincipal.COMISION_PENSION == "") {
-                this.polizaEmitComerDTOPrincipal.COMISION_PENSION = "0";
-              }
+              // if (this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT == "") {
+              //   this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT = "0";
+              // }
             }
             break;
           case this.saludID: // Salud
@@ -1113,14 +1225,14 @@ export class PolicyTransactionsComponent implements OnInit {
                 if (item.channelDistributions != undefined) {
                   item.channelDistributions.forEach(channel => {
                     if (channel.roleId == this.polizaEmitComerDTOPrincipal.CANAL) {
-                      this.polizaEmitComerDTOPrincipal.COMISION_SALUD = (parseFloat(self.commissionSalud) * parseFloat(channel.distribution)) / 100;
+                      this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT = (parseFloat(self.commissionSalud) * parseFloat(channel.distribution)) / 100;
                     }
                   });
 
                   item.channelDistributions.forEach(channel => {
                     this.polizaEmitComer.forEach(broker => {
                       if (channel.roleId == broker.CANAL) { //Produccion 
-                        broker.COMISION_SALUD = (parseFloat(self.commissionSalud) * parseFloat(channel.distribution)) / 100;
+                        broker.COMISION_SALUD_AUT = (parseFloat(self.commissionSalud) * parseFloat(channel.distribution)) / 100;
                       }
                     });
                   });
@@ -1128,8 +1240,8 @@ export class PolicyTransactionsComponent implements OnInit {
               }
 
               // Comision en veremos //
-              if (this.polizaEmitComerDTOPrincipal.COMISION_SALUD == "") {
-                this.polizaEmitComerDTOPrincipal.COMISION_SALUD = "0";
+              if (this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT == "") {
+                this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT = "0";
               }
             }
             break;
@@ -1148,9 +1260,9 @@ export class PolicyTransactionsComponent implements OnInit {
       item.COMISION_PENSION_PRO = "0";
     });
 
-    this.polizaEmitComerDTOPrincipal.COMISION_SALUD = ""; // Comision salud web service
+    this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT = ""; // Comision salud web service
     this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO = ""; // Comision salud propuesta
-    this.polizaEmitComerDTOPrincipal.COMISION_PENSION = ""; // Comision pension web service
+    this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT = ""; // Comision pension web service
     this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO = ""; // Comision pension propuesta
     this.polizaEmitCab.MIN_SALUD = ""; // Prima minima salud
     this.polizaEmitCab.MIN_SALUD_PR = ""; // Prima minima salud propuesta
@@ -1164,16 +1276,16 @@ export class PolicyTransactionsComponent implements OnInit {
     this.brutaTotalSaludSave = 0.00
   }
 
-  addBroker() {
+  addBroker(event) {
     let modalRef = this.modalService.open(SearchBrokerComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
     modalRef.componentInstance.formModalReference = modalRef;
     modalRef.componentInstance.listaBroker = this.polizaEmitComer;
     modalRef.componentInstance.brokerMain = this.polizaEmitComerDTOPrincipal.DOC_COMER;
 
     modalRef.result.then((BrokerData) => {
-      BrokerData.COMISION_SALUD = 0;
+      BrokerData.COMISION_SALUD_AUT = 0;
       BrokerData.COMISION_SALUD_PRO = 0;
-      BrokerData.COMISION_PENSION = 0;
+      BrokerData.COMISION_PENSION_AUT = 0;
       BrokerData.COMISION_PENSION_PRO = 0;
 
       BrokerData.CANAL = BrokerData.COD_CANAL.toString()
@@ -1233,7 +1345,9 @@ export class PolicyTransactionsComponent implements OnInit {
               res.GenericResponse.frecuenciaPago = this.polizaEmitCab.frecuenciaPago
               this.polizaEmitCab = res.GenericResponse;
               this.polizaEmitCab.MINA = res.GenericResponse.MINA == "1" ? true : false;
-              this.polizaEmitCab.DELIMITACION = res.GenericResponse.DELIMITACION == "1" ? true : false;
+              this.polizaEmitCab.DELIMITACION = res.GenericResponse.DELIMITACION == "1" ? "* La actividad cuenta con delimitación" : "";
+              this.minPension = res.GenericResponse.MIN_PENSION_AUT
+              this.minSalud = res.GenericResponse.MIN_SALUD_AUT
               this.flagBusqueda = true;
 
               //Detalle de comercializadores
@@ -1244,25 +1358,41 @@ export class PolicyTransactionsComponent implements OnInit {
                   if (res.length > 0 && res !== null) {
                     self.objEdit.polizaCom = [];
                     res.forEach(com => {
-                      if (com.PRINCIPAL == 1) {
-                        //Cambio Comercialziador
-                        this.polizaEmitComerDTOPrincipal = com;
-                        let item: any = {};
-                        item.main = 1;
-                        item.SCLIENT = com.SCLIENT;
-                        item.COM_PRO_PEN = com.COMISION_PENSION_PRO;
-                        item.COM_PRO_SAL = com.COMISION_SALUD_PRO;
-                        self.objEdit.polizaCom.push(item)
-                      } else {
-                        this.polizaEmitComer.push(com);
-                        let item: any = {};
-                        item.main = 0;
-                        item.SCLIENT = com.SCLIENT;
-                        item.COM_PRO_PEN = com.COMISION_PENSION_PRO;
-                        item.COM_PRO_SAL = com.COMISION_SALUD_PRO;
-                        self.objEdit.polizaCom.push(item)
-                      }
+                      // if (com.PRINCIPAL == 1) {
+                      //   //Cambio Comercialziador
+                      //   this.polizaEmitComerDTOPrincipal = com;
+                      //   let item: any = {};
+                      //   item.main = 1;
+                      //   item.SCLIENT = com.SCLIENT;
+                      //   item.COM_PRO_PEN = com.COMISION_PENSION_AUT;
+                      //   item.COM_PRO_SAL = com.COMISION_SALUD_AUT;
+                      //   self.objEdit.polizaCom.push(item)
+                      // } else {
+                      // this.polizaEmitComer.push(com);
+                      com.BLOCK = 0;
+                      com.COMISION_PENSION_AUT = com.COMISION_PENSION_AUT == "" ? "0" : com.COMISION_PENSION_AUT;
+                      com.COMISION_PENSION_PRO = com.COMISION_PENSION_PRO == "" ? "0" : com.COMISION_PENSION_PRO;
+                      com.COMISION_PENSION = com.COMISION_PENSION == "" ? "0" : com.COMISION_PENSION;
+                      com.COMISION_SALUD = com.COMISION_SALUD == "" ? "0" : com.COMISION_SALUD;
+                      com.COMISION_SALUD_AUT = com.COMISION_SALUD_AUT == "" ? "0" : com.COMISION_SALUD_AUT;
+                      com.COMISION_SALUD_PRO = com.COMISION_SALUD_PRO == "" ? "0" : com.COMISION_SALUD_PRO;
+                      let item: any = {};
+                      item.main = 0;
+                      item.SCLIENT = com.SCLIENT;
+                      item.COM_PRO_PEN = com.COMISION_PENSION_AUT;
+                      item.COM_PRO_SAL = com.COMISION_SALUD_AUT;
+                      self.objEdit.polizaCom.push(item)
+                      // }
                     });
+                    this.polizaEmitComer = res
+
+                    if (this.perfil == JSON.parse(localStorage.getItem("currentUser"))["idProfile"]) {
+                      this.polizaEmitComer[0].BLOCK = 1;
+                    } else {
+                      this.polizaEmitComer[0].BLOCK = 0;
+                    }
+
+                    // console.log(this.polizaEmitComer)
                     this.flagBusqueda = true;
                   } else {
                     this.polizaEmitComerDTOPrincipal = {};
@@ -1367,19 +1497,25 @@ export class PolicyTransactionsComponent implements OnInit {
                     this.fechaFin(this.polizaEmitCab.tipoRenovacion, res[0].HASTA, res[0].DESDE)
 
                   } else if (this.mode == "endosar") {
-                    this.fechaBase = new Date(res[0].DESDE);
-                    this.polizaEmitCab.bsValueIni = new Date(res[0].DESDE);
-                    this.polizaEmitCab.bsValueIniMin = new Date(res[0].DESDE);
+                    // this.fechaBase = new Date(res[0].DESDE);
+                    let fechaInicio = new Date(res[0].DESDE);
+                    fechaInicio.setDate(fechaInicio.getDate() + 1);
+                    this.fechaBase = fechaInicio;
+                    this.polizaEmitCab.bsValueIni = new Date(fechaInicio);
+                    this.polizaEmitCab.bsValueIniMin = new Date(fechaInicio);
                     this.polizaEmitCab.bsValueFinMax = new Date(res[0].HASTA);
                     this.fechaFin(this.polizaEmitCab.tipoRenovacion, res[0].HASTA, res[0].DESDE)
                   }
                   else {
-                    this.fechaBase = new Date(res[0].HASTA);
+                    let fechaInicio = new Date(res[0].DESDE);
+                    fechaInicio.setDate(fechaInicio.getDate() + 1);
+                    this.fechaBase = fechaInicio;
                     this.fechaBaseHasta = res[0].HASTA;
-                    this.polizaEmitCab.bsValueIni = new Date();
-                    this.polizaEmitCab.bsValueIniMin = new Date();
+                    this.polizaEmitCab.bsValueIni = new Date(fechaInicio);
+                    this.polizaEmitCab.bsValueIniMin = new Date(fechaInicio);
                     this.polizaEmitCab.bsValueFinMax = new Date(res[0].HASTA);
                     this.polizaEmitCab.bsValueFin = new Date(res[0].HASTA);
+
                   }
 
                   this.cargarFrecuencia();
@@ -1387,73 +1523,80 @@ export class PolicyTransactionsComponent implements OnInit {
                   this.polizaEmit.facturacionAnticipada = res[0].FACT_ANTI == 0 ? false : true;
                   this.polizaEmitCab.frecuenciaPago = res[0].FREC_PAGO;
 
-                })
 
-              if (this.mode == "renew" && AccessFilter.hasPermission("20")) {
-                Swal.fire({
-                  title: "Renovación",
-                  text: "¿Desea generar renovación con modificación de datos?",
-                  type: "info",
-                  showCancelButton: true,
-                  confirmButtonText: 'SÍ',
-                  allowOutsideClick: false,
-                  cancelButtonText: 'NO'
-                })
-                  .then((result) => {
-                    if (result.value) {
-                      this.editFlag = false;
-                      this.endosoFlag = false;
-                      if (this.polizaEmitCab.tipoRenovacion == "6" || this.polizaEmitCab.tipoRenovacion == "7") {
-                        this.disabledFecha = false;
-                        this.disabledFechaFin = false;
-                      }
+                  if (this.mode == "renew" && AccessFilter.hasPermission("20")) {
+                    Swal.fire({
+                      title: "Renovación",
+                      text: "¿Desea generar renovación con modificación de datos?",
+                      type: "info",
+                      showCancelButton: true,
+                      confirmButtonText: 'SÍ',
+                      allowOutsideClick: false,
+                      cancelButtonText: 'NO'
+                    })
+                      .then((result) => {
+                        if (result.value) {
+                          this.editFlag = false;
+                          this.endosoFlag = false;
+                          if (this.polizaEmitCab.tipoRenovacion == "6" || this.polizaEmitCab.tipoRenovacion == "7") {
+                            this.disabledFecha = false;
+                            this.disabledFechaFin = false;
+                          }
 
-                      if (this.polizaEmit.facturacionVencido == true) {
-                        this.facVencido = false;
-                        this.facAnticipada = true;
-                      }
+                          if (this.polizaEmit.facturacionVencido == true) {
+                            this.facVencido = false;
+                            this.facAnticipada = true;
+                          }
 
-                      if (this.polizaEmit.facturacionAnticipada == true) {
-                        this.facVencido = true;
-                        this.facAnticipada = false;
-                      }
+                          if (this.polizaEmit.facturacionAnticipada == true) {
+                            this.facVencido = true;
+                            this.facAnticipada = false;
+                          }
 
-                      if (this.polizaEmit.facturacionVencido == false && this.polizaEmit.facturacionAnticipada == false) {
-                        this.facVencido = false;
-                        this.facAnticipada = false;
-                      }
-                    } else {
-                      this.editFlag = true;
-                      if (this.polizaEmitCab.tipoRenovacion == "6" || this.polizaEmitCab.tipoRenovacion == "7") {
-                        this.disabledFecha = true;
-                        this.disabledFechaFin = false;
-                      }
+                          if (this.polizaEmit.facturacionVencido == false && this.polizaEmit.facturacionAnticipada == false) {
+                            this.facVencido = false;
+                            this.facAnticipada = false;
+                          }
+                        } else {
+                          this.editFlag = true;
+                          if (this.polizaEmitCab.tipoRenovacion == "6" || this.polizaEmitCab.tipoRenovacion == "7") {
+                            this.disabledFecha = true;
+                            this.disabledFechaFin = false;
+                          }
+                        }
+                      });
+
+                  }
+
+                  if (this.mode == "endosar") {
+                    this.editFlag = false;
+                    this.endosoFlag = true;
+
+                    if (this.polizaEmit.facturacionVencido == true) {
+                      this.facVencido = false;
+                      this.facAnticipada = true;
                     }
-                  });
 
-              }
+                    if (this.polizaEmit.facturacionAnticipada == true) {
+                      this.facVencido = true;
+                      this.facAnticipada = false;
+                    }
 
-              if (this.mode == "endosar") {
-                this.editFlag = false;
-                this.endosoFlag = true;
-                if (this.polizaEmit.facturacionVencido == true) {
-                  this.facVencido = false;
-                  this.facAnticipada = true;
-                }
+                    if (this.polizaEmit.facturacionVencido == false && this.polizaEmit.facturacionAnticipada == false) {
+                      this.facVencido = false;
+                      this.facAnticipada = false;
+                    }
+                  }
+                  if (this.mode == "include" || this.mode == "exclude" || this.mode == "netear") {
+                    this.disabledFecha = false;
+                    this.disabledFechaFin = true;
+                  }
 
-                if (this.polizaEmit.facturacionAnticipada == true) {
-                  this.facVencido = true;
-                  this.facAnticipada = false;
-                }
-                if (this.polizaEmit.facturacionVencido == false && this.polizaEmit.facturacionAnticipada == false) {
-                  this.facVencido = false;
-                  this.facAnticipada = false;
-                }
-              }
-              if (this.mode == "include" || this.mode == "exclude" || this.mode == "netear") {
-                this.disabledFecha = false;
-                this.disabledFechaFin = true;
-              }
+                })
+
+
+
+
             } else {
               Swal.fire("Información", res.GenericResponse.MENSAJE, "error");
               this.clearInfo()
@@ -1532,6 +1675,10 @@ export class PolicyTransactionsComponent implements OnInit {
 
             res.forEach(item => {
               if (item.ID_PRODUCTO == this.pensionID) {
+                if (this.mode == "renew") {
+                  this.polizaEmitCab.PRIMA_PEN_END = this.minPension;
+                }
+
                 item.PRIMA = self.formateaValor(item.PRIMA)
                 this.pensionList.push(item);
                 this.prodPension = true;
@@ -1540,13 +1687,61 @@ export class PolicyTransactionsComponent implements OnInit {
                 if (parseFloat(item.NSUM_PREMIUMN) > 0 || parseFloat(item.NSUM_IGV) > 0 || parseFloat(item.NSUM_PREMIUM) > 0) {
                   this.stateTransac = false;
                 }
-
                 this.primatotalSCTR = self.formateaValor(item.NSUM_PREMIUMN);
                 this.igvPension = self.formateaValor(item.NSUM_IGV);
                 this.totalSTRC = self.formateaValor(item.NSUM_PREMIUM);
+              }
 
-                if (parseFloat(this.primatotalSCTR.toString()) < this.polizaEmitCab.PRIMA_PEN_END) {
-                  this.totalNetoPensionSave = this.polizaEmitCab.PRIMA_PEN_END
+              if (item.ID_PRODUCTO == this.saludID) {
+                if (this.mode == "renew") {
+                  this.polizaEmitCab.PRIMA_SALUD_END = this.minSalud;
+                }
+                item.PRIMA = self.formateaValor(item.PRIMA)
+                this.saludList.push(item);
+                this.prodSalud = true;
+                this.activityVariationSalud = item.VARIACION_TASA;
+                if (parseFloat(item.NSUM_PREMIUMN) > 0 || parseFloat(item.NSUM_IGV) > 0 || parseFloat(item.NSUM_PREMIUM) > 0) {
+                  this.stateTransac = false;
+                }
+                this.primatotalSalud = self.formateaValor(item.NSUM_PREMIUMN);
+                this.igvSalud = self.formateaValor(item.NSUM_IGV);
+                this.totalSalud = self.formateaValor(item.NSUM_PREMIUM);
+              }
+            });
+
+            let sumPen = 0;
+            this.pensionList.forEach(item => {
+              sumPen = sumPen + parseFloat(item.AUT_PRIMA)
+            });
+
+            if (this.polizaEmit.facturacionVencido == true) {
+              if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+                this.mensajePrimaPension = ""
+                this.totalNetoPensionSave = this.primatotalSCTR
+                this.igvPensionSave = this.igvPension;
+                this.brutaTotalPensionSave = this.totalSTRC;
+              } else {
+                if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+                  this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión"
+                  this.totalNetoPensionSave = this.primatotalSCTR
+                  this.igvPensionSave = this.igvPension;
+                  this.brutaTotalPensionSave = this.totalSTRC;
+                } else {
+                  this.totalNetoPensionSave = this.primatotalSCTR
+                  this.igvPensionSave = this.igvPension;
+                  this.brutaTotalPensionSave = this.totalSTRC;
+                  this.mensajePrimaPension = "";
+                }
+              }
+            } else {
+              if (self.formateaValor(sumPen) == parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+                this.mensajePrimaPension = ""
+                this.totalNetoPensionSave = this.primatotalSCTR
+                this.igvPensionSave = this.igvPension;
+                this.brutaTotalPensionSave = this.totalSTRC;
+              } else {
+                if (this.primatotalSCTR <= parseFloat(this.polizaEmitCab.PRIMA_PEN_END)) {
+                  this.totalNetoPensionSave = self.formateaValor(this.polizaEmitCab.PRIMA_PEN_END)
                   this.igvPensionSave = this.formateaValor((this.totalNetoPensionSave * this.igvPensionWS) - this.totalNetoPensionSave);
                   this.brutaTotalPensionSave = this.formateaValor(parseFloat(this.totalNetoPensionSave.toString()) + parseFloat(this.igvPensionSave.toString()));
                   this.mensajePrimaPension = "* Se aplica prima mínima en esta ocasión";
@@ -1557,22 +1752,41 @@ export class PolicyTransactionsComponent implements OnInit {
                   this.brutaTotalPensionSave = this.totalSTRC;
                 }
               }
-              if (item.ID_PRODUCTO == this.saludID) {
-                item.PRIMA = self.formateaValor(item.PRIMA)
-                this.saludList.push(item);
-                this.prodSalud = true;
-                this.activityVariationSalud = item.VARIACION_TASA;
+            }
 
-                if (parseFloat(item.NSUM_PREMIUMN) > 0 || parseFloat(item.NSUM_IGV) > 0 || parseFloat(item.NSUM_PREMIUM) > 0) {
-                  this.stateTransac = false;
+            let sumSal = 0;
+            this.saludList.forEach(item => {
+              sumSal = sumSal + parseFloat(item.AUT_PRIMA)
+            });
+
+            if (this.polizaEmit.facturacionVencido == true) {
+              if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+                this.mensajePrimaSalud = ""
+                this.totalNetoSaludSave = this.primatotalSalud
+                this.igvSaludSave = this.igvSalud;
+                this.brutaTotalSaludSave = this.totalSalud;
+              } else {
+                if (parseFloat(this.primatotalSCTR.toString()) < parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+                  this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión"
+                  this.totalNetoSaludSave = this.primatotalSalud
+                  this.igvSaludSave = this.igvSalud;
+                  this.brutaTotalSaludSave = this.totalSalud;
+                } else {
+                  this.totalNetoSaludSave = this.primatotalSalud
+                  this.igvSaludSave = this.igvSalud;
+                  this.brutaTotalSaludSave = this.totalSalud;
+                  this.mensajePrimaSalud = "";
                 }
-
-                this.primatotalSalud = self.formateaValor(item.NSUM_PREMIUMN);
-                this.igvSalud = self.formateaValor(item.NSUM_IGV);
-                this.totalSalud = self.formateaValor(item.NSUM_PREMIUM);
-
-                if (parseFloat(this.primatotalSalud.toString()) < this.polizaEmitCab.PRIMA_SALUD_END) {
-                  this.totalNetoSaludSave = this.polizaEmitCab.PRIMA_SALUD_END
+              }
+            } else {
+              if (self.formateaValor(sumSal) == parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+                this.mensajePrimaSalud = ""
+                this.totalNetoSaludSave = this.primatotalSalud
+                this.igvSaludSave = this.igvSalud;
+                this.brutaTotalSaludSave = this.totalSalud;
+              } else {
+                if (this.primatotalSalud <= parseFloat(this.polizaEmitCab.PRIMA_SALUD_END)) {
+                  this.totalNetoSaludSave = self.formateaValor(this.polizaEmitCab.PRIMA_SALUD_END)
                   this.igvSaludSave = this.formateaValor((this.totalNetoSaludSave * this.igvSaludWS) - this.totalNetoSaludSave);
                   this.brutaTotalSaludSave = this.formateaValor(parseFloat(this.totalNetoSaludSave.toString()) + parseFloat(this.igvSaludSave.toString()));
                   this.mensajePrimaSalud = "* Se aplica prima mínima en esta ocasión";
@@ -1583,26 +1797,34 @@ export class PolicyTransactionsComponent implements OnInit {
                   this.brutaTotalSaludSave = this.totalSalud;
                 }
               }
-            });
+            }
+
+
 
             let sumWorkers = 0;
             if (this.pensionList.length > 0) {
               this.tasasList = this.pensionList;
               this.pensionList.map(function (dato) {
+                dato.AUT_PRIMA = self.formateaValor(dato.AUT_PRIMA)
                 dato.TASA_PRO = "";
                 self.endosoPension = dato.PRIMA_END;
                 dato.rateDet = dato.TASA_RIESGO;
                 sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
               });
-            } else if (this.saludList.length > 0) {
+            }
+
+            if (this.saludList.length > 0) {
               this.tasasList = this.saludList;
               this.saludList.map(function (dato) {
+                dato.AUT_PRIMA = self.formateaValor(dato.AUT_PRIMA)
                 dato.TASA_PRO = "";
                 self.endosoSalud = dato.PRIMA_END;
                 dato.rateDet = dato.TASA_RIESGO;
                 sumWorkers = sumWorkers + parseFloat(dato.NUM_TRABAJADORES);
               });
-            } else {
+            }
+
+            if (this.pensionList.length == 0 && this.saludList.length == 0) {
               this.tasasList = [];
             }
             this.polizaEmit.P_WORKER = sumWorkers;
@@ -1614,6 +1836,41 @@ export class PolicyTransactionsComponent implements OnInit {
             if (sumWorkers > 50) {
               this.polizaEmit.workers = "2";
             }
+
+            let flat = false
+            self.tasasList.forEach(item => {
+              if (item.TIP_RIESGO == "4" && item.MONTO_PLANILLA != "0") {
+                flat = true;
+              }
+            });
+
+
+
+            var num = 0
+            self.tasasList.forEach(item => {
+              if (self.editFlag == false) {
+                if (flat == false) {
+                  self.disabledFlat[num].id = item.TIP_RIESGO
+                  self.disabledFlat[num].value = false
+                  if (item.TIP_RIESGO == "4") {
+                    self.disabledFlat[num].value = true
+                  }
+                }
+                else {
+                  self.disabledFlat[num].id = item.TIP_RIESGO
+                  if (item.TIP_RIESGO == "4") {
+                    self.disabledFlat[num].value = false
+                  } else {
+                    self.disabledFlat[num].value = true
+                  }
+                }
+              } else {
+                self.disabledFlat[num].value = true
+              }
+
+              num++
+            });
+
 
           } else {
             this.primatotalSCTR = 0;
@@ -1634,6 +1891,7 @@ export class PolicyTransactionsComponent implements OnInit {
 
 
   generarPoliza(forma: NgForm) {
+
     let mensaje = "";
     if (this.cotizacionID == "") {
       this.errorNroCot = true;
@@ -1744,7 +2002,7 @@ export class PolicyTransactionsComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           if (this.mode == "endosar") {
-            this.EndososarPolicy();
+            this.endososarPolicy();
           } else {
             this.createJob()
           }
@@ -1755,7 +2013,7 @@ export class PolicyTransactionsComponent implements OnInit {
     }
   }
 
-  EndososarPolicy() {
+  endososarPolicy() {
     let self = this;
     self.loading = true;
     let dataQuotation: any = {};
@@ -1825,17 +2083,17 @@ export class PolicyTransactionsComponent implements OnInit {
     }
 
     //Comercializador Principal
-    let itemQuotationComMain: any = {};
-    itemQuotationComMain.P_NID_COTIZACION = this.cotizacionID; //Cotizacion
-    itemQuotationComMain.P_NIDTYPECHANNEL = this.polizaEmitComerDTOPrincipal.TIPO_CANAL;
-    itemQuotationComMain.P_NINTERMED = this.polizaEmitComerDTOPrincipal.CANAL;
-    itemQuotationComMain.P_SCLIENT_COMER = this.polizaEmitComerDTOPrincipal.SCLIENT;
-    itemQuotationComMain.P_NCOMISION_SAL = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD : "0";
-    itemQuotationComMain.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO : "0";
-    itemQuotationComMain.P_NCOMISION_PEN = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION : "0";
-    itemQuotationComMain.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO : "0";
-    itemQuotationComMain.P_NPRINCIPAL = this.polizaEmitComerDTOPrincipal.PRINCIPAL;
-    dataQuotation.QuotationCom.push(itemQuotationComMain);
+    // let itemQuotationComMain: any = {};
+    // itemQuotationComMain.P_NID_COTIZACION = this.cotizacionID; //Cotizacion
+    // itemQuotationComMain.P_NIDTYPECHANNEL = this.polizaEmitComerDTOPrincipal.TIPO_CANAL;
+    // itemQuotationComMain.P_NINTERMED = this.polizaEmitComerDTOPrincipal.CANAL;
+    // itemQuotationComMain.P_SCLIENT_COMER = this.polizaEmitComerDTOPrincipal.SCLIENT;
+    // itemQuotationComMain.P_NCOMISION_SAL = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT : "0";
+    // itemQuotationComMain.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO : "0";
+    // itemQuotationComMain.P_NCOMISION_PEN = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT : "0";
+    // itemQuotationComMain.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO : "0";
+    // itemQuotationComMain.P_NPRINCIPAL = this.polizaEmitComerDTOPrincipal.PRINCIPAL;
+    // dataQuotation.QuotationCom.push(itemQuotationComMain);
 
     //Comercializadores secundarios
     if (this.polizaEmitComer.length > 0) {
@@ -1845,9 +2103,9 @@ export class PolicyTransactionsComponent implements OnInit {
         itemQuotationCom.P_NIDTYPECHANNEL = dataBroker.TIPO_CANAL;
         itemQuotationCom.P_NINTERMED = dataBroker.CANAL; // Produccion
         itemQuotationCom.P_SCLIENT_COMER = dataBroker.SCLIENT;
-        itemQuotationCom.P_NCOMISION_SAL = self.saludList.length > 0 ? dataBroker.COMISION_SALUD == "" ? "0" : dataBroker.COMISION_SALUD : "0";
+        itemQuotationCom.P_NCOMISION_SAL = self.saludList.length > 0 ? dataBroker.COMISION_SALUD_AUT == "" ? "0" : dataBroker.COMISION_SALUD_AUT : "0";
         itemQuotationCom.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? dataBroker.COMISION_SALUD_PRO == "" ? "0" : dataBroker.COMISION_SALUD_PRO : "0";
-        itemQuotationCom.P_NCOMISION_PEN = self.pensionList.length > 0 ? dataBroker.COMISION_PENSION == "" ? "0" : dataBroker.COMISION_PENSION : "0";
+        itemQuotationCom.P_NCOMISION_PEN = self.pensionList.length > 0 ? dataBroker.COMISION_PENSION_AUT == "" ? "0" : dataBroker.COMISION_PENSION_AUT : "0";
         itemQuotationCom.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? dataBroker.COMISION_PENSION_PRO == "" ? "0" : dataBroker.COMISION_PENSION_PRO : "0";
         itemQuotationCom.P_NPRINCIPAL = dataBroker.PRINCIPAL;
         dataQuotation.QuotationCom.push(itemQuotationCom);
@@ -1913,7 +2171,7 @@ export class PolicyTransactionsComponent implements OnInit {
       res => {
         this.loading = false;
         if (res.P_COD_ERR == 0) {
-          if (this.mode == "cancel") {
+          if (this.mode == "cancel" || this.mode == "endosar") {
             Swal.fire({
               title: "Información",
               text: this.responseText,
@@ -2185,6 +2443,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.disabledFechaFin = false;
       this.fechaFinEspecial();
     }
+
     if (this.polizaEmitCab.tipoRenovacion == "7") { //Especial estado
       fechad.setDate(fechad.getDate() + 1);
       if (this.mode == "endosar") {
@@ -2203,6 +2462,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.disabledFechaFin = false;
       this.fechaFinEspecial()
     }
+
     if (this.polizaEmitCab.tipoRenovacion === "5") { //Mensual
       this.polizaEmitCab.bsValueIni = new Date(this.fechaBase)
       this.polizaEmitCab.bsValueIniMin = new Date(this.fechaBase)
@@ -2212,6 +2472,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.flagFechaMenorMayorFin = true;
       this.fechaFinEspecial()
     }
+
     if (this.polizaEmitCab.tipoRenovacion === "4") { //Bimestral
       this.polizaEmitCab.bsValueIni = new Date(this.fechaBase)
       this.polizaEmitCab.bsValueIniMin = new Date(this.fechaBase)
@@ -2222,6 +2483,7 @@ export class PolicyTransactionsComponent implements OnInit {
 
       this.fechaFinEspecial()
     }
+
     if (this.polizaEmitCab.tipoRenovacion === "3") { //Trimestral
       this.polizaEmitCab.bsValueIni = new Date(this.fechaBase)
       this.polizaEmitCab.bsValueIniMin = new Date(this.fechaBase)
@@ -2231,6 +2493,7 @@ export class PolicyTransactionsComponent implements OnInit {
       this.flagFechaMenorMayorFin = true;
       this.fechaFinEspecial()
     }
+
     if (this.polizaEmitCab.tipoRenovacion === "2") { //Semestral
       this.polizaEmitCab.bsValueIni = new Date(this.fechaBase)
       this.polizaEmitCab.bsValueIniMin = new Date(this.fechaBase)
@@ -2249,22 +2512,23 @@ export class PolicyTransactionsComponent implements OnInit {
       this.polizaEmitCab.bsValueFin = new Date(fechad);
       this.flagFechaMenorMayorFin = true;
       this.fechaFinEspecial()
-
     }
+
+
   }
 
   fechaFinEspecial() {
     if (this.mode == "include" || this.mode == "exclude" || this.mode == "netear") {
-      this.polizaEmitCab.bsValueIni = new Date();
-      this.polizaEmitCab.bsValueIniMin = new Date();
+      this.polizaEmitCab.bsValueIni = this.fechaBase;
+      this.polizaEmitCab.bsValueIniMin = this.fechaBase;
       this.polizaEmitCab.bsValueFinMax = new Date(this.fechaBaseHasta);
       this.polizaEmitCab.bsValueFin = new Date(this.fechaBaseHasta);
       this.disabledFechaFin = true;
     }
 
     if (this.mode == "endosar") {
-      this.polizaEmitCab.bsValueIni = new Date();
-      this.polizaEmitCab.bsValueIniMin = new Date();
+      this.polizaEmitCab.bsValueIni = this.fechaBase;
+      this.polizaEmitCab.bsValueIniMin = this.fechaBase;
     }
   }
 

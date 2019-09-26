@@ -105,6 +105,7 @@ import { QuotationRequestComponent } from './components/quote/quotation-request/
 import { TransactionReportComponent } from './components/reports/transaction-report/transaction-report.component';
 import { InsuredReportComponent } from './components/reports/insured-report/insured-report.component';
 import { StateReportComponent } from './components/reports/state-report/state-report.component';
+import { AnulMovComponent } from './modal/anul-mov/anul-mov.component';
 import { ngfModule } from 'angular-file';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -183,6 +184,8 @@ import { CampaignService } from './services/campaign/campaign.service';
 import { DeliveryService } from './services/delivery/delivery.service';
 import { PrettyNumberPipe } from './pipes/pretty-number.pipe';
 import { TestComponent } from './components/maintenance/test/test.component';
+import { PolicyRequestComponent } from './components/policy/policy-request/policy-request.component';
+import { PolicyEvaluationComponent } from './components/policy/policy-evaluation/policy-evaluation.component';
 
 //Kuntur Services 20190812
 
@@ -314,7 +317,10 @@ import { TestComponent } from './components/maintenance/test/test.component';
         CreditQualificationRecordComponent, // Kuntur 20190812
         PolicyTransactionsComponent, // Kuntur 20190812
         FilePickerComponent, // Kuntur 20190812
-        ProcessViewerComponent, PrettyNumberPipe, TestComponent, // Kuntur 20190812
+        ProcessViewerComponent, // Kuntur 20190919
+        PrettyNumberPipe, // Kuntur 20190919
+        TestComponent, // Kuntur 20190919
+        AnulMovComponent, PolicyRequestComponent, PolicyEvaluationComponent // Kuntur 20190812
     ],
     entryComponents: [
         ResVaucherComponent,
@@ -338,8 +344,7 @@ import { TestComponent } from './components/maintenance/test/test.component';
         ValErrorComponent, // Kuntur 20190812
         PolicyDocumentsComponent, // Kuntur 20190812
         AddCiiuComponent, // Kuntur 20190812
-        SearchBrokerComponent, // Kuntur 20190812
-        AddCiiuComponent // Kuntur 20190812
+        AnulMovComponent // Kuntur 20190919
     ],
     providers: [
         AppConfig,

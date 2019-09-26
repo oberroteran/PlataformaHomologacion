@@ -87,9 +87,11 @@
 									placeholder="Dirección" disabled />
 							</div>
 							<div class="col-sm-3">
-								<span>CORREO ELECTRÓNICO</span>
-								<input type="text" [(ngModel)]="polizaEmitCab.CORREO" name="CORREO"
-									placeholder="Correo Electrónico" disabled />
+								<span>CORREO ELECTRÓNICO (*)</span>
+								<input type="text" [(ngModel)]="polizaEmitCab.CORREO"
+									[ngClass]="{'error-validate': flagEmail}" name="CORREO"
+									placeholder="Correo Electrónico" (keypress)="valText($event, 6)"
+									[disabled]="flagEmailNull" />
 							</div>
 						</div>
 					</div>
@@ -103,7 +105,7 @@
 						</h5>
 					</div>
 					<div id="comercializador" class="collapse show pt-1">
-						<div class="row">
+						<!-- <div class="row">
 							<div class="col-sm-3">
 								<span>TIPO DOCUMENTO</span>
 								<select disabled [(ngModel)]="this.polizaEmitComerDTOPrincipal.TYPE_DOC_COMER"
@@ -119,8 +121,8 @@
 								<input [(ngModel)]="this.polizaEmitComerDTOPrincipal.DOC_COMER" name="DOC_COMER"
 									type="text" placeholder="Documento" id="" disabled />
 							</div>
-						</div>
-						<div class="row">
+						</div> -->
+						<!-- <div class="row">
 							<div class="col-sm-9">
 								<span>NOMBRE / RAZÓN SOCIAL</span>
 
@@ -129,67 +131,71 @@
 							</div>
 
 
-						</div>
-						<div class="row">
+						</div> -->
+						<!-- <div class="row">
 							<div class="col-sm-3" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD =$event"
-									name="COMISION_SALUD" placeholder="0 %" id="" disabled />
-							</div>
-							<!-- <div class="col-sm-3 chk" *ngIf="saludList.length > 0">
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT =$event"
+									name="COMISION_SALUD_AUT" placeholder="0 %" id="" disabled />
+							</div> -->
+						<!-- <div class="col-sm-3 chk" *ngIf="saludList.length > 0">
 								<span>COMISIÓN SALUD PROPUESTA</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO =$event"
 									name="COMISION_SALUD_PRO" placeholder="0" disabled
 									style="margin-top: 2px !important;" FloatDirective />
 							</div> -->
-							<div class="col-sm-3" *ngIf="pensionList.length > 0">
+						<!-- <div class="col-sm-3" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN</span>
-								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION"
-									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION =$event"
-									name="COMISION_PENSION" placeholder="0 %" id="" disabled />
-							</div>
-							<!-- <div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
+								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT"
+									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT =$event"
+									name="COMISION_PENSION_AUT" placeholder="0 %" id="" disabled />
+							</div> -->
+						<!-- <div class="col-sm-3 chk" *ngIf="pensionList.length > 0">
 								<span>COMISIÓN PENSIÓN PROPUESTA</span>
 								<input type="text" [ngModel]="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO"
 									(ngModelChange)="polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO =$event"
 									name="COMISION_PENSION_PRO" placeholder="0" disabled
 									style="margin-top: 2px !important;" FloatDirective />
 							</div> -->
-						</div>
+						<!-- </div> -->
 
 						<br>
 
-						<table *ngIf="polizaEmitComer.length !== 0" class="table table-borderless riesgo tblbroker">
+						<table class="table table-borderless riesgo tblbroker">
 							<thead>
 								<tr class="d-flex">
 									<th class="col-sm text-center"><label>Tipo Documento</label></th>
 									<th class="col-sm text-center"><label>Nro Documento</label></th>
-									<th class="col-sm text-center"><label>Nombres y Apellidos</label></th>
+									<th class="col-sm text-center"><label>Razón Social / Nombres y Apellidos</label>
+									</th>
 									<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Comisión
 											Salud</label></th>
-									<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Propuesta</label>
-									</th>
+									<!-- <th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Propuesta</label>
+									</th> -->
 									<th class="col-sm text-center" *ngIf="pensionList.length > 0"><label>Comisión
 											Pensión</label></th>
-									<th class="col-sm text-center" *ngIf="pensionList.length > 0">
-										<label>Propuesta</label></th>
+									<!-- <th class="col-sm text-center" *ngIf="pensionList.length > 0">
+										<label>Propuesta</label></th> -->
 								</tr>
 							</thead>
 							<tbody>
+								<tr class="d-flex" *ngIf="polizaEmitComer.length == 0">
+									<td class="col-sm text-center">No hay brokers</td>
+								</tr>
 								<tr class="d-flex" *ngFor="let comer of polizaEmitComer; let i = index">
 									<td class="col-sm text-center"><span>{{comer.DES_DOC_COMER}}</span></td>
 									<td class="col-sm text-center"><span>{{comer.DOC_COMER}}</span></td>
 									<td class="col-sm text-center"><span>{{comer.COMERCIALIZADOR}}</span></td>
 									<td class="col-sm text-center" *ngIf="saludList.length > 0">
-										<span>{{comer.COMISION_SALUD}}</span></td>
-									<td class="col-sm text-center" *ngIf="saludList.length > 0">
-										<span>{{comer.COMISION_SALUD_PRO}}</span></td>
+										<span>{{comer.COMISION_SALUD_AUT}}</span></td>
+									<!-- <td class="col-sm text-center" *ngIf="saludList.length > 0">
+										<span>{{comer.COMISION_SALUD_PRO}}</span></td> -->
 									<td class="col-sm text-center" *ngIf="pensionList.length > 0">
-										<span>{{comer.COMISION_PENSION}}</span></td>
-									<td class="col-sm text-center" *ngIf="pensionList.length > 0">
-										<span>{{comer.COMISION_PENSION_PRO}}</span></td>
+										<span>{{comer.COMISION_PENSION_AUT}}</span></td>
+									<!-- <td class="col-sm text-center" *ngIf="pensionList.length > 0">
+										<span>{{comer.COMISION_PENSION_AUT}}</span></td> -->
 								</tr>
 							</tbody>
 						</table>
@@ -250,13 +256,13 @@
 
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div *ngIf="canBillMonthly || canBillInAdvance" class="col-sm-3">
 								<span style="margin: 0;">&nbsp;</span>
 								<label *ngIf="canBillMonthly" style="width: 100%;margin-bottom: 0;"><input
 										type="checkbox" [disabled]="facVencido"
 										[(ngModel)]="polizaEmit.facturacionVencido" (ngModelChange)="onFacturacion()"
 										name="FAC_VENCIDO" class="checkbox"><span class="schk"
-										style="margin-top: 15px; font-size: 13px;">PROFORMA A MES
+										style="margin-top: 15px; font-size: 13px;">REGULA A MES
 										VENCIDO</span></label>
 
 								<label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input
@@ -307,11 +313,13 @@
 							</div>
 							<div class="col-sm-2">
 								<span>&nbsp;</span>
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+								<!-- <label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.DELIMITACION" name="DELIMITACION"
 										[checked]="polizaEmitCab.DELIMITACION" class="checkbox" disabled><span
 										class="schk"
-										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label>
+										style="margin-top: 10px; font-size: 13px;">Delimitación</span></label> -->
+								<label style="width: 100%;margin-bottom: 0;"><span
+										style="margin-top: 5px; font-size: 13px; color: red; text-transform: initial;">{{polizaEmitCab.DELIMITACION}}</span></label>
 								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
 										[(ngModel)]="polizaEmitCab.MINA" name="MINA" [checked]="polizaEmitCab.MINA"
 										class="checkbox" disabled><span class="schk"
@@ -424,8 +432,8 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA SALUD</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD" name="MIN_SALUD"
-											placeholder="Prima Mínima" disabled>
+										<input type="text" [(ngModel)]="polizaEmitCab.MIN_SALUD_AUT"
+											name="MIN_SALUD_AUT" placeholder="Prima Mínima" disabled>
 									</div>
 
 									<!-- <div class="col-sm-6">
@@ -446,7 +454,7 @@
 												<thead>
 													<tr class="d-flex">
 														<th class="col-sm text-center"><label>Categoría</label></th>
-														<th class="col-sm text-center"><label>Tasa Calculada</label>
+														<th class="col-sm text-center"><label>Tasa</label>
 														</th>
 														<th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
@@ -468,12 +476,13 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{primatotalSalud | miles}}</span></td>
+															<span>{{totalNetoSaludSave | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
 														<td class="col-sm text-center"></td>
-														<td class="col-sm text-right"><span>IGV</span></td>
-														<td class="col-sm text-center"><span>{{igvSalud | miles}}</span>
+														<td class="col-sm text-right"><span>IGV + GASTOS</span></td>
+														<td class="col-sm text-center">
+															<span>{{igvSaludSave | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="saludList.length > 0">
@@ -481,10 +490,13 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{totalSalud | miles}}</span></td>
+															<span>{{brutaTotalSaludSave | miles}}</span></td>
 													</tr>
 												</tbody>
 											</table>
+											<div class="col-sm-12">
+												<p class="msg-error">{{mensajePrimaSalud}}</p>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -493,8 +505,8 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<span>PRIMA MÍNIMA PENSIÓN</span>
-										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION" name="MIN_PENSION"
-											placeholder="Prima Mínima" disabled>
+										<input type="text" [(ngModel)]="polizaEmitCab.MIN_PENSION_AUT"
+											name="MIN_PENSION_AUT" placeholder="Prima Mínima" disabled>
 									</div>
 									<!-- <div class="col-sm-6">
 										<span>PRIMA MÍNIMA PROPUESTA</span>
@@ -514,7 +526,7 @@
 												<thead>
 													<tr class="d-flex">
 														<th class="col-sm text-center"><label>Categoría</label></th>
-														<th class="col-sm text-center"><label>Tasa Calculada</label>
+														<th class="col-sm text-center"><label>Tasa</label>
 														</th>
 														<th class="col-sm text-center"><label>Prima Mensual</label></th>
 													</tr>
@@ -536,13 +548,13 @@
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>Prima Total Neta</span></td>
 														<td class="col-sm text-center">
-															<span>{{primatotalSCTR | miles}}</span></td>
+															<span>{{totalNetoPensionSave | miles}}</span></td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
 														<td class="col-sm text-center"></td>
 														<td class="col-sm text-right"><span>IGV + GASTOS</span></td>
 														<td class="col-sm text-center">
-															<span>{{igvPension | miles}}</span>
+															<span>{{igvPensionSave | miles}}</span>
 														</td>
 													</tr>
 													<tr class="d-flex" *ngIf="pensionList.length > 0">
@@ -550,9 +562,12 @@
 														<td class="col-sm text-right"><span>Prima Bruta Total</span>
 														</td>
 														<td class="col-sm text-center">
-															<span>{{totalSTRC | miles}}</span></td>
+															<span>{{brutaTotalPensionSave | miles}}</span></td>
 												</tbody>
 											</table>
+											<div class="col-sm-12">
+												<p class="msg-error">{{mensajePrimaPension}}</p>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -621,9 +636,9 @@
 										<thead>
 											<tr>
 												<th>Nombre</th>
-												<th>Tipo</th>
-												<th>Tamaño</th>
-												<th>Accion</th>
+												<!-- <th>Tipo</th> -->
+												<th class="text-center">Tamaño</th>
+												<th class="text-center">Acción</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -631,14 +646,14 @@
 												<td>
 													<strong>{{ item.name }}</strong>
 												</td>
-												<td>
+												<!-- <td>
 													{{ item.type }}
-												</td>
-												<td nowrap>
+												</td> -->
+												<td class="text-center">
 													{{ item.size/1024/1024 | number:'.2' }} MB
 												</td>
-												<td><img src="assets/icons/anular.png" (click)="files.splice(i,1)"
-														title="Eliminar" alt="Eliminar" />
+												<td class="text-center"><img src="assets/icons/anular.png"
+														(click)="files.splice(i,1)" title="Eliminar" alt="Eliminar" />
 												</td>
 											</tr>
 										</tbody>
