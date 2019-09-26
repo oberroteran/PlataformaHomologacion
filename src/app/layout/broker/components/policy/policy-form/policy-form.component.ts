@@ -3,8 +3,9 @@ import { PolizaEmitCab } from '../../../models/polizaEmit/PolizaEmitCab';
 import { PolizaEmitComer } from '../../../models/polizaEmit/PolizaEmitComer';
 import { TipoRenovacion } from '../../../models/polizaEmit/TipoRenovacion';
 import { FrecuenciaPago } from '../../../models/polizaEmit/FrecuenciaPago';
+import { ButtonVisaComponent } from '../../../../../shared/components/button-visa/button-visa.component';
 import { PolizaEmitDet, PolizaEmitDetAltoRiesgo, PolizaEmitDetMedianoRiesgo, PolizaEmitDetBajoRiesgo } from '../../../models/polizaEmit/PolizaEmitDet';
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewContainerRef, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -12,6 +13,8 @@ import swal from 'sweetalert2'
 import { PolicyemitService } from '../../../services/policy/policyemit.service';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ValErrorComponent } from '../../../modal/val-error/val-error.component';
+import { VisaService } from '../../../../../shared/services/pago/visa.service';
+import { AppConfig } from '../../../../../app.config';
 //Compartido
 import { AccessFilter } from './../../access-filter'
 import { ModuleConfig } from './../../module.config'
@@ -132,7 +135,8 @@ export class PolicyFormComponent implements OnInit {
 	/**Tenemos un número de cotización? */
 	hasQuotationNumber: boolean = false;
 
-	constructor(private route: ActivatedRoute, private router: Router, private othersService: OthersService, private policyemit: PolicyemitService, private modalService: NgbModal) {
+	constructor(private route: ActivatedRoute, private router: Router, private othersService: OthersService, private policyemit: PolicyemitService, private modalService: NgbModal, private visaService: VisaService, private viewContainerRef: ViewContainerRef,
+		private factoryResolver: ComponentFactoryResolver) {
 		this.bsConfig = Object.assign(
 			{},
 			{
@@ -150,6 +154,8 @@ export class PolicyFormComponent implements OnInit {
 		this.polizaEmit.facturacionVencido = false;
 		this.polizaEmit.facturacionAnticipada = false;
 		this.polizaEmit.comentario = "";
+
+		this.createVISAButton();
 		//prueba mina
 		this.polizaEmitCab.MINA = false;
 		this.obtenerTipoRenovacion();
@@ -888,5 +894,29 @@ export class PolicyFormComponent implements OnInit {
 			});
 		}
 		return output;
+	}
+	createVISAButton() {
+		let btnVisa;
+		this.visaService.generarSessionToken(65.20, JSON.parse(localStorage.getItem("currentUser"))["id"]) // user Id
+			.subscribe(
+				res => {
+					// console.log(res);
+					//const data = <SessionToken>res;
+					//sessionStorage.setItem('sessionToken', data.sessionToken);
+					const factory = this.factoryResolver.resolveComponentFactory(ButtonVisaComponent);
+					btnVisa = factory.create(this.viewContainerRef.parentInjector);
+					btnVisa.instance.action = AppConfig.ACTION_FORM_VISA_PAYROLL;
+					btnVisa.instance.amount = 65.20;
+					btnVisa.instance.sessionToken = res.sessionToken;
+					btnVisa.instance.purchaseNumber = res.purchaseNumber;
+					btnVisa.instance.merchantLogo = AppConfig.MERCHANT_LOGO_VISA;
+					btnVisa.instance.userId = JSON.parse(localStorage.getItem("currentUser"))["id"]; // Enviar el id del usuario
+					// Agregar el componente al componente contenedor
+					this.viewContainerRef.insert(btnVisa.hostView);
+				},
+				error => {
+					console.log(error);
+				}
+			);
 	}
 }
