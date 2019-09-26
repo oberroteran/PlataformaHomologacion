@@ -7,7 +7,7 @@
             <div class="header-content">
                 <div class="containt-item">
                     <div class="header-item">
-                        <span class="title">Consulta Solicitudes de Cotización</span>
+                        <span class="title">Consulta Solicitudes de Póliza</span>
                     </div>
                 </div>
             </div>
@@ -19,7 +19,7 @@
 
                             <div class="col-sm-3">
                                 <span>TIPO PRODUCTO</span>
-                                <select formControlName="product"  class="minimal">
+                                <select formControlName="product" class="minimal">
                                     <option value="">Todos</option>
                                     <option *ngFor="let item of productTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -27,7 +27,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <span>ESTADO</span>
-                                <select formControlName="status"  class="minimal">
+                                <select formControlName="status" class="minimal">
                                     <option value="">Todos</option>
                                     <option *ngFor="let item of statusList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -85,7 +85,8 @@
 
                                 <div>
                                     <span>&nbsp;&nbsp;BÚSQUEDA POR CONTRATANTE</span>
-                                    <select formControlName="contractorSearchMode" (change)="cleanContractorInputs()"  class="minimal">
+                                    <select formControlName="contractorSearchMode" (change)="cleanContractorInputs()"
+                                        class="minimal">
                                         <option value="3" disabled>Seleccionar</option>
                                         <option *ngFor="let item of searchModeList" value="{{item.Id}}">
                                             {{item.Name}}</option>
@@ -96,7 +97,7 @@
                             <div *ngIf="mainFormGroup.controls.contractorSearchMode.value=='1'" class="col-sm-3">
                                 <span>TIPO DOC. CONTRATANTE</span>
                                 <select formControlName="contractorDocumentType"
-                                    (change)="contractorDocumentTypeChanged()"  class="minimal">
+                                    (change)="contractorDocumentTypeChanged()" class="minimal">
                                     <option value="" disabled>Seleccione</option>
                                     <option *ngFor="let item of documentTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -124,7 +125,8 @@
 
                             <div *ngIf="mainFormGroup.controls.contractorSearchMode.value=='2'" class="col-sm-3">
                                 <span>TIPO PERSONA</span>
-                                <select formControlName="contractorPersonType" (change)="cleanContractorInputs()"  class="minimal">
+                                <select formControlName="contractorPersonType" (change)="cleanContractorInputs()"
+                                    class="minimal">
                                     <option value="0" disabled>Seleccionar</option>
                                     <option *ngFor="let item of personTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -167,7 +169,8 @@
 
                                 <div>
                                     <span>&nbsp;&nbsp;BÚSQUEDA POR BROKER</span>
-                                    <select formControlName="brokerSearchMode" (change)="cleanBrokerInputs()" class="minimal">
+                                    <select formControlName="brokerSearchMode" (change)="cleanBrokerInputs()"
+                                        class="minimal">
                                         <option value="3" disabled>Seleccionar</option>
                                         <option *ngFor="let item of searchModeList" value="{{item.Id}}">
                                             {{item.Name}}</option>
@@ -177,7 +180,8 @@
 
                             <div *ngIf="mainFormGroup.controls.brokerSearchMode.value=='1'" class="col-sm-3">
                                 <span>TIPO DOC. BROKER</span>
-                                <select formControlName="brokerDocumentType" (change)="brokerDocumentTypeChanged()" class="minimal">
+                                <select formControlName="brokerDocumentType" (change)="brokerDocumentTypeChanged()"
+                                    class="minimal">
                                     <option value="" disabled>Seleccione</option>
                                     <option *ngFor="let item of documentTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -204,7 +208,8 @@
                             </div>
                             <div *ngIf="mainFormGroup.controls.brokerSearchMode.value=='2'" class="col-sm-3">
                                 <span>TIPO PERSONA</span>
-                                <select formControlName="brokerPersonType" (change)="cleanBrokerInputs()" class="minimal">
+                                <select formControlName="brokerPersonType" (change)="cleanBrokerInputs()"
+                                    class="minimal">
                                     <option value="0" disabled>Seleccionar</option>
                                     <option *ngFor="let item of personTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -261,6 +266,7 @@
                         <table class="table">
                             <thead>
                                 <tr class="grid-title">
+                                    <td class="grid-title-item">Cotización</td>
                                     <td class="grid-title-item">Póliza</td>
                                     <td class="grid-title-item">Producto</td>
                                     <td class="grid-title-item">Contratante</td>
@@ -268,8 +274,8 @@
                                     <td class="grid-title-item">Nro. Trabajadores</td>
                                     <td class="grid-title-item">Planilla</td>
                                     <td class="grid-title-item">Broker</td>
-                                    <td class="grid-title-item">Estado</td>
-                                    <td class="grid-title-item">Fecha Aprobación</td>
+                                    <!-- <td class="grid-title-item">Estado</td> -->
+                                    <!-- <td class="grid-title-item">Fecha Aprobación</td> -->
                                     <td class="grid-title-item">Opciones</td>
                                 </tr>
                             </thead>
@@ -288,19 +294,20 @@
                             <tbody *ngFor="let item of foundResults">
                                 <tr>
                                     <td>{{ item.QuotationNumber}}</td>
+                                    <td>{{ item.PolicyNumber}}</td>
                                     <td>{{ item.ProductName }}</td>
-                                    <td>{{item.ContractorFullName}}</td>
+                                    <td>{{ item.ContractorFullName }}</td>
                                     <td>{{ item.MinimalPremium | prettyNumber:2}}</td>
                                     <td>{{ item.WorkersCount }}</td>
                                     <td>{{ item.Payroll | prettyNumber:2}}</td>
                                     <td>{{item.BrokerFullName}}</td>
-                                    <td>{{ item.Status}}</td>
-                                    <td>{{ item.ApprovalDate | date:'dd/MM/yyyy, h:mm a'}}</td>
+                                    <!-- <td>{{ item.Status}}</td> -->
+                                    <!-- <td>{{ item.ApprovalDate | date:'dd/MM/yyyy, h:mm a'}}</td> -->
                                     <td style="display: flex">
 
-                                        <a (click)="seeTracking(item.QuotationNumber)"><img alt="Ver movimientos"
+                                        <!-- <a (click)="seeTracking(item.QuotationNumber)"><img alt="Ver movimientos"
                                                 src="assets/icons/preview_soat_box.png" title="Ver movimientos"
-                                                style="cursor: pointer;height: 24px"></a>
+                                                style="cursor: pointer;height: 24px"></a> -->
                                         <a (click)="openDetails(item)"><img alt="Ver detalles"
                                                 src="assets/icons/see.svg" title="{{item.Mode}}"
                                                 style="cursor: pointer;height: 24px;margin-left: 15px"></a>

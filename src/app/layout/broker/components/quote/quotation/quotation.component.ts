@@ -2504,19 +2504,21 @@ export class QuotationComponent implements OnInit {
     }
 
     addBroker() {
+        console.log(this.brokerList)
         let modalRef = this.modalService.open(SearchBrokerComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
         modalRef.componentInstance.formModalReference = modalRef;
         modalRef.componentInstance.listaBroker = this.brokerList;
         modalRef.componentInstance.brokerMain = this.InputsQuotation.P_SIDDOC_COM;
 
-        modalRef.result.then((BorkerData) => {
-            BorkerData.P_COM_SALUD = 0;
-            BorkerData.P_COM_SALUD_PRO = 0;
-            BorkerData.P_COM_PENSION = 0;
-            BorkerData.P_COM_PENSION_PRO = 0;
-            BorkerData.PROFILE = JSON.parse(localStorage.getItem("currentUser"))["idProfile"];
-            BorkerData.BLOCK = 0; 
-            this.brokerList.push(BorkerData);
+        modalRef.result.then((BrokerData) => {
+            BrokerData.P_COM_SALUD = 0;
+            BrokerData.P_COM_SALUD_PRO = 0;
+            BrokerData.P_COM_PENSION = 0;
+            BrokerData.P_COM_PENSION_PRO = 0;
+            BrokerData.PROFILE = JSON.parse(localStorage.getItem("currentUser"))["idProfile"];
+            BrokerData.NCORREDOR = BrokerData.NCORREDOR == "" ? BrokerData.COD_CANAL : BrokerData.NCORREDOR;
+            BrokerData.BLOCK = 0; 
+            this.brokerList.push(BrokerData);
             this.equivalentMuni();
         }, (reason) => {
         });

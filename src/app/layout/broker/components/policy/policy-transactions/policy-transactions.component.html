@@ -164,8 +164,7 @@
 									</div>
 								</div>
 
-								<table
-									class="table table-borderless riesgo tblbroker" style="margin-top: 10px;">
+								<table class="table table-borderless riesgo tblbroker" style="margin-top: 10px;">
 									<thead>
 										<tr class="d-flex">
 											<th class="col-sm text-center"><label>Tipo Documento</label></th>
@@ -214,9 +213,10 @@
 													[(ngModel)]="comer.COMISION_PENSION_PRO"
 													(ngModelChange)="changePensionPropuesta($event, comer.DOC_COMER)"
 													FloatDirective />
-											<td *ngIf="!editFlag"><span style="padding: 0 12px;"><img
+											<td *ngIf="!editFlag"><span style="padding: 0 12px;" *ngIf="comer.BLOCK != 1"><img
 														src="assets/icons/anular.png" (click)="deleteBroker(row)"
 														title="Eliminar" alt="Eliminar" /></span>
+												<span style="padding: 0 12px;" *ngIf="comer.BLOCK == 1">------</span>
 											</td>
 										</tr>
 									</tbody>
@@ -282,17 +282,18 @@
 
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div *ngIf="canBillMonthly || canBillInAdvance" class="col-sm-3">
 								<span style="margin: 0;">&nbsp;</span>
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-										[(ngModel)]="polizaEmit.facturacionVencido" name="facturacionVencido"
-										(ngModelChange)="onFacturacion()" class="checkbox" [disabled]="facVencido"><span
-										class="schk" style="margin-top: 15px; font-size: 13px;">REGULA A MES
+								<label *ngIf="canBillMonthly" style="width: 100%;margin-bottom: 0;"><input
+										type="checkbox" [(ngModel)]="polizaEmit.facturacionVencido"
+										name="facturacionVencido" (ngModelChange)="onFacturacion()" class="checkbox"
+										[disabled]="facVencido"><span class="schk"
+										style="margin-top: 15px; font-size: 13px;">REGULA A MES
 										VENCIDO</span></label>
 
-								<label style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-										[(ngModel)]="polizaEmit.facturacionAnticipada" name="facturacionAnticipada"
-										(ngModelChange)="onFacturacion()" class="checkbox"
+								<label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input
+										type="checkbox" [(ngModel)]="polizaEmit.facturacionAnticipada"
+										name="facturacionAnticipada" (ngModelChange)="onFacturacion()" class="checkbox"
 										[disabled]="facAnticipada"><span class="schk"
 										style="margin-top: 5px; font-size: 13px;">FACTURACIÓN
 										ANTICIPADA</span></label>

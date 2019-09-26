@@ -467,9 +467,9 @@ export class PolicyRequestComponent implements OnInit {
   */
   search() {
     this.isLoading = true;
-
     this.quotationService.getPolicyList(this.filter).subscribe(
       res => {
+        
         this.foundResults = res.GenericResponse;
 
         if (this.foundResults != null && this.foundResults.length > 0) this.totalItems = res.TotalRowNumber;
@@ -637,7 +637,7 @@ export class PolicyRequestComponent implements OnInit {
 
   openDetails(item: any) {
     sessionStorage.setItem('cs-quotation', JSON.stringify(item));
-    this.router.navigate(['/broker/quotation-evaluation']);
+    this.router.navigate(['/broker/policy-evaluation']);
   }
 
 }

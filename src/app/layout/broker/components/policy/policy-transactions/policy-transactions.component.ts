@@ -187,7 +187,10 @@ export class PolicyTransactionsComponent implements OnInit {
   fechaBaseHasta: any = "";
   minPension: any = "";
   minSalud: any = "";
-
+  /**Puede facturar a mes vencido? */
+  canBillMonthly: boolean;
+  /**Puede facturar anticipadamente? */
+  canBillInAdvance: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -238,6 +241,9 @@ export class PolicyTransactionsComponent implements OnInit {
     this.polizaEmitCab.COD_PROVINCIA = ''
     this.polizaEmitCab.COD_DISTRITO = ''
     this.polizaEmitCab.frecuenciaPago = '';
+
+    this.canBillMonthly = AccessFilter.hasPermission("16");
+    this.canBillInAdvance = AccessFilter.hasPermission("17");
 
     let self = this
     for (var i = 0; i < 10; i++) {
@@ -1363,6 +1369,7 @@ export class PolicyTransactionsComponent implements OnInit {
                       //   self.objEdit.polizaCom.push(item)
                       // } else {
                       // this.polizaEmitComer.push(com);
+                      com.BLOCK = 0;
                       com.COMISION_PENSION_AUT = com.COMISION_PENSION_AUT == "" ? "0" : com.COMISION_PENSION_AUT;
                       com.COMISION_PENSION_PRO = com.COMISION_PENSION_PRO == "" ? "0" : com.COMISION_PENSION_PRO;
                       com.COMISION_PENSION = com.COMISION_PENSION == "" ? "0" : com.COMISION_PENSION;
@@ -1377,9 +1384,15 @@ export class PolicyTransactionsComponent implements OnInit {
                       self.objEdit.polizaCom.push(item)
                       // }
                     });
-                    console.log(res)
                     this.polizaEmitComer = res
-                    console.log(this.polizaEmitComer)
+
+                    if (this.perfil == JSON.parse(localStorage.getItem("currentUser"))["idProfile"]) {
+                      this.polizaEmitComer[0].BLOCK = 1;
+                    } else {
+                      this.polizaEmitComer[0].BLOCK = 0;
+                    }
+
+                    // console.log(this.polizaEmitComer)
                     this.flagBusqueda = true;
                   } else {
                     this.polizaEmitComerDTOPrincipal = {};
@@ -2070,17 +2083,17 @@ export class PolicyTransactionsComponent implements OnInit {
     }
 
     //Comercializador Principal
-    let itemQuotationComMain: any = {};
-    itemQuotationComMain.P_NID_COTIZACION = this.cotizacionID; //Cotizacion
-    itemQuotationComMain.P_NIDTYPECHANNEL = this.polizaEmitComerDTOPrincipal.TIPO_CANAL;
-    itemQuotationComMain.P_NINTERMED = this.polizaEmitComerDTOPrincipal.CANAL;
-    itemQuotationComMain.P_SCLIENT_COMER = this.polizaEmitComerDTOPrincipal.SCLIENT;
-    itemQuotationComMain.P_NCOMISION_SAL = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT : "0";
-    itemQuotationComMain.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO : "0";
-    itemQuotationComMain.P_NCOMISION_PEN = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT : "0";
-    itemQuotationComMain.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO : "0";
-    itemQuotationComMain.P_NPRINCIPAL = this.polizaEmitComerDTOPrincipal.PRINCIPAL;
-    dataQuotation.QuotationCom.push(itemQuotationComMain);
+    // let itemQuotationComMain: any = {};
+    // itemQuotationComMain.P_NID_COTIZACION = this.cotizacionID; //Cotizacion
+    // itemQuotationComMain.P_NIDTYPECHANNEL = this.polizaEmitComerDTOPrincipal.TIPO_CANAL;
+    // itemQuotationComMain.P_NINTERMED = this.polizaEmitComerDTOPrincipal.CANAL;
+    // itemQuotationComMain.P_SCLIENT_COMER = this.polizaEmitComerDTOPrincipal.SCLIENT;
+    // itemQuotationComMain.P_NCOMISION_SAL = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_AUT : "0";
+    // itemQuotationComMain.P_NCOMISION_SAL_PR = self.saludList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_SALUD_PRO : "0";
+    // itemQuotationComMain.P_NCOMISION_PEN = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_AUT : "0";
+    // itemQuotationComMain.P_NCOMISION_PEN_PR = self.pensionList.length > 0 ? this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO == "" ? "0" : this.polizaEmitComerDTOPrincipal.COMISION_PENSION_PRO : "0";
+    // itemQuotationComMain.P_NPRINCIPAL = this.polizaEmitComerDTOPrincipal.PRINCIPAL;
+    // dataQuotation.QuotationCom.push(itemQuotationComMain);
 
     //Comercializadores secundarios
     if (this.polizaEmitComer.length > 0) {
