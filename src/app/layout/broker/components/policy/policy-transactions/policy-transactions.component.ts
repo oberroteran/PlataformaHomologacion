@@ -191,6 +191,12 @@ export class PolicyTransactionsComponent implements OnInit {
   canBillMonthly: boolean;
   /**Puede facturar anticipadamente? */
   canBillInAdvance: boolean;
+  /** Puede agregar brokers secundarios? */
+  canAddSecondaryBroker: boolean;
+  /** Puede proponer comisión? */
+  canProposeComission: boolean;
+  /** Puede proponer prima mínima? */
+  canProposeMinimunPremium: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -242,6 +248,10 @@ export class PolicyTransactionsComponent implements OnInit {
     this.polizaEmitCab.COD_DISTRITO = ''
     this.polizaEmitCab.frecuenciaPago = '';
 
+    this.canProposeComission = AccessFilter.hasPermission("6");
+    console.log(this.canProposeComission)
+    this.canAddSecondaryBroker = AccessFilter.hasPermission("7");
+    this.canProposeMinimunPremium = AccessFilter.hasPermission("8");
     this.canBillMonthly = AccessFilter.hasPermission("16");
     this.canBillInAdvance = AccessFilter.hasPermission("17");
 
@@ -2196,6 +2206,19 @@ export class PolicyTransactionsComponent implements OnInit {
               }
             });
           }
+        }
+        else if (res.P_COD_ERR == 2) {
+          Swal.fire({
+            title: "Información",
+            text: res.P_MESSAGE,
+            type: "info",
+            confirmButtonText: 'OK',
+            allowOutsideClick: false,
+          }).then((result) => {
+            if (result.value) {
+              this.router.navigate(['/broker/policy-transactions']);
+            }
+          });
         } else {
           Swal.fire({
             title: "Información",

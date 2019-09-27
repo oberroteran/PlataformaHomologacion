@@ -156,7 +156,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<div *ngIf="!editFlag">
-									<div [hidden]="canAddSecondaryBroker" *ngIf="polizaEmitComer.length < 3">
+									<div [hidden]="!canAddSecondaryBroker" *ngIf="polizaEmitComer.length < 3">
 										<button class=" pull-right" (click)="addBroker($event.preventDefault())"
 											style="margin: 10px 0 20px 0">
 											<span>Agregar</span>
@@ -174,7 +174,7 @@
 											<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Comisión
 													Salud</label></th>
 											<th class="col-sm text-center ctasa" *ngIf="saludList.length > 0">
-												<label><input type="checkbox" class="checkbox" [disabled]="editFlag"
+												<label><input type="checkbox" class="checkbox" [disabled]="editFlag "
 														(change)="primaPropuesta(7)" name="stateBroker"><span
 														class="schk">
 														Propuesta</span></label></th>
@@ -477,7 +477,7 @@
 									<div class="col-sm-6">
 										<label style="margin: 0;"><span class="schk"><input type="checkbox"
 													style="top: 3px;" class="checkbox" (change)="primaPropuesta(3)"
-													[disabled]="editFlag">
+													[disabled]="editFlag && !canProposeMinimunPremium">
 												PRIMA MÍNIMA PROPUESTA</span></label>
 										<input type="text" placeholder="0" [disabled]="statePrimaSalud"
 											(ngModelChange)="changePrimaPropuesta($event, saludID)" name="MIN_SALUD_PR"

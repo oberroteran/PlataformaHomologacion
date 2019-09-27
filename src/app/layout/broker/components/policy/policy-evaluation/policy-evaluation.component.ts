@@ -48,6 +48,8 @@ export class PolicyEvaluationComponent implements OnInit {
   statusChangeList: QuotationTracking[];
 
   quotationNumber: string;  //Número de cotización
+  policyNumber: string;  //Número de poliza
+  nroProcess: string;  //Número de poliza
   statusChangeRequest = new QuotationStatusChange();  //Objeto principal a enviar en la operación de cambio de estado
   pensionAuthorizedRate: boolean = false;  //habilitar los campos de tasa autorizada de SCTR pensión
   saludAuthorizedRate: boolean = false;  //habilitar los campos de tasa autorizada de SCTR salud
@@ -172,15 +174,17 @@ export class PolicyEvaluationComponent implements OnInit {
     this.initializeForm();
     this.healthProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
     this.pensionProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
-
+    console.log(JSON.parse(sessionStorage.getItem("cs-quotation")))
     let quotationData = JSON.parse(sessionStorage.getItem("cs-quotation"));
-    sessionStorage.removeItem('cs-quotation');
-    if (quotationData == null || quotationData === undefined) this.router.navigate(['/broker/home']);
+    // sessionStorage.removeItem('cs-quotation');
+    if (quotationData == null || quotationData === undefined) this.router.navigate(['/broker/policy-request']);
     else {
+      this.policyNumber = quotationData.PolicyNumber;
       this.quotationNumber = quotationData.QuotationNumber;
       this.mode = quotationData.Mode;
+      this.nroProcess = quotationData.NroProcess;
 
-      if (this.quotationNumber == null || this.quotationNumber === undefined || this.mode == null || this.mode === undefined) this.router.navigate(['/broker/home']);
+      if (this.quotationNumber == null || this.quotationNumber === undefined || this.mode == null || this.mode === undefined) this.router.navigate(['/broker/policy-request']);
       else {
         switch (this.mode) {
           case "recotizar":
@@ -317,7 +321,7 @@ export class PolicyEvaluationComponent implements OnInit {
    * Obtiene una lista de estados de cotización
    */
   getStatusList() {
-    this.quotationService.getStatusList("3").subscribe(
+    this.quotationService.getStatusList("2").subscribe(
       res => {
         res.forEach(element => {
           if (element.Id == "1" || element.Id == "2" || element.Id == "3") this.statusList.push(element);
@@ -489,7 +493,7 @@ export class PolicyEvaluationComponent implements OnInit {
 
     forkJoin(this.policyService.getPolicyEmitCab(this.quotationNumber, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"]),
       this.policyService.getPolicyEmitComer(this.quotationNumber),
-      this.policyService.getPolicyEmitDet(this.quotationNumber, JSON.parse(localStorage.getItem("currentUser"))["id"])).subscribe(
+      this.policyService.getPolicyEmitDetTX(this.nroProcess, 0, JSON.parse(localStorage.getItem("currentUser"))["id"])).subscribe(
         (res: any) => {
           if (res[0].GenericResponse == null || res[1].length == 0 || res[2].length == 0) { //Verificamos si todos los datos de las 3 peticiones han sido obtenidos
             swal.fire("Información", "No se encontraron los datos necesarios para esta cotización. " + this.redirectionMessage, "error");
@@ -1280,6 +1284,4 @@ export class PolicyEvaluationComponent implements OnInit {
     }
     return errorList;
   }
-}
-
 }
