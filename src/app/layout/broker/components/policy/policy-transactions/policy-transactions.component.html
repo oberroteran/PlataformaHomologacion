@@ -174,7 +174,9 @@
 											<th class="col-sm text-center" *ngIf="saludList.length > 0"><label>Comisión
 													Salud</label></th>
 											<th class="col-sm text-center ctasa" *ngIf="saludList.length > 0">
-												<label><input type="checkbox" class="checkbox" [disabled]="editFlag "
+												<input type="hidden" value="{{editFlag}}" />
+												<input type="hidden" value="{{canProposeComission}}" />
+												<label><input type="checkbox" class="checkbox" [disabled]="editFlag == true || canProposeComission == false"
 														(change)="primaPropuesta(7)" name="stateBroker"><span
 														class="schk">
 														Propuesta</span></label></th>
@@ -182,7 +184,7 @@
 												<label>Comisión
 													Pensión</label></th>
 											<th class="col-sm text-center ctasa" *ngIf="pensionList.length > 0">
-												<label><input type="checkbox" class="checkbox" [disabled]="editFlag"
+												<label><input type="checkbox" class="checkbox" [disabled]="editFlag == true || canProposeComission == false"
 														(change)="primaPropuesta(8)" name="stateBroker"><span
 														class="schk">
 														Propuesta</span></label></th>
@@ -477,7 +479,7 @@
 									<div class="col-sm-6">
 										<label style="margin: 0;"><span class="schk"><input type="checkbox"
 													style="top: 3px;" class="checkbox" (change)="primaPropuesta(3)"
-													[disabled]="editFlag && !canProposeMinimunPremium">
+													[disabled]="editFlag == true || canProposeComission == false">
 												PRIMA MÍNIMA PROPUESTA</span></label>
 										<input type="text" placeholder="0" [disabled]="statePrimaSalud"
 											(ngModelChange)="changePrimaPropuesta($event, saludID)" name="MIN_SALUD_PR"
@@ -495,16 +497,6 @@
 											<table class="table table-borderless riesgo tblTasas">
 												<thead>
 													<tr class="d-flex">
-														<!-- <th class="col-sm text-center"><label>Categoría</label></th>
-														<th class="col-sm text-center"><label>Tasa</label>
-														</th>
-														<th class="col-sm text-center ctasa"><label><input
-																	type="checkbox" class="checkbox"
-																	[disabled]="editFlag"
-																	(change)="primaPropuesta(5)"><span class="schk">
-																	Propuesta</span></label>
-														</th>
-														<th class="col-sm text-center"><label>Prima Mensual</label></th> -->
 														<th class="col-sm text-center"><label>Categoría</label></th>
 														<th class="col-sm text-center"><label>Tasa</label></th>
 														<th class="col-sm text-center"><label>Propuesta</label></th>
@@ -572,7 +564,7 @@
 									<div class="col-sm-6">
 										<label style="margin: 0;"><span class="schk"><input type="checkbox"
 													style="top: 3px;" class="checkbox" (change)="primaPropuesta(4)"
-													[disabled]="editFlag">
+													[disabled]="editFlag == true || canProposeComission == false">
 												PRIMA MÍNIMA PROPUESTA</span></label>
 										<input type="text" placeholder="0" style="margin-top: 2px !important;"
 											[disabled]="statePrimaPension"
