@@ -340,12 +340,12 @@ export class PolicyFormComponent implements OnInit {
 			this.facAnticipada = false;
 		}
 
-		if (this.polizaEmit.facturacionAnticipada == true && this.processID != null && this.processID != "") {
-			let totalAmount = 0;
-			if (this.pensionList != null && this.pensionList.length > 0) totalAmount = totalAmount + parseFloat(this.brutaTotalSaludSave.toString());
-			if (this.saludList != null && this.saludList.length > 0) totalAmount = totalAmount + parseFloat(this.brutaTotalPensionSave.toString());
-			this.createVISAButton(totalAmount);
-		}
+		// if (this.polizaEmit.facturacionAnticipada == true && this.processID != null && this.processID != "") {
+		// 	let totalAmount = 0;
+		// 	if (this.pensionList != null && this.pensionList.length > 0) totalAmount = totalAmount + parseFloat(this.brutaTotalSaludSave.toString());
+		// 	if (this.saludList != null && this.saludList.length > 0) totalAmount = totalAmount + parseFloat(this.brutaTotalPensionSave.toString());
+		// 	this.createVISAButton(totalAmount);
+		// }
 
 	}
 
