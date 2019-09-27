@@ -1249,11 +1249,15 @@ export class QuotationEvaluationComponent implements OnInit {
     /**Valida las primas autorizadas */
     validateAuthorizedPremiums(): string[] {
         let errorList = [];
-        if (CommonMethods.isNumber(this.InputsQuotation.HealthAuthMinPremium) == false) errorList.push("La prima mínima autorizada de salud no es válida.");
-        else if (this.InputsQuotation.HealthAuthMinPremium <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La prima mínima autorizada de salud debe ser mayor a cero.");
+        if (this.InputsQuotation.SaludDetailsList != null && this.InputsQuotation.SaludDetailsList.length > 0) {
+            if (CommonMethods.isNumber(this.InputsQuotation.HealthAuthMinPremium) == false) errorList.push("La prima mínima autorizada de salud no es válida.");
+            else if (this.InputsQuotation.HealthAuthMinPremium <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La prima mínima autorizada de salud debe ser mayor a cero.");
+        }
 
-        if (CommonMethods.isNumber(this.InputsQuotation.PensionAuthMinPremium) == false) errorList.push("La prima mínima autorizada de pensión no es válida.");
-        else if (this.InputsQuotation.PensionAuthMinPremium <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La prima mínima autorizada de pensión debe ser mayor a cero.");
+        if (this.InputsQuotation.PensionDetailsList != null && this.InputsQuotation.PensionDetailsList.length > 0) {
+            if (CommonMethods.isNumber(this.InputsQuotation.PensionAuthMinPremium) == false) errorList.push("La prima mínima autorizada de pensión no es válida.");
+            else if (this.InputsQuotation.PensionAuthMinPremium <= 0 && this.mainFormGroup.get('status').value == "2" && (JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "5" || JSON.parse(localStorage.getItem("currentUser"))["idProfile"] == "137")) errorList.push("La prima mínima autorizada de pensión debe ser mayor a cero.");
+        }
 
         return errorList;
     }
