@@ -158,8 +158,8 @@ export class PolicyFormComponent implements OnInit {
 	/**Tenemos un número de cotización? */
 	hasQuotationNumber: boolean = false;
 
-	constructor(private route: ActivatedRoute, private router: Router, private othersService: OthersService, private policyemit: PolicyemitService, private modalService: NgbModal, private visaService: VisaService, private viewContainerRef: ViewContainerRef,
-		private factoryResolver: ComponentFactoryResolver) {
+	constructor(private route: ActivatedRoute, private router: Router, private othersService: OthersService, private policyemit: PolicyemitService, private quotationService: QuotationService, private modalService: NgbModal, private visaService: VisaService, private viewContainerRef: ViewContainerRef,
+		private factoryResolver: ComponentFactoryResolver, private clientInformationService: ClientInformationService) {
 		this.bsConfig = Object.assign(
 			{},
 			{
@@ -177,8 +177,6 @@ export class PolicyFormComponent implements OnInit {
 		this.polizaEmit.facturacionVencido = false;
 		this.polizaEmit.facturacionAnticipada = false;
 		this.polizaEmit.comentario = "";
-
-		this.createVISAButton();
 		//prueba mina
 		this.polizaEmitCab.MINA = false;
 		this.obtenerTipoRenovacion();
@@ -341,6 +339,14 @@ export class PolicyFormComponent implements OnInit {
 			this.facVencido = false;
 			this.facAnticipada = false;
 		}
+
+		if (this.polizaEmit.facturacionAnticipada == true && this.processID != null && this.processID != "") {
+			let totalAmount = 0;
+			if (this.pensionList != null && this.pensionList.length > 0) totalAmount = totalAmount + parseFloat(this.brutaTotalSaludSave.toString());
+			if (this.saludList != null && this.saludList.length > 0) totalAmount = totalAmount + parseFloat(this.brutaTotalPensionSave.toString());
+			this.createVISAButton(totalAmount);
+		}
+
 	}
 
 	getDate() {
@@ -1346,9 +1352,9 @@ export class PolicyFormComponent implements OnInit {
 		}
 		return output;
 	}
-	createVISAButton() {
+	createVISAButton(amount: number) {
 		let btnVisa;
-		this.visaService.generarSessionToken(65.20, JSON.parse(localStorage.getItem("currentUser"))["id"]) // user Id
+		this.visaService.generarSessionToken(amount, JSON.parse(localStorage.getItem("currentUser"))["id"]) // user Id
 			.subscribe(
 				res => {
 					// console.log(res);
@@ -1357,7 +1363,7 @@ export class PolicyFormComponent implements OnInit {
 					const factory = this.factoryResolver.resolveComponentFactory(ButtonVisaComponent);
 					btnVisa = factory.create(this.viewContainerRef.parentInjector);
 					btnVisa.instance.action = AppConfig.ACTION_FORM_VISA_PAYROLL;
-					btnVisa.instance.amount = 65.20;
+					btnVisa.instance.amount = amount;
 					btnVisa.instance.sessionToken = res.sessionToken;
 					btnVisa.instance.purchaseNumber = res.purchaseNumber;
 					btnVisa.instance.merchantLogo = AppConfig.MERCHANT_LOGO_VISA;
