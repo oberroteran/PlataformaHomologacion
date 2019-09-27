@@ -895,7 +895,7 @@ export class AddContractingComponent implements OnInit {
     }
 
     eventSave(event) {
-
+        this.InputsContracting.P_SIDDOC = this.InputsContracting.P_SIDDOC == null ? "" :  this.InputsContracting.P_SIDDOC.toUpperCase()
         this.InputsContracting.P_SFIRSTNAME = this.InputsContracting.P_SFIRSTNAME == null ? "" : this.InputsContracting.P_SFIRSTNAME.toUpperCase()
         this.InputsContracting.P_SLEGALNAME = this.InputsContracting.P_SLEGALNAME == null ? "" : this.InputsContracting.P_SLEGALNAME.toUpperCase()
         this.InputsContracting.P_SLASTNAME = this.InputsContracting.P_SLASTNAME == null ? "" : this.InputsContracting.P_SLASTNAME.toUpperCase()
