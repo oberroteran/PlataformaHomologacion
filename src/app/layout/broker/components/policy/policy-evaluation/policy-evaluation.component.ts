@@ -28,6 +28,7 @@ import { QuotationModification } from '../../../models/quotation/request/quotati
 import { QuotationRisk } from '../../../models/quotation/request/quotation-modification/quotation-risk';
 import { Broker } from '../../../models/quotation/request/broker';
 import { BrokerProduct } from '../../../models/quotation/request/broker-product';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-policy-evaluation',
@@ -53,6 +54,8 @@ export class PolicyEvaluationComponent implements OnInit {
   statusChangeRequest = new QuotationStatusChange();  //Objeto principal a enviar en la operación de cambio de estado
   pensionAuthorizedRate: boolean = false;  //habilitar los campos de tasa autorizada de SCTR pensión
   saludAuthorizedRate: boolean = false;  //habilitar los campos de tasa autorizada de SCTR salud
+
+  bsConfig: Partial<BsDatepickerConfig>;
 
   // isPensionProposedRateEnabled: boolean = false;
   // isHealthProposedRateEnabled: boolean = false;
@@ -157,6 +160,12 @@ export class PolicyEvaluationComponent implements OnInit {
   isNetPremiumLessThanMinPensionPremium: boolean;
   /**Prima total neta recalculada que se muestra cuando la prima neta actual es menor a la prima mínima*/
   healthMessage: string;
+  /** Tipo de transaccion */
+  typeTransac: string;
+  tipoRenovacion: any;
+  frecuenciaPago: any;
+  canBillMonthly: boolean;
+  canBillInAdvance: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -167,52 +176,44 @@ export class PolicyEvaluationComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private othersService: OthersService,
     private ngbModal: NgbModal
-  ) { }
+  ) {
+    this.bsConfig = Object.assign(
+      {},
+      {
+        dateInputFormat: "DD/MM/YYYY",
+        locale: "es",
+        showWeekNumbers: false
+      }
+    );
+  }
 
   ngOnInit() {
     this.createFormControl();
     this.initializeForm();
     this.healthProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
     this.pensionProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
-    console.log(JSON.parse(sessionStorage.getItem("cs-quotation")))
-    let quotationData = JSON.parse(sessionStorage.getItem("cs-quotation"));
+    let policyData = JSON.parse(sessionStorage.getItem("cs-quotation"));
     // sessionStorage.removeItem('cs-quotation');
-    if (quotationData == null || quotationData === undefined) this.router.navigate(['/broker/policy-request']);
+    if (policyData == null || policyData === undefined) this.router.navigate(['/broker/policy-request']);
     else {
-      this.policyNumber = quotationData.PolicyNumber;
-      this.quotationNumber = quotationData.QuotationNumber;
-      this.mode = quotationData.Mode;
-      this.nroProcess = quotationData.NroProcess;
+      this.policyNumber = policyData.PolicyNumber;
+      this.quotationNumber = policyData.QuotationNumber;
+      this.mode = policyData.Mode;
+      this.nroProcess = policyData.NroProcess;
+      this.typeTransac = policyData.TypeTransac;
+
+      this.obtenerTipoRenovacion();
 
       if (this.quotationNumber == null || this.quotationNumber === undefined || this.mode == null || this.mode === undefined) this.router.navigate(['/broker/policy-request']);
       else {
-        switch (this.mode) {
-          case "recotizar":
-            this.enabledPensionProposedRate = false;
-            this.enabledHealthProposedRate = false;
-            this.enabledHealthMinPropPremium = false;
-            this.enabledPensionMinPropPremium = false;
-            this.enabledHealthMainPropCommission = false;
-            this.enabledPensionMainPropCommission = false;
-            this.enabledHealthSecondaryPropCommission = false;
-            this.enabledPensionSecondaryPropCommission = false;
-            this.evaluationLabel = "Datos adjuntos";
-            this.buttonName = "RECOTIZAR";
-            break;
-          case "evaluar":
-            this.evaluationLabel = "Evaluación";
-            this.buttonName = "EVALUAR";
-            break;
-          case "emitir":
-            this.buttonName = "EMITIR";
-            break
-          default:
-            break;
-        }
+        this.evaluationLabel = "Evaluación";
+        this.buttonName = "EVALUAR";
       }
 
       this.canProposeRate = AccessFilter.hasPermission("13");
       this.canSeeRiskRate = AccessFilter.hasPermission("36");
+      this.canBillMonthly = AccessFilter.hasPermission("16");
+      this.canBillInAdvance = AccessFilter.hasPermission("17");
 
       this.isLoading = true;
       this.getIGVData();
@@ -224,6 +225,24 @@ export class PolicyEvaluationComponent implements OnInit {
       this.firstSearch();
     }
   }
+
+  obtenerTipoRenovacion() {
+    let requestTypeRen: any = {}
+    requestTypeRen.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]
+    this.policyService.getTipoRenovacion(requestTypeRen)
+      .subscribe((res: any) => {
+        this.tipoRenovacion = res;
+      })
+  }
+
+  cargarFrecuencia() {
+    this.policyService.getFrecuenciaPago(this.InputsQuotation.tipoRenovacion)
+      .subscribe((res: any) => {
+        this.frecuenciaPago = res;
+        if (res != null && res.length == 1) this.InputsQuotation.frecuenciaPago = res[0].COD_TIPO_FRECUENCIA; //Si solo hay una frecuencia de pago, está se seleccionará automáticamente
+      })
+  }
+
   createFormControl() { //Crear "mainFormGroup"
     this.mainFormGroup = this.mainFormBuilder.group({
       reason: [""], //Razón de cambio de estado
@@ -332,20 +351,20 @@ export class PolicyEvaluationComponent implements OnInit {
       }
     );
   }
-  /**
-   * Obtiene una lista de motivos por estado escogido
-   */
-  getReasonList() {
-    this.quotationService.getReasonList(this.mainFormGroup.controls.status.value).subscribe(
-      res => {
+  // /**
+  //  * Obtiene una lista de motivos por estado escogido
+  //  */
+  // getReasonList() {
+  //   this.quotationService.getReasonList(this.mainFormGroup.controls.status.value).subscribe(
+  //     res => {
 
-        this.reasonList = res;
-      },
-      error => {
+  //       this.reasonList = res;
+  //     },
+  //     error => {
 
-      }
-    );
-  }
+  //     }
+  //   );
+  // }
 
 
   /**
@@ -489,11 +508,11 @@ export class PolicyEvaluationComponent implements OnInit {
   getQuotationData() {  //Obtener datos de cotización: cabecera, brokers y detalles.
     this.isLoading = true;
     let self = this;
-    let typeMovement = "0";
 
-    forkJoin(this.policyService.getPolicyEmitCab(this.quotationNumber, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"]),
+    forkJoin(this.policyService.getPolicyEmitCab(this.quotationNumber, this.typeTransac, JSON.parse(localStorage.getItem("currentUser"))["id"]),
       this.policyService.getPolicyEmitComer(this.quotationNumber),
-      this.policyService.getPolicyEmitDetTX(this.nroProcess, 0, JSON.parse(localStorage.getItem("currentUser"))["id"])).subscribe(
+      this.policyService.getPolicyEmitDetTX(this.nroProcess, this.typeTransac, JSON.parse(localStorage.getItem("currentUser"))["id"]),
+      this.policyService.getPolicyCot(this.quotationNumber)).subscribe(
         (res: any) => {
           if (res[0].GenericResponse == null || res[1].length == 0 || res[2].length == 0) { //Verificamos si todos los datos de las 3 peticiones han sido obtenidos
             swal.fire("Información", "No se encontraron los datos necesarios para esta cotización. " + this.redirectionMessage, "error");
@@ -644,6 +663,13 @@ export class PolicyEvaluationComponent implements OnInit {
               });
               if (add == true) self.InputsQuotation.SharedDetailsList.push({ "RiskTypeId": element.TIP_RIESGO, "RiskTypeName": element.DES_RIESGO, "WorkersCount": element.NUM_TRABAJADORES, "PayrollAmount": element.MONTO_PLANILLA });
             });
+            this.InputsQuotation.tipoRenovacion = res[3][0].TIP_RENOV;
+            this.InputsQuotation.frecuenciaPago = res[3][0].FREC_PAGO;
+            this.InputsQuotation.desde = new Date(res[3][0].DESDE);
+            this.InputsQuotation.hasta = new Date(res[3][0].HASTA);
+            this.InputsQuotation.facturacionVencido = res[3][0].FACT_MES_VENC == 0 ? false : true;
+            this.InputsQuotation.facturacionAnticipada = res[3][0].FACT_ANTI == 0 ? false : true;
+            this.cargarFrecuencia();
 
             this.InputsQuotation.PensionNewCalculatedIGV = this.FormatValue((this.InputsQuotation.PensionNewNetAmount * this.pensionIGV) - this.InputsQuotation.PensionNewNetAmount);
             this.InputsQuotation.PensionNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.PensionNewCalculatedIGV) + parseFloat(this.InputsQuotation.PensionNewNetAmount));
@@ -797,77 +823,88 @@ export class PolicyEvaluationComponent implements OnInit {
    */
   AddStatusChange() {
     let errorList = this.areAuthorizedRatesValid();
-    errorList = errorList.concat(this.validateAuthorizedCommmissions());
-    errorList = errorList.concat(this.validateAuthorizedPremiums());
+    // errorList = errorList.concat(this.validateAuthorizedCommmissions());
+    // errorList = errorList.concat(this.validateAuthorizedPremiums());
     if (this.mainFormGroup.valid == true && (errorList == null || errorList.length == 0)) {
-
+      // console.log("ada")
       let self = this;
       this.isLoading = true;
-      let formData = new FormData();
-      this.files.forEach(function (file) { //anexamos todos los archivos al formData
-        formData.append(file.name, file, file.name)
-      });
+      // let formData = new FormData();
+      // this.files.forEach(function (file) { //anexamos todos los archivos al formData
+      //   formData.append(file.name, file, file.name)
+      // });
 
-      this.statusChangeRequest.QuotationNumber = this.quotationNumber;  //Número de cotización
-      this.statusChangeRequest.Status = this.mainFormGroup.controls.status.value; //Nuevo estado
-      this.statusChangeRequest.Reason = this.mainFormGroup.controls.reason.value; //Motivo
-      this.statusChangeRequest.Comment = this.mainFormGroup.controls.comment.value; //Comentario
-      this.statusChangeRequest.User = JSON.parse(localStorage.getItem("currentUser"))["id"];  //Usuario
+      // this.statusChangeRequest.QuotationNumber = this.quotationNumber;  //Número de cotización
+      // this.statusChangeRequest.Status = this.mainFormGroup.controls.status.value; //Nuevo estado
+      // this.statusChangeRequest.Reason = this.mainFormGroup.controls.reason.value; //Motivo
+      // this.statusChangeRequest.Comment = this.mainFormGroup.controls.comment.value; //Comentario
+      // this.statusChangeRequest.User = JSON.parse(localStorage.getItem("currentUser"))["id"];  //Usuario
 
 
-      //Preparación de tasas autorizadas y primas recalculadas a enviar
-      self.statusChangeRequest.saludAuthorizedRateList = [];
-      self.statusChangeRequest.pensionAuthorizedRateList = [];
-      this.statusChangeRequest.BrokerList = [];
+      // //Preparación de tasas autorizadas y primas recalculadas a enviar
+      // self.statusChangeRequest.saludAuthorizedRateList = [];
+      // self.statusChangeRequest.pensionAuthorizedRateList = [];
+      // this.statusChangeRequest.BrokerList = [];
 
-      this.InputsQuotation.SecondaryBrokerList.forEach(element => {
-        let item = new Broker();
-        item.Id = element.CANAL;
-        item.ProductList = [];
-        if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
-          let obj = new BrokerProduct();
-          obj.Product = self.pensionProductId;
-          obj.AuthorizedCommission = element.COMISION_PENSION_AUT;
-          item.ProductList.push(obj);
-        }
-        if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
-          let obj = new BrokerProduct();
-          obj.Product = self.healthProductId;
-          obj.AuthorizedCommission = element.COMISION_SALUD_AUT;
-          item.ProductList.push(obj);
-        }
-        self.statusChangeRequest.BrokerList.push(item);
-      });
+      // this.InputsQuotation.SecondaryBrokerList.forEach(element => {
+      //   let item = new Broker();
+      //   item.Id = element.CANAL;
+      //   item.ProductList = [];
+      //   if (self.InputsQuotation.PensionDetailsList != null && self.InputsQuotation.PensionDetailsList.length > 0) {
+      //     let obj = new BrokerProduct();
+      //     obj.Product = self.pensionProductId;
+      //     obj.AuthorizedCommission = element.COMISION_PENSION_AUT;
+      //     item.ProductList.push(obj);
+      //   }
+      //   if (self.InputsQuotation.SaludDetailsList != null && self.InputsQuotation.SaludDetailsList.length > 0) {
+      //     let obj = new BrokerProduct();
+      //     obj.Product = self.healthProductId;
+      //     obj.AuthorizedCommission = element.COMISION_SALUD_AUT;
+      //     item.ProductList.push(obj);
+      //   }
+      //   self.statusChangeRequest.BrokerList.push(item);
+      // });
 
-      this.InputsQuotation.PensionDetailsList.forEach((element) => {
-        let item = new AuthorizedRate();
-        item.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
-        item.RiskTypeId = element.RiskTypeId;
-        item.AuthorizedRate = element.AuthorizedRate;
-        item.AuthorizedPremium = element.NewPremium;
-        item.AuthorizedMinimunPremium = self.InputsQuotation.PensionAuthMinPremium;
+      // this.InputsQuotation.PensionDetailsList.forEach((element) => {
+      //   let item = new AuthorizedRate();
+      //   item.ProductId = JSON.parse(localStorage.getItem("pensionID"))["id"];
+      //   item.RiskTypeId = element.RiskTypeId;
+      //   item.AuthorizedRate = element.AuthorizedRate;
+      //   item.AuthorizedPremium = element.NewPremium;
+      //   item.AuthorizedMinimunPremium = self.InputsQuotation.PensionAuthMinPremium;
 
-        self.statusChangeRequest.pensionAuthorizedRateList.push(item);
-      });
-      this.InputsQuotation.SaludDetailsList.forEach((element) => {
-        let item = new AuthorizedRate();
-        item.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
-        item.RiskTypeId = element.RiskTypeId;
-        item.AuthorizedRate = element.AuthorizedRate;
-        item.AuthorizedPremium = element.NewPremium;
-        item.AuthorizedMinimunPremium = self.InputsQuotation.HealthAuthMinPremium;
+      //   self.statusChangeRequest.pensionAuthorizedRateList.push(item);
+      // });
+      // this.InputsQuotation.SaludDetailsList.forEach((element) => {
+      //   let item = new AuthorizedRate();
+      //   item.ProductId = JSON.parse(localStorage.getItem("saludID"))["id"];
+      //   item.RiskTypeId = element.RiskTypeId;
+      //   item.AuthorizedRate = element.AuthorizedRate;
+      //   item.AuthorizedPremium = element.NewPremium;
+      //   item.AuthorizedMinimunPremium = self.InputsQuotation.HealthAuthMinPremium;
 
-        self.statusChangeRequest.saludAuthorizedRateList.push(item);
-      });
+      //   self.statusChangeRequest.saludAuthorizedRateList.push(item);
+      // });
 
-      formData.append("statusChangeData", JSON.stringify(this.statusChangeRequest));
+      // formData.append("statusChangeData", JSON.stringify(this.statusChangeRequest));
 
-      this.quotationService.changeStatus(formData).subscribe(
+      let savedPolicy: any = {};
+      savedPolicy.P_NID_COTIZACION = this.quotationNumber
+      savedPolicy.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"]
+      savedPolicy.P_NTYPE_TRANSAC = this.typeTransac
+      savedPolicy.P_NID_PROC = this.nroProcess
+      savedPolicy.P_SCOMMENT = this.mainFormGroup.controls.comment.value == "" ? "" : this.mainFormGroup.controls.comment.value.toUpperCase(); //Comentario
+      savedPolicy.P_SASIGNAR = "A"
+      savedPolicy.P_SAPROBADO = this.mainFormGroup.controls.status.value == 2 ? "A" : "R"
+      // console.log(savedPolicy)
+      // this.isLoading = false;
+      // return
+      this.policyService.savedPolicyTransac(savedPolicy).subscribe(
         res => {
-          if (res.StatusCode == 0) {
+          if (res.P_NCODE == 0) {
             swal.fire("Información", "Operación exitosa.", "success");
-            this.router.navigate(['/broker/request-status']);
-          } else if (res.StatusCode == 1) { //Error de validación
+            this.router.navigate(['/broker/policy-request']);
+          } else if (res.P_NCODE == 1) { //Error de validación
             swal.fire("Información", this.listToString(res.ErrorMessageList), "error");
           } else {  //Error no controlado en el servicio
             swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
@@ -888,157 +925,158 @@ export class PolicyEvaluationComponent implements OnInit {
   }
 
   /**Modificar cotización | recotizar */
-  modifyQuotation() {
-    let errorList = this.areProposedRatesValid();
-    if (errorList == null || errorList.length == 0) {
-      let self = this;
-      let quotation = new QuotationModification();
-      quotation.Number = this.quotationNumber;
-      quotation.Branch = "1";
-      quotation.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
+  // modifyQuotation() {
+  //   let errorList = this.areProposedRatesValid();
+  //   if (errorList == null || errorList.length == 0) {
+  //     let self = this;
+  //     let quotation = new QuotationModification();
+  //     quotation.Number = this.quotationNumber;
+  //     quotation.Branch = "1";
+  //     quotation.User = JSON.parse(localStorage.getItem("currentUser"))["id"];
 
-      this.statusChangeRequest.QuotationNumber = this.quotationNumber;  //Número de cotización
-      this.statusChangeRequest.Status = "1"; //Nuevo estado
-      this.statusChangeRequest.Reason = null; //Motivo
-      this.statusChangeRequest.Comment = this.mainFormGroup.controls.comment.value; //Comentario
-      this.statusChangeRequest.User = JSON.parse(localStorage.getItem("currentUser"))["id"];  //Usuario
+  //     this.statusChangeRequest.QuotationNumber = this.quotationNumber;  //Número de cotización
+  //     this.statusChangeRequest.Status = "1"; //Nuevo estado
+  //     this.statusChangeRequest.Reason = null; //Motivo
+  //     this.statusChangeRequest.Comment = this.mainFormGroup.controls.comment.value; //Comentario
+  //     this.statusChangeRequest.User = JSON.parse(localStorage.getItem("currentUser"))["id"];  //Usuario
 
-      quotation.StatusChangeData = this.statusChangeRequest;
-      quotation.RiskList = [];
-      this.InputsQuotation.PensionDetailsList.forEach((element) => {
-        let item = new QuotationRisk();
-        item.RiskTypeId = element.RiskTypeId;
-        item.ProductTypeId = JSON.parse(localStorage.getItem("pensionID"))["id"];
-        item.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
-        item.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
-        item.PayrollAmount = CommonMethods.ConvertToReadableNumber(element.PayrollAmount);
-        item.CalculatedRate = CommonMethods.ConvertToReadableNumber(element.Rate);
-        item.PremimunPerRisk = CommonMethods.ConvertToReadableNumber(element.Premium);
-        item.MinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionMinPremium);
-        item.ProposedMinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionPropMinPremium);
-        item.EndorsmentPremium = CommonMethods.ConvertToReadableNumber(element.EndorsmentPremium);
+  //     quotation.StatusChangeData = this.statusChangeRequest;
+  //     quotation.RiskList = [];
+  //     this.InputsQuotation.PensionDetailsList.forEach((element) => {
+  //       let item = new QuotationRisk();
+  //       item.RiskTypeId = element.RiskTypeId;
+  //       item.ProductTypeId = JSON.parse(localStorage.getItem("pensionID"))["id"];
+  //       item.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
+  //       item.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+  //       item.PayrollAmount = CommonMethods.ConvertToReadableNumber(element.PayrollAmount);
+  //       item.CalculatedRate = CommonMethods.ConvertToReadableNumber(element.Rate);
+  //       item.PremimunPerRisk = CommonMethods.ConvertToReadableNumber(element.Premium);
+  //       item.MinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionMinPremium);
+  //       item.ProposedMinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionPropMinPremium);
+  //       item.EndorsmentPremium = CommonMethods.ConvertToReadableNumber(element.EndorsmentPremium);
 
-        item.NetPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionNetAmount);
-        item.GrossPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionGrossAmount);
-        item.PremiumIGV = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionCalculatedIGV);
+  //       item.NetPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionNetAmount);
+  //       item.GrossPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionGrossAmount);
+  //       item.PremiumIGV = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.PensionCalculatedIGV);
 
-        item.RiskRate = CommonMethods.ConvertToReadableNumber(element.RiskRate);
-        item.Discount = element.Discount;
-        item.Variation = element.Variation;
-        item.TariffFlag = "3";
+  //       item.RiskRate = CommonMethods.ConvertToReadableNumber(element.RiskRate);
+  //       item.Discount = element.Discount;
+  //       item.Variation = element.Variation;
+  //       item.TariffFlag = "3";
 
-        quotation.RiskList.push(item);
-      });
-      this.InputsQuotation.SaludDetailsList.forEach((element) => {
-        let item = new QuotationRisk();
-        item.RiskTypeId = element.RiskTypeId;
-        item.ProductTypeId = JSON.parse(localStorage.getItem("saludID"))["id"];
-        item.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
-        item.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
-        item.PayrollAmount = CommonMethods.ConvertToReadableNumber(element.PayrollAmount);
-        item.CalculatedRate = CommonMethods.ConvertToReadableNumber(element.Rate);
-        item.PremimunPerRisk = CommonMethods.ConvertToReadableNumber(element.Premium);
-        item.MinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludMinPremium);
-        item.ProposedMinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludPropMinPremium);
-        item.EndorsmentPremium = CommonMethods.ConvertToReadableNumber(element.EndorsmentPremium);
+  //       quotation.RiskList.push(item);
+  //     });
+  //     this.InputsQuotation.SaludDetailsList.forEach((element) => {
+  //       let item = new QuotationRisk();
+  //       item.RiskTypeId = element.RiskTypeId;
+  //       item.ProductTypeId = JSON.parse(localStorage.getItem("saludID"))["id"];
+  //       item.ProposedRate = CommonMethods.ConvertToReadableNumber(element.ProposedRate);
+  //       item.WorkersCount = CommonMethods.ConvertToReadableNumber(element.WorkersCount);
+  //       item.PayrollAmount = CommonMethods.ConvertToReadableNumber(element.PayrollAmount);
+  //       item.CalculatedRate = CommonMethods.ConvertToReadableNumber(element.Rate);
+  //       item.PremimunPerRisk = CommonMethods.ConvertToReadableNumber(element.Premium);
+  //       item.MinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludMinPremium);
+  //       item.ProposedMinimunPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludPropMinPremium);
+  //       item.EndorsmentPremium = CommonMethods.ConvertToReadableNumber(element.EndorsmentPremium);
 
-        item.NetPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludNetAmount);
-        item.GrossPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludGrossAmount);
-        item.PremiumIGV = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludCalculatedIGV);
+  //       item.NetPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludNetAmount);
+  //       item.GrossPremium = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludGrossAmount);
+  //       item.PremiumIGV = CommonMethods.ConvertToReadableNumber(self.InputsQuotation.SaludCalculatedIGV);
 
-        item.RiskRate = CommonMethods.ConvertToReadableNumber(element.RiskRate);
-        item.Discount = element.Discount;
-        item.Variation = element.Variation;
-        item.TariffFlag = "3";
+  //       item.RiskRate = CommonMethods.ConvertToReadableNumber(element.RiskRate);
+  //       item.Discount = element.Discount;
+  //       item.Variation = element.Variation;
+  //       item.TariffFlag = "3";
 
-        quotation.RiskList.push(item);
-      });
+  //       quotation.RiskList.push(item);
+  //     });
 
-      quotation.BrokerList = [];
+  //     quotation.BrokerList = [];
 
-      this.InputsQuotation.SecondaryBrokerList.forEach((element) => {
-        let item = new QuotationBroker();
-        item.ChannelTypeId = element.TIPO_CANAL;
-        item.ChannelId = element.CANAL;
-        item.ClientId = element.SCLIENT;
+  //     this.InputsQuotation.SecondaryBrokerList.forEach((element) => {
+  //       let item = new QuotationBroker();
+  //       item.ChannelTypeId = element.TIPO_CANAL;
+  //       item.ChannelId = element.CANAL;
+  //       item.ClientId = element.SCLIENT;
 
-        item.HealthProposedCommission = CommonMethods.isNumber(element.COMISION_SALUD_PRO) ? element.COMISION_SALUD_PRO : 0;
-        item.HealthCommission = CommonMethods.isNumber(element.COMISION_SALUD) ? element.COMISION_SALUD : 0;
-        item.PensionProposedCommission = CommonMethods.isNumber(element.COMISION_PENSION_PRO) ? element.COMISION_PENSION_PRO : 0;
-        item.PensionCommission = CommonMethods.isNumber(element.COMISION_PENSION) ? element.COMISION_PENSION : 0;
-        item.IsPrincipal = false;
-        // item.SharedCommission = CommonMethods.isNumber(element.NSHARE) ? element.NSHARE : 0;
-        item.SharedCommission = 0;
-        quotation.BrokerList.push(item);
-      });
+  //       item.HealthProposedCommission = CommonMethods.isNumber(element.COMISION_SALUD_PRO) ? element.COMISION_SALUD_PRO : 0;
+  //       item.HealthCommission = CommonMethods.isNumber(element.COMISION_SALUD) ? element.COMISION_SALUD : 0;
+  //       item.PensionProposedCommission = CommonMethods.isNumber(element.COMISION_PENSION_PRO) ? element.COMISION_PENSION_PRO : 0;
+  //       item.PensionCommission = CommonMethods.isNumber(element.COMISION_PENSION) ? element.COMISION_PENSION : 0;
+  //       item.IsPrincipal = false;
+  //       // item.SharedCommission = CommonMethods.isNumber(element.NSHARE) ? element.NSHARE : 0;
+  //       item.SharedCommission = 0;
+  //       quotation.BrokerList.push(item);
+  //     });
 
-      let formData = new FormData();
-      this.files.forEach(function (file) { //anexamos todos los archivos al formData
-        formData.append(file.name, file, file.name)
-      });
+  //     let formData = new FormData();
+  //     this.files.forEach(function (file) { //anexamos todos los archivos al formData
+  //       formData.append(file.name, file, file.name)
+  //     });
 
-      formData.append("quotationModification", JSON.stringify(quotation));
-      this.quotationService.modifyQuotation(formData).subscribe(
-        res => {
-          if (res.P_COD_ERR == 0) {
-            if (res.P_SAPROBADO == 'S') {
-              self.isLoading = false;
-              if (res.P_NCODE == 0) {
-                swal.fire({
-                  title: "Información",
-                  text: "¿Desea emitir la cotización N° " + res.P_NID_COTIZACION + " de forma directa?",
-                  type: "question",
-                  showCancelButton: true,
-                  confirmButtonText: 'Sí',
-                  allowOutsideClick: false,
-                  cancelButtonText: 'No'
-                })
-                  .then((result) => {
-                    if (result.value) {
-                      self.isLoading = false;
-                      this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: res.P_NID_COTIZACION } });
-                    }
-                  });
-              } else {
-                self.isLoading = false;
-                swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación.", "success");
-                this.router.navigate(['/broker/request-status']);
-              }
-            } else {
-              self.isLoading = false;
-              swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
-              this.router.navigate(['/broker/request-status']);
-            }
-          } else {
-            self.isLoading = false;
-            swal.fire("Información", res.P_MESSAGE, "error");
-          }
-        },
-        error => {
-          swal.fire("Información", this.genericServerErrorMessage, "error");
-        }
-      );
-    } else {
-      swal.fire("Información", CommonMethods.listToString(errorList), "error")
-    }
+  //     formData.append("quotationModification", JSON.stringify(quotation));
+  //     this.quotationService.modifyQuotation(formData).subscribe(
+  //       res => {
+  //         if (res.P_COD_ERR == 0) {
+  //           if (res.P_SAPROBADO == 'S') {
+  //             self.isLoading = false;
+  //             if (res.P_NCODE == 0) {
+  //               swal.fire({
+  //                 title: "Información",
+  //                 text: "¿Desea emitir la cotización N° " + res.P_NID_COTIZACION + " de forma directa?",
+  //                 type: "question",
+  //                 showCancelButton: true,
+  //                 confirmButtonText: 'Sí',
+  //                 allowOutsideClick: false,
+  //                 cancelButtonText: 'No'
+  //               })
+  //                 .then((result) => {
+  //                   if (result.value) {
+  //                     self.isLoading = false;
+  //                     this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: res.P_NID_COTIZACION } });
+  //                   }
+  //                 });
+  //             } else {
+  //               self.isLoading = false;
+  //               swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación.", "success");
+  //               this.router.navigate(['/broker/request-status']);
+  //             }
+  //           } else {
+  //             self.isLoading = false;
+  //             swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+  //             this.router.navigate(['/broker/request-status']);
+  //           }
+  //         } else {
+  //           self.isLoading = false;
+  //           swal.fire("Información", res.P_MESSAGE, "error");
+  //         }
+  //       },
+  //       error => {
+  //         swal.fire("Información", this.genericServerErrorMessage, "error");
+  //       }
+  //     );
+  //   } else {
+  //     swal.fire("Información", CommonMethods.listToString(errorList), "error")
+  //   }
 
-  }
+  // }
 
   /**Decide que operación hacer de acuerdo al modo de esta vista */
   manageOperation() {
-    switch (this.mode) {
-      case "recotizar":
-        this.modifyQuotation();
-        break;
-      case "evaluar":
-        this.AddStatusChange();
-        break;
-      case "emitir":
-        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: this.quotationNumber } });
-        break;
-      default:
-        break;
-    }
+    this.AddStatusChange();
+    // switch (this.mode) {
+    //   case "recotizar":
+    //     this.modifyQuotation();
+    //     break;
+    //   case "evaluar":
+    //     this.AddStatusChange();
+    //     break;
+    //   case "emitir":
+    //     this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: this.quotationNumber } });
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
 
   /**Primera búsqueda de cambios de estado de cotización */
@@ -1052,7 +1090,7 @@ export class PolicyEvaluationComponent implements OnInit {
   }
   /**Proceso de búsqueda de cambios de estado de la cotización */
   searchTracking() {
-    this.quotationService.getTrackingList(this.filter).subscribe(
+    this.policyService.getPolicyTrackingList(this.filter).subscribe(
       res => {
         this.totalItems = res.TotalRowNumber;
         if (res.TotalRowNumber > 0) {

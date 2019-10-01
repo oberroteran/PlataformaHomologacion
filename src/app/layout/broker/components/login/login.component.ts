@@ -67,13 +67,14 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(
                 result => {
+                    localStorage.setItem('pensionID', JSON.stringify({ id: "0", }));
+                    localStorage.setItem('saludID', JSON.stringify({ id: "0", }));
+
                     if (result === true) {
                         this.productService.getProductList().subscribe(
                             res => {
-                                localStorage.setItem('pensionID', JSON.stringify({ id: "0", }));
-                                localStorage.setItem('saludID', JSON.stringify({ id: "0", }));
-
                                 res.forEach(item => {
+                                    console.log(res)
                                     if (item.TIP_PRODUCT == "SCTR_PEN") {
                                         localStorage.setItem('pensionID', JSON.stringify({ id: item.COD_PRODUCT.toString() }));
                                     }

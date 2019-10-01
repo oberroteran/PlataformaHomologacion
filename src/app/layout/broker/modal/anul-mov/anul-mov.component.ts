@@ -25,6 +25,18 @@ export class AnulMovComponent implements OnInit {
   }
 
   anularMovimiento() {
+    console.log(this.comentarioAnu)
+    if (this.comentarioAnu.trim() == "") {
+      Swal.fire({
+        title: "Información",
+        text: "Debe ingresar un motivo de anulación",
+        type: "error",
+        allowOutsideClick: false,
+        confirmButtonText: 'OK'
+      })
+      return;
+    }
+
     let myFormData: FormData = new FormData()
     let renovacion: any = {};
     renovacion.P_NID_COTIZACION = this.cotizacionID // nro cotizacion

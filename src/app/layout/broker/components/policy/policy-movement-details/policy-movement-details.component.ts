@@ -61,6 +61,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
     data.P_NID_COTIZACION = cotizacionID;
     this.policyService.getPolicyMovementsTransList(data).subscribe(
       res => {
+        console.log(res.C_TABLE)
         this.policyMovementList = res.C_TABLE;
         let num = 0;
         this.totalItems = this.policyMovementList.length;

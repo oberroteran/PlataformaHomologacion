@@ -8,6 +8,7 @@ import { Contratante } from '../../../../client/shared/models/contratante.model'
 import { Auto } from '../../../../client/shared/models/auto.model';
 import { FrameComponent } from '../../../../../shared/components/frame/frame.component';
 import { EmisionService } from '../../../../client/shared/services/emision.service';
+import { GenerarCip } from '../../../../client/shared/models/generar-cip.model';
 
 @Component({
   selector: 'app-test',
@@ -29,7 +30,7 @@ export class TestComponent implements OnInit {
   mensajes = [];
   canal = '';
   puntoDeVenta = '';
-  modalidad = '3';
+  modalidad = '0';
 
   frameResult;
   @ViewChild('modalResultadoPE', { static: true }) modalResultado;
@@ -44,6 +45,8 @@ export class TestComponent implements OnInit {
 
   ngOnInit() {
     this.crearBotonVisa();
+    console.log(JSON.parse(localStorage.getItem("currentUser")))
+
 
   }
   crearBotonVisa() {
@@ -132,61 +135,52 @@ export class TestComponent implements OnInit {
   //   const idClientTrack = sessionStorage.getItem('idClientTrack');
   // }
   processPE() {
-    this.cliente.p_NPERSON_TYP = "1";
-    this.cliente.p_NDOCUMENT_TYP = "2";
-    this.cliente.p_SDOCUMENT = "72185297";
     this.cliente.p_SLEGALNAME = "";
-    this.cliente.p_SCLIENT_NAME = "WALTER FREDY";
-    this.cliente.p_SCLIENT_APPPAT = "HUANACO";
-    this.cliente.p_SCLIENT_APPMAT = "HUAYTA";
-    this.cliente.p_NPROVINCE = "3";
-    this.cliente.p_NLOCAT = "301";
-    this.cliente.p_NMUNICIPALITY = "30104";
-    this.cliente.p_SADDRESS = "ddqweqwe12312";
-    this.cliente.p_SMAIL = "adqwe@gmail.com";
-    this.cliente.p_SPHONE = "971879879";
-    this.cliente.p_NIDPROCESS = "2135304";
-    this.cliente.V_NIDPROCESS = "2135304";
+    this.cliente.p_SCLIENT_NAME = "JUAN";
+    this.cliente.p_SCLIENT_APPPAT = "DE LA CRUZ";
+    this.cliente.p_SCLIENT_APPMAT = "DEL POZO";
+    this.cliente.p_SMAIL = "juan.delacruz@materiagris.pe";
 
     this.canal = "2015000002";
     this.puntoDeVenta = "2";
 
 
-    let item = {
-      ProcessId: "4421210",
-      Name: "Nombre Nombre",
-      LastName: "Apellido Apellido",
-      Email: "abc@hotmail.com",
-      Amount: 143.25,
-      Client: "client123",
-      Canal: "canal123",
-      PuntoDeVenta: "pventa123"
-    }
+    // let item = {
+    //   ProcessId: "2135304",
+    //   Name: "Juan",
+    //   LastName: "De La Cruz",
+    //   Email: "juan.delacruz@materiagris.pe",
+    //   Amount: 143.25,
+    //   Client: "01020517207331",
+    //   Canal: "2015000002",
+    //   PuntoDeVenta: "pventa123"
+    // }
 
     this.emisionService
       .emissionProcessCompletePolicy(
-        '',
-        '',
-        item.ProcessId,
-        '',
+        '', // transaction token
+        '', // session token
+        "2137821", // process Id
+        '', // planilla Id
         AppConfig.FLUJO_CLIENTE, // Constante
-        '',
-        '2',
-        item.Name,
-        item.LastName,
-        item.Email,
-        item.Amount,
-        this.cliente,
-        this.canal,
-        this.puntoDeVenta,
-        this.modalidad
+        '', // User Id
+        '2', //Tipo de pago
+        "Juan", // Nombre
+        "De La Cruz Del Pozo", //Apellidos
+        "jdelacruz0903@gmail.com", // Email
+        310, // total
+        this.cliente, // Obj Contratante
+        this.canal, // Canal
+        this.puntoDeVenta, // punto de venta
+        this.modalidad // modalidad
       )
       .subscribe(
         res => {
+          console.log(res)
           if (res.errorCode === '0') {
             this.bValidationEmission = true;
             this.bAprobado = true;
-            //const data = <GenerarCip>res; // manejarlo mejor
+            const data = <GenerarCip>res; // manejarlo mejor
             const factory = this.factoryResolver.resolveComponentFactory(
               FrameComponent
             );

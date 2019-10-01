@@ -74,7 +74,7 @@
 									placeholder="Dirección" disabled />
 							</div>
 							<div class="col-sm-3">
-								<span>CORREO ELECTRÓNICO</span>
+								<span>CORREO ELECTRÓNICO (*)</span>
 								<input type="text" [(ngModel)]="polizaEmitCab.CORREO" name="CORREO"
 									placeholder="Correo Electrónico" disabled />
 							</div>
@@ -476,7 +476,7 @@
 										<input type="text" [(ngModel)]="polizaEmitCab.PRIMA_SALUD_END" name="MIN_SALUD"
 											placeholder="0" disabled>
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-6" *ngIf="mode == 'renew'">
 										<label style="margin: 0;"><span class="schk"><input type="checkbox"
 													style="top: 3px;" class="checkbox" (change)="primaPropuesta(3)"
 													[disabled]="editFlag == true || canProposeComission == false">
@@ -561,7 +561,7 @@
 										<input type="text" [(ngModel)]="polizaEmitCab.PRIMA_PEN_END" name="MIN_PENSION"
 											placeholder="Prima Mínima" disabled>
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-6" *ngIf="mode == 'renew'">
 										<label style="margin: 0;"><span class="schk"><input type="checkbox"
 													style="top: 3px;" class="checkbox" (change)="primaPropuesta(4)"
 													[disabled]="editFlag == true || canProposeComission == false">

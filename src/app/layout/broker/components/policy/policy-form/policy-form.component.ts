@@ -405,8 +405,12 @@ export class PolicyFormComponent implements OnInit {
 		myFormData.append("type_mov", "1");
 		myFormData.append("retarif", "1");
 		myFormData.append("date", dayIni + "/" + monthIni + "/" + yearIni);
+		console.log(JSON.parse(localStorage.getItem("currentUser"))["id"])
+		console.log(this.cotizacionID)
+		console.log(dayIni + "/" + monthIni + "/" + yearIni)
 		this.policyemit.valGestorList(myFormData).subscribe(
 			res => {
+				console.log(res)
 				this.erroresList = res.C_TABLE;
 				this.loading = false;
 				if (this.erroresList != null) {

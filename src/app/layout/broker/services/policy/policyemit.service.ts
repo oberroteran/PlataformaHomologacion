@@ -9,6 +9,7 @@ import { SavedPolicyEmit } from '../../models/polizaEmit/SavedPolicyEmit';
 import { InsuredPolicySearch } from '../../models/polizaEmit/request/insured-policy-search';
 import { PolicyProofSearch } from '../../models/polizaEmit/request/policy-proof-search';
 import { PolicyTransactionSearch } from '../../models/polizaEmit/request/policy-transaction-search';
+import { QuotationTrackingSearch } from '../../models/quotation/request/quotation-tracking-search';
 
 @Injectable({
     providedIn: 'root'
@@ -131,6 +132,18 @@ export class PolicyemitService {
         const body = JSON.stringify(data);
         let url = this._baseUrl + "/PolicyManager/valBilling";
         return this.http.post(url, body, {
+            headers: this.headers
+        });
+    }
+    getPolicyTrackingList(data: QuotationTrackingSearch): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this._baseUrl + "/PolicyManager/GetPolicyTrackingList", body, {
+            headers: this.headers
+        });
+    }
+    savedPolicyTransac(data: any): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this._baseUrl + "/PolicyManager/SavedPolicyTransac", body, {
             headers: this.headers
         });
     }

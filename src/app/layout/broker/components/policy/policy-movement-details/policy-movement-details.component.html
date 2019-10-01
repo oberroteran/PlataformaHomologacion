@@ -95,9 +95,9 @@
               </td>
             </ng-container>
             <td class="text-center">
-              <img *ngIf="item.CONSTANCIA != 0 && item.RECIBO != ''" src="assets/icons/facturar.png" (click)="facturarMov(item, 10)" title="Facturar" alt="Facturar"
+              <img *ngIf="item.FACTURAR == 1" src="assets/icons/facturar.png" (click)="facturarMov(item, 10)" title="Facturar" alt="Facturar"
                 style="cursor: pointer;" />
-                <label *ngIf="item.CONSTANCIA == 0 || item.RECIBO == '' "><b>--</b></label>
+                <label *ngIf="item.FACTURAR == 0 || item.RECIBO == '' "><b>--</b></label>
               </td>
           </tr>
         </ng-template>

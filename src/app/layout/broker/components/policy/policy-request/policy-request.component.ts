@@ -411,7 +411,6 @@ export class PolicyRequestComponent implements OnInit {
       if (this.mainFormGroup.controls.brokerDocumentNumber.value.toString().trim() == "" && this.mainFormGroup.controls.brokerSearchMode.value == "1") {
         this.filter.BrokerSearchMode = "3";
       }
-      console.log(this.filter)
       this.search();
     } else {
       this.identifyAndShowErrors();

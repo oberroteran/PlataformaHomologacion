@@ -249,7 +249,6 @@ export class PolicyTransactionsComponent implements OnInit {
     this.polizaEmitCab.frecuenciaPago = '';
 
     this.canProposeComission = AccessFilter.hasPermission("6");
-    console.log(this.canProposeComission)
     this.canAddSecondaryBroker = AccessFilter.hasPermission("7");
     this.canProposeMinimunPremium = AccessFilter.hasPermission("8");
     this.canBillMonthly = AccessFilter.hasPermission("16");
