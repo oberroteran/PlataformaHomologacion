@@ -514,9 +514,10 @@ export class PolicyEvaluationComponent implements OnInit {
       this.policyService.getPolicyEmitDetTX(this.nroProcess, this.typeTransac, JSON.parse(localStorage.getItem("currentUser"))["id"]),
       this.policyService.getPolicyCot(this.quotationNumber)).subscribe(
         (res: any) => {
+          console.log(res)
           if (res[0].GenericResponse == null || res[1].length == 0 || res[2].length == 0) { //Verificamos si todos los datos de las 3 peticiones han sido obtenidos
             swal.fire("Información", "No se encontraron los datos necesarios para esta cotización. " + this.redirectionMessage, "error");
-            this.router.navigate(['/broker/request-status']);
+            this.router.navigate(['/broker/policy-request']);
           } else {
             if (res[0].StatusCode == 2) {
               swal.fire("Información", this.listToString(res[0].ErrorMessageList), "warning");
@@ -606,52 +607,52 @@ export class PolicyEvaluationComponent implements OnInit {
             res[2].forEach(element => {
               if (element.ID_PRODUCTO == JSON.parse(localStorage.getItem("pensionID"))["id"]) { //Si es un elemento de pensión
                 let item: any = {};
-                item.RiskRate = element.TASA_RIESGO;
+                item.RiskRate = self.FormatValue(element.TASA_RIESGO);
                 item.RiskTypeId = element.TIP_RIESGO; //Id tipo de riesgo
                 item.RiskTypeName = element.DES_RIESGO; //Nombre de tipo de riesgo
-                item.Rate = element.TASA_CALC;  //Tasa
-                item.Premium = element.PRIMA; //Prima
-                item.ProposedRate = element.TASA_PRO; //Tasa propuesta
-                item.OriginalProposedRate = element.TASA_PRO; //Tasa propuesta original
-                item.OriginalAuthorizedRate = element.TASA; //tasa autorizada original
-                item.AuthorizedRate = element.TASA;
-                item.NewPremium = element.AUT_PRIMA;
+                item.Rate = self.FormatValue(element.TASA_CALC);  //Tasa
+                item.Premium = self.FormatValue(element.PRIMA); //Prima
+                item.ProposedRate = self.FormatValue(element.TASA_PRO); //Tasa propuesta
+                item.OriginalProposedRate = self.FormatValue(element.TASA_PRO); //Tasa propuesta original
+                item.OriginalAuthorizedRate = self.FormatValue(element.TASA); //tasa autorizada original
+                item.AuthorizedRate = self.FormatValue(element.TASA);
+                item.NewPremium = self.FormatValue(element.AUT_PRIMA);
                 item.EndorsmentPremium = element.PRIMA_END; //Prima de endoso
-                item.Discount = element.DESCUENTO; //Descuento
-                item.Variation = element.VARIACION_TASA; //Variación de la tasa
+                item.Discount = self.FormatValue(element.DESCUENTO); //Descuento
+                item.Variation = self.FormatValue(element.VARIACION_TASA); //Variación de la tasa
 
                 self.InputsQuotation.PensionDetailsList.push(item);
                 self.InputsQuotation.PensionNewNetAmount = self.FormatValue(parseFloat(self.InputsQuotation.PensionNewNetAmount) + parseFloat(element.AUT_PRIMA));
 
-                self.InputsQuotation.PensionNetAmount = element.NSUM_PREMIUMN;
-                self.InputsQuotation.PensionCalculatedIGV = element.NSUM_IGV;
-                self.InputsQuotation.PensionGrossAmount = element.NSUM_PREMIUM;
+                self.InputsQuotation.PensionNetAmount = self.FormatValue(element.NSUM_PREMIUMN);
+                self.InputsQuotation.PensionCalculatedIGV = self.FormatValue(element.NSUM_IGV);
+                self.InputsQuotation.PensionGrossAmount = self.FormatValue(element.NSUM_PREMIUM);
 
                 item.WorkersCount = element.NUM_TRABAJADORES;
                 item.PayrollAmount = element.MONTO_PLANILLA;
               }
               if (element.ID_PRODUCTO == JSON.parse(localStorage.getItem("saludID"))["id"]) { //Si es un elemento de pensión
                 let item: any = {};
-                item.RiskRate = element.TASA_RIESGO;
+                item.RiskRate = self.FormatValue(element.TASA_RIESGO);
                 item.RiskTypeId = element.TIP_RIESGO; //Id tipo de riesgo
                 item.RiskTypeName = element.DES_RIESGO; //Nombre de tipo de riesgo
-                item.Rate = element.TASA_CALC;  //Tasa
-                item.Premium = element.PRIMA; //Prima
-                item.ProposedRate = element.TASA_PRO; //Tasa propuesta
-                item.OriginalProposedRate = element.TASA_PRO; //Tasa propuesta original
-                item.OriginalAuthorizedRate = element.TASA; //tasa autorizada original
-                item.AuthorizedRate = element.TASA; //tasa autorizada
-                item.NewPremium = element.AUT_PRIMA //Nueva prima calculada con la nueva tasa autorizada
+                item.Rate = self.FormatValue(element.TASA_CALC);  //Tasa
+                item.Premium = self.FormatValue(element.PRIMA); //Prima
+                item.ProposedRate = self.FormatValue(element.TASA_PRO); //Tasa propuesta
+                item.OriginalProposedRate = self.FormatValue(element.TASA_PRO); //Tasa propuesta original
+                item.OriginalAuthorizedRate = self.FormatValue(element.TASA); //tasa autorizada original
+                item.AuthorizedRate = self.FormatValue(element.TASA);
+                item.NewPremium = self.FormatValue(element.AUT_PRIMA);
                 item.EndorsmentPremium = element.PRIMA_END; //Prima de endoso
-                item.Discount = element.DESCUENTO; //Descuento
-                item.Variation = element.VARIACION_TASA; //Variación de la tasa
+                item.Discount = self.FormatValue(element.DESCUENTO); //Descuento
+                item.Variation = self.FormatValue(element.VARIACION_TASA); //Variación de la tasa
 
                 self.InputsQuotation.SaludDetailsList.push(item);
                 self.InputsQuotation.SaludNewNetAmount = self.FormatValue(parseFloat(self.InputsQuotation.SaludNewNetAmount) + parseFloat(element.AUT_PRIMA));
 
-                self.InputsQuotation.SaludNetAmount = element.NSUM_PREMIUMN;
-                self.InputsQuotation.SaludCalculatedIGV = element.NSUM_IGV;
-                self.InputsQuotation.SaludGrossAmount = element.NSUM_PREMIUM;
+                self.InputsQuotation.SaludNetAmount = self.FormatValue(element.NSUM_PREMIUMN);
+                self.InputsQuotation.SaludCalculatedIGV = self.FormatValue(element.NSUM_IGV);
+                self.InputsQuotation.SaludGrossAmount = self.FormatValue(element.NSUM_PREMIUM);
 
                 item.WorkersCount = element.NUM_TRABAJADORES;
                 item.PayrollAmount = element.MONTO_PLANILLA;
@@ -677,15 +678,15 @@ export class PolicyEvaluationComponent implements OnInit {
             this.InputsQuotation.SaludNewCalculatedIGV = this.FormatValue((this.InputsQuotation.SaludNewNetAmount * this.healthIGV) - this.InputsQuotation.SaludNewNetAmount);
             this.InputsQuotation.SaludNewGrossAmount = this.FormatValue(parseFloat(this.InputsQuotation.SaludNewCalculatedIGV) + parseFloat(this.InputsQuotation.SaludNewNetAmount));
 
-            this.InputsQuotation.SharedDetailsList.sort(function (obj1, obj2) { //ordenamos según el riesgo
-              return obj2.RiskTypeId - obj1.RiskTypeId;
-            });
-            this.InputsQuotation.PensionDetailsList.sort(function (obj1, obj2) { //ordenamos según el riesgo
-              return obj2.RiskTypeId - obj1.RiskTypeId;
-            });
-            this.InputsQuotation.SaludDetailsList.sort(function (obj1, obj2) {  //ordenamos según el riesgo
-              return obj2.RiskTypeId - obj1.RiskTypeId;
-            });
+            // this.InputsQuotation.SharedDetailsList.sort(function (obj1, obj2) { //ordenamos según el riesgo
+            //   return obj2.RiskTypeId - obj1.RiskTypeId;
+            // });
+            // this.InputsQuotation.PensionDetailsList.sort(function (obj1, obj2) { //ordenamos según el riesgo
+            //   return obj2.RiskTypeId - obj1.RiskTypeId;
+            // });
+            // this.InputsQuotation.SaludDetailsList.sort(function (obj1, obj2) {  //ordenamos según el riesgo
+            //   return obj2.RiskTypeId - obj1.RiskTypeId;
+            // });
 
             if (this.mode == "recotizar") {
               this.checkMinimunPremiumForOriginals(this.healthProductId);
@@ -703,7 +704,7 @@ export class PolicyEvaluationComponent implements OnInit {
         (error) => {
           this.isLoading = false;
           swal.fire("Información", this.genericServerErrorMessage + " " + this.redirectionMessage, "error");
-          this.router.navigate(['/broker/request-status']);
+          this.router.navigate(['/broker/policy-request']);
         }
       );
   }
@@ -828,7 +829,6 @@ export class PolicyEvaluationComponent implements OnInit {
     if (this.mainFormGroup.valid == true && (errorList == null || errorList.length == 0)) {
       // console.log("ada")
       let self = this;
-      this.isLoading = true;
       // let formData = new FormData();
       // this.files.forEach(function (file) { //anexamos todos los archivos al formData
       //   formData.append(file.name, file, file.name)
@@ -899,23 +899,39 @@ export class PolicyEvaluationComponent implements OnInit {
       // console.log(savedPolicy)
       // this.isLoading = false;
       // return
-      this.policyService.savedPolicyTransac(savedPolicy).subscribe(
-        res => {
-          if (res.P_NCODE == 0) {
-            swal.fire("Información", "Operación exitosa.", "success");
-            this.router.navigate(['/broker/policy-request']);
-          } else if (res.P_NCODE == 1) { //Error de validación
-            swal.fire("Información", this.listToString(res.ErrorMessageList), "error");
-          } else {  //Error no controlado en el servicio
-            swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
+      let operacion = this.mainFormGroup.controls.status.value == 2 ? "¿Desea realizar la aprobación de esta transacción?" : "¿Desea realizar el rechazo de esta transacción?"
+      swal.fire({
+        title: "Información",
+        text: operacion,
+        type: "question",
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        allowOutsideClick: false,
+        cancelButtonText: 'Cancelar'
+      })
+        .then((result) => {
+          if (result.value) {
+            this.isLoading = true;
+            this.policyService.savedPolicyTransac(savedPolicy).subscribe(
+              res => {
+                if (res.P_NCODE == 0) {
+                  swal.fire("Información", "La operación se ha aprobado exitosamente", "success");
+                  this.router.navigate(['/broker/policy-request']);
+                } else if (res.P_NCODE == 2) {
+                  swal.fire("Información", "La operación se ha rechazado exitosamente", "success");
+                  this.router.navigate(['/broker/policy-request']);
+                } else {  //Error no controlado en el servicio
+                  swal.fire("Información", "Hubo un error al procesar su solicitud", "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
+                }
+                this.isLoading = false;
+              },
+              err => {
+                swal.fire("Información", "Hubo un error al procesar su solicitud", "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
+                this.isLoading = false;
+              }
+            );
           }
-          this.isLoading = false;
-        },
-        err => {
-          swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
-          this.isLoading = false;
-        }
-      );
+        });
     } else {
 
       if (this.mainFormGroup.controls.status.hasError('required')) errorList.push("El estado es obligatorio.");

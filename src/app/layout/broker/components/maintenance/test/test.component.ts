@@ -167,8 +167,8 @@ export class TestComponent implements OnInit {
         '2', //Tipo de pago
         "Juan", // Nombre
         "De La Cruz Del Pozo", //Apellidos
-        "jdelacruz0903@gmail.com", // Email
-        310, // total
+        "juan.delacruz@materiagris.pe", // Email
+        1, // total
         this.cliente, // Obj Contratante
         this.canal, // Canal
         this.puntoDeVenta, // punto de venta
@@ -189,7 +189,7 @@ export class TestComponent implements OnInit {
             );
             this.frameResult.instance.token = res.errorDesc;
             this.frameResult.instance.ancho = '100%';
-            this.frameResult.instance.alto = '95%';
+            this.frameResult.instance.alto = '350px';
             // Agregar el componente al componente contenedor
             this.viewContainerRef.insert(this.frameResult.hostView);
             // Abrimos el modal
@@ -240,4 +240,9 @@ export class TestComponent implements OnInit {
         }
       );
   }
+  finalizar() {
+    this.modalResultado.hide();
+    // this.limpiarSesion();
+  }
+
 }

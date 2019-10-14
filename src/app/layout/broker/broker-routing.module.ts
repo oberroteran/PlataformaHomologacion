@@ -64,6 +64,8 @@ import { ProcessViewerComponent } from './components/policy/process-viewer/proce
 import { TestComponent } from './components/maintenance/test/test.component';
 import { PolicyEvaluationComponent } from './components/policy/policy-evaluation/policy-evaluation.component';
 import { PolicyRequestComponent } from './components/policy/policy-request/policy-request.component';
+import { PolicyResultComponent } from './components/policy/policy-result/policy-result.component';
+import { PolicyVoucherComponent } from './components/policy/policy-voucher/policy-voucher.component';
 
 
 const broutes: Routes = [
@@ -134,6 +136,8 @@ const broutes: Routes = [
             { path: 'process-viewer', component: ProcessViewerComponent },
             { path: 'policy-evaluation', component: PolicyEvaluationComponent },
             { path: "policy-request", component: PolicyRequestComponent },
+            { path: "policy/resultado/:key", component: PolicyResultComponent },
+            { path: "policy/voucher", component: PolicyVoucherComponent },
             { path: 'test', component: TestComponent },
             { path: '**', redirectTo: 'login' }
         ]

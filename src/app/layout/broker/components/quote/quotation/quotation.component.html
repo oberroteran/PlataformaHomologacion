@@ -15,7 +15,7 @@
             <div class="collapse-list">
                 <div>
                     <input class="collapse-open " type="checkbox" id="cotizador" />
-                    <label class="collapse-btn title" for="cotizador">Datos del Contratante</label>
+                    <label class="collapse-btn title" for="cotizador">Datos del Contratante <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i></label>
                     <div class="collapse-panel">
                         <div class="collapse-inner collapse-border">
                             <div class="row">
@@ -69,7 +69,7 @@
                             </div>
                             <div class="row">
                                 <div *ngIf="blockDoc" class="col-sm-3">
-                                    <span>NOMBRES</span>
+                                    <span>NOMBRES (*)</span>
                                     <input type="text" placeholder="Nombres" [disabled]="!stateSearch"
                                         [(ngModel)]="InputsQuotation.P_SFIRSTNAME" (keyup.enter)="buscarContratante()"
                                         (keypress)="valText($event, 5)" />
@@ -81,7 +81,7 @@
                                         (keypress)="valText($event, 4)" />
                                 </div>
                                 <div *ngIf="blockDoc" class="col-sm-3">
-                                    <span>APELLIDO PATERNO</span>
+                                    <span>APELLIDO PATERNO (*)</span>
                                     <input type="text" placeholder="Apellido Paterno" [disabled]="!stateSearch"
                                         [(ngModel)]="InputsQuotation.P_SLASTNAME" (keyup.enter)="buscarContratante()"
                                         (keypress)="valText($event, 5)" />
@@ -113,7 +113,7 @@
             <div class="collapse-list">
                 <div>
                     <input class="collapse-open " type="checkbox" id="comercializador" />
-                    <label class="collapse-btn title" for="comercializador">Datos Brokers</label>
+                    <label class="collapse-btn title" for="comercializador">Datos Brokers <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i></label>
                     <div class="collapse-panel">
                         <div class="collapse-inner collapse-border">
                             <!-- <div class="col-sm-3">
@@ -253,12 +253,12 @@
         <div class="collapse-list">
             <div>
                 <input class="collapse-open " type="checkbox" id="cotizacion" />
-                <label class="collapse-btn title" for="cotizacion">Datos de la Cotización</label>
+                <label class="collapse-btn title" for="cotizacion">Datos de la Cotización <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i></label>
                 <div class="collapse-panel">
                     <div class="collapse-inner collapse-border">
                         <div class="row">
                             <div class="col-sm-3">
-                                <span>PRODUCTOS</span>
+                                <span>PRODUCTOS (*)</span>
                                 <select (change)="onSelectProducto($event.target.value)"
                                     [(ngModel)]="InputsQuotation.P_NPRODUCT" (click)="clearText(11)"
                                     [ngClass]="{'error-validate': VAL_QUOTATION[11] != ''}" class="minimal">
@@ -296,7 +296,7 @@
                                 </ng-select>
                             </div>
                             <div class="col-sm-3">
-                                <span>ACTIVIDAD A REALIZAR</span>
+                                <span>ACTIVIDAD A REALIZAR (*)</span>
                                 <ng-select [items]="technicalList" (change)="onSelectTechnicalActivity()"
                                     bindLabel="Name" [ngClass]="{'error-validate': VAL_QUOTATION[12] != ''}"
                                     bindValue="Id" [(ngModel)]="InputsQuotation.P_NTECHNICAL" class="border-ng"
@@ -306,7 +306,7 @@
                                 </ng-select>
                             </div>
                             <div class="col-sm-4">
-                                <span>ACTIVIDAD ECONÓMICA</span>
+                                <span>ACTIVIDAD ECONÓMICA (*)</span>
                                 <ng-select [items]="economicActivityList" (change)="onSelectEconomicActivity()"
                                     bindLabel="Name" [ngClass]="{'error-validate': VAL_QUOTATION[3] != ''}"
                                     bindValue="Id" [(ngModel)]="InputsQuotation.P_NECONOMIC" class="border-ng"
@@ -361,7 +361,7 @@
         <div class="collapse-list">
             <div>
                 <input class="collapse-open " type="checkbox" id="calculadora" />
-                <label class="collapse-btn title" for="calculadora">Cotizador</label>
+                <label class="collapse-btn title" for="calculadora">Cotizador <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i></label>
                 <div class="collapse-panel">
                     <div class="collapse-inner collapse-border">
                         <div class="row">

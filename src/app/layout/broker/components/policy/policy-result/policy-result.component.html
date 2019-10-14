@@ -1,0 +1,171 @@
+<div class="form-group row">
+    <div class="col-lg-3">
+        <navmenusctr></navmenusctr>
+    </div>
+    <div class="col-lg-9">
+        <div class="container-fluid" style="margin: 40px 0;">
+            <div *ngIf="bLoading == true" class="mensaje-carga">
+                <h4>Por favor espere unos segundos mientras procesamos su pago...</h4>
+            </div>
+
+            <div *ngIf="bLoading == false && bAprobado == true"
+                class="mensaje-aprobado col-sm-9">
+                <h4>Completaste la compra de tu SOAT Protecta Security</h4>
+                <p>
+                    Gracias por confiar lo que más valoras en Protecta Security. Hemos enviado tu certificado a la
+                    siguiente
+                    dirección:
+                    <b>{{ cliente.p_SMAIL }}</b>.
+                </p>
+
+                <div class="box-pay-info row">
+                    <div class="col-sm-3">
+                        <b>N&Uacute;MERO DE PEDIDO:</b>
+                        <br>
+                        <span>{{autorizacion.orderNumber}}</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <b>FECHA:</b>
+                        <br>
+                        <span>{{autorizacion.transactionDateTime}}</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <b>TOTAL:</b>
+                        <br>
+                        <span>{{autorizacion.authorizedAmount}}</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <b>M&Eacute;TODO DE PAGO:</b>
+                        <br>
+                        <span>Visa</span>
+                    </div>
+                </div>
+
+
+                <div class="box-detail">
+                    <div>
+                        <b>Cliente:</b>
+                        <span>{{autorizacion.customerName}}</span>
+                        <br>
+                    </div>
+                    <div>
+                        <b>Fecha:</b>
+                        <span>{{autorizacion.fullDate}}</span>
+                        <br>
+                    </div>
+                    <div>
+                        <b>Nro. de tarjeta:</b>
+                        <span>{{autorizacion.cardNumber}}</span>
+                        <br>
+                    </div>
+                    <div>
+                        <b>Moneda:</b>
+                        <span>Soles</span>
+                        <br>
+                    </div>
+                    <!-- <div>
+                        <a href="javascript:void(0)" (click)="mostrarTerminosCondiciones()">Nuestros t&eacute;rminos y
+                            condiciones</a>
+                    </div> -->
+                    <button type="button" class="btn-print" (click)="downloadPdf()">
+                        <i class="fa fa-print print-color"></i>
+                        <span>Imprimir Reporte</span>
+                    </button>
+                    <div class="h-divider"></div>
+                    <h5>Detalles del pedido</h5>
+                    <div class="div-result">
+                        <table class="tb-result">
+                            <tr>
+                                <td class="tl">Producto</td>
+                                <td class="tr">Total</td>
+                            </tr>
+                            <tr>
+                                <td>SOAT Protecta Security x 1</td>
+                                <td>S/ {{autorizacion.authorizedAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>Subtotal:</td>
+                                <td>S/ {{autorizacion.authorizedAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>M&eacute;todo de pago:</td>
+                                <td>Visa</td>
+                            </tr>
+                            <tr>
+                                <td>Total:</td>
+                                <td>S/ {{autorizacion.authorizedAmount}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="div-center">
+                    <button type="button" class="btn-compra" (click)="emisionNuevo()">Realizar otra Emisión</button>
+                </div>
+                <br>
+                <div class="h-divider"></div>
+            </div>
+            <!-- FIN PAGO SATISFACTORIO -->
+
+
+            <!-- INI PAGO DENEGADO -->
+            <div *ngIf="bLoading == false && bAprobado == false && bValidationEmission == false"
+                class="mensaje-denegado">
+                <h4>Lamentablemente tu pago no se realizó satisfactoriamente</h4>
+                <p>Estimado cliente, ha ocurrido un error al intentar comunicarnos con la entidad financiera que
+                    seleccionaste,
+                    vuelve
+                    a intentar nuevamente por favor</p>
+                <div class="div-center">
+                    <button type="button" class="btn-compra" (click)="emisionNuevo()">Volver a Intentar</button>
+                </div>
+            </div>
+
+            <div *ngIf="bLoading == false && bAprobado == false && bValidationEmission == true"
+                class="mensaje-aprobado">
+                <h4>Pedido Recibido</h4>
+                <p>
+                    Desgraciadamente, tu pedido no puede procesarse; el banco/comercio ha rechazado tu transacción. Por
+                    favor,
+                    intenta realizar
+                    la compra de nuevo.
+                </p>
+
+                <!-- <button type="button" class="btn-again" (click)="nuevoPago()">Pagar</button> -->
+
+                <div class="box-pay-info row">
+                    <div class="col-sm-3">
+                        <b>N&Uacute;MERO DE PEDIDO:</b>
+                        <br>
+                        <span>{{autorizacion.orderNumber}}</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <b>FECHA:</b>
+                        <br>
+                        <span>{{autorizacion.transactionDateTime}}</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <b>MOTIVO RECHAZO:</b>
+                        <br>
+                        <span>{{autorizacion.errorMessage}}</span>
+                    </div>
+                </div>
+                <!-- <div class="link-container">
+                          <a class="link-terminos" href="javascript:void(0)" (click)="mostrarTerminosCondiciones()">Nuestros
+                            t&eacute;rminos y condiciones</a>
+                        </div>
+                        <button type="button" class="btn-print" (click)="downloadPdf()">
+                          <i class="fa fa-print print-color"></i>
+                          <span>Imprimir Reporte</span>
+                        </button> -->
+                <br>
+                <br>
+                <div class="div-center">
+                    <button type="button" class="btn-compra" (click)="emisionNuevo()">Volver a Intentar</button>
+                </div>
+            </div>
+            <!-- FIN PAGO DENEGADO -->
+        </div>
+        <iframe id="ifrmPdf"></iframe>
+    </div>
+</div>

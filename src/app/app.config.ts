@@ -17,6 +17,9 @@ export class AppConfig {
     public static get ACTION_FORM_VISA_PREPAYROLL(): string {
         return environment.backendapi + '/pago/formresponse/4';
     }
+    public static get ACTION_FORM_VISA_KUNTUR(): string {
+        return environment.backendapi + '/pago/formresponse/5';
+    }
 
     public static get MERCHANT_LOGO_VISA(): string {
         return (

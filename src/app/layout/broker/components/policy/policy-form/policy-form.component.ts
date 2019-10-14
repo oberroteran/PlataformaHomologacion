@@ -21,6 +21,7 @@ import { ModuleConfig } from './../../module.config'
 import { OthersService } from '../../../services/shared/others.service';
 import { QuotationService } from '../../../services/quotation/quotation.service';
 import { ClientInformationService } from '../../../services/shared/client-information.service';
+import { MethodsPaymentComponent } from '../../../modal/methods-payment/methods-payment.component';
 
 @Component({
 	selector: 'app-policy-form',
@@ -88,7 +89,7 @@ export class PolicyFormComponent implements OnInit {
 	igvPensionSave = 0.0;
 	/** prima bruta save */
 	brutaTotalSaludSave = 0.0;
-	brutaTotalPensionSave = 0.0;
+	brutaTotalPensionSave = 60.0;
 	mensajePrimaPension = "";
 	mensajePrimaSalud = "";
 	igvPensionWS: number = 0.0;
@@ -144,8 +145,8 @@ export class PolicyFormComponent implements OnInit {
 	processID = "";
 	mode: String; //emitir, incluir, renovar : emit, include, renew
 	title: string; //titulo del formulario
-	pensionID: string = JSON.parse(localStorage.getItem("pensionID"))["id"];
-	saludID: string = JSON.parse(localStorage.getItem("saludID"))["id"];
+	pensionID: string = JSON.parse(localStorage.getItem("pensionID"))["id"] == "0" ? "120" : JSON.parse(localStorage.getItem("pensionID"))["id"];
+	saludID: string = JSON.parse(localStorage.getItem("saludID"))["id"] == "0" ? "130" : JSON.parse(localStorage.getItem("saludID"))["id"];
 
 	/**Puede facturar a mes vencido? */
 	canBillMonthly: boolean;
@@ -200,6 +201,15 @@ export class PolicyFormComponent implements OnInit {
 		this.polizaEmitCab.frecuenciaPago = '';
 		this.getIGVPension();
 		this.getIGVSalud();
+
+		if (JSON.parse(localStorage.getItem("emiPolicy"))["emiPolicy"] == 1) {
+			localStorage.setItem("emiPolicy", JSON.stringify({ emiPolicy: 0 }));
+			window.location.reload();
+		} else {
+			localStorage.setItem("emiPolicy", JSON.stringify({ emiPolicy: 1 }));
+			console.log(JSON.parse(localStorage.getItem("emiPolicy"))["emiPolicy"])
+		}
+		//
 
 		this.route.queryParams
 			.subscribe(params => {
@@ -405,9 +415,9 @@ export class PolicyFormComponent implements OnInit {
 		myFormData.append("type_mov", "1");
 		myFormData.append("retarif", "1");
 		myFormData.append("date", dayIni + "/" + monthIni + "/" + yearIni);
-		console.log(JSON.parse(localStorage.getItem("currentUser"))["id"])
-		console.log(this.cotizacionID)
-		console.log(dayIni + "/" + monthIni + "/" + yearIni)
+		// console.log(JSON.parse(localStorage.getItem("currentUser"))["id"])
+		// console.log(this.cotizacionID)
+		// console.log(dayIni + "/" + monthIni + "/" + yearIni)
 		this.policyemit.valGestorList(myFormData).subscribe(
 			res => {
 				console.log(res)
@@ -448,9 +458,14 @@ export class PolicyFormComponent implements OnInit {
 						this.primatotalSalud = 0;
 
 						res.forEach(item => {
+							// console.log(item)
 							if (item.ID_PRODUCTO == this.pensionID) {
 								this.polizaEmitCab.MIN_PENSION = item.PRIMA_MIN;
 								item.PRIMA = self.formateaValor(item.PRIMA)
+								item.TASA = self.formateaValor(item.TASA)
+								item.TASA_CALC = self.formateaValor(item.TASA_CALC)
+								item.TASA_RIESGO = self.formateaValor(item.TASA_RIESGO)
+								item.TASA_PRO = self.formateaValor(item.TASA_PRO)
 								this.pensionList.push(item);
 								// this.prodPension = true;
 								this.activityVariationPension = item.VARIACION_TASA;
@@ -463,6 +478,10 @@ export class PolicyFormComponent implements OnInit {
 							if (item.ID_PRODUCTO == this.saludID) {
 								this.polizaEmitCab.MIN_SALUD = item.PRIMA_MIN;
 								item.PRIMA = self.formateaValor(item.PRIMA)
+								item.TASA = self.formateaValor(item.TASA)
+								item.TASA_CALC = self.formateaValor(item.TASA_CALC)
+								item.TASA_RIESGO = self.formateaValor(item.TASA_RIESGO)
+								item.TASA_PRO = self.formateaValor(item.TASA_PRO)
 								this.saludList.push(item);
 								this.activityVariationSalud = item.VARIACION_TASA;
 
@@ -653,20 +672,8 @@ export class PolicyFormComponent implements OnInit {
 							this.polizaEmitCab = res.GenericResponse;
 							if (this.polizaEmitCab.CORREO == "") {
 								this.flagEmailNull = false
-								let data: any = {};
-								data.P_CodAplicacion = "SCTR";
-								data.P_TipOper = "CON";
-								data.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
-								data.P_NIDDOC_TYPE = this.polizaEmitCab.TIPO_DOCUMENTO;
-								data.P_SIDDOC = this.polizaEmitCab.NUM_DOCUMENTO.toUpperCase();
-
-								this.clientInformationService.getClientInformation(data).subscribe(
-									res => {
-										this.contractingdata = res.EListClient[0]
-									}
-
-								);
 							}
+							this.dataClient()
 							this.polizaEmitCab.bsValueIni = new Date();
 							this.polizaEmitCab.bsValueIniMin = new Date(this.polizaEmitCab.EFECTO_COTIZACION);
 							this.polizaEmitCab.bsValueFinMin = this.polizaEmitCab.bsValueIni;
@@ -785,6 +792,23 @@ export class PolicyFormComponent implements OnInit {
 		else {
 			swal.fire("Información", "Ingresar nro de cotización", "error");
 		}
+	}
+	dataClient() {
+		let data: any = {};
+		data.P_CodAplicacion = "SCTR";
+		data.P_TipOper = "CON";
+		data.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
+		data.P_NIDDOC_TYPE = this.polizaEmitCab.TIPO_DOCUMENTO;
+		data.P_SIDDOC = this.polizaEmitCab.NUM_DOCUMENTO.toUpperCase();
+
+		this.clientInformationService.getClientInformation(data).subscribe(
+			res => {
+				console.log("gestor")
+				console.log(res.EListClient[0])
+				this.contractingdata = res.EListClient[0]
+			}
+
+		);
 	}
 
 	formateaValor(valor) {
@@ -1038,9 +1062,9 @@ export class PolicyFormComponent implements OnInit {
 								let policySalud = 0;
 								let constancia = 0
 
-								policyPension = res.P_POL_PENSION;
-								policySalud = res.P_POL_SALUD;
-								constancia = res.P_NCONSTANCIA;
+								policyPension = Number(res.P_POL_PENSION);
+								policySalud = Number(res.P_POL_SALUD);
+								constancia = Number(res.P_NCONSTANCIA);
 
 								this.NroPension = policyPension;
 								this.NroSalud = policySalud;
@@ -1056,6 +1080,7 @@ export class PolicyFormComponent implements OnInit {
 									})
 										.then((result) => {
 											if (result.value) {
+												// this.registerPayment(policyPension, policySalud)
 												this.router.navigate(['/broker/policy-transactions']);
 											}
 										});
@@ -1071,6 +1096,7 @@ export class PolicyFormComponent implements OnInit {
 										})
 											.then((result) => {
 												if (result.value) {
+													// this.registerPayment(policyPension, policySalud)
 													this.router.navigate(['/broker/policy-transactions']);
 												}
 											});
@@ -1085,6 +1111,7 @@ export class PolicyFormComponent implements OnInit {
 										})
 											.then((result) => {
 												if (result.value) {
+													// this.registerPayment(policyPension, policySalud)
 													this.router.navigate(['/broker/policy-transactions']);
 												}
 											});
@@ -1104,6 +1131,19 @@ export class PolicyFormComponent implements OnInit {
 				}
 			});
 
+	}
+
+	registerPayment(policyPension, policySalud) {
+		let modalRef = this.modalService.open(MethodsPaymentComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
+		modalRef.componentInstance.formModalReference = modalRef;
+		modalRef.componentInstance.correoContracting = this.polizaEmitCab.CORREO;
+		modalRef.componentInstance.dataClient = this.contractingdata;
+		modalRef.componentInstance.typePayment = "2";
+		modalRef.componentInstance.typeMovement = "1";
+		modalRef.componentInstance.product = this.pensionList.length > 0 ? this.pensionID : this.saludID;
+		modalRef.componentInstance.policy = policyPension != 0 ? policyPension : policySalud;
+		modalRef.componentInstance.totalPolicy = Number(this.brutaTotalPensionSave) + Number(this.brutaTotalSaludSave);
+		return;
 	}
 
 	validarArchivos() {
@@ -1355,29 +1395,5 @@ export class PolicyFormComponent implements OnInit {
 			});
 		}
 		return output;
-	}
-	createVISAButton(amount: number) {
-		let btnVisa;
-		this.visaService.generarSessionToken(amount, JSON.parse(localStorage.getItem("currentUser"))["id"]) // user Id
-			.subscribe(
-				res => {
-					// console.log(res);
-					//const data = <SessionToken>res;
-					//sessionStorage.setItem('sessionToken', data.sessionToken);
-					const factory = this.factoryResolver.resolveComponentFactory(ButtonVisaComponent);
-					btnVisa = factory.create(this.viewContainerRef.parentInjector);
-					btnVisa.instance.action = AppConfig.ACTION_FORM_VISA_PAYROLL;
-					btnVisa.instance.amount = amount;
-					btnVisa.instance.sessionToken = res.sessionToken;
-					btnVisa.instance.purchaseNumber = res.purchaseNumber;
-					btnVisa.instance.merchantLogo = AppConfig.MERCHANT_LOGO_VISA;
-					btnVisa.instance.userId = JSON.parse(localStorage.getItem("currentUser"))["id"]; // Enviar el id del usuario
-					// Agregar el componente al componente contenedor
-					this.viewContainerRef.insert(btnVisa.hostView);
-				},
-				error => {
-					console.log(error);
-				}
-			);
 	}
 }

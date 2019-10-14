@@ -147,6 +147,82 @@ export class PolicyemitService {
             headers: this.headers
         });
     }
+
+    registerPayment(data: any): Observable<any> {
+        let customerName =
+            data.cliente.p_SCLIENT_NAME +
+            ' ' +
+            data.cliente.p_SCLIENT_APPPAT +
+            ' ' +
+            data.cliente.p_SCLIENT_APPMAT;
+
+        let request = {
+            TransactionToken: data.transactionToken,
+            SessionToken: data.sessionToken,
+            ProcesoId: data.processId,
+            PlanillaId: data.planillaId,
+            FlujoId: data.flujoId,
+            UserId: data.userId,
+            TipoPago: data.tipoPago,
+            Nombres: data.nombres,
+            Apellidos: data.apellidos,
+            Correo: data.correo,
+            Total: data.total,
+            // PDF Information ---------------------
+            Pdf_Email: data.cliente.p_SMAIL,
+            Pdf_CustomerName: customerName,
+            Pdf_PhoneNumber: data.cliente.p_SPHONE,
+            CodigoCanal: data.canal,
+            CodigoPuntoDeVenta: data.puntoDeVenta,
+            Modalidad: data.modalidad,
+            ChannelCode: sessionStorage.getItem('referenteCode'),
+            Policy: data.policy,
+            Movement: data.typeMovement
+        };
+        
+        const body = JSON.stringify(request);
+        return this.http.post(this._baseUrl + "/Payment/registerPayment", body, {
+            headers: this.headers
+        });
+        // return this.api.post(url, request);
+    }
+    generateProcess(data: any): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this._baseUrl + "/Payment/generarProcess", body, {
+            headers: this.headers
+        });
+    }
+
+    public getTransaccionList(): Observable<any[]> { //listar tipos de documento a usar
+        return this.http.get<any[]>(this._baseUrl + "/PolicyManager/GetTransaccionList");
+    }
+
+    public getPolicyTransList(data: any): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this._baseUrl + "/PolicyManager/GetPolicyTransList", body, {
+            headers: this.headers
+        });
+    }
+
+    public getPolicyMovementsTransList(data: any): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this._baseUrl + "/PolicyManager/GetPolicyMovementsTransList", body, {
+            headers: this.headers
+        });
+    }
+
+    public valTransactionPolicy(nroCotizacion: any): Observable<any> {
+        let url = this._baseUrl + "/PolicyManager/valTransactionPolicy?nroCotizacion=" + nroCotizacion;
+        return this.http.get(url);
+    }
+
+    public GetVisualizadorProc(data: any): Observable<any> {
+        const body = JSON.stringify(data);
+        return this.http.post(this._baseUrl + "/PolicyManager/GetVisualizadorProc", body, {
+            headers: this.headers
+        });
+    }
+
     getUrl() {
         return this._baseUrl;
     }

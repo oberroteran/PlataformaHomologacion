@@ -36,7 +36,7 @@
           <ng-template #showGrid>
             <tbody *ngFor="let item of foundResults;let rownum=index">
               <tr>
-                <td>{{rownum+1}}</td>
+                <td>{{rownum + 1}}</td>
                 <td>{{item.EventDate | date: 'dd/MM/yyyy, h:mm a' }}</td>
                 <td>{{item.Status}}</td>
                 <td>{{item.User}}</td>
@@ -45,13 +45,18 @@
           </ng-template>
 
         </div>
-        <div class="row" *ngIf="foundResults!=null && foundResults.length!=0">
-          <div class="col-xs-12 col-12">
-            <pagination [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [rotate]="rotate" [maxSize]="maxSize"
-              [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)">
-            </pagination>
+        <ng-container *ngIf="foundResults!=null && foundResults.length>0; then showPagination"></ng-container>
+        <ng-template #showPagination>
+          <div class="row">
+            <div class="col-sm-12">
+              <ngb-pagination [(page)]="currentPage" [pageSize]="itemsPerPage" [collectionSize]="totalItems"
+                [maxSize]="maxSize" (pageChange)="pageChanged(currentPage)">
+                <ng-template ngbPaginationPrevious>ANTERIOR</ng-template>
+                <ng-template ngbPaginationNext>SIGUIENTE</ng-template>
+              </ngb-pagination>
+            </div>
           </div>
-        </div>
+        </ng-template>
       </div>
 
     </div>

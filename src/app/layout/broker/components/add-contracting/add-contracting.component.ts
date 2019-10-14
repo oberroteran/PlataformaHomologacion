@@ -131,21 +131,37 @@ export class AddContractingComponent implements OnInit {
                         if (res.EListClient.length > 0) {
                             if (res.EListClient[0].P_SCLIENT == null) {
                                 this.datosClient = res.EListClient[0];
+                                console.log(this.datosClient)
                                 this.InputsContracting.P_TipOper = "INS";
                                 this.InputsContracting.P_SFIRSTNAME = res.EListClient[0].P_SFIRSTNAME;
                                 this.InputsContracting.P_SLASTNAME = res.EListClient[0].P_SLASTNAME;
                                 this.InputsContracting.P_SLASTNAME2 = res.EListClient[0].P_SLASTNAME2;
                                 this.InputsContracting.P_SLEGALNAME = res.EListClient[0].P_SLEGALNAME;
-                                this.InputsContracting.P_SSEXCLIEN = res.EListClient[0].P_SSEXCLIEN != "" ? res.EListClient[0].P_SSEXCLIEN : "3";
-                                let dd = res.EListClient[0].P_DBIRTHDAT.substr(0, 2);
-                                let mm = res.EListClient[0].P_DBIRTHDAT.substr(3, 2);
-                                let yy = res.EListClient[0].P_DBIRTHDAT.substr(6, 4);
-                                this.bsValueFNac = new Date(mm + "/" + dd + "/" + yy);
+                                if (res.EListClient[0].P_DBIRTHDAT != null) {
+                                    let dd = res.EListClient[0].P_DBIRTHDAT.substr(0, 2);
+                                    let mm = res.EListClient[0].P_DBIRTHDAT.substr(3, 2);
+                                    let yy = res.EListClient[0].P_DBIRTHDAT.substr(6, 4);
+                                    this.bsValueFNac = new Date(mm + "/" + dd + "/" + yy);
+                                } else {
+                                    this.bsValueFNac = new Date("01/01/1990");
+
+                                }
                                 this.InputsContracting.P_DBIRTHDAT = res.EListClient[0].P_DBIRTHDAT;
-                                this.InputsContracting.P_NSPECIALITY = res.EListClient[0].P_NSPECIALITY != "" ? res.EListClient[0].P_NSPECIALITY : "99";
-                                this.InputsContracting.P_NCIVILSTA = res.EListClient[0].P_NCIVILSTA != "" ? res.EListClient[0].P_NCIVILSTA : "6";
+                                this.InputsContracting.P_NSPECIALITY = res.EListClient[0].P_NSPECIALITY != null ? res.EListClient[0].P_NSPECIALITY : "99";
                                 this.InputsContracting.P_SBLOCKADE = "2";
-                                this.InputsContracting.P_NTITLE = res.EListClient[0].P_NTITLE != "" ? res.EListClient[0].P_NSPECIALITY : "99";
+                                this.InputsContracting.P_NTITLE = res.EListClient[0].P_NTITLE != null ? res.EListClient[0].P_NSPECIALITY : "99";
+                                if (this.InputsContracting.P_NIDDOC_TYPE == 1) {
+                                    if (this.InputsContracting.P_SIDDOC.substr(0, 2) == "20") {
+                                        this.InputsContracting.P_SSEXCLIEN = res.EListClient[0].P_SSEXCLIEN != null ? res.EListClient[0].P_SSEXCLIEN : "";
+                                        this.InputsContracting.P_NCIVILSTA = res.EListClient[0].P_NCIVILSTA != null ? res.EListClient[0].P_NCIVILSTA : "";
+                                    } else {
+                                        this.InputsContracting.P_SSEXCLIEN = res.EListClient[0].P_SSEXCLIEN != null ? res.EListClient[0].P_SSEXCLIEN : "3";
+                                        this.InputsContracting.P_NCIVILSTA = res.EListClient[0].P_NCIVILSTA != null ? res.EListClient[0].P_NCIVILSTA : "6";
+                                    }
+                                } else {
+                                    this.InputsContracting.P_SSEXCLIEN = res.EListClient[0].P_SSEXCLIEN != "" ? res.EListClient[0].P_SSEXCLIEN : "3";
+                                    this.InputsContracting.P_NCIVILSTA = res.EListClient[0].P_NCIVILSTA != null ? res.EListClient[0].P_NCIVILSTA : "6";
+                                }
                                 this.InputsContracting.P_NHEIGHT = null;
                                 this.InputsContracting.P_ORIGEN_DATA = "GESTORCLIENTE";
                                 this.InputsContracting.P_RESTRICCION = null;
@@ -180,19 +196,25 @@ export class AddContractingComponent implements OnInit {
                                 this.listaDirecciones = res.EListClient[0].EListAddresClient;
                                 this.InputsContracting.EListAddresClient = this.listaDirecciones;
                                 let numdir = 1;
-                                this.listaDirecciones.forEach(item => {
-                                    item.P_NROW = numdir++;
-                                    item.P_CLASS = "";
-                                    item.P_STI_DIRE = item.P_STI_DIRE == "" ? "88" : item.P_STI_DIRE
-                                    item.P_SNOM_DIRECCION = item.P_SNOM_DIRECCION == "" ? item.P_SNOM_DIRECCION : item.P_SNOM_DIRECCION.replace(/[.]/g, " ").replace(/[-]/g, " ")
-                                    item.P_SDESDIREBUSQ = item.P_SDESDIREBUSQ == "" ? item.P_SDESDIREBUSQ : item.P_SDESDIREBUSQ.replace(/[.]/g, " ").replace(/[-]/g, " ")
-                                    item.P_SNUM_DIRECCION = item.P_SNUM_DIRECCION == "" ? "0" : item.P_SNUM_DIRECCION;
-                                    item.P_DESDEPARTAMENTO = item.P_DESDEPARTAMENTO == null ? item.P_SDES_DEP_DOM : item.P_DESDEPARTAMENTO;
-                                    item.P_DESDISTRITO = item.P_DESDISTRITO == null ? item.P_SDES_DIS_DOM : item.P_DESDISTRITO;
-                                    item.P_DESPROVINCIA = item.P_DESPROVINCIA == null ? item.P_SDES_PRO_DOM : item.P_DESPROVINCIA;
-                                    
-                                    console.log(item)
-                                });
+                                if (this.listaDirecciones.length > 0) {
+                                    this.listaDirecciones.forEach(item => {
+                                        item.P_NROW = numdir++;
+                                        item.P_CLASS = "";
+                                        item.P_SRECTYPE = item.P_SRECTYPE == "" || item.P_SRECTYPE == null ? "2" : item.P_SRECTYPE;
+                                        item.P_STI_DIRE = item.P_STI_DIRE == "" || item.P_STI_DIRE == null ? "88" : item.P_STI_DIRE
+                                        item.P_SNOM_DIRECCION = item.P_SNOM_DIRECCION == "" ? "NO ESPECIFICADO" : item.P_SNOM_DIRECCION.replace(/[().]/g, " ").replace(/[-]/g, " ").substr(0, 79)
+                                        item.P_SDESDIREBUSQ = item.P_SDESDIREBUSQ == "" ? item.P_SDESDIREBUSQ : item.P_SDESDIREBUSQ.replace(/[().]/g, " ").replace(/[-]/g, " ").substr(0, 79)
+                                        item.P_SNUM_DIRECCION = item.P_SNUM_DIRECCION == "" || item.P_SNUM_DIRECCION == null ? "0" : item.P_SNUM_DIRECCION;
+                                        item.P_DESDEPARTAMENTO = item.P_DESDEPARTAMENTO == null ? item.P_SDES_DEP_DOM : item.P_DESDEPARTAMENTO;
+                                        item.P_DESDISTRITO = item.P_DESDISTRITO == null ? item.P_SDES_DIS_DOM : item.P_DESDISTRITO;
+                                        item.P_DESPROVINCIA = item.P_DESPROVINCIA == null ? item.P_SDES_PRO_DOM : item.P_DESPROVINCIA;
+                                        item.P_NCOUNTRY = item.P_NCOUNTRY == null || item.P_NCOUNTRY == "" ? "604" : item.P_NCOUNTRY;
+                                        item.P_NPROVINCE = item.P_NPROVINCE == null || item.P_NPROVINCE == "" ? "14" : item.P_NPROVINCE;
+                                        item.P_NLOCAL = item.P_NLOCAL == null || item.P_NLOCAL == "" ? "1401" : item.P_NLOCAL;
+                                        item.P_NMUNICIPALITY = item.P_NMUNICIPALITY == null || item.P_NMUNICIPALITY == "" ? "140101" : item.P_NMUNICIPALITY;
+                                    });
+                                }
+
                                 this.listaTelefonos = res.EListClient[0].EListPhoneClient;
                                 this.InputsContracting.EListPhoneClient = this.listaTelefonos;
                                 let numtel = 1;
@@ -895,7 +917,7 @@ export class AddContractingComponent implements OnInit {
     }
 
     eventSave(event) {
-        this.InputsContracting.P_SIDDOC = this.InputsContracting.P_SIDDOC == null ? "" :  this.InputsContracting.P_SIDDOC.toUpperCase()
+        this.InputsContracting.P_SIDDOC = this.InputsContracting.P_SIDDOC == null ? "" : this.InputsContracting.P_SIDDOC.toUpperCase()
         this.InputsContracting.P_SFIRSTNAME = this.InputsContracting.P_SFIRSTNAME == null ? "" : this.InputsContracting.P_SFIRSTNAME.toUpperCase()
         this.InputsContracting.P_SLEGALNAME = this.InputsContracting.P_SLEGALNAME == null ? "" : this.InputsContracting.P_SLEGALNAME.toUpperCase()
         this.InputsContracting.P_SLASTNAME = this.InputsContracting.P_SLASTNAME == null ? "" : this.InputsContracting.P_SLASTNAME.toUpperCase()
@@ -969,7 +991,7 @@ export class AddContractingComponent implements OnInit {
                 text: "¿Estas seguro de crear el contratante?",
                 type: "question",
                 showCancelButton: true,
-                confirmButtonText: 'Crear',
+                confirmButtonText: 'Guardar',
                 allowOutsideClick: false,
                 cancelButtonText: 'Cancelar'
             })

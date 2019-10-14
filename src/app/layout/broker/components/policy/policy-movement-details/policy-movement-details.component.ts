@@ -37,7 +37,6 @@ export class PolicyMovementDetailsComponent implements OnInit {
   canCancelMovements: boolean;
 
   constructor(
-    private policyService: PolicyService,
     private modalService: NgbModal,
     private router: Router,
     private policyemit: PolicyemitService
@@ -59,7 +58,7 @@ export class PolicyMovementDetailsComponent implements OnInit {
   getPolicyMovement(cotizacionID: any) {
     let data: any = {};
     data.P_NID_COTIZACION = cotizacionID;
-    this.policyService.getPolicyMovementsTransList(data).subscribe(
+    this.policyemit.getPolicyMovementsTransList(data).subscribe(
       res => {
         console.log(res.C_TABLE)
         this.policyMovementList = res.C_TABLE;

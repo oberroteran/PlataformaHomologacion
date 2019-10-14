@@ -222,6 +222,7 @@ export class Step05Component implements OnInit, OnDestroy {
   }
 
   crearBotonVisa() {
+    // alert("step 05")
     // this.bMostrarButtons = false;
     this.mostrarVisa = true;
     this.cd.detectChanges();

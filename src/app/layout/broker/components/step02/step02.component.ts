@@ -336,7 +336,7 @@ export class Step02Component implements OnInit {
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.auto.p_NUSERCODE = currentUser["id"];
-    //console.log(this.auto);
+    console.log(this.auto);
     this.vehiculoService.registrar(this.auto)
       .subscribe(
         res => {

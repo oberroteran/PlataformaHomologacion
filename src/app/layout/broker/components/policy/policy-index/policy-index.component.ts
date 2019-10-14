@@ -10,7 +10,6 @@ import { PolicyemitService } from '../../../services/policy/policyemit.service';
 
 //componentes para ser usados como MODAL
 import { PolicyMovementDetailsComponent } from '../policy-movement-details/policy-movement-details.component'
-import { PolicyService } from '../../../services/policy/policy.service';
 //Compartido
 import { AccessFilter } from './../../access-filter'
 import { ModuleConfig } from './../../module.config'
@@ -73,7 +72,6 @@ export class PolicyIndexComponent implements OnInit {
 
     constructor(
         private clientInformationService: ClientInformationService,
-        private policyService: PolicyService,
         private policyemit: PolicyemitService,
         private router: Router,
         private datePipe: DatePipe,
@@ -136,7 +134,7 @@ export class PolicyIndexComponent implements OnInit {
     }
 
     getTransaccionList() {
-        this.policyService.getTransaccionList().subscribe(
+        this.policyemit.getTransaccionList().subscribe(
             res => {
                 this.transaccionList = res;
             },
@@ -341,7 +339,7 @@ export class PolicyIndexComponent implements OnInit {
             data.P_APE_MAT_CONT = this.InputsSearch.P_SLASTNAME2;
             data.P_NOMBRES_CONT = this.InputsSearch.P_SFIRSTNAME;
             data.P_NUSERCODE = JSON.parse(localStorage.getItem("currentUser"))["id"];
-            this.policyService.getPolicyTransList(data).subscribe(
+            this.policyemit.getPolicyTransList(data).subscribe(
                 res => {
                     this.isLoading = false;
                     this.policyList = res.C_TABLE;
@@ -380,7 +378,7 @@ export class PolicyIndexComponent implements OnInit {
             if (this.policyList.length > 0) {
                 this.policyList.forEach(item => {
                     if (item.NRO_COTIZACION == selection) {
-                        this.policyService.valTransactionPolicy(item.NRO_COTIZACION).subscribe(
+                        this.policyemit.valTransactionPolicy(item.NRO_COTIZACION).subscribe(
                             res => {
                                 if (res.P_COD_ERR == "0") {
                                     switch (idTipo) {

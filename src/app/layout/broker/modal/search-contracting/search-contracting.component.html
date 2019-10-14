@@ -41,7 +41,7 @@
           <tbody>
             <tr class="selectable" (dblclick)="chooseContractor(item)"
               *ngFor="let item of listToShow  | filter : {P_SIDDOC: searchText, RAZON_SOCIAL:searchText, list: EListClient}; let row_no = index">
-              <td><input value={{row_no}} type="radio" name="contractorList" [(ngModel)]="selectedContractor">
+              <td><input value={{item.P_SIDDOC}} type="radio" name="contractorList" [(ngModel)]="selectedContractor">
               </td>
               <td>{{ item.P_NIDDOC_TYPE | typeDocument}}</td>
               <td>{{ item.P_SIDDOC }}</td>

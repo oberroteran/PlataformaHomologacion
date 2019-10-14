@@ -19,7 +19,7 @@
 
                             <div class="col-sm-3">
                                 <span>TIPO PRODUCTO</span>
-                                <select formControlName="product">
+                                <select formControlName="product" class="minimal">
                                     <option value="">Todos</option>
                                     <option *ngFor="let item of productTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -27,7 +27,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <span>ESTADO</span>
-                                <select formControlName="status">
+                                <select formControlName="status" class="minimal">
                                     <option value="">Todos</option>
                                     <option *ngFor="let item of statusList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -85,7 +85,7 @@
 
                                 <div>
                                     <span>&nbsp;&nbsp;BÚSQUEDA POR CONTRATANTE</span>
-                                    <select formControlName="contractorSearchMode" (change)="cleanContractorInputs()">
+                                    <select formControlName="contractorSearchMode" (change)="cleanContractorInputs()" class="minimal">
                                         <option value="3" disabled>Seleccionar</option>
                                         <option *ngFor="let item of searchModeList" value="{{item.Id}}">
                                             {{item.Name}}</option>
@@ -95,7 +95,7 @@
 
                             <div *ngIf="mainFormGroup.controls.contractorSearchMode.value=='1'" class="col-sm-3">
                                 <span>TIPO DOC. CONTRATANTE</span>
-                                <select formControlName="contractorDocumentType"
+                                <select formControlName="contractorDocumentType" class="minimal"
                                     (change)="contractorDocumentTypeChanged()">
                                     <option value="" disabled>Seleccione</option>
                                     <option *ngFor="let item of documentTypeList" value="{{item.Id}}">
@@ -124,7 +124,7 @@
 
                             <div *ngIf="mainFormGroup.controls.contractorSearchMode.value=='2'" class="col-sm-3">
                                 <span>TIPO PERSONA</span>
-                                <select formControlName="contractorPersonType" (change)="cleanContractorInputs()">
+                                <select formControlName="contractorPersonType" (change)="cleanContractorInputs()" class="minimal">
                                     <option value="0" disabled>Seleccionar</option>
                                     <option *ngFor="let item of personTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -167,7 +167,7 @@
 
                                 <div>
                                     <span>&nbsp;&nbsp;BÚSQUEDA POR BROKER</span>
-                                    <select formControlName="brokerSearchMode" (change)="cleanBrokerInputs()">
+                                    <select formControlName="brokerSearchMode" (change)="cleanBrokerInputs()" class="minimal">
                                         <option value="3" disabled>Seleccionar</option>
                                         <option *ngFor="let item of searchModeList" value="{{item.Id}}">
                                             {{item.Name}}</option>
@@ -177,7 +177,7 @@
 
                             <div *ngIf="mainFormGroup.controls.brokerSearchMode.value=='1'" class="col-sm-3">
                                 <span>TIPO DOC. BROKER</span>
-                                <select formControlName="brokerDocumentType" (change)="brokerDocumentTypeChanged()">
+                                <select formControlName="brokerDocumentType" (change)="brokerDocumentTypeChanged()" class="minimal">
                                     <option value="" disabled>Seleccione</option>
                                     <option *ngFor="let item of documentTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>
@@ -204,7 +204,7 @@
                             </div>
                             <div *ngIf="mainFormGroup.controls.brokerSearchMode.value=='2'" class="col-sm-3">
                                 <span>TIPO PERSONA</span>
-                                <select formControlName="brokerPersonType" (change)="cleanBrokerInputs()">
+                                <select formControlName="brokerPersonType" (change)="cleanBrokerInputs()" class="minimal">
                                     <option value="0" disabled>Seleccionar</option>
                                     <option *ngFor="let item of personTypeList" value="{{item.Id}}">
                                         {{item.Name}}</option>

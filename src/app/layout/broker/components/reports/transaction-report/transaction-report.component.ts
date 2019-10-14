@@ -8,7 +8,6 @@ import { Router } from "@angular/router";
 import { ClientInformationService } from '../../../services/shared/client-information.service';
 import { ExcelService } from '../../../services/shared/excel.service';
 import { PolicyemitService } from '../../../services/policy/policyemit.service';
-import { PolicyService } from '../../../services/policy/policy.service';
 //Modelos
 import { PolicyTransactionSearch } from '../../../models/polizaEmit/request/policy-transaction-search';
 import { PolicyTransaction } from '../../../models/polizaEmit/response/policy-transaction';

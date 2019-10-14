@@ -386,7 +386,7 @@ export class ContractorLocationIndexComponent implements OnInit {
             }
 
         }
-
+        
         this.clientInformationService.getClientInformation(data).subscribe(
             res => {
                 let self = this;

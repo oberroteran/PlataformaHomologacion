@@ -52,7 +52,7 @@
             <div class="row">
               <ng-container *ngIf="blockDoc">
                 <div *ngIf="!blockSearch" class="col-sm-4">
-                  <span>NOMBRES</span>
+                  <span>NOMBRES (*)</span>
                   <input type="text" placeholder="Nombres" [(ngModel)]="InputsBroker.P_SFIRSTNAME"
                     (keyup.enter)="SearchContrator()" (keypress)="valText($event, 5)" />
                 </div>
@@ -64,7 +64,7 @@
               </div>
               <ng-container *ngIf="blockDoc">
                 <div *ngIf="!blockSearch" class="col-sm-4">
-                  <span>APELLIDO PATERNO</span>
+                  <span>APELLIDO PATERNO (*)</span>
                   <input type="text" placeholder="Apellido Paterno" [(ngModel)]="InputsBroker.P_SLASTNAME"
                     (keyup.enter)="SearchContrator()" (keypress)="valText($event, 5)" />
                 </div>

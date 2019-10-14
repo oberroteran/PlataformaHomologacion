@@ -58,14 +58,14 @@
               <div class="col-sm-4">
                 <span>NACIONALIDAD (*)</span>
                 <select (change)="onSelectNacionality($event.target.value)"
-                  [(ngModel)]="InputsContracting.P_NNATIONALITY">
+                  [(ngModel)]="InputsContracting.P_NNATIONALITY" class="minimal">
                   <option *ngFor="let nacionality of nacionalityList" value="{{nacionality.NNATIONALITY}}">
                     {{nacionality.SDESCRIPT}}</option>
                 </select>
               </div>
               <div *ngIf="blockDoc" class="col-sm-4">
                 <span>GÉNERO (*)</span>
-                <select (change)="onSelectGender($event.target.value)" [(ngModel)]="InputsContracting.P_SSEXCLIEN">
+                <select (change)="onSelectGender($event.target.value)" [(ngModel)]="InputsContracting.P_SSEXCLIEN" class="minimal">
                   <option *ngFor="let gender of genderList" value="{{gender.SSEXCLIEN}}">{{gender.SDESCRIPT}}</option>
                 </select>
               </div>
@@ -76,7 +76,7 @@
               </div>
               <div *ngIf="blockDoc" class="col-sm-4">
                 <span>ESTADO CIVIL (*)</span>
-                <select (change)="onSelectCivilStatus($event.target.value)" [(ngModel)]="InputsContracting.P_NCIVILSTA">
+                <select (change)="onSelectCivilStatus($event.target.value)" [(ngModel)]="InputsContracting.P_NCIVILSTA" class="minimal">
                   <option *ngFor="let civilStatus of civilStatusList" value="{{civilStatus.NCIVILSTA}}">
                     {{civilStatus.SDESCRIPT}}</option>
                 </select>

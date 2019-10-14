@@ -1,24 +1,39 @@
-
 .container {
     float: left;
     width: 75%;
     padding: 10px 30px;
 }
-.underline{
+
+.underline {
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: rgba(0,0,0,.125);
+    border-bottom-color: rgba(0, 0, 0, .125);
 }
 
 ::placeholder {
     color: rgb(146, 138, 163);
 }
 
+.modal-body {
+    padding: 0;
+}
+
+.loadingScreen {
+	opacity: 0.7;
+	transition: opacity .8s ease-in-out;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background: #000;
+	z-index: 10000000000;
+}
+
 .filter {
     width: 100%;
-    margin: 10px auto;
-    /* border-bottom: 1px solid rgb(84, 61, 129); */
-    padding: 10px 0 15px;
+    margin: 0 auto;
+    padding: 0;
 }
 
 .filter .filter-row {
@@ -41,7 +56,6 @@
 }
 
 .filter input[type="text"] {
-    /* outline: auto; */
     border: none;
     border-radius: 2px;
     padding: 7px 5px;
@@ -55,22 +69,25 @@
     height: 45px;
     font-weight: 300;
     padding-left: 12px;
-    text-transform: uppercase;
 }
-.pminima{
+
+.pminima {
     width: 90% !important;
     float: right;
 }
+
 .chk input[type="checkbox"] {
     position: absolute;
     top: 66%;
 }
-.schk{
+
+.schk {
     display: inline-block;
     position: relative;
     top: -2px;
     padding: 0 10px;
 }
+
 .checkbox {
     position: relative;
     width: 16px;
@@ -100,7 +117,7 @@
 }
 
 .checkbox[type=checkbox]:before {
-    background: #806ea0 url("http://i.imgur.com/dR1TM0y.png");
+    background: #806ea0 url(assets/icons/check.png);
     background-size: 10px 8px;
     background-repeat: no-repeat;
     background-position: 2px 3px;
@@ -122,8 +139,8 @@
     border: 1px solid #806ea0;
     border-radius: 2px;
 }
+
 .filter input[type="date"] {
-    /* outline: auto; */
     border: none;
     border-radius: 2px;
     padding: 6px 5px;
@@ -131,37 +148,12 @@
     border: 1px solid rgb(146, 138, 163);
     color: rgb(146, 138, 163);
     width: 100%;
-    /* margin-left: 5px; */
     font-size: 14px;
     border: 1px solid #aa9ec0;
     color: #aa9ec0;
     height: 45px;
     font-weight: 300;
     padding-left: 12px;
-    text-transform: uppercase;
-}
-
-.tblbroker label {
-	font-size: 14px;
-	font-weight: normal;
-	text-transform: uppercase;
-}
-
-.tblbroker thead {
-	border-bottom: 1px solid #ddd;
-}
-
-.tblbroker tbody tr {
-	margin-top: 10px;
-}
-
-.riesgo td, .riesgo th {
-	padding: .2rem !important;
-}
-
-.riesgo {
-	font-size: 14px;
-    text-transform: uppercase;
 }
 
 select {
@@ -173,8 +165,6 @@ select {
     border-radius: 2px;
     margin-top: 5px;
     color: rgb(146, 138, 163);
-    /* outline: auto; */
-    /* margin-left: 3px; */
     font-family: "Bliss Pro";
     font-size: 14px;
     height: 45px;
@@ -182,22 +172,23 @@ select {
     font-weight: 300;
     color: #aa9ec0;
     border: 1px solid #aa9ec0;
-    text-transform: uppercase;
 }
 
 select:disabled {
     background-color: rgb(235, 235, 228);
 }
-.ctasa span{
+
+.ctasa span {
     margin: 3px 0;
 }
 
-span, textarea{
+span, textarea {
     margin-top: 0.7em;
     display: block;
+    text-transform: uppercase;
 }
 
-.card{
+.card {
     margin-top: 0.7em;
 }
 
@@ -206,11 +197,11 @@ span, textarea{
     margin: 20px auto;
     font-size: 14px;
     font-weight: 300;
-    /* border: 1px solid rgb(146, 138, 163); */
 }
 
 .grid table {
     width: 100%;
+    text-transform: uppercase;
     border-collapse: collapse;
 }
 
@@ -222,7 +213,6 @@ span, textarea{
 .grid table .grid-title td {
     font-family: "Bliss Pro";
     padding: 25px 15px;
-    text-align: center;
     font-size: 14px;
     font-weight: bold;
     color: rgba(42, 18, 99, 0.78);
@@ -236,7 +226,6 @@ span, textarea{
     background: rgb(169, 157, 192);
     color: #fff;
     margin: 0 2px;
-    /* outline: none; */
     height: 30px;
     width: 25px;
     font-family: "Bliss Pro";
@@ -286,7 +275,6 @@ span, textarea{
     padding: 8px 5px;
     min-width: 170px;
     height: 45px;
-    /* outline: none; */
 }
 
 .header-content .header-item button:hover {
@@ -326,7 +314,7 @@ span, textarea{
     background: #553d81 !important;
 }
 
-.full-color span{
+.full-color span {
     margin: 0 10px;
     color: #fff !important;
 }
@@ -335,17 +323,17 @@ button span {
     margin: 0 10px;
 }
 
-.full-color img, button img{
+.full-color img, button img {
     display: table-cell;
     margin-top: auto;
     margin-bottom: auto;
 }
 
-.riesgo td, .riesgo th{
+.riesgo td, .riesgo th {
     padding: .2rem !important;
 }
 
-.file{
+.file {
     margin: 0.7em 0;
 }
 
@@ -362,11 +350,6 @@ button span {
     height: 45px;
     outline: none;
 }
-/*
-.header-content .header-item .full-color span{
-  color: #fff;
-}*/
-
 .input-date {
     height: 45px;
     width: fit-content;
@@ -377,7 +360,6 @@ button span {
 
 .div-date {
     display: inline-block;
-
     margin-top: 5px;
 }
 
@@ -410,10 +392,29 @@ button span {
     font-weight: 600 !important;
     font-size: 16px !important;
     color: rgb(83, 66, 121);
-} 
+}
 
-/*Bootstrap sobreescritura*/
-.modal-header button{
+.modal-header button {
+    padding: 1rem 1rem;
+    margin: -1rem -1rem -1rem auto;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+    font-family: "Bliss Pro";
+    text-transform: none;
+    overflow: visible;
+    border-radius: 0;
+}
+
+.modal-header button {
     padding: 1rem 1rem;
     margin: -1rem -1rem -1rem auto;
     cursor: pointer;
@@ -432,10 +433,31 @@ button span {
     overflow: visible;
     border-radius: 0;
     min-width: 0px;
- }
- .modal-header button span{
+}
+
+.modal-header button span {
     font-size: 24px !important;
- }
- span{
-     font-size: 14px
- }
+}
+
+.btn-secondary:hover {
+    cursor: pointer;
+    color: #81769d;
+    background-color: white;
+}
+
+.btn-secondary {
+    border-color: #81769d;
+    color: white;
+    background-color: #81769d;
+}
+
+span {
+    font-size: 14px
+}
+
+.img-pago-efectivo {
+    border-radius: 6px;
+    width: 130px;
+    height: 35px;
+    margin-bottom: 15px;
+  }

@@ -106,6 +106,7 @@ import { TransactionReportComponent } from './components/reports/transaction-rep
 import { InsuredReportComponent } from './components/reports/insured-report/insured-report.component';
 import { StateReportComponent } from './components/reports/state-report/state-report.component';
 import { AnulMovComponent } from './modal/anul-mov/anul-mov.component';
+import { MethodsPaymentComponent } from './modal/methods-payment/methods-payment.component';
 import { ngfModule } from 'angular-file';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -186,8 +187,11 @@ import { PrettyNumberPipe } from './pipes/pretty-number.pipe';
 import { TestComponent } from './components/maintenance/test/test.component';
 import { PolicyRequestComponent } from './components/policy/policy-request/policy-request.component';
 import { PolicyEvaluationComponent } from './components/policy/policy-evaluation/policy-evaluation.component';
+import { PolicyResultComponent } from './components/policy/policy-result/policy-result.component';
+import { PolicyVoucherComponent } from './components/policy/policy-voucher/policy-voucher.component';
 
 //Kuntur Services 20190812
+import { PolicyService } from '../broker/services/policy/policy.service';
 
 
 @NgModule({
@@ -320,7 +324,10 @@ import { PolicyEvaluationComponent } from './components/policy/policy-evaluation
         ProcessViewerComponent, // Kuntur 20190919
         PrettyNumberPipe, // Kuntur 20190919
         TestComponent, // Kuntur 20190919
-        AnulMovComponent, PolicyRequestComponent, PolicyEvaluationComponent // Kuntur 20190812
+        AnulMovComponent, // Kuntur 20190812
+        PolicyRequestComponent, // Kuntur 20190812
+        PolicyEvaluationComponent, // Kuntur 20190812
+        MethodsPaymentComponent, PolicyResultComponent, PolicyVoucherComponent // Kuntur 2019103
     ],
     entryComponents: [
         ResVaucherComponent,
@@ -344,7 +351,8 @@ import { PolicyEvaluationComponent } from './components/policy/policy-evaluation
         ValErrorComponent, // Kuntur 20190812
         PolicyDocumentsComponent, // Kuntur 20190812
         AddCiiuComponent, // Kuntur 20190812
-        AnulMovComponent // Kuntur 20190919
+        AnulMovComponent, // Kuntur 20190919
+        MethodsPaymentComponent // Kuntur 2019103
     ],
     providers: [
         AppConfig,
@@ -388,6 +396,7 @@ import { PolicyEvaluationComponent } from './components/policy/policy-evaluation
         AccountBankService,
         ClienteService,
         EmisionService,
+        PolicyService,
         PagoEfectivoService,
         ConfirmService,
         PagoEfectivoService,

@@ -296,7 +296,7 @@ export class SearchBrokerComponent implements OnInit {
               this.listBroker = res.listBroker;
               this.totalItems = this.listBroker.length; this.listToShow = this.listBroker.slice(((this.currentPage - 1) * this.itemsPerPage), (this.currentPage * this.itemsPerPage));
             } else {
-              swal.fire("Información", "No hay informacion con los datos ingresados", "error");
+              swal.fire("Información", "No hay información con los datos ingresados", "error");
             }
           } else {
             swal.fire("Información", res.P_SMESSAGE, "error");

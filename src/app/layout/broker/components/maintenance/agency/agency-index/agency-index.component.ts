@@ -186,6 +186,8 @@ export class AgencyIndexComponent implements OnInit {
      */
     changeValidators() {
         //Volvemos a configurar el tamaño del campo de número de documento según el tipo de documento
+        this.bsValueIni = ModuleConfig.StartDate; //Fecha inicial del componente
+        this.bsValueFin = ModuleConfig.EndDate;  //Fecha final del componente
         switch (this.mainFormGroup.controls.documentType.value) {
             case "": { //ningún tipo 
                 this.documentNumberLength = 11;

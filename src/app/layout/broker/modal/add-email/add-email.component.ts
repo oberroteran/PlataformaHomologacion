@@ -129,7 +129,7 @@ export class AddEmailComponent implements OnInit {
     let mensaje = "";
     if (itemCorreo.P_SRECTYPE == 0) {
       this.VAL_EMAIL[0] = "0";
-      mensaje += "El tipo de email es requerido <br />"
+      mensaje += "El tipo de correo electrónico es requerido <br />"
     }
     if (itemCorreo.P_SE_MAIL.trim() == "") {
       this.VAL_EMAIL[1] = "1";

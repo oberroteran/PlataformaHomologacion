@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BsDatepickerConfig } from "ngx-bootstrap";
 import { DatePipe } from '@angular/common';
-import { PolicyService } from '../../../services/policy/policy.service';
 import swal from 'sweetalert2';
+import { PolicyemitService } from '../../../services/policy/policyemit.service';
 
 @Component({
   selector: 'app-process-viewer',
@@ -24,7 +24,7 @@ export class ProcessViewerComponent implements OnInit {
   bsValueIni: Date = new Date();
   bsValueFinMax: Date = new Date();
   constructor(
-    private policyService: PolicyService,
+    private policyemit: PolicyemitService,
     private datePipe: DatePipe,
   ) {
     this.bsConfig = Object.assign(
@@ -63,7 +63,7 @@ export class ProcessViewerComponent implements OnInit {
     data.P_DEFFECDATE = dayIni + "/" + monthIni + "/" + yearIni;
     data.P_NLIMITPERPAGE = 99999
     data.P_NPAGENUM = 1
-    this.policyService.GetVisualizadorProc(data).subscribe(
+    this.policyemit.GetVisualizadorProc(data).subscribe(
       res => {
         this.isLoading = false;
         this.processList = res.listProcess;

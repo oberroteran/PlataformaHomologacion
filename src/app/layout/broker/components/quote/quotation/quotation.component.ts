@@ -253,31 +253,9 @@ export class QuotationComponent implements OnInit {
             this.InputsQuotation.P_NMUNICIPALITY = null;
         }
         console.log(JSON.parse(localStorage.getItem("currentUser")))
-        //Datos del comercializador
-        let brokerMain: any = {}
-        brokerMain.NTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
-        // brokerMain.CODCANAL = ""
-        brokerMain.COD_CANAL = JSON.parse(localStorage.getItem("currentUser"))["canal"];
-        brokerMain.NCORREDOR = JSON.parse(localStorage.getItem("currentUser"))["brokerId"];
-        brokerMain.NTIPDOC = JSON.parse(localStorage.getItem("currentUser"))["sclient"].substr(1, 1);
-        brokerMain.NNUMDOC = JSON.parse(localStorage.getItem("currentUser"))["sclient"].substr(3);
-        brokerMain.RAZON_SOCIAL = JSON.parse(localStorage.getItem("currentUser"))["desCanal"];
-        brokerMain.PROFILE = JSON.parse(localStorage.getItem("currentUser"))["idProfile"];
-        brokerMain.SCLIENT = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
 
-        brokerMain.P_NPRINCIPAL = 0;
-
-        if(brokerMain.PROFILE == this.perfil){
-            brokerMain.BLOCK = 1;
-        }else{
-            brokerMain.BLOCK = 0;                                       
-        }
-
-        brokerMain.P_COM_SALUD = 0;
-        brokerMain.P_COM_SALUD_PRO = 0;
-        brokerMain.P_COM_PENSION = 0;
-        brokerMain.P_COM_PENSION_PRO = 0;
-        this.brokerList.push(brokerMain);
+        this.brokerIni()
+        
 
         // this.InputsQuotation.P_COMERCIALIZADOR_LIST = this.listaComercializador; // Lista de comercializador
         //this.InputsQuotation.P_NIDDOC_TYPE_COM = currentUser["sclient"].substr(1, 1);
@@ -301,6 +279,30 @@ export class QuotationComponent implements OnInit {
 
         //Comentario
         this.InputsQuotation.P_SCOMMENT = "";
+    }
+    brokerIni() {
+        //Datos del comercializador
+        let brokerMain: any = {}
+        brokerMain.NTYPECHANNEL = JSON.parse(localStorage.getItem("currentUser"))["tipoCanal"];
+        brokerMain.COD_CANAL = JSON.parse(localStorage.getItem("currentUser"))["canal"];
+        brokerMain.NCORREDOR = JSON.parse(localStorage.getItem("currentUser"))["brokerId"];
+        brokerMain.NTIPDOC = JSON.parse(localStorage.getItem("currentUser"))["sclient"].substr(1, 1);
+        brokerMain.NNUMDOC = JSON.parse(localStorage.getItem("currentUser"))["sclient"].substr(3);
+        brokerMain.RAZON_SOCIAL = JSON.parse(localStorage.getItem("currentUser"))["desCanal"];
+        brokerMain.PROFILE = JSON.parse(localStorage.getItem("currentUser"))["idProfile"];
+        brokerMain.SCLIENT = JSON.parse(localStorage.getItem("currentUser"))["sclient"];
+        brokerMain.P_NPRINCIPAL = 0;
+        brokerMain.P_COM_SALUD = 0;
+        brokerMain.P_COM_SALUD_PRO = 0;
+        brokerMain.P_COM_PENSION = 0;
+        brokerMain.P_COM_PENSION_PRO = 0;
+        if(brokerMain.PROFILE == this.perfil){
+            brokerMain.BLOCK = 1;
+        }else{
+            brokerMain.BLOCK = 0;                                       
+        }
+        
+        this.brokerList.push(brokerMain);
     }
 
     getIGVPension() {
@@ -1046,7 +1048,13 @@ export class QuotationComponent implements OnInit {
     }
     onSelectTypePerson(typePersonID) {
 
-        this.clearInputsQuotation();
+        this.InputsQuotation.P_SFIRSTNAME = "";
+        this.InputsQuotation.P_SLEGALNAME = "";
+        this.InputsQuotation.P_SLASTNAME = "";
+        this.InputsQuotation.P_SLASTNAME2 = "";
+        this.InputsQuotation.P_SDESDIREBUSQ = "";
+        this.InputsQuotation.P_SE_MAIL = "";
+        
         switch (typePersonID) {
             case "1":
                 this.blockDoc = true;
@@ -2443,6 +2451,7 @@ export class QuotationComponent implements OnInit {
         this.InputsQuotation.P_TYPE_SEARCH = "1"; // Tipo de busqueda
         this.InputsQuotation.P_PERSON_TYPE = "1"; // Tipo persona
         this.brokerList = [];
+        this.brokerIni();
         this.maxlength = 8;
     }
 
@@ -2504,7 +2513,6 @@ export class QuotationComponent implements OnInit {
     }
 
     addBroker() {
-        console.log(this.brokerList)
         let modalRef = this.modalService.open(SearchBrokerComponent, { size: 'lg', backdropClass: 'light-blue-backdrop', backdrop: 'static', keyboard: false });
         modalRef.componentInstance.formModalReference = modalRef;
         modalRef.componentInstance.listaBroker = this.brokerList;

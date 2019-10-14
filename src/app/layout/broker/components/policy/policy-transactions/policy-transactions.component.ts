@@ -16,7 +16,6 @@ import { ValErrorComponent } from '../../../modal/val-error/val-error.component'
 import { AccessFilter } from './../../access-filter'
 import { ModuleConfig } from './../../module.config'
 import { QuotationService } from '../../../services/quotation/quotation.service';
-import { PolicyService } from '../../../services/policy/policy.service';
 //Modal
 import { SearchBrokerComponent } from '../../../modal/search-broker/search-broker.component';
 
@@ -204,7 +203,6 @@ export class PolicyTransactionsComponent implements OnInit {
     private policyemit: PolicyemitService,
     private quotationService: QuotationService,
     private clientInformationService: ClientInformationService,
-    private policyService: PolicyService,
     private datePipe: DatePipe,
     private modalService: NgbModal) {
     this.bsConfig = Object.assign(
@@ -307,7 +305,7 @@ export class PolicyTransactionsComponent implements OnInit {
       });
 
     if (this.nrocotizacion != undefined) {
-      this.policyService.valTransactionPolicy(this.nrocotizacion).subscribe(
+      this.policyemit.valTransactionPolicy(this.nrocotizacion).subscribe(
         res => {
           if (res.P_COD_ERR == "0") {
             this.buscarCotizacion();
@@ -1689,6 +1687,10 @@ export class PolicyTransactionsComponent implements OnInit {
                 }
 
                 item.PRIMA = self.formateaValor(item.PRIMA)
+								item.TASA = self.formateaValor(item.TASA)
+								item.TASA_CALC = self.formateaValor(item.TASA_CALC)
+								item.TASA_RIESGO = self.formateaValor(item.TASA_RIESGO)
+								item.TASA_PRO = self.formateaValor(item.TASA_PRO)
                 this.pensionList.push(item);
                 this.prodPension = true;
                 this.activityVariationPension = item.VARIACION_TASA;
@@ -1706,6 +1708,10 @@ export class PolicyTransactionsComponent implements OnInit {
                   this.polizaEmitCab.PRIMA_SALUD_END = this.minSalud;
                 }
                 item.PRIMA = self.formateaValor(item.PRIMA)
+								item.TASA = self.formateaValor(item.TASA)
+								item.TASA_CALC = self.formateaValor(item.TASA_CALC)
+								item.TASA_RIESGO = self.formateaValor(item.TASA_RIESGO)
+								item.TASA_PRO = self.formateaValor(item.TASA_PRO)
                 this.saludList.push(item);
                 this.prodSalud = true;
                 this.activityVariationSalud = item.VARIACION_TASA;

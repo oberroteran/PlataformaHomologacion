@@ -20,19 +20,19 @@
         </div>
       </div>
       <div class="table-responsive">
-        <table class="table">
+        <table class="table table-borderless riesgo tblbroker">
           <thead>
-            <tr class="grid-title">
-              <td class="grid-title-item col-sm-8">Nombres</td>
-              <td class="grid-title-item col-sm-4">Descargar</td>
+            <tr>
+              <th class="col-sm"><label>Nombre del archivo</label></th>
+              <th class="col-sm"><label>Descargar</label></th>
             </tr>
           </thead>
           <ng-container *ngIf="fileList!=null && fileList.length>0; then showContent;else hideContent"></ng-container>
           <ng-template #showContent>
             <tbody *ngFor="let item of fileList; let row_no = index">
               <tr>
-                <td col-sm-8>{{item | fileName}}</td>
-                <td col-sm-4 class="col-sm text-center"><a (click)="downloadFile(item)"><img
+                <td class="col-sm"><span style="margin-top: 5px;">{{item | fileName}}</span></td>
+                <td class="col-sm" style="text-align: center;"><a (click)="downloadFile(item)"><img
                       src="assets/icons/imprimir.png" title="Descargar" style="cursor:pointer;" alt="Descargar" /></a>
                 </td>
               </tr>

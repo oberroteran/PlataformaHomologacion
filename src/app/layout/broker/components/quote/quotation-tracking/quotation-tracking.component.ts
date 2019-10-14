@@ -17,10 +17,10 @@ export class QuotationTrackingComponent implements OnInit {
 
   isLoading: Boolean = false;
   /*Variables de paginacion */
-  //currentPage = 1; //página actual
+  currentPage = 1; //página actual
   rotate = true; //
   maxSize = 5; // cantidad de paginas que se mostrarán en el paginado
-  //itemsPerPage = 5; // limite de items por página
+  itemsPerPage = 5; // limite de items por página
   totalItems = 0; //total de items encontrados
   foundResults: any[] = [];
 

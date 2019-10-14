@@ -324,6 +324,10 @@ select.minimal {
     padding-top: 6px;
 }
 
+.ng-value{
+    text-transform: uppercase;
+}
+
 .ng-dropdown-panel, .ng-dropdown-panel .scroll-host  {
     border: 1px solid #aa9ec0;
 }
@@ -349,9 +353,9 @@ select.minimal {
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
     background-color: #fff;
     font-size: 14px;
-    text-transform: capitalize;
     color: #aa9ec0;
     padding: 0 16px;
+    text-transform: uppercase;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
@@ -375,7 +379,7 @@ select.minimal {
 /* Collapse */
 
 .collapse-list {
-    margin-bottom: 0;
+    margin-bottom: 10px;
     padding-left: 0;
     list-style: none;
 }

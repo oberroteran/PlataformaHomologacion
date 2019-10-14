@@ -14,732 +14,681 @@
           </div>
         </div>
       </div>
-      <div class="accordion mt-2">
-
-        <div class="card-header">
-          <h5 class="mb-0" data-toggle="collapse" data-target="#contratante" aria-expanded="true"
-            aria-controls="contratante">
-            DATOS DEL CONTRATANTE
-            <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
-          </h5>
-        </div>
-        <div id="contratante" class="collapse show">
-
-          <div class="row">
-            <div class="col-sm-3">
-              <span>TIPO DOCUMENTO (*)</span>
-              <select disabled [(ngModel)]="InputsQuotation.DocumentTypeId">
-                <option value="{{InputsQuotation.DocumentTypeId}}">{{InputsQuotation.DocumentTypeName}}</option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>NRO DE DOCUMENTO (*)</span>
-              <input type="text" placeholder="Nro Documento" [(ngModel)]="InputsQuotation.DocumentNumber" disabled
-                value="{{InputsQuotation.DocumentNumber}}" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-9">
-              <span>NOMBRES</span>
-              <input type="text" placeholder="Nombres" disabled [(ngModel)]="InputsQuotation.P_SNOMBRES" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <span>DIRECCIÓN</span>
-              <input type="text" placeholder="Dirección" disabled [(ngModel)]="InputsQuotation.P_SDESDIREBUSQ" />
-            </div>
-            <div class="col-sm-3">
-              <span>CORREO ELECTRÓNICO</span>
-              <input type="text" placeholder="Correo Electrónico" disabled [(ngModel)]="InputsQuotation.P_SE_MAIL" />
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-      <div class="accordion mt-2">
-        <div class="card-header">
-          <h5 class="mb-0" data-toggle="collapse" data-target="#comercializador" aria-expanded="true"
-            aria-controls="comercializador">
-            DATOS DE BROKERS
-            <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
-          </h5>
-        </div>
-        <div id="comercializador" class="collapse show pt-1">
-          <div class="row" style="margin-top: 20px">
-            <div class="col-sm-12"
-              *ngIf="InputsQuotation.SecondaryBrokerList!=null && InputsQuotation.SecondaryBrokerList.length>0">
-              <table class="table table-borderless riesgo tblbroker">
-                <thead>
-                  <tr class="d-flex">
-                    <th class="col-sm text-center"><label>Tipo Documento</label></th>
-                    <th class="col-sm text-center"><label>Nro Documento</label></th>
-                    <th class="col-sm text-center"><label>Nombres y Apellidos </label></th>
-                    <ng-container
-                      *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0">
-                      <th class="col-sm text-center"><label>Comisión Salud</label></th>
-                      <th class="col-sm text-center ctasa">
-                        <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
-                            [checked]="false" class="checkbox" [(ngModel)]="enabledHealthSecondaryPropCommission"
-                            (ngModelChange)="switchHealthSecondaryPropCommissionValue()">
-                          <span class="schk">
-                            Propuesta Salud</span></label>
-                      </th>
-                      <th class="col-sm text-center ctasa" *ngIf="mode!='recotizar'">
-                        <label><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" [checked]="false"
-                            class="checkbox" [(ngModel)]="enabledHealthSecondaryAuthCommission"
-                            (ngModelChange)="switchHealthSecondaryAuthCommissionValue()">
-                          <span class="schk">
-                            Autorizada Salud</span></label>
-                      </th>
-                    </ng-container>
-                    <ng-container
-                      *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0">
-                      <th class="col-sm text-center"><label>Comisión Pensión</label></th>
-                      <th class="col-sm text-center ctasa">
-                        <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
-                            [checked]="false" class="checkbox" [(ngModel)]="enabledPensionSecondaryPropCommission"
-                            (ngModelChange)="switchPensionSecondaryPropCommissionValue()">
-                          <span class="schk">
-                            Pensión Propuesta</span></label>
-                      </th>
-                      <th class="col-sm text-center ctasa" *ngIf="mode!='recotizar'">
-                        <label><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" [checked]="false"
-                            class="checkbox" [(ngModel)]="enabledPensionSecondaryAuthCommission"
-                            (ngModelChange)="switchPensionSecondaryAuthCommissionValue()">
-                          <span class="schk">
-                            Pensión Autorizada</span></label>
-                      </th>
-                    </ng-container>
-
-                  </tr>
-                </thead>
-                <tbody *ngFor="let item of InputsQuotation.SecondaryBrokerList">
-                  <tr class="d-flex">
-                    <td class="col-sm text-center"><span>{{ item.DES_DOC_COMER }}</span></td>
-                    <td class="col-sm text-center"><span>{{ item.DOC_COMER }}</span></td>
-                    <td class="col-sm text-center"><span>{{ item.COMERCIALIZADOR }}</span></td>
-                    <ng-container
-                      *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0">
-                      <td class="col-sm text-center"><span>{{item.COMISION_SALUD}}</span></td>
-                      <td class="col-sm"><input type="text" class="text-center"
-                          [disabled]="mode!='recotizar' || !enabledHealthSecondaryPropCommission"
-                          [(ngModel)]="item.COMISION_SALUD_PRO" />
-                      <td class="col-sm" *ngIf="mode!='recotizar'"><input type="text" class="text-center"
-                          [disabled]="!enabledHealthSecondaryAuthCommission" [(ngModel)]="item.COMISION_SALUD_AUT" />
-                    </ng-container>
-                    <ng-container
-                      *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0">
-                      <td class="col-sm text-center"><span>{{item.COMISION_PENSION}}</span></td>
-                      <td class="col-sm"><input type="text" class="text-center"
-                          [disabled]="mode!='recotizar' || !enabledPensionSecondaryPropCommission"
-                          [(ngModel)]="item.COMISION_PENSION_PRO" />
-                      </td>
-                      <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
-                          [disabled]="!enabledPensionSecondaryAuthCommission" [(ngModel)]="item.COMISION_PENSION_AUT" />
-                      </td>
-                    </ng-container>
-
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="accordion mt-2">
-        <div class="card-header">
-          <h5 class="mb-0" data-toggle="collapse" data-target="#cotizacion" aria-expanded="true"
-            aria-controls="cotizacion">
-            DATOS DE LA COTIZACIÓN
-            <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
-          </h5>
-        </div>
-        <div id="cotizacion" class="collapse show pt-1">
-          <div class="row">
-            <div class="col-sm-3">
-              <span>TIPO RENOVACIÓN</span>
-              <select [(ngModel)]="InputsQuotation.tipoRenovacion"  class="minimal" disabled>
-                <option *ngFor="let renovacion of tipoRenovacion" [value]="renovacion.COD_TIPO_RENOVACION">
-                  {{renovacion.DES_TIPO_RENOVACION}}
-                </option>
-
-                <!-- <option value="{{InputsQuotation.tipoRenovacion}}">{{InputsQuotation.tipoRenovacion}}</option> -->
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>DESDE</span>
-              <input type="text" [(ngModel)]="InputsQuotation.desde" [bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker disabled />
-            </div>
-            <div class="col-sm-3">
-              <span>HASTA</span>
-              <input type="text" [(ngModel)]="InputsQuotation.hasta" [bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker disabled />
-            </div>
-
-          </div>
-          <div class="row">
-            <div class="col-sm-3">
-              <span>FRECUENCIA PAGO</span>
-              <select [(ngModel)]="InputsQuotation.frecuenciaPago"  class="minimal" disabled>
-                <option *ngFor="let frecuencia of frecuenciaPago" [value]="frecuencia.COD_TIPO_FRECUENCIA">
-                  {{frecuencia.DES_TIPO_FRECUENCIA}}
-                </option>
-              </select>
-            </div>
-            <div *ngIf="canBillMonthly || canBillInAdvance" class="col-sm-3">
-              <span style="margin: 0;">&nbsp;</span>
-              <label *ngIf="canBillMonthly" style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-                  [(ngModel)]="InputsQuotation.facturacionVencido" 
-                  class="checkbox" disabled><span class="schk"
-                  style="margin-top: 15px; font-size: 13px;">REGULA A MES
-                  VENCIDO</span></label>
-
-              <label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input type="checkbox"
-                  [(ngModel)]="InputsQuotation.facturacionAnticipada" class="checkbox" disabled><span class="schk"
-                  style="margin-top: 5px; font-size: 13px;">FACTURACIÓN
-                  ANTICIPADA</span></label>
-            </div>
-            <div class="col-sm-3">
-              <span>MONEDA</span>
-              <select [(ngModel)]="InputsQuotation.CurrencyId" class="minimal" disabled>
-                <option value="{{InputsQuotation.CurrencyId}}">{{InputsQuotation.CurrencyName}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-3">
-              <span>SEDE</span>
-              <select [(ngModel)]="InputsQuotation.LocationId"  class="minimal" disabled>
-                <option value="{{InputsQuotation.LocationId}}">{{InputsQuotation.LocationName}}</option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>ACTIVIDAD A REALIZAR</span>
-              <select [(ngModel)]="InputsQuotation.TechnicalActivityId"  class="minimal" disabled>
-                <option value="{{InputsQuotation.TechnicalActivityId}}">{{InputsQuotation.TechnicalActivityName}}
-                </option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>ACTIVIDAD ECONÓMICA</span>
-              <select [(ngModel)]="InputsQuotation.EconomicActivityId"  class="minimal" disabled>
-                <option value="{{InputsQuotation.EconomicActivityId}}">{{InputsQuotation.EconomicActivityName}}
-                </option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>&nbsp;</span>
-              <label *ngIf="InputsQuotation.HasDelimiter" style="width: 100%;margin-bottom: 0;"><span
-                  style="margin-top: 5px; font-size: 13px; color: red; text-transform: initial;">* La actividad cuenta
-                  con delimitación</span></label>
-              <label style="width: 100%;margin-bottom: 0;"><input disabled type="checkbox"
-                  [(ngModel)]="InputsQuotation.IsMining" class="checkbox"><span class="schk"
-                  style="margin-top: 5px;; font-size: 13px;">¿Se realiza en
-                  mina?</span></label>
-            </div>
-            <div class="col-sm-3">
-              <span>DEPARTAMENTO (*)</span>
-              <select [(ngModel)]="InputsQuotation.DepartmentId" class="minimal" disabled>
-                <option value="{{InputsQuotation.DepartmentId}}">{{InputsQuotation.DepartmentName}}</option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>PROVINCIA (*)</span>
-              <select [(ngModel)]="InputsQuotation.ProvinceId" class="minimal" disabled>
-                <option value="{{InputsQuotation.ProvinceId}}" selected>{{InputsQuotation.ProvinceName}}</option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <span>DISTRITO (*)</span>
-              <select [(ngModel)]="InputsQuotation.DistrictId" class="minimal" disabled>
-                <option value="{{InputsQuotation.DistrictId}}" selected>{{InputsQuotation.DistrictName}}</option>
-              </select>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-      <div class="accordion mt-2">
-        <div class="card-header">
-          <h5 class="mb-0" data-toggle="collapse" data-target="#calculadora" aria-expanded="true"
-            aria-controls="calculadora">
-            COTIZADOR
-            <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
-          </h5>
-        </div>
-        <div id="calculadora" class="collapse show p-0">
-          <div class="card-body pt-1 pb-1">
-            <div class="row">
-              <div class="col-sm-6">
-                <table class="table table-borderless riesgo">
-                  <thead>
-                    <tr class="d-flex" style="border-bottom: 1px solid #ddd;">
-                      <th class="col-sm-4"><label style="font-weight: 100;">Categoría</label></th>
-                      <th class="col-sm-4"><label style="font-weight: 100;">Total Trabajadores</label></th>
-                      <th class="col-sm-4"><label style="font-weight: 100;">Monto Planilla</label></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="d-flex" *ngFor="let item of this.InputsQuotation.SharedDetailsList">
-                      <td class="col-sm-4"><span>{{item.RiskTypeName}}</span></td>
-                      <td class="col-sm-4"><input disabled type="text" placeholder="0" value="{{item.WorkersCount}}" />
-                      </td>
-                      <td class="col-sm-4"><input disabled type="text" placeholder="0" value="{{item.PayrollAmount}}" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col"
-                *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length!=0">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <span>PRIMA MÍNIMA SALUD</span>
-                    <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.SaludMinPremium" />
-                  </div>
-                  <div class="col-sm-4">
-                    <span><input *ngIf="mode=='recotizar'" type="checkbox" id="" style="top: 3px;" class="checkbox"
-                        [(ngModel)]="enabledHealthMinPropPremium" [checked]="false"
-                        (ngModelChange)="switchHealthMinPropPremiumValue()" [disabled]="mode!='recotizar'"> PRIMA MÍNIMA
-                      PROPUESTA</span>
-                    <input type="text" placeholder="0" [disabled]="mode!='recotizar' || !enabledHealthMinPropPremium"
-                      [(ngModel)]="InputsQuotation.SaludPropMinPremium"
-                      (ngModelChange)="checkMinimunPremiumForOriginals(healthProductId)" />
-                  </div>
-                  <div class="col-sm-4" *ngIf="mode!='recotizar'">
-                    <span><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" class="checkbox"
-                        [checked]="false" [(ngModel)]="enabledHealthAuthorizedPremium"
-                        (ngModelChange)="switchHealthMinAuthPremiumValue()">
-                      PRIMA MÍNIMA AUTORIZADA</span>
-                    <input type="text" placeholder="0" id="" style="top: 3px;"
-                      [disabled]="!enabledHealthAuthorizedPremium" [(ngModel)]="InputsQuotation.HealthAuthMinPremium"
-                      (ngModelChange)="checkMinimunPremiumForAuthorizedAmounts(healthProductId)" />
-                  </div>
+      <div class="collapse-list">
+        <div>
+          <input class="collapse-open " type="checkbox" id="contratante" />
+          <label class="collapse-btn title" for="contratante"> DATOS DEL CONTRATANTE <i
+              class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i></label>
+          <div class="collapse-panel">
+            <div class="collapse-inner collapse-border">
+              <div class="row">
+                <div class="col-sm-3">
+                  <span>TIPO DOCUMENTO (*)</span>
+                  <select disabled [(ngModel)]="InputsQuotation.DocumentTypeId">
+                    <option value="{{InputsQuotation.DocumentTypeId}}">{{InputsQuotation.DocumentTypeName}}</option>
+                  </select>
                 </div>
-                <div class="card mt-3"
-                  *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length>0">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm">
-                        <h5>SCTR SALUD</h5>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <table class="table table-borderless riesgo tblTasas">
-                        <thead>
-                          <tr class="d-flex">
-                            <th class="col-sm text-center"><label>Categoría</label></th>
-                            <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>Tasa Riesgo</label></th>
-                            <th class="col-sm text-center"><label>Tasa Neta Calculada</label></th>
-                            <th class="col-sm text-center ctasa">
-                              <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
-                                  [checked]="false" class="checkbox" [(ngModel)]="enabledHealthProposedRate"
-                                  (ngModelChange)="switchHealthProposedRateValues()">
-                                <span class="schk">
-                                  Propuesta</span></label>
-                            </th>
-                            <th class="col-sm text-center"><label>Prima Mensual</label></th>
-                            <th *ngIf="mode!='recotizar'" class="col-sm text-center ctasa"><label><input
-                                  *ngIf="mode=='evaluar'" type="checkbox" [disabled]="!canProposeRate" id=""
-                                  class="checkbox" [(ngModel)]="enabledHealthAuthorizedRate"
-                                  (ngModelChange)="switchHealthAuthorizedRateValues()"><span class="schk">
-                                  Autorizada</span></label></th>
-
-                            <th *ngIf="mode!='recotizar'" class="col-sm text-center"><label>Nueva Prima Mensual</label>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="d-flex"
-                            *ngIf="InputsQuotation.SaludDetailsList==null || InputsQuotation.SaludDetailsList.length == 0">
-                            <td class="col-sm text-center">No hay tasas asociadas</td>
-                          </tr>
-                          <tr class="d-flex" *ngFor="let item of InputsQuotation.SaludDetailsList; let row = index">
-                            <td class="col-sm text-center"><span>{{item.RiskTypeName}}</span></td>
-                            <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>{{item.RiskRate}}</label>
-                            </th>
-                            <td class="col-sm text-center"><span>{{item.Rate}}</span></td>
-                            <td class="col-sm"><input type="text" class="text-center" FloatDirective [checked]="false"
-                                [disabled]="!enabledHealthProposedRate"
-                                [(ngModel)]="InputsQuotation.SaludDetailsList[row].ProposedRate"
-                                (mouseup)="$event.target.select()" />
-                            </td>
-                            <td class="col-sm text-center"><span>{{item.Premium | prettyNumber:2}}</span></td>
-                            <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
-                                [disabled]="!enabledHealthAuthorizedRate" FloatDirective
-                                [(ngModel)]="InputsQuotation.SaludDetailsList[row].AuthorizedRate"
-                                (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,healthProductId)"
-                                (mouseup)="$event.target.select()" />
-                            </td>
-                            <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                              <span>{{item.NewPremium | prettyNumber:2}}</span>
-                            </td>
-                          </tr>
-                          <ng-container
-                            *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length!=0">
-                            <hr style="margin-bottom: 0;">
-                            <tr class="d-flex">
-                              <td class="col-sm text-center"></td>
-                              <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
-                              <td class="col-sm text-center"></td>
-                              <td class="col-sm text-rigth" style="text-align: right"><span>Prima Total Neta</span></td>
-                              <td class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludNetAmount | prettyNumber:2}}</span></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludNewNetAmount | prettyNumber:2}}</span></td>
-                            </tr>
-                            <tr class="d-flex">
-                              <td class="col-sm text-center"></td>
-                              <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
-                              <td class="col-sm text-center"></td>
-                              <td class="col-sm text-right"><span>IGV + GASTOS</span></td>
-                              <td class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludCalculatedIGV | prettyNumber:2}}</span></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludNewCalculatedIGV | prettyNumber:2}}</span></td>
-                            </tr>
-                            <tr class="d-flex">
-                              <td class="col-sm text-center"></td>
-                              <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
-                              <td class="col-sm text-center"></td>
-                              <td class="col-sm text-right"><span>Prima Bruta Total</span></td>
-                              <td class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludGrossAmount | prettyNumber:2}}</span></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.SaludNewGrossAmount | prettyNumber:2}}</span></td>
-                            </tr>
-                          </ng-container>
-                        </tbody>
-                      </table>
-                      <div class="col-sm-12">
-                        <p class="msg-error">{{healthMessage}}</p>
-                      </div>
-                    </div>
-                  </div>
+                <div class="col-sm-3">
+                  <span>NRO DE DOCUMENTO (*)</span>
+                  <input type="text" placeholder="Nro Documento" [(ngModel)]="InputsQuotation.DocumentNumber" disabled
+                    value="{{InputsQuotation.DocumentNumber}}" />
                 </div>
               </div>
-              <div class="col"
-                *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length!=0">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <span>PRIMA MÍNIMA PENSIÓN</span>
-                    <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.PensionMinPremium" />
-                  </div>
-                  <div class="col-sm-4">
-
-                    <span><input *ngIf="mode=='recotizar'" type="checkbox" class="checkbox"
-                        [disabled]="mode!='recotizar'" [checked]="false" [(ngModel)]="enabledPensionMinPropPremium"
-                        (ngModelChange)="switchPensionMinPropPremiumValue()">
-                      PRIMA MÍNIMA PROPUESTA</span>
-                    <input type="text" placeholder="0" id="" style="top: 3px;"
-                      [disabled]="mode!='recotizar' || !enabledPensionMinPropPremium"
-                      [(ngModel)]="InputsQuotation.PensionPropMinPremium"
-                      (ngModelChange)="checkMinimunPremiumForOriginals(pensionProductId)" />
-                  </div>
-                  <div class="col-sm-4" *ngIf="mode!='recotizar'">
-                    <span><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" class="checkbox"
-                        [checked]="false" [(ngModel)]="enabledPensionAuthorizedPremium"
-                        (ngModelChange)="switchPensionMinAuthPremiumValue()">
-                      PRIMA MÍNIMA AUTORIZADA</span>
-                    <input type="text" placeholder="0" id="" style="top: 3px;"
-                      [disabled]="!enabledPensionAuthorizedPremium" [(ngModel)]="InputsQuotation.PensionAuthMinPremium"
-                      (ngModelChange)="checkMinimunPremiumForAuthorizedAmounts(pensionProductId)" />
-                  </div>
+              <div class="row">
+                <div class="col-sm-9">
+                  <span>NOMBRES</span>
+                  <input type="text" placeholder="Nombres" disabled [(ngModel)]="InputsQuotation.P_SNOMBRES" />
                 </div>
-                <div class="card mt-3"
-                  *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length>0">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm">
-                        <h5>SCTR PENSIÓN</h5>
-                      </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <span>DIRECCIÓN</span>
+                  <input type="text" placeholder="Dirección" disabled [(ngModel)]="InputsQuotation.P_SDESDIREBUSQ" />
+                </div>
+                <div class="col-sm-3">
+                  <span>CORREO ELECTRÓNICO</span>
+                  <input type="text" placeholder="Correo Electrónico" disabled
+                    [(ngModel)]="InputsQuotation.P_SE_MAIL" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="collapse-list">
+        <div>
+          <input class="collapse-open " type="checkbox" id="broker" />
+          <label class="collapse-btn title" for="broker"> DATOS DE BROKERS <i class="fa fa-angle-down pull-right"
+              style="position: relative; top: 4px;"></i></label>
+          <div class="collapse-panel">
+            <div class="collapse-inner collapse-border">
+              <div class="row" style="margin-top: 20px">
+                <div class="col-sm-12"
+                  *ngIf="InputsQuotation.SecondaryBrokerList!=null && InputsQuotation.SecondaryBrokerList.length>0">
+                  <table class="table table-borderless riesgo tblbroker">
+                    <thead>
+                      <tr class="d-flex">
+                        <th class="col-sm text-center"><label>Tipo Documento</label></th>
+                        <th class="col-sm text-center"><label>Nro Documento</label></th>
+                        <th class="col-sm text-center"><label>Nombres y Apellidos </label></th>
+                        <ng-container
+                          *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0">
+                          <th class="col-sm text-center"><label>Comisión Salud</label></th>
+                          <th class="col-sm text-center ctasa">
+                            <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
+                                [checked]="false" class="checkbox" [(ngModel)]="enabledHealthSecondaryPropCommission"
+                                (ngModelChange)="switchHealthSecondaryPropCommissionValue()">
+                              <span class="schk">
+                                Propuesta Salud</span></label>
+                          </th>
+                          <th class="col-sm text-center ctasa" *ngIf="mode!='recotizar'">
+                            <label><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" [checked]="false"
+                                class="checkbox" [(ngModel)]="enabledHealthSecondaryAuthCommission"
+                                (ngModelChange)="switchHealthSecondaryAuthCommissionValue()">
+                              <span class="schk">
+                                Autorizada Salud</span></label>
+                          </th>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0">
+                          <th class="col-sm text-center"><label>Comisión Pensión</label></th>
+                          <th class="col-sm text-center ctasa">
+                            <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
+                                [checked]="false" class="checkbox" [(ngModel)]="enabledPensionSecondaryPropCommission"
+                                (ngModelChange)="switchPensionSecondaryPropCommissionValue()">
+                              <span class="schk">
+                                Pensión Propuesta</span></label>
+                          </th>
+                          <th class="col-sm text-center ctasa" *ngIf="mode!='recotizar'">
+                            <label><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" [checked]="false"
+                                class="checkbox" [(ngModel)]="enabledPensionSecondaryAuthCommission"
+                                (ngModelChange)="switchPensionSecondaryAuthCommissionValue()">
+                              <span class="schk">
+                                Pensión Autorizada</span></label>
+                          </th>
+                        </ng-container>
+
+                      </tr>
+                    </thead>
+                    <tbody *ngFor="let item of InputsQuotation.SecondaryBrokerList">
+                      <tr class="d-flex">
+                        <td class="col-sm text-center"><span>{{ item.DES_DOC_COMER }}</span></td>
+                        <td class="col-sm text-center"><span>{{ item.DOC_COMER }}</span></td>
+                        <td class="col-sm text-center"><span>{{ item.COMERCIALIZADOR }}</span></td>
+                        <ng-container
+                          *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length > 0">
+                          <td class="col-sm text-center"><span>{{item.COMISION_SALUD}}</span></td>
+                          <td class="col-sm"><input type="text" class="text-center"
+                              [disabled]="mode!='recotizar' || !enabledHealthSecondaryPropCommission"
+                              [(ngModel)]="item.COMISION_SALUD_PRO" />
+                          <td class="col-sm" *ngIf="mode!='recotizar'"><input type="text" class="text-center"
+                              [disabled]="!enabledHealthSecondaryAuthCommission"
+                              [(ngModel)]="item.COMISION_SALUD_AUT" />
+                        </ng-container>
+                        <ng-container
+                          *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length > 0">
+                          <td class="col-sm text-center"><span>{{item.COMISION_PENSION}}</span></td>
+                          <td class="col-sm"><input type="text" class="text-center"
+                              [disabled]="mode!='recotizar' || !enabledPensionSecondaryPropCommission"
+                              [(ngModel)]="item.COMISION_PENSION_PRO" />
+                          </td>
+                          <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
+                              [disabled]="!enabledPensionSecondaryAuthCommission"
+                              [(ngModel)]="item.COMISION_PENSION_AUT" />
+                          </td>
+                        </ng-container>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="collapse-list">
+        <div>
+          <input class="collapse-open " type="checkbox" id="cotizacion" />
+          <label class="collapse-btn title" for="cotizacion"> DATOS DE LA COTIZACIÓN <i
+              class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i></label>
+          <div class="collapse-panel">
+            <div class="collapse-inner collapse-border">
+              <div class="row">
+                <div class="col-sm-3">
+                  <span>TIPO RENOVACIÓN</span>
+                  <select [(ngModel)]="InputsQuotation.tipoRenovacion" class="minimal" disabled>
+                    <option *ngFor="let renovacion of tipoRenovacion" [value]="renovacion.COD_TIPO_RENOVACION">
+                      {{renovacion.DES_TIPO_RENOVACION}}
+                    </option>
+
+                    <!-- <option value="{{InputsQuotation.tipoRenovacion}}">{{InputsQuotation.tipoRenovacion}}</option> -->
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <span>DESDE</span>
+                  <input type="text" [(ngModel)]="InputsQuotation.desde" [bsConfig]="bsConfig" #dp="bsDatepicker"
+                    bsDatepicker disabled />
+                </div>
+                <div class="col-sm-3">
+                  <span>HASTA</span>
+                  <input type="text" [(ngModel)]="InputsQuotation.hasta" [bsConfig]="bsConfig" #dp="bsDatepicker"
+                    bsDatepicker disabled />
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <span>FRECUENCIA PAGO</span>
+                  <select [(ngModel)]="InputsQuotation.frecuenciaPago" class="minimal" disabled>
+                    <option *ngFor="let frecuencia of frecuenciaPago" [value]="frecuencia.COD_TIPO_FRECUENCIA">
+                      {{frecuencia.DES_TIPO_FRECUENCIA}}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="canBillMonthly || canBillInAdvance" class="col-sm-3">
+                  <span style="margin: 0;">&nbsp;</span>
+                  <label *ngIf="canBillMonthly" style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+                      [(ngModel)]="InputsQuotation.facturacionVencido" class="checkbox" disabled><span class="schk"
+                      style="margin-top: 15px; font-size: 13px;">REGULA A MES
+                      VENCIDO</span></label>
+
+                  <label *ngIf="canBillInAdvance" style="width: 100%;margin-bottom: 0;"><input type="checkbox"
+                      [(ngModel)]="InputsQuotation.facturacionAnticipada" class="checkbox" disabled><span class="schk"
+                      style="margin-top: 5px; font-size: 13px;">FACTURACIÓN
+                      ANTICIPADA</span></label>
+                </div>
+                <div class="col-sm-3">
+                  <span>MONEDA</span>
+                  <select [(ngModel)]="InputsQuotation.CurrencyId" class="minimal" disabled>
+                    <option value="{{InputsQuotation.CurrencyId}}">{{InputsQuotation.CurrencyName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <span>SEDE</span>
+                  <select [(ngModel)]="InputsQuotation.LocationId" class="minimal" disabled>
+                    <option value="{{InputsQuotation.LocationId}}">{{InputsQuotation.LocationName}}</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <span>ACTIVIDAD A REALIZAR</span>
+                  <select [(ngModel)]="InputsQuotation.TechnicalActivityId" class="minimal" disabled>
+                    <option value="{{InputsQuotation.TechnicalActivityId}}">{{InputsQuotation.TechnicalActivityName}}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <span>ACTIVIDAD ECONÓMICA</span>
+                  <select [(ngModel)]="InputsQuotation.EconomicActivityId" class="minimal" disabled>
+                    <option value="{{InputsQuotation.EconomicActivityId}}">{{InputsQuotation.EconomicActivityName}}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <span>&nbsp;</span>
+                  <label *ngIf="InputsQuotation.HasDelimiter" style="width: 100%;margin-bottom: 0;"><span
+                      style="margin-top: 5px; font-size: 13px; color: red; text-transform: initial;">* La actividad
+                      cuenta
+                      con delimitación</span></label>
+                  <label style="width: 100%;margin-bottom: 0;"><input disabled type="checkbox"
+                      [(ngModel)]="InputsQuotation.IsMining" class="checkbox"><span class="schk"
+                      style="margin-top: 5px;; font-size: 13px;">¿Se realiza en
+                      mina?</span></label>
+                </div>
+                <div class="col-sm-3">
+                  <span>DEPARTAMENTO (*)</span>
+                  <select [(ngModel)]="InputsQuotation.DepartmentId" class="minimal" disabled>
+                    <option value="{{InputsQuotation.DepartmentId}}">{{InputsQuotation.DepartmentName}}</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <span>PROVINCIA (*)</span>
+                  <select [(ngModel)]="InputsQuotation.ProvinceId" class="minimal" disabled>
+                    <option value="{{InputsQuotation.ProvinceId}}" selected>{{InputsQuotation.ProvinceName}}</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <span>DISTRITO (*)</span>
+                  <select [(ngModel)]="InputsQuotation.DistrictId" class="minimal" disabled>
+                    <option value="{{InputsQuotation.DistrictId}}" selected>{{InputsQuotation.DistrictName}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="collapse-list">
+        <div>
+          <input class="collapse-open " type="checkbox" id="calculadora" />
+          <label class="collapse-btn title" for="calculadora"> COTIZADOR <i class="fa fa-angle-down pull-right"
+              style="position: relative; top: 4px;"></i></label>
+          <div class="collapse-panel">
+            <div class="collapse-inner collapse-border">
+              <div class="row">
+                <div class="col-sm-6">
+                  <table class="table table-borderless riesgo">
+                    <thead>
+                      <tr class="d-flex" style="border-bottom: 1px solid #ddd;">
+                        <th class="col-sm-4"><label style="font-weight: 100;">Categoría</label></th>
+                        <th class="col-sm-4"><label style="font-weight: 100;">Total Trabajadores</label></th>
+                        <th class="col-sm-4"><label style="font-weight: 100;">Monto Planilla</label></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="d-flex" *ngFor="let item of this.InputsQuotation.SharedDetailsList">
+                        <td class="col-sm-4"><span>{{item.RiskTypeName}}</span></td>
+                        <td class="col-sm-4"><input disabled type="text" placeholder="0"
+                            value="{{item.WorkersCount}}" />
+                        </td>
+                        <td class="col-sm-4"><input disabled type="text" placeholder="0"
+                            value="{{item.PayrollAmount}}" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12"
+                  *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length!=0">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <span>PRIMA MÍNIMA SALUD</span>
+                      <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.SaludMinPremium" />
                     </div>
-                    <div class="row">
-                      <table class="table table-borderless riesgo tblTasas">
-                        <thead>
-                          <tr class="d-flex">
-                            <th class="col-sm text-center"><label>Categoría</label></th>
-                            <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>Tasa Riesgo</label></th>
-                            <th class="col-sm text-center "><label>Tasa Neta Calculada</label></th>
-                            <th class="col-sm text-center ctasa">
-                              <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
-                                  [checked]="false" class="checkbox" [(ngModel)]="enabledPensionProposedRate"
-                                  (ngModelChange)="switchPensionProposedRateValues()">
-                                <span class="schk">
-                                  Propuesta</span></label>
-                            </th>
-                            <th class="col-sm text-center"><label>Prima Mensual</label></th>
-                            <th *ngIf="mode!='recotizar'" class="col-sm text-center ctasa">
-                              <label><input *ngIf="mode=='evaluar'" [disabled]="!canProposeRate" type="checkbox"
-                                  class="checkbox" [(ngModel)]="enabledPensionAuthorizedRate"
-                                  (ngModelChange)="switchPensionAuthorizedRateValues()">
-                                <span class="schk">
-                                  Autorizada</span></label>
-                            </th>
-                            <th *ngIf="mode!='recotizar'" class="col-sm text-center"><label>Nueva Prima Mensual</label>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="d-flex"
-                            *ngIf="InputsQuotation.PensionDetailsList==null || InputsQuotation.PensionDetailsList.length==0">
-                            <td colspan="4" class="col-sm text-center">No hay tasas asociadas</td>
-                          </tr>
-                          <tr class="d-flex" *ngFor="let item of InputsQuotation.PensionDetailsList; let row = index">
-                            <td class="col-sm text-center"><span>{{item.RiskTypeName}}</span></td>
-                            <td *ngIf="canSeeRiskRate" class="col-sm text-center"><span>{{item.RiskRate}}</span>
-                            </td>
-                            <td class="col-sm text-center"><span>{{item.Rate}}</span></td>
-                            <td class="col-sm"><input type="text" class="text-center" FloatDirective
-                                [disabled]="!enabledPensionProposedRate"
-                                [(ngModel)]="InputsQuotation.PensionDetailsList[row].ProposedRate"
-                                (mouseup)="$event.target.select()" />
-                            </td>
-                            <td class="col-sm text-center"><span>{{item.Premium | prettyNumber:2}}</span></td>
-                            <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
-                                [checked]="false" [disabled]="!enabledPensionAuthorizedRate" FloatDirective
-                                [(ngModel)]="InputsQuotation.PensionDetailsList[row].AuthorizedRate"
-                                (mouseup)="$event.target.select()"
-                                (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,pensionProductId)" />
-                            </td>
-                            <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                              <span>{{item.NewPremium | prettyNumber:2}}</span>
-                            </td>
-                          </tr>
-                          <ng-container
-                            *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length!=0">
-                            <hr style="margin-bottom: 0;">
+                    <div class="col-sm-4">
+                      <span><input *ngIf="mode=='recotizar'" type="checkbox" id="" style="top: 3px;" class="checkbox"
+                          [(ngModel)]="enabledHealthMinPropPremium" [checked]="false"
+                          (ngModelChange)="switchHealthMinPropPremiumValue()" [disabled]="mode!='recotizar'"> PRIMA
+                        MÍNIMA
+                        PROPUESTA</span>
+                      <input type="text" placeholder="0" [disabled]="mode!='recotizar' || !enabledHealthMinPropPremium"
+                        [(ngModel)]="InputsQuotation.SaludPropMinPremium"
+                        (ngModelChange)="checkMinimunPremiumForOriginals(healthProductId)" />
+                    </div>
+                    <div class="col-sm-4" *ngIf="mode!='recotizar'">
+                      <span><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" class="checkbox"
+                          [checked]="false" [(ngModel)]="enabledHealthAuthorizedPremium"
+                          (ngModelChange)="switchHealthMinAuthPremiumValue()">
+                        PRIMA MÍNIMA AUTORIZADA</span>
+                      <input type="text" placeholder="0" id="" style="top: 3px;"
+                        [disabled]="!enabledHealthAuthorizedPremium" [(ngModel)]="InputsQuotation.HealthAuthMinPremium"
+                        (ngModelChange)="checkMinimunPremiumForAuthorizedAmounts(healthProductId)" />
+                    </div>
+                  </div>
+                  <div class="card mt-3"
+                    *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length>0">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm">
+                          <h5>SCTR SALUD</h5>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <table class="table table-borderless riesgo tblTasas">
+                          <thead>
                             <tr class="d-flex">
-                              <td class="col-sm text-center"></td>
-                              <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
-                              <td class="col-sm text-center"></td>
-                              <td class="col-sm text-right" style="text-align: right"><span>Prima Total Neta</span></td>
-                              <td class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionNetAmount | prettyNumber:2}}</span></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionNewNetAmount | prettyNumber:2}}</span></td>
+                              <th class="col-sm text-center"><label>Categoría</label></th>
+                              <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>Tasa Riesgo</label></th>
+                              <th class="col-sm text-center"><label>Tasa Neta Calculada</label></th>
+                              <th class="col-sm text-center ctasa">
+                                <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
+                                    [checked]="false" class="checkbox" [(ngModel)]="enabledHealthProposedRate"
+                                    (ngModelChange)="switchHealthProposedRateValues()">
+                                  <span class="schk">
+                                    Propuesta</span></label>
+                              </th>
+                              <th class="col-sm text-center"><label>Prima Mensual</label></th>
+                              <th *ngIf="mode!='recotizar'" class="col-sm text-center ctasa"><label><input
+                                    *ngIf="mode=='evaluar'" type="checkbox" [disabled]="!canProposeRate" id=""
+                                    class="checkbox" [(ngModel)]="enabledHealthAuthorizedRate"
+                                    (ngModelChange)="switchHealthAuthorizedRateValues()"><span class="schk">
+                                    Autorizada</span></label></th>
+
+                              <th *ngIf="mode!='recotizar'" class="col-sm text-center"><label>Nueva Prima
+                                  Mensual</label>
+                              </th>
                             </tr>
-                            <tr class="d-flex">
-                              <td class="col-sm text-center"></td>
-                              <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
-                              <td class="col-sm text-center"></td>
-                              <td class="col-sm text-right"><span>IGV + GASTOS</span></td>
-                              <td class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionCalculatedIGV | prettyNumber:2}}</span></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
+                          </thead>
+                          <tbody>
+                            <tr class="d-flex"
+                              *ngIf="InputsQuotation.SaludDetailsList==null || InputsQuotation.SaludDetailsList.length == 0">
+                              <td class="col-sm text-center">No hay tasas asociadas</td>
+                            </tr>
+                            <tr class="d-flex" *ngFor="let item of InputsQuotation.SaludDetailsList; let row = index">
+                              <td class="col-sm text-center"><span>{{item.RiskTypeName}}</span></td>
+                              <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>{{item.RiskRate}}</label>
+                              </th>
+                              <td class="col-sm text-center"><span>{{item.Rate}}</span></td>
+                              <td class="col-sm"><input type="text" class="text-center" FloatDirective [checked]="false"
+                                  [disabled]="!enabledHealthProposedRate"
+                                  [(ngModel)]="InputsQuotation.SaludDetailsList[row].ProposedRate"
+                                  (mouseup)="$event.target.select()" />
+                              </td>
+                              <td class="col-sm text-center"><span>{{item.Premium | prettyNumber:2}}</span></td>
+                              <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
+                                  [disabled]="!enabledHealthAuthorizedRate" FloatDirective
+                                  [(ngModel)]="InputsQuotation.SaludDetailsList[row].AuthorizedRate"
+                                  (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,healthProductId)"
+                                  (mouseup)="$event.target.select()" />
+                              </td>
                               <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionNewCalculatedIGV | prettyNumber:2}}</span>
+                                <span>{{item.NewPremium | prettyNumber:2}}</span>
                               </td>
                             </tr>
-                            <tr class="d-flex">
-                              <td class="col-sm text-center"></td>
-                              <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
-                              <td class="col-sm text-center"></td>
-                              <td class="col-sm text-right"><span>Prima Bruta Total</span></td>
-                              <td class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionGrossAmount | prettyNumber:2}}</span></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
-                              <td *ngIf="mode!='recotizar'" class="col-sm text-center">
-                                <span>{{InputsQuotation.PensionNewGrossAmount | prettyNumber:2}}</span></td>
-                            </tr>
-                          </ng-container>
+                            <ng-container
+                              *ngIf="InputsQuotation.SaludDetailsList!=null && InputsQuotation.SaludDetailsList.length!=0">
+                              <hr style="margin-bottom: 0;">
+                              <tr class="d-flex">
+                                <td class="col-sm text-center"></td>
+                                <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
+                                <td class="col-sm text-center"></td>
+                                <td class="col-sm text-rigth" style="text-align: right"><span>Prima Total Neta</span>
+                                </td>
+                                <td class="col-sm text-center">
+                                  <span>{{InputsQuotation.SaludNetAmount | prettyNumber:2}}</span></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                                  <span>{{InputsQuotation.SaludNewNetAmount | prettyNumber:2}}</span></td>
+                              </tr>
+                              <tr class="d-flex">
+                                <td class="col-sm text-center"></td>
+                                <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
+                                <td class="col-sm text-center"></td>
+                                <td class="col-sm text-right"><span>IGV + GASTOS</span></td>
+                                <td class="col-sm text-center">
+                                  <span>{{InputsQuotation.SaludCalculatedIGV | prettyNumber:2}}</span></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                                  <span>{{InputsQuotation.SaludNewCalculatedIGV | prettyNumber:2}}</span></td>
+                              </tr>
+                              <tr class="d-flex">
+                                <td class="col-sm text-center"></td>
+                                <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
+                                <td class="col-sm text-center"></td>
+                                <td class="col-sm text-right"><span>Prima Bruta Total</span></td>
+                                <td class="col-sm text-center">
+                                  <span>{{InputsQuotation.SaludGrossAmount | prettyNumber:2}}</span></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                                  <span>{{InputsQuotation.SaludNewGrossAmount | prettyNumber:2}}</span></td>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                        <div class="col-sm-12">
+                          <p class="msg-error">{{healthMessage}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12"
+                  *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length!=0">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <span>PRIMA MÍNIMA PENSIÓN</span>
+                      <input type="text" placeholder="0" disabled [(ngModel)]="InputsQuotation.PensionMinPremium" />
+                    </div>
+                    <div class="col-sm-4">
 
-                        </tbody>
-                      </table>
-                      <div class="col-sm-12">
-                        <p class="msg-error">{{pensionMessage}}</p>
+                      <span><input *ngIf="mode=='recotizar'" type="checkbox" class="checkbox"
+                          [disabled]="mode!='recotizar'" [checked]="false" [(ngModel)]="enabledPensionMinPropPremium"
+                          (ngModelChange)="switchPensionMinPropPremiumValue()">
+                        PRIMA MÍNIMA PROPUESTA</span>
+                      <input type="text" placeholder="0" id="" style="top: 3px;"
+                        [disabled]="mode!='recotizar' || !enabledPensionMinPropPremium"
+                        [(ngModel)]="InputsQuotation.PensionPropMinPremium"
+                        (ngModelChange)="checkMinimunPremiumForOriginals(pensionProductId)" />
+                    </div>
+                    <div class="col-sm-4" *ngIf="mode!='recotizar'">
+                      <span><input *ngIf="mode=='evaluar' && canProposeRate" type="checkbox" class="checkbox"
+                          [checked]="false" [(ngModel)]="enabledPensionAuthorizedPremium"
+                          (ngModelChange)="switchPensionMinAuthPremiumValue()">
+                        PRIMA MÍNIMA AUTORIZADA</span>
+                      <input type="text" placeholder="0" id="" style="top: 3px;"
+                        [disabled]="!enabledPensionAuthorizedPremium"
+                        [(ngModel)]="InputsQuotation.PensionAuthMinPremium"
+                        (ngModelChange)="checkMinimunPremiumForAuthorizedAmounts(pensionProductId)" />
+                    </div>
+                  </div>
+                  <div class="card mt-3"
+                    *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length>0">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm">
+                          <h5>SCTR PENSIÓN</h5>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <table class="table table-borderless riesgo tblTasas">
+                          <thead>
+                            <tr class="d-flex">
+                              <th class="col-sm text-center"><label>Categoría</label></th>
+                              <th *ngIf="canSeeRiskRate" class="col-sm text-center"><label>Tasa Riesgo</label></th>
+                              <th class="col-sm text-center "><label>Tasa Neta Calculada</label></th>
+                              <th class="col-sm text-center ctasa">
+                                <label><input *ngIf="mode=='recotizar'" [disabled]="mode!='recotizar'" type="checkbox"
+                                    [checked]="false" class="checkbox" [(ngModel)]="enabledPensionProposedRate"
+                                    (ngModelChange)="switchPensionProposedRateValues()">
+                                  <span class="schk">
+                                    Propuesta</span></label>
+                              </th>
+                              <th class="col-sm text-center"><label>Prima Mensual</label></th>
+                              <th *ngIf="mode!='recotizar'" class="col-sm text-center ctasa">
+                                <label><input *ngIf="mode=='evaluar'" [disabled]="!canProposeRate" type="checkbox"
+                                    class="checkbox" [(ngModel)]="enabledPensionAuthorizedRate"
+                                    (ngModelChange)="switchPensionAuthorizedRateValues()">
+                                  <span class="schk">
+                                    Autorizada</span></label>
+                              </th>
+                              <th *ngIf="mode!='recotizar'" class="col-sm text-center"><label>Nueva Prima
+                                  Mensual</label>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="d-flex"
+                              *ngIf="InputsQuotation.PensionDetailsList==null || InputsQuotation.PensionDetailsList.length==0">
+                              <td colspan="4" class="col-sm text-center">No hay tasas asociadas</td>
+                            </tr>
+                            <tr class="d-flex" *ngFor="let item of InputsQuotation.PensionDetailsList; let row = index">
+                              <td class="col-sm text-center"><span>{{item.RiskTypeName}}</span></td>
+                              <td *ngIf="canSeeRiskRate" class="col-sm text-center"><span>{{item.RiskRate}}</span>
+                              </td>
+                              <td class="col-sm text-center"><span>{{item.Rate}}</span></td>
+                              <td class="col-sm"><input type="text" class="text-center" FloatDirective
+                                  [disabled]="!enabledPensionProposedRate"
+                                  [(ngModel)]="InputsQuotation.PensionDetailsList[row].ProposedRate"
+                                  (mouseup)="$event.target.select()" />
+                              </td>
+                              <td class="col-sm text-center"><span>{{item.Premium | prettyNumber:2}}</span></td>
+                              <td *ngIf="mode!='recotizar'" class="col-sm"><input type="text" class="text-center"
+                                  [checked]="false" [disabled]="!enabledPensionAuthorizedRate" FloatDirective
+                                  [(ngModel)]="InputsQuotation.PensionDetailsList[row].AuthorizedRate"
+                                  (mouseup)="$event.target.select()"
+                                  (ngModelChange)="calculateNewPremiums($event,item.RiskTypeId,pensionProductId)" />
+                              </td>
+                              <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                                <span>{{item.NewPremium | prettyNumber:2}}</span>
+                              </td>
+                            </tr>
+                            <ng-container
+                              *ngIf="InputsQuotation.PensionDetailsList!=null && InputsQuotation.PensionDetailsList.length!=0">
+                              <hr style="margin-bottom: 0;">
+                              <tr class="d-flex">
+                                <td class="col-sm text-center"></td>
+                                <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
+                                <td class="col-sm text-center"></td>
+                                <td class="col-sm text-right" style="text-align: right"><span>Prima Total Neta</span>
+                                </td>
+                                <td class="col-sm text-center">
+                                  <span>{{InputsQuotation.PensionNetAmount | prettyNumber:2}}</span></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                                  <span>{{InputsQuotation.PensionNewNetAmount | prettyNumber:2}}</span></td>
+                              </tr>
+                              <tr class="d-flex">
+                                <td class="col-sm text-center"></td>
+                                <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
+                                <td class="col-sm text-center"></td>
+                                <td class="col-sm text-right"><span>IGV + GASTOS</span></td>
+                                <td class="col-sm text-center">
+                                  <span>{{InputsQuotation.PensionCalculatedIGV | prettyNumber:2}}</span></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                                  <span>{{InputsQuotation.PensionNewCalculatedIGV | prettyNumber:2}}</span>
+                                </td>
+                              </tr>
+                              <tr class="d-flex">
+                                <td class="col-sm text-center"></td>
+                                <td *ngIf="canSeeRiskRate" class="col-sm text-center"></td>
+                                <td class="col-sm text-center"></td>
+                                <td class="col-sm text-right"><span>Prima Bruta Total</span></td>
+                                <td class="col-sm text-center">
+                                  <span>{{InputsQuotation.PensionGrossAmount | prettyNumber:2}}</span></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center"></td>
+                                <td *ngIf="mode!='recotizar'" class="col-sm text-center">
+                                  <span>{{InputsQuotation.PensionNewGrossAmount | prettyNumber:2}}</span></td>
+                              </tr>
+                            </ng-container>
+
+                          </tbody>
+                        </table>
+                        <div class="col-sm-12">
+                          <p class="msg-error">{{pensionMessage}}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <span>COMENTARIO</span>
-                <textarea class="form-control" id="" rows="4" placeholder="Comentario"
-                  disabled>{{InputsQuotation.Comment}}</textarea>
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-sm-12">
-                <h5>ARCHIVO ADJUNTOS</h5>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6">
-                <table class="table table-borderless riesgo tblbroker">
-                  <thead>
-                    <tr class="d-flex">
-                      <th class="col-sm text-center"><label>Nombre</label></th>
-                      <th class="col-sm text-center"><label>Descargar</label></th>
-                    </tr>
-                  </thead>
-                  <tbody *ngIf="InputsQuotation.FilePathList!=null && InputsQuotation.FilePathList.length>0">
-                    <tr *ngFor="let item of InputsQuotation.FilePathList" class="d-flex">
-                      <td class="col-sm text-center"><span>{{ item | fileName }}</span></td>
-                      <td class="col-sm text-center"><a (click)="downloadFile(item)"><img
-                            src="assets/icons/imprimir.png" title="Descargar" style="cursor:pointer;"
-                            alt="Descargar" /></a></td>
-                    </tr>
-                  </tbody>
-                  <tbody *ngIf="InputsQuotation.FilePathList==null || InputsQuotation.FilePathList.length==0">
-                    <tr class="d-flex">
-                      <td colspan="2" class="col-sm text-center"><span>No se encontraron archivos</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div [formGroup]="mainFormGroup" class="accordion mt-2">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="mb-0" data-toggle="collapse" data-target="#evaluation" aria-expanded="true"
-              aria-controls="evaluation">
-              {{evaluationLabel}}
-              <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
-            </h5>
-          </div>
-          <div id="evaluation" class="card-body collapse show pt-1">
-            <div class="row">
-              <div class="col-sm-3">
-                <span>ESTADO</span>
-                <select formControlName="status" class="minimal"
-                  [ngClass]="{'error-validate': !mainFormGroup.get('status').valid && mainFormGroup.get('status').touched}">
-                  <option disabled value="">Seleccione</option>
-                  <option *ngFor="let item of statusList" value="{{item.Id}}">{{item.Name}}</option>
-                </select>
-                <span *ngIf="mainFormGroup.get('status').errors!=null && mainFormGroup.get('status').touched"
-                  class="mensaje-error-control">
-                  <ng-container
-                    *ngIf="mainFormGroup.get('status').hasError('required'); then required_status else invalid_status">
-                  </ng-container>
-                  <ng-template #required_status>El estado es requerido.</ng-template>
-                  <ng-template #invalid_status>El estado no es válido.</ng-template>
-                </span>
-              </div>
-              <!-- <div *ngIf="reasonList!=null && reasonList.length>0" class="col-sm-3">
-                <span>MOTIVO</span>
-                <select formControlName="reason" class="minimal">
-                  <option value="">Seleccione</option>
-                  <option *ngFor="let item of reasonList" value="{{item.Id}}">{{item.Name}}</option>
-                </select>
-              </div> -->
-            </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <span>COMENTARIO</span>
-                <textarea class="form-control" rows="4" placeholder="Comentario" formControlName="comment"></textarea>
-              </div>
-            </div>
-            <!-- <div class="row">
-              <div class="col-sm-12">
-                <button type="button" (click)="fileInput.click()" style="margin: 15px 0;">
-                  <span>Seleccionar Archivo</span></button>
-                <input hidden #fileInput ngfSelect multiple type="file" [(files)]="files" [maxSize]="filesMaxSize"
-                  (filesChange)="lastFileAt=getDate()" />
-              </div>
-            </div> -->
-            <!-- <div class="row">
-              <div class="col-sm-12">
-                <div *ngIf="files.length > 0">
-                  <div style="margin-bottom: 0px">
-                    <h6>Archivos Seleccionados ({{files.length}})</h6>
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th class="col">Nombre</th>
-                          <th class="col">Tipo</th>
-                          <th class="col">Tamaño</th>
-                          <th class="col">Acción</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let item of files;let i=index">
-                          <td class="col"> <strong>{{ item.name }}</strong> </td>
-                          <td class="col"> {{ item.type }} </td>
-                          <td class="col" nowrap> {{ item.size/1024/1024 | number:'.2' }} MB </td>
-                          <td class="col"><span style="cursor: pointer"><img src="assets/icons/anular.png"
-                                (click)="files.splice(i,1)" title="Eliminar" alt="Eliminar" /></span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+              <div class="row" style="margin-top: 25px;">
+                <div class="col-sm-6">
+                  <h5 style="font-size: 14px;">ARCHIVO ADJUNTOS </h5>
+                  <table class="table table-borderless riesgo tblbroker">
+                    <thead>
+                      <tr class="d-flex">
+                        <th class="col-sm text-center"><label>Nombre del archivo</label></th>
+                        <th class="col-sm text-center"><label>Descargar</label></th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="InputsQuotation.FilePathList!=null && InputsQuotation.FilePathList.length>0">
+                      <tr *ngFor="let item of InputsQuotation.FilePathList" class="d-flex">
+                        <td class="col-sm text-center"><span>{{ item | fileName }}</span></td>
+                        <td class="col-sm text-center"><a (click)="downloadFile(item)"><img
+                              src="assets/icons/imprimir.png" title="Descargar" style="cursor:pointer;"
+                              alt="Descargar" /></a></td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="InputsQuotation.FilePathList==null || InputsQuotation.FilePathList.length==0">
+                      <tr class="d-flex">
+                        <td colspan="2" class="col-sm text-center"><span>No se encontraron archivos</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-sm-6">
+                  <span style="margin-top: 0;">COMENTARIO</span>
+                  <textarea class="form-control" cols="40" rows="5" style="width:100%" placeholder="Comentario"
+                    disabled>{{InputsQuotation.Comment}}</textarea>
                 </div>
               </div>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
-      <div class="accordion mt-2">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="mb-0" data-toggle="collapse" data-target="#history" aria-expanded="true" aria-controls="history">
-              Historial de Evaluaciones
-              <i class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i>
-            </h5>
-          </div>
-          <div id="history" class="collapse show pt-1">
-            <div class="grid form-group">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr class="grid-title">
-                      <th style="text-align: center" class="grid-title-item">Estado</th>
-                      <!-- <th style="text-align: center" class="grid-title-item">Motivo</th> -->
-                      <th style="text-align: center" class="grid-title-item">Usuario</th>
-                      <th style="text-align: center" class="grid-title-item">Perfil</th>
-                      <th style="text-align: center" class="grid-title-item">Fecha</th>
-                      <th style="text-align: center" class="grid-title-item">Comentario</th>
-                    </tr>
-                  </thead>
-                  <tbody *ngIf="statusChangeList==null || statusChangeList.length==0">
-                    <tr>
-                      <td colspan="6">No se encontraron registros.</td>
-                    </tr>
-                  </tbody>
-                  <tbody *ngIf="statusChangeList!=null && statusChangeList.length>0">
-
-                    <tr *ngFor="let item of statusChangeList; let i=index">
-                      <td>{{item.Status}}</td>
-                      <!-- <td>{{item.Reason}}</td> -->
-                      <td>{{item.User}}</td>
-                      <td>{{item.Profile}}</td>
-                      <td>{{item.EventDate | date:'dd/MM/yyyy, h:mm a'}}</td>
-                      <td>{{item.Comment}}</td>
-                    </tr>
-                  </tbody>
-                </table>
+      <div [formGroup]="mainFormGroup" class="collapse-list">
+        <div>
+          <input class="collapse-open " type="checkbox" id="evaluation" />
+          <label class="collapse-btn title" for="evaluation"> {{evaluationLabel}} <i class="fa fa-angle-down pull-right"
+              style="position: relative; top: 4px;"></i></label>
+          <div class="collapse-panel">
+            <div class="collapse-inner collapse-border">
+              <div class="row">
+                <div class="col-sm-3">
+                  <span>ESTADO</span>
+                  <select formControlName="status" class="minimal"
+                    [ngClass]="{'error-validate': !mainFormGroup.get('status').valid && mainFormGroup.get('status').touched}">
+                    <option disabled value="">Seleccione</option>
+                    <option *ngFor="let item of statusList" value="{{item.Id}}">{{item.Name}}</option>
+                  </select>
+                  <span *ngIf="mainFormGroup.get('status').errors!=null && mainFormGroup.get('status').touched"
+                    class="mensaje-error-control">
+                    <ng-container
+                      *ngIf="mainFormGroup.get('status').hasError('required'); then required_status else invalid_status">
+                    </ng-container>
+                    <ng-template #required_status>El estado es requerido.</ng-template>
+                    <ng-template #invalid_status>El estado no es válido.</ng-template>
+                  </span>
+                </div>
               </div>
-            </div>
-            <div *ngIf="statusChangeList!=null && statusChangeList.length>0" class="row" style="display:flex">
-              <div class="col-sm-12">
-                <ngb-pagination [(page)]="filter.PageNumber" [pageSize]="filter.LimitPerPage"
-                  [collectionSize]="totalItems" (pageChange)="pageChanged(filter.PageNumber)">
-                  <ng-template ngbPaginationPrevious>Anterior</ng-template>
-                  <ng-template ngbPaginationNext>Siguiente</ng-template>
-                </ngb-pagination>
+              <div class="row">
+                <div class="col-sm-12">
+                  <span>COMENTARIO</span>
+                  <textarea class="form-control" rows="4" placeholder="Comentario" formControlName="comment"></textarea>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
+      <div class="collapse-list">
+        <div>
+          <input class="collapse-open " type="checkbox" id="history" />
+          <label class="collapse-btn title" for="history"> Historial de Evaluaciones <i
+              class="fa fa-angle-down pull-right" style="position: relative; top: 4px;"></i></label>
+          <div class="collapse-panel">
+            <div class="collapse-inner collapse-border">
+              <div class="grid form-group">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr class="grid-title">
+                        <th style="text-align: center" class="grid-title-item">Estado</th>
+                        <!-- <th style="text-align: center" class="grid-title-item">Motivo</th> -->
+                        <th style="text-align: center" class="grid-title-item">Usuario</th>
+                        <th style="text-align: center" class="grid-title-item">Perfil</th>
+                        <th style="text-align: center" class="grid-title-item">Fecha</th>
+                        <th style="text-align: center" class="grid-title-item">Comentario</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="statusChangeList==null || statusChangeList.length==0">
+                      <tr>
+                        <td colspan="6">No se encontraron registros.</td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="statusChangeList!=null && statusChangeList.length>0">
+
+                      <tr *ngFor="let item of statusChangeList; let i=index">
+                        <td>{{item.Status}}</td>
+                        <!-- <td>{{item.Reason}}</td> -->
+                        <td>{{item.User}}</td>
+                        <td>{{item.Profile}}</td>
+                        <td>{{item.EventDate | date:'dd/MM/yyyy, h:mm a'}}</td>
+                        <td>{{item.Comment}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div *ngIf="statusChangeList!=null && statusChangeList.length>0" class="row" style="display:flex">
+                <div class="col-sm-12">
+                  <ngb-pagination [(page)]="filter.PageNumber" [pageSize]="filter.LimitPerPage"
+                    [collectionSize]="totalItems" (pageChange)="pageChanged(filter.PageNumber)">
+                    <ng-template ngbPaginationPrevious>Anterior</ng-template>
+                    <ng-template ngbPaginationNext>Siguiente</ng-template>
+                  </ngb-pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row pull-right mt-2">
         <button [routerLink]="['/broker/policy-request']">
           <span>Cancelar</span>

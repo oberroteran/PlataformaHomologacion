@@ -19,11 +19,12 @@ export class PanelComponent implements OnInit {
   ngOnInit() {
     this.limpiarsession();
     localStorage.setItem("systemUser", JSON.stringify({ system: 2 }));
+    localStorage.setItem("emiPolicy", JSON.stringify({ emiPolicy: 1 }));
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     this.canal = currentUser && currentUser.canal;
     this.id = currentUser && currentUser.id;
     this.nombre = currentUser && currentUser.firstName;
-    localStorage.setItem("systemUser", JSON.stringify({ system: 2 }));
+    // localStorage.setItem("systemUser", JSON.stringify({ system: 2 }));
   }
 
   limpiarsession() {

@@ -229,7 +229,6 @@ export class AddAddressComponent implements OnInit {
       this.prefDepar = event.SDESCRIPT + " ";
       this.InputsStreet.prefDepar = event.SDESCRIPT + " ";
     }
-    console.log(this.InputsStreet.prefDepar);
   }
 
   onSelectCJHTType(event) {
