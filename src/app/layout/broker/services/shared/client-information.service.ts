@@ -146,7 +146,6 @@ export class ClientInformationService {
     }
     public insertContract(data: Response): Observable<any> {
         const request = JSON.stringify(data);
-        console.log(request)
         return this.http
             .post(
                 this.UrlGestor + "/Cliente/GestionarCliente", request, {

@@ -103,7 +103,6 @@ export class EmisionService {
     const endpoint = 'emissionproc';
     const action = 'emissionprocesscompletepolicy';
     const url = `${endpoint}/${action}`;
-    console.log(url)
     // const oSisweb = new Sisweb();
 
     const customerName =
@@ -134,8 +133,6 @@ export class EmisionService {
       Modalidad: modalidad,
       ChannelCode: sessionStorage.getItem('referenteCode')
     };
-    console.log(data)
-    //return;
     return this.api.post(url, data);
   }
 

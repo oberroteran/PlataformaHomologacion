@@ -155,6 +155,7 @@ export class QuotationEvaluationComponent implements OnInit {
     isNetPremiumLessThanMinPensionPremium: boolean;
     /**Prima total neta recalculada que se muestra cuando la prima neta actual es menor a la prima mínima*/
     healthMessage: string;
+    statusChange: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -332,7 +333,10 @@ export class QuotationEvaluationComponent implements OnInit {
     /**
      * Obtiene una lista de motivos por estado escogido
      */
-    getReasonList() {
+    getReasonList(event) {
+        let selectElementText = event.target['options']
+        [event.target['options'].selectedIndex].text;
+        this.statusChange = selectElementText;
         this.quotationService.getReasonList(this.mainFormGroup.controls.status.value).subscribe(
             res => {
 
@@ -534,24 +538,24 @@ export class QuotationEvaluationComponent implements OnInit {
 
                         this.InputsQuotation.SaludPropMinPremium = res[0].GenericResponse.MIN_SALUD_PR;
                         this.originalHealthMinPropPremium = res[0].GenericResponse.MIN_SALUD_PR;
-                        this.InputsQuotation.HealthAuthMinPremium = res[0].GenericResponse.MIN_SALUD_AUT;
+                        this.InputsQuotation.HealthAuthMinPremium = res[0].GenericResponse.MIN_SALUD_AUT == "0" ? res[0].GenericResponse.MIN_SALUD_PR : res[0].GenericResponse.MIN_SALUD_AUT;
                         this.originalHealthMinAuthPremium = this.InputsQuotation.HealthAuthMinPremium;
                         this.InputsQuotation.SaludMinPremium = res[0].GenericResponse.MIN_SALUD;
                         this.InputsQuotation.PensionPropMinPremium = res[0].GenericResponse.MIN_PENSION_PR;
                         this.originalPensionMinPropPremium = res[0].GenericResponse.MIN_PENSION_PR;
                         this.InputsQuotation.PensionMinPremium = res[0].GenericResponse.MIN_PENSION;
-                        this.InputsQuotation.PensionAuthMinPremium = res[0].GenericResponse.MIN_PENSION_AUT;
+                        this.InputsQuotation.PensionAuthMinPremium = res[0].GenericResponse.MIN_PENSION_AUT == "0" ? res[0].GenericResponse.MIN_PENSION_PR : res[0].GenericResponse.MIN_PENSION_AUT;
                         this.originalPensionMinAuthPremium = this.InputsQuotation.PensionAuthMinPremium;
 
                         //Datos de brokers
                         this.InputsQuotation.SecondaryBrokerList = [];
                         res[1].forEach(item => {
-                            item.COMISION_SALUD_PRO = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD_PRO);
-                            item.COMISION_PENSION_PRO = CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION_PRO);
-                            item.COMISION_SALUD_AUT = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD_AUT);
-                            item.COMISION_PENSION_AUT = CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION_AUT);
-                            item.COMISION_SALUD = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD);
                             item.COMISION_PENSION = CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION);
+                            item.COMISION_PENSION_PRO = CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION_PRO);
+                            item.COMISION_PENSION_AUT = item.COMISION_PENSION_AUT == "0" ? CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION_PRO) : CommonMethods.ConvertToReadableNumber(item.COMISION_PENSION_AUT);
+                            item.COMISION_SALUD_PRO = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD_PRO);
+                            item.COMISION_SALUD = CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD);
+                            item.COMISION_SALUD_AUT = item.COMISION_SALUD_AUT == "0" ? CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD_PRO) : CommonMethods.ConvertToReadableNumber(item.COMISION_SALUD_AUT);
 
                             item.OriginalHealthPropCommission = item.COMISION_SALUD_PRO;
                             item.OriginalPensionPropCommission = item.COMISION_PENSION_PRO;
@@ -799,7 +803,6 @@ export class QuotationEvaluationComponent implements OnInit {
         if (this.mainFormGroup.valid == true && (errorList == null || errorList.length == 0)) {
 
             let self = this;
-            this.isLoading = true;
             let formData = new FormData();
             this.files.forEach(function (file) { //anexamos todos los archivos al formData
                 formData.append(file.name, file, file.name)
@@ -858,24 +861,37 @@ export class QuotationEvaluationComponent implements OnInit {
             });
 
             formData.append("statusChangeData", JSON.stringify(this.statusChangeRequest));
-
-            this.quotationService.changeStatus(formData).subscribe(
-                res => {
-                    if (res.StatusCode == 0) {
-                        swal.fire("Información", "Operación exitosa.", "success");
-                        this.router.navigate(['/broker/request-status']);
-                    } else if (res.StatusCode == 1) { //Error de validación
-                        swal.fire("Información", this.listToString(res.ErrorMessageList), "error");
-                    } else {  //Error no controlado en el servicio
-                        swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
+            swal.fire({
+                title: "Información",
+                text: "¿Desea cambiar a estado " + this.statusChange + " la cotización N° " + this.quotationNumber + "?",
+                type: "question",
+                showCancelButton: true,
+                confirmButtonText: 'Sí',
+                allowOutsideClick: false,
+                cancelButtonText: 'No'
+            })
+                .then((result) => {
+                    if (result.value) {
+                        this.isLoading = true;
+                        this.quotationService.changeStatus(formData).subscribe(
+                            res => {
+                                if (res.StatusCode == 0) {
+                                    swal.fire("Información", "Operación exitosa.", "success");
+                                    this.router.navigate(['/broker/request-status']);
+                                } else if (res.StatusCode == 1) { //Error de validación
+                                    swal.fire("Información", this.listToString(res.ErrorMessageList), "error");
+                                } else {  //Error no controlado en el servicio
+                                    swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
+                                }
+                                this.isLoading = false;
+                            },
+                            err => {
+                                swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
+                                this.isLoading = false;
+                            }
+                        );
                     }
-                    this.isLoading = false;
-                },
-                err => {
-                    swal.fire("Información", this.genericServerErrorMessage, "error");  //Use las herramientas de desarrollador de su navegador para ver el error en esta petición peticiones
-                    this.isLoading = false;
-                }
-            );
+                });
         } else {
 
             if (this.mainFormGroup.controls.status.hasError('required')) errorList.push("El estado es obligatorio.");
@@ -975,46 +991,65 @@ export class QuotationEvaluationComponent implements OnInit {
             });
 
             formData.append("quotationModification", JSON.stringify(quotation));
-            this.quotationService.modifyQuotation(formData).subscribe(
-                res => {
-                    if (res.P_COD_ERR == 0) {
-                        if (res.P_SAPROBADO == 'S') {
-                            self.isLoading = false;
-                            if (res.P_NCODE == 0) {
-                                swal.fire({
-                                    title: "Información",
-                                    text: "¿Desea emitir la cotización N° " + res.P_NID_COTIZACION + " de forma directa?",
-                                    type: "question",
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Sí',
-                                    allowOutsideClick: false,
-                                    cancelButtonText: 'No'
-                                })
-                                    .then((result) => {
-                                        if (result.value) {
+            
+            swal.fire({
+                title: "Información",
+                text: "¿Desea recotizar la cotización N° " + this.quotationNumber + "?",
+                type: "question",
+                showCancelButton: true,
+                confirmButtonText: 'Sí',
+                allowOutsideClick: false,
+                cancelButtonText: 'No'
+            })
+                .then((result) => {
+                    if (result.value) {
+                        this.isLoading = true;
+                        this.quotationService.modifyQuotation(formData).subscribe(
+                            res => {
+                                console.log(res)
+                                if (res.P_COD_ERR == 0) {
+                                    if (res.P_SAPROBADO == 'S') {
+                                        self.isLoading = false;
+                                        if (res.P_NCODE == 0) {
+                                            swal.fire({
+                                                title: "Información",
+                                                text: "¿Desea emitir la cotización N° " + res.P_NID_COTIZACION + " de forma directa?",
+                                                type: "question",
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Sí',
+                                                allowOutsideClick: false,
+                                                cancelButtonText: 'No'
+                                            })
+                                                .then((result) => {
+                                                    if (result.value) {
+                                                        self.isLoading = false;
+                                                        this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: res.P_NID_COTIZACION } });
+                                                    } else {
+                                                        this.router.navigate(['/broker/request-status']);
+                                                    }
+                                                });
+                                        } else {
                                             self.isLoading = false;
-                                            this.router.navigate(['/broker/policy/emit'], { queryParams: { quotationNumber: res.P_NID_COTIZACION } });
+                                            swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación.", "success");
+                                            this.router.navigate(['/broker/request-status']);
                                         }
-                                    });
-                            } else {
-                                self.isLoading = false;
-                                swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación.", "success");
-                                this.router.navigate(['/broker/request-status']);
+                                    } else {
+                                        self.isLoading = false;
+                                        swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
+                                        this.router.navigate(['/broker/request-status']);
+                                    }
+                                } else {
+                                    self.isLoading = false;
+                                    swal.fire("Información", res.P_MESSAGE, "error");
+                                }
+                            },
+                            error => {
+                                swal.fire("Información", this.genericServerErrorMessage, "error");
                             }
-                        } else {
-                            self.isLoading = false;
-                            swal.fire("Información", "Se ha recotizado correctamente la cotización N° " + res.P_NID_COTIZACION + ",  para emitir debe esperar su aprobación. " + res.P_SMESSAGE, "success");
-                            this.router.navigate(['/broker/request-status']);
-                        }
-                    } else {
-                        self.isLoading = false;
-                        swal.fire("Información", res.P_MESSAGE, "error");
+                        );                        
                     }
-                },
-                error => {
-                    swal.fire("Información", this.genericServerErrorMessage, "error");
-                }
-            );
+                });
+            
         } else {
             swal.fire("Información", CommonMethods.listToString(errorList), "error")
         }

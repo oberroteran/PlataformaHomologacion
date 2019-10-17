@@ -74,7 +74,6 @@ export class LoginComponent implements OnInit {
                         this.productService.getProductList().subscribe(
                             res => {
                                 res.forEach(item => {
-                                    console.log(res)
                                     if (item.TIP_PRODUCT == "SCTR_PEN") {
                                         localStorage.setItem('pensionID', JSON.stringify({ id: item.COD_PRODUCT.toString() }));
                                     }
@@ -84,8 +83,9 @@ export class LoginComponent implements OnInit {
                                 });
                             }
                         );
-                        this.sidebarService.close();
+                        //this.sidebarService.close();
                         this.menuTotal = JSON.parse(localStorage.getItem("currentUser"))["menu"];
+                        
                         this.menuTotal.forEach(element => {
                             if (element.nidproduct == "1") {
                                 this.productSoat++;

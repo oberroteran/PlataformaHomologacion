@@ -207,9 +207,7 @@ export class PolicyFormComponent implements OnInit {
 			window.location.reload();
 		} else {
 			localStorage.setItem("emiPolicy", JSON.stringify({ emiPolicy: 1 }));
-			console.log(JSON.parse(localStorage.getItem("emiPolicy"))["emiPolicy"])
 		}
-		//
 
 		this.route.queryParams
 			.subscribe(params => {
@@ -655,6 +653,7 @@ export class PolicyFormComponent implements OnInit {
 		this.saludList = [];
 		this.tasasList = [];
 		let typeMovement = "1";
+		this.flagEmailNull = true
 		//Cabeza Cotizacion | Datos de la póliza
 		if (this.nrocotizacion != undefined && this.nrocotizacion != 0) {
 			this.policyemit.getPolicyEmitCab(this.nrocotizacion, typeMovement, JSON.parse(localStorage.getItem("currentUser"))["id"])

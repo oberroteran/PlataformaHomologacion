@@ -189,6 +189,9 @@ import { PolicyRequestComponent } from './components/policy/policy-request/polic
 import { PolicyEvaluationComponent } from './components/policy/policy-evaluation/policy-evaluation.component';
 import { PolicyResultComponent } from './components/policy/policy-result/policy-result.component';
 import { PolicyVoucherComponent } from './components/policy/policy-voucher/policy-voucher.component';
+import { MonitoringComponent } from './components/bulk-load/monitoring/monitoring.component';
+import { MonitoringViewComponent } from './components/bulk-load/monitoring-view/monitoring-view.component';
+import { MonitoringErrorComponent } from './components/bulk-load/monitoring-error/monitoring-error.component';
 
 //Kuntur Services 20190812
 import { PolicyService } from '../broker/services/policy/policy.service';
@@ -327,7 +330,9 @@ import { PolicyService } from '../broker/services/policy/policy.service';
         AnulMovComponent, // Kuntur 20190812
         PolicyRequestComponent, // Kuntur 20190812
         PolicyEvaluationComponent, // Kuntur 20190812
-        MethodsPaymentComponent, PolicyResultComponent, PolicyVoucherComponent // Kuntur 2019103
+        MethodsPaymentComponent, PolicyResultComponent, PolicyVoucherComponent, // Kuntur 2019103
+        MonitoringComponent, // Kuntur 20190812
+        MonitoringViewComponent, MonitoringErrorComponent // KUNTUR 17092019
     ],
     entryComponents: [
         ResVaucherComponent,
@@ -352,7 +357,8 @@ import { PolicyService } from '../broker/services/policy/policy.service';
         PolicyDocumentsComponent, // Kuntur 20190812
         AddCiiuComponent, // Kuntur 20190812
         AnulMovComponent, // Kuntur 20190919
-        MethodsPaymentComponent // Kuntur 2019103
+        MethodsPaymentComponent,// Kuntur 2019103
+        MonitoringViewComponent // Kuntur 20190917
     ],
     providers: [
         AppConfig,

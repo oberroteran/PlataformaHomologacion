@@ -398,8 +398,6 @@ export class Step03Component implements OnInit {
   }
 
   generateSessionToken() {
-    console.log(this.tarifa.precio);
-    
     this.visaService.generarSessionToken(this.tarifa.precio, '').subscribe(
       resvisa => {
         const data = <SessionToken>resvisa;

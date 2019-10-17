@@ -573,7 +573,7 @@
               <div *ngIf="mode!='recotizar'" class="row">
                 <div class="col-sm-3">
                   <span>ESTADO</span>
-                  <select formControlName="status" (change)="getReasonList()" class="minimal"
+                  <select formControlName="status" (change)="getReasonList($event)" class="minimal"
                     [ngClass]="{'error-validate': !mainFormGroup.get('status').valid && mainFormGroup.get('status').touched}">
                     <option disabled value="">Seleccione</option>
                     <option *ngFor="let item of statusList" value="{{item.Id}}">{{item.Name}}</option>

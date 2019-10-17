@@ -61,11 +61,12 @@ import { QuotationEvaluationComponent } from './components/quote/quotation-evalu
 import { ContractorStateComponent } from './components/reports/state-report/contractor-state/contractor-state.component'
 import { PolicyTransactionsComponent } from './components/policy/policy-transactions/policy-transactions.component';
 import { ProcessViewerComponent } from './components/policy/process-viewer/process-viewer.component';
-import { TestComponent } from './components/maintenance/test/test.component';
 import { PolicyEvaluationComponent } from './components/policy/policy-evaluation/policy-evaluation.component';
 import { PolicyRequestComponent } from './components/policy/policy-request/policy-request.component';
 import { PolicyResultComponent } from './components/policy/policy-result/policy-result.component';
 import { PolicyVoucherComponent } from './components/policy/policy-voucher/policy-voucher.component';
+import { MonitoringComponent } from './components/bulk-load/monitoring/monitoring.component';
+import { MonitoringErrorComponent } from './components/bulk-load/monitoring-error/monitoring-error.component';
 
 
 const broutes: Routes = [
@@ -138,7 +139,8 @@ const broutes: Routes = [
             { path: "policy-request", component: PolicyRequestComponent },
             { path: "policy/resultado/:key", component: PolicyResultComponent },
             { path: "policy/voucher", component: PolicyVoucherComponent },
-            { path: 'test', component: TestComponent },
+            { path: 'process-error', component: MonitoringErrorComponent },
+            { path: 'monitoring' , component : MonitoringComponent},
             { path: '**', redirectTo: 'login' }
         ]
     }

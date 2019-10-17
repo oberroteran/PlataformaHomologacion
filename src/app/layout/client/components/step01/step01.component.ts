@@ -187,7 +187,6 @@ export class Step01Component implements OnInit {
     this.auto = auto;
     this.auto.p_STYPE_REGIST = this.sTipoVehiculo;
     this.auto.p_SREGIST = this.placa.toString().toUpperCase();
-    console.log(this.auto)
     sessionStorage.setItem('auto', JSON.stringify(this.auto));
     this.appConfig.pixelEvent('virtualEvent', 'SOAT Digital - Cliente - Paso 2', 'Completado', '(not available)');
     if (this.paginaActual > this.ultimaPaginaNavegada) {
